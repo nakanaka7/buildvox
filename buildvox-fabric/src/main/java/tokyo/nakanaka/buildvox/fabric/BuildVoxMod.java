@@ -31,12 +31,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
-import tokyo.nakanaka.buildVoxCore.MessageReceiver;
-import tokyo.nakanaka.buildVoxCore.NamespacedId;
-import tokyo.nakanaka.buildVoxCore.PlayerEntity;
-import tokyo.nakanaka.buildVoxCore.system.BuildVoxSystem;
-import tokyo.nakanaka.buildVoxCore.system.ToolType;
-import tokyo.nakanaka.buildVoxCore.world.World;
+import tokyo.nakanaka.buildvox.core.MessageReceiver;
+import tokyo.nakanaka.buildvox.core.NamespacedId;
+import tokyo.nakanaka.buildvox.core.PlayerEntity;
+import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
+import tokyo.nakanaka.buildvox.core.system.ToolType;
+import tokyo.nakanaka.buildvox.core.world.World;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
