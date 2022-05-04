@@ -1,11 +1,12 @@
-package tokyo.nakanaka.buildVoxFabric;
+package tokyo.nakanaka.buildvox.fabric;
 
 import tokyo.nakanaka.buildVoxCore.Scheduler;
+import tokyo.nakanaka.buildvox.fabric.mixin.MinecraftServerMixin;
 
 import java.util.*;
 
 /**
- * A scheduler for Fabric platform. This class uses a mixin class, {@link tokyo.nakanaka.buildVoxFabric.mixin.MinecraftServerMixin}.
+ * A scheduler for Fabric platform. This class uses a mixin class, {@link MinecraftServerMixin}.
  * Hence, for using this class, the mod have to be effective. This class is singleton.
  */
 public class FabricScheduler implements Scheduler {

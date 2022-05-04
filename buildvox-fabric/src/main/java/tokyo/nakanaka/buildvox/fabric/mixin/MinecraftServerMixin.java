@@ -1,11 +1,11 @@
-package tokyo.nakanaka.buildVoxFabric.mixin;
+package tokyo.nakanaka.buildvox.fabric.mixin;
 
 import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import tokyo.nakanaka.buildVoxFabric.FabricScheduler;
+import tokyo.nakanaka.buildvox.fabric.FabricScheduler;
 
 @Mixin(MinecraftServer.class)
 public class MinecraftServerMixin {

@@ -1,4 +1,4 @@
-package tokyo.nakanaka.buildVoxFabric;
+package tokyo.nakanaka.buildvox.fabric;
 
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;

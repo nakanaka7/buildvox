@@ -1,4 +1,4 @@
-package tokyo.nakanaka.buildVoxFabric;
+package tokyo.nakanaka.buildvox.fabric;
 
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;

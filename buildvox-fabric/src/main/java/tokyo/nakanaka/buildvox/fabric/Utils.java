@@ -1,4 +1,4 @@
-package tokyo.nakanaka.buildVoxFabric;
+package tokyo.nakanaka.buildvox.fabric;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;

@@ -1,4 +1,4 @@
-package tokyo.nakanaka.buildVoxFabric;
+package tokyo.nakanaka.buildvox.fabric;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.StairsBlock;

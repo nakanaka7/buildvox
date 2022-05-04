@@ -1,4 +1,4 @@
-package tokyo.nakanaka.buildVoxFabric.mixin;
+package tokyo.nakanaka.buildvox.fabric.mixin;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.server.world.ServerWorld;
@@ -8,7 +8,7 @@ import net.minecraft.world.chunk.WorldChunk;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import tokyo.nakanaka.buildVoxFabric.FabricWorld;
+import tokyo.nakanaka.buildvox.fabric.FabricWorld;
 
 @Mixin(WorldChunk.class)
 public class WorldChunkMixin {
