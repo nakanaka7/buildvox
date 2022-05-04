@@ -20,7 +20,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "tokyo.nakanaka.buildVoxFabric.BuildVoxMod"
+      "tokyo.nakanaka.buildvox.fabric.BuildVoxMod"
     ]
   },
   "mixins": [
