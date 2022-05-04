@@ -11,8 +11,6 @@ import org.slf4j.LoggerFactory;
 import tokyo.nakanaka.buildVoxCore.NamespacedId;
 import tokyo.nakanaka.buildVoxCore.blockStateTransformer.BlockStateTransformer;
 import tokyo.nakanaka.buildVoxCore.blockStateTransformer.BlockTransformation;
-import tokyo.nakanaka.buildVoxCore.math.transformation.*;
-import tokyo.nakanaka.buildVoxCore.math.vector.*;
 import tokyo.nakanaka.buildVoxCore.world.Block;
 
 import java.util.*;
