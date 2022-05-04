@@ -1,0 +1,10 @@
+plugins {
+    id 'java'
+}
+
+sourceCompatibility = 17
+targetCompatibility = 17
+
+archivesBaseName = 'BuildVoxCore'
+version = '1.0.0-beta10.0'
+group = 'tokyo.nakanaka'
