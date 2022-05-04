@@ -1,4 +1,4 @@
-package tokyo.nakanaka.buildVoxBukkit;
+package tokyo.nakanaka.buildvox.bukkit;
 
 import org.bukkit.Location;
 import org.bukkit.Material;

@@ -1,4 +1,4 @@
-package tokyo.nakanaka.buildVoxBukkit.experimental;
+package tokyo.nakanaka.buildvox.bukkit.experimental;
 
 import tokyo.nakanaka.buildVoxCore.world.Biome;
 
