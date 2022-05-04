@@ -1,0 +1,7 @@
+main: tokyo.nakanaka.buildVoxBukkit.BuildVoxPlugin
+name: BuildVox
+version: 1.0.0
+commands:
+  'bv':
+  'bvd':
+api-version: 1.17
