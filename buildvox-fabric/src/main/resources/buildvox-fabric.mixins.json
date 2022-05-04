@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "tokyo.nakanaka.buildVoxFabric.mixin",
+  "package": "tokyo.nakanaka.buildvox.fabric.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
   ],
