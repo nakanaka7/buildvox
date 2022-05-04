@@ -1,7 +1,6 @@
 package tokyo.nakanaka.buildvox.core.edit;
 
 import tokyo.nakanaka.buildvox.core.NamespacedId;
-import tokyo.nakanaka.buildVoxCore.blockSpace.*;
 import tokyo.nakanaka.buildvox.core.blockSpace.BlockStateTransformingBlockSpace3;
 import tokyo.nakanaka.buildvox.core.blockSpace.ClipboardBlockSpace3;
 import tokyo.nakanaka.buildvox.core.blockSpace.IntegrityAdjustableBlockSpace3;

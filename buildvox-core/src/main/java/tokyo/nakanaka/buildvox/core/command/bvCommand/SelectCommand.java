@@ -5,7 +5,6 @@ import tokyo.nakanaka.buildvox.core.FeedbackMessage;
 import tokyo.nakanaka.buildvox.core.command.IllegalPosException;
 import tokyo.nakanaka.buildvox.core.command.MissingPosDataException;
 import tokyo.nakanaka.buildvox.core.command.PosDataSizeException;
-import tokyo.nakanaka.buildVoxCore.command.mixin.shapeMixin.*;
 import tokyo.nakanaka.buildvox.core.command.mixin.shapeMixin.*;
 import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.selection.Selection;

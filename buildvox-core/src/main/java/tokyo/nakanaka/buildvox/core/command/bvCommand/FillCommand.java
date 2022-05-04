@@ -10,7 +10,6 @@ import tokyo.nakanaka.buildvox.core.command.MissingPosDataException;
 import tokyo.nakanaka.buildvox.core.command.PosDataSizeException;
 import tokyo.nakanaka.buildvox.core.command.completionCandidates.BlockCandidates;
 import tokyo.nakanaka.buildvox.core.command.mixin.IntegrityMixin;
-import tokyo.nakanaka.buildVoxCore.command.mixin.shapeMixin.*;
 import tokyo.nakanaka.buildvox.core.command.mixin.shapeMixin.*;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;

@@ -3,7 +3,6 @@ package tokyo.nakanaka.buildvox.core.selection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tokyo.nakanaka.buildvox.core.math.MaxMinCalculator;
-import tokyo.nakanaka.buildVoxCore.math.region3d.*;
 import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
 import tokyo.nakanaka.buildvox.core.math.vector.PolarVector2d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
