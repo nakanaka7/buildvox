@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 sourceCompatibility = 17
@@ -28,4 +29,13 @@ dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.18.2-R0.1-SNAPSHOT'
     compileOnly 'org.slf4j:slf4j-api:1.7.36'
     compileOnly 'javax.validation:validation-api:2.0.1.Final'
+}
+
+shadowJar {
+    archiveClassifier.set('')
+}
+
+jar {
+    dependsOn(shadowJar)
+    jar.enabled = false
 }
