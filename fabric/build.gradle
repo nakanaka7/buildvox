@@ -1,4 +1,5 @@
 plugins {
+    id 'fabric-loom' version '0.11-SNAPSHOT'
     id 'java'
 }
 
@@ -8,3 +9,33 @@ targetCompatibility = 17
 archivesBaseName = 'BuildVoxFabric'
 version = '1.0.0-beta4.0'
 group = 'tokyo.nakanaka'
+
+dependencies {
+    compileOnly 'org.slf4j:slf4j-api:1.7.36'
+    include(implementation(project(':core')))
+    minecraft "com.mojang:minecraft:1.18.1"
+    mappings "net.fabricmc:yarn:1.18.1+build.22:v2"
+    modImplementation "net.fabricmc:fabric-loader:0.12.12"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:0.46.2+1.18"
+}
+
+
+processResources {
+    inputs.property "version", project.version
+
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    // Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
+    it.options.release = 17
+}
+
+jar {
+    from("LICENSE") {
+        rename { "${it}_${archivesBaseName}"}
+    }
+}
+
