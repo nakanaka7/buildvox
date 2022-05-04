@@ -2,7 +2,7 @@ package tokyo.nakanaka.buildvox.fabric;
 
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
-import tokyo.nakanaka.buildVoxCore.MessageReceiver;
+import tokyo.nakanaka.buildvox.core.MessageReceiver;
 
 /**
  * The implementation of {@link MessageReceiver} for Fabric platform

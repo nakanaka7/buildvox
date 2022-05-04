@@ -5,8 +5,8 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.state.property.Property;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-import tokyo.nakanaka.buildVoxCore.NamespacedId;
-import tokyo.nakanaka.buildVoxCore.world.Block;
+import tokyo.nakanaka.buildvox.core.NamespacedId;
+import tokyo.nakanaka.buildvox.core.world.Block;
 
 import java.util.Collection;
 import java.util.HashMap;

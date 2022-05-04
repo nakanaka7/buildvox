@@ -1,7 +1,7 @@
 package tokyo.nakanaka.buildvox.fabric;
 
-import tokyo.nakanaka.buildVoxCore.BlockValidator;
-import tokyo.nakanaka.buildVoxCore.world.Block;
+import tokyo.nakanaka.buildvox.core.BlockValidator;
+import tokyo.nakanaka.buildvox.core.world.Block;
 
 /**
  * The implementation of BlockValidator for Fabric platform

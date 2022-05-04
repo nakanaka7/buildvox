@@ -5,8 +5,8 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
-import tokyo.nakanaka.buildVoxCore.world.Block;
-import tokyo.nakanaka.buildVoxCore.world.World;
+import tokyo.nakanaka.buildvox.core.world.Block;
+import tokyo.nakanaka.buildvox.core.world.World;
 
 import java.util.HashSet;
 import java.util.Objects;

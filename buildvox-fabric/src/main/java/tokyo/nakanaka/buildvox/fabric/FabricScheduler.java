@@ -1,6 +1,6 @@
 package tokyo.nakanaka.buildvox.fabric;
 
-import tokyo.nakanaka.buildVoxCore.Scheduler;
+import tokyo.nakanaka.buildvox.core.Scheduler;
 import tokyo.nakanaka.buildvox.fabric.mixin.MinecraftServerMixin;
 
 import java.util.*;

@@ -5,9 +5,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.Vec3f;
-import tokyo.nakanaka.buildVoxCore.PlayerEntity;
-import tokyo.nakanaka.buildVoxCore.particleGui.Color;
-import tokyo.nakanaka.buildVoxCore.world.World;
+import tokyo.nakanaka.buildvox.core.PlayerEntity;
+import tokyo.nakanaka.buildvox.core.particleGui.Color;
+import tokyo.nakanaka.buildvox.core.world.World;
 
 /**
  * The implementation of PlayerEntity for Fabric platform

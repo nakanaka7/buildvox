@@ -5,12 +5,12 @@ import net.minecraft.block.StairsBlock;
 import net.minecraft.block.enums.StairShape;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
-import tokyo.nakanaka.buildVoxCore.NamespacedId;
-import tokyo.nakanaka.buildVoxCore.blockStateTransformer.BlockStateTransformer;
-import tokyo.nakanaka.buildVoxCore.blockStateTransformer.BlockTransformation;
-import tokyo.nakanaka.buildVoxCore.math.transformation.Matrix3x3i;
-import tokyo.nakanaka.buildVoxCore.math.vector.Vector3i;
-import tokyo.nakanaka.buildVoxCore.world.Block;
+import tokyo.nakanaka.buildvox.core.NamespacedId;
+import tokyo.nakanaka.buildvox.core.blockStateTransformer.BlockStateTransformer;
+import tokyo.nakanaka.buildvox.core.blockStateTransformer.BlockTransformation;
+import tokyo.nakanaka.buildvox.core.math.transformation.Matrix3x3i;
+import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
+import tokyo.nakanaka.buildvox.core.world.Block;
 
 import java.util.HashMap;
 import java.util.Map;
