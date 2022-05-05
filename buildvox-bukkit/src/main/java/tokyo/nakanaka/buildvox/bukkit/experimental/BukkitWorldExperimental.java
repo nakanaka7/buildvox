@@ -1,7 +1,7 @@
 package tokyo.nakanaka.buildvox.bukkit.experimental;
 
-import tokyo.nakanaka.buildVoxCore.world.Biome;
-import tokyo.nakanaka.buildVoxCore.world.Entity;
+import tokyo.nakanaka.buildvox.core.world.Biome;
+import tokyo.nakanaka.buildvox.core.world.Entity;
 
 import java.util.List;
 import java.util.UUID;

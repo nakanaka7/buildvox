@@ -1,6 +1,6 @@
 package tokyo.nakanaka.buildvox.bukkit.experimental;
 
-import tokyo.nakanaka.buildVoxCore.world.Biome;
+import tokyo.nakanaka.buildvox.core.world.Biome;
 
 public class BukkitBiome implements Biome {
     private org.bukkit.block.Biome original;
