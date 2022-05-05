@@ -1,0 +1,33 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+}
+
+sourceCompatibility = 17
+targetCompatibility = 17
+
+version = '1.0.0-beta10.0'
+group = 'tokyo.nakanaka'
+
+repositories {
+    mavenCentral()
+    maven {
+        url = uri('https://repo.maven.apache.org/maven2/')
+    }
+}
+
+dependencies {
+    compileOnly 'org.slf4j:slf4j-api:1.7.36'
+    implementation 'info.picocli:picocli:4.6.3'
+    implementation 'org.apache.commons:commons-math3:3.6.1'
+    implementation 'org.apache.commons:commons-geometry-euclidean:1.0'
+}
+
+shadowJar {
+    archiveClassifier.set('')
+}
+
+jar {
+    dependsOn(shadowJar)
+    jar.enabled = false
+}

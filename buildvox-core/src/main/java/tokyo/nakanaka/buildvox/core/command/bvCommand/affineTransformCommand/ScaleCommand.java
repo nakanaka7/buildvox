@@ -1,0 +1,52 @@
+package tokyo.nakanaka.buildvox.core.command.bvCommand.affineTransformCommand;
+
+import picocli.CommandLine;
+import tokyo.nakanaka.buildvox.core.FeedbackMessage;
+import tokyo.nakanaka.buildvox.core.command.EditExit;
+import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
+import tokyo.nakanaka.buildvox.core.command.completionCandidates.DoubleCandidates;
+import tokyo.nakanaka.buildvox.core.command.mixin.PosMixin;
+import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
+import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
+import tokyo.nakanaka.buildvox.core.player.Player;
+
+import java.io.PrintWriter;
+
+@CommandLine.Command(name = "scale",
+        mixinStandardHelpOptions = true,
+        description = "Scale the selected blocks about the position (posX, posY, posZ).")
+public class ScaleCommand implements Runnable {
+    @CommandLine.Spec
+    private CommandLine.Model.CommandSpec commandSpec;
+    @CommandLine.ParentCommand
+    private BvCommand bvCmd;
+    @CommandLine.Parameters(description = "The scale factor along x-axis.", completionCandidates = DoubleCandidates.class)
+    private Double factorX;
+    @CommandLine.Parameters(description = "The scale factor along y-axis.", completionCandidates = DoubleCandidates.class)
+    private Double factorY;
+    @CommandLine.Parameters(description = "The scale factor along z-axis.", completionCandidates = DoubleCandidates.class)
+    private Double factorZ;
+    @CommandLine.Mixin
+    private PosMixin posMixin;
+
+    @Override
+    public void run() {
+        PrintWriter out = commandSpec.commandLine().getOut();
+        PrintWriter err = commandSpec.commandLine().getErr();
+        Player player = bvCmd.getPlayer();
+        if(factorX * factorY * factorZ == 0) {
+            err.println(FeedbackMessage.SCALE_FACTOR_ERROR);
+            return;
+        }
+        Vector3d pos = posMixin.calcAbsPos(bvCmd.getExecPos());
+        EditExit editExit;
+        try {
+            editExit = PlayerEdits.scale(player, factorX, factorY, factorZ, pos);
+        }catch (PlayerEdits.SelectionNotFoundException ex) {
+            err.println(FeedbackMessage.SELECTION_NULL_ERROR);
+            return;
+        }
+        out.println(FeedbackMessage.ofSetExit(editExit));
+    }
+
+}

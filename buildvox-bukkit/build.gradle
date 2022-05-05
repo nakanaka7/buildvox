@@ -1,0 +1,40 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+}
+
+sourceCompatibility = 17
+targetCompatibility = 17
+
+version = '1.0.0-beta3.0'
+group = 'tokyo.nakanaka'
+
+repositories {
+    mavenCentral()
+    maven {
+        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+        content {
+            includeGroup 'org.bukkit'
+            includeGroup 'org.spigotmc'
+        }
+    }
+    maven { url = 'https://oss.sonatype.org/content/repositories/snapshots' }
+    maven { url = 'https://oss.sonatype.org/content/repositories/central' }
+    maven { url = 'https://repo.codemc.org/repository/maven-public/'}
+}
+
+dependencies {
+    implementation project(":buildvox-core")
+    compileOnly 'org.spigotmc:spigot-api:1.18.2-R0.1-SNAPSHOT'
+    compileOnly 'org.slf4j:slf4j-api:1.7.36'
+    compileOnly 'javax.validation:validation-api:2.0.1.Final'
+}
+
+shadowJar {
+    archiveClassifier.set('')
+}
+
+jar {
+    dependsOn(shadowJar)
+    jar.enabled = false
+}

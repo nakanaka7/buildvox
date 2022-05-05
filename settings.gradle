@@ -9,5 +9,5 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'BuildVox'
-include 'core', 'bukkit', 'fabric'
+rootProject.name = 'buildvox'
+include 'buildvox-core', 'buildvox-bukkit', 'buildvox-fabric'
