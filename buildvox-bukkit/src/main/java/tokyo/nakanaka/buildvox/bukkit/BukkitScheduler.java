@@ -2,7 +2,7 @@ package tokyo.nakanaka.buildvox.bukkit;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import tokyo.nakanaka.buildVoxCore.Scheduler;
+import tokyo.nakanaka.buildvox.core.Scheduler;
 
 /**
  * The class which implements {@link Scheduler} for Bukkit Platform

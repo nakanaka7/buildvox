@@ -21,11 +21,11 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import tokyo.nakanaka.buildVoxCore.MessageReceiver;
-import tokyo.nakanaka.buildVoxCore.NamespacedId;
-import tokyo.nakanaka.buildVoxCore.PlayerEntity;
-import tokyo.nakanaka.buildVoxCore.system.BuildVoxSystem;
-import tokyo.nakanaka.buildVoxCore.system.PlayerRepository;
+import tokyo.nakanaka.buildvox.core.MessageReceiver;
+import tokyo.nakanaka.buildvox.core.NamespacedId;
+import tokyo.nakanaka.buildvox.core.PlayerEntity;
+import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
+import tokyo.nakanaka.buildvox.core.system.PlayerRepository;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
@@ -113,7 +113,7 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
         }
         UUID playerId = cmdSource.playerId();
         PlayerRepository repo = BuildVoxSystem.PLAYER_REPOSITORY;
-        tokyo.nakanaka.buildVoxCore.player.Player player = repo.get(playerId);
+        tokyo.nakanaka.buildvox.core.player.Player player = repo.get(playerId);
         if(player == null) {
             repo.create(playerId, cmdSource.playerEntity());
         }
@@ -134,7 +134,7 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
         }
         UUID playerId = cmdSource.playerId();
         PlayerRepository repo = BuildVoxSystem.PLAYER_REPOSITORY;
-        tokyo.nakanaka.buildVoxCore.player.Player player = repo.get(playerId);
+        tokyo.nakanaka.buildvox.core.player.Player player = repo.get(playerId);
         if(player == null) {
             repo.create(playerId, cmdSource.playerEntity());
         }
@@ -206,7 +206,7 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
         UUID playerId = player.getUniqueId();
         PlayerEntity playerEntity = new BukkitPlayerEntity(player);
         PlayerRepository repo = BuildVoxSystem.PLAYER_REPOSITORY;
-        tokyo.nakanaka.buildVoxCore.player.Player bvPlayer = repo.get(playerId);
+        tokyo.nakanaka.buildvox.core.player.Player bvPlayer = repo.get(playerId);
         if(bvPlayer == null) {
             repo.create(playerId, playerEntity);
         }
@@ -224,10 +224,10 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
             case POS -> {
                 switch (action) {
                     case LEFT_CLICK_BLOCK -> BuildVoxSystem
-                            .CLICK_BLOCK_EVENT_MANAGER.onLeft(tokyo.nakanaka.buildVoxCore.system.ToolType.POS_MARKER,
+                            .CLICK_BLOCK_EVENT_MANAGER.onLeft(tokyo.nakanaka.buildvox.core.system.ToolType.POS_MARKER,
                                     playerId, worldId, x, y, z, commandOut);
                     case RIGHT_CLICK_BLOCK -> BuildVoxSystem
-                            .CLICK_BLOCK_EVENT_MANAGER.onRight(tokyo.nakanaka.buildVoxCore.system.ToolType.POS_MARKER, playerId, worldId, x, y, z, commandOut);
+                            .CLICK_BLOCK_EVENT_MANAGER.onRight(tokyo.nakanaka.buildvox.core.system.ToolType.POS_MARKER, playerId, worldId, x, y, z, commandOut);
                     default -> throw new InternalError();
                 }
             }

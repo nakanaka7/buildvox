@@ -1,7 +1,7 @@
 package tokyo.nakanaka.buildvox.bukkit;
 
 import org.bukkit.command.CommandSender;
-import tokyo.nakanaka.buildVoxCore.MessageReceiver;
+import tokyo.nakanaka.buildvox.core.MessageReceiver;
 
 /**
  * The class which implements {@link MessageReceiver} for Bukkit Platform

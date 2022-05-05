@@ -2,8 +2,8 @@ package tokyo.nakanaka.buildvox.bukkit;
 
 import org.bukkit.Server;
 import org.bukkit.block.data.BlockData;
-import tokyo.nakanaka.buildVoxCore.world.Block;
-import tokyo.nakanaka.buildVoxCore.world.World;
+import tokyo.nakanaka.buildvox.core.world.Block;
+import tokyo.nakanaka.buildvox.core.world.World;
 
 import java.util.Objects;
 import java.util.UUID;

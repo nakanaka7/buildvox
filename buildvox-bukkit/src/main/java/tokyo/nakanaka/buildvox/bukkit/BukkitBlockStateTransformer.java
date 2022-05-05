@@ -8,10 +8,12 @@ import org.bukkit.block.data.type.Slab;
 import org.bukkit.block.data.type.Stairs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import tokyo.nakanaka.buildVoxCore.NamespacedId;
-import tokyo.nakanaka.buildVoxCore.blockStateTransformer.BlockStateTransformer;
-import tokyo.nakanaka.buildVoxCore.blockStateTransformer.BlockTransformation;
-import tokyo.nakanaka.buildVoxCore.world.Block;
+import tokyo.nakanaka.buildvox.core.NamespacedId;
+import tokyo.nakanaka.buildvox.core.blockStateTransformer.BlockStateTransformer;
+import tokyo.nakanaka.buildvox.core.blockStateTransformer.BlockTransformation;
+import tokyo.nakanaka.buildvox.core.math.transformation.*;
+import tokyo.nakanaka.buildvox.core.math.vector.*;
+import tokyo.nakanaka.buildvox.core.world.Block;
 
 import java.util.*;
 

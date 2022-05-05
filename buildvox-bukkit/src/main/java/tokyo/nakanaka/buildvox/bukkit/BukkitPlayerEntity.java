@@ -6,10 +6,10 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.meta.ItemMeta;
-import tokyo.nakanaka.buildVoxCore.ColorCode;
-import tokyo.nakanaka.buildVoxCore.PlayerEntity;
-import tokyo.nakanaka.buildVoxCore.particleGui.Color;
-import tokyo.nakanaka.buildVoxCore.world.World;
+import tokyo.nakanaka.buildvox.core.ColorCode;
+import tokyo.nakanaka.buildvox.core.PlayerEntity;
+import tokyo.nakanaka.buildvox.core.particleGui.Color;
+import tokyo.nakanaka.buildvox.core.world.World;
 
 /**
  * The class which implements {@link PlayerEntity} for Bukkit Platform

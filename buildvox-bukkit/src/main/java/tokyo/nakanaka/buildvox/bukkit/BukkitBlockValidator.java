@@ -1,8 +1,8 @@
 package tokyo.nakanaka.buildvox.bukkit;
 
 import org.bukkit.Server;
-import tokyo.nakanaka.buildVoxCore.BlockValidator;
-import tokyo.nakanaka.buildVoxCore.world.Block;
+import tokyo.nakanaka.buildvox.core.BlockValidator;
+import tokyo.nakanaka.buildvox.core.world.Block;
 
 /**
  * The class which implements {@link BlockValidator} for Bukkit Platform

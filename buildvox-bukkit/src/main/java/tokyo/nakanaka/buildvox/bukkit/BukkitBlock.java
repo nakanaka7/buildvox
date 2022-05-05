@@ -8,8 +8,8 @@ import org.bukkit.block.Sign;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import tokyo.nakanaka.buildVoxCore.NamespacedId;
-import tokyo.nakanaka.buildVoxCore.world.Block;
+import tokyo.nakanaka.buildvox.core.NamespacedId;
+import tokyo.nakanaka.buildvox.core.world.Block;
 
 import java.util.HashSet;
 import java.util.Map;
