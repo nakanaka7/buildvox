@@ -1,4 +1,4 @@
-main: tokyo.nakanaka.buildVoxBukkit.BuildVoxPlugin
+main: tokyo.nakanaka.buildvox.bukkit.BuildVoxPlugin
 name: BuildVox
 version: 1.0.0
 commands:
