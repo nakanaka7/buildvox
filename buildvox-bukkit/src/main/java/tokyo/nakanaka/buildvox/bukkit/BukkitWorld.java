@@ -2,6 +2,7 @@ package tokyo.nakanaka.buildvox.bukkit;
 
 import org.bukkit.Server;
 import org.bukkit.block.data.BlockData;
+import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.world.Block;
 import tokyo.nakanaka.buildvox.core.world.World;
 
@@ -33,6 +34,11 @@ public class BukkitWorld implements World {
      */
     public org.bukkit.World getOriginal() {
         return original;
+    }
+
+    @Override
+    public NamespacedId getId() {
+        return new NamespacedId(original.getName());
     }
 
     @Override
