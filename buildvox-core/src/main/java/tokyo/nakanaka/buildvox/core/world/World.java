@@ -6,7 +6,7 @@ import tokyo.nakanaka.buildvox.core.NamespacedId;
  * Represents a world. A world is a single space. It does not contain 3 parallel "dimension"
  * spaces(over-world, nether, and end). Each dimension is considered as a single world.
  */
-public interface World extends OutputWorld {
+public interface World {
     default NamespacedId getId() {
         return new NamespacedId("buildvox", "world");
     }
