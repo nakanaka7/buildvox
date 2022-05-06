@@ -4,7 +4,9 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.world.Block;
 import tokyo.nakanaka.buildvox.core.world.World;
 
@@ -19,6 +21,12 @@ import java.util.Set;
 public class FabricWorld implements World {
     private ServerWorld original;
     public static final Set<ServerWorld> stopPhysicsWorlds = new HashSet<>();
+
+    @Override
+    public NamespacedId getId() {
+        Identifier id = original.getRegistryKey().getValue();
+        return new NamespacedId(id.getNamespace(), id.getPath());
+    }
 
     /**
      * Constructs a world from a ServerWorld
