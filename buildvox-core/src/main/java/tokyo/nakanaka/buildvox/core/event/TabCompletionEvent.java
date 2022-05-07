@@ -1,4 +1,4 @@
-package tokyo.nakanaka.buildvox.core.system.commandHandler;
+package tokyo.nakanaka.buildvox.core.event;
 
 import java.util.List;
 
