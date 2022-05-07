@@ -19,6 +19,7 @@ repositories {
 dependencies {
     compileOnly 'org.slf4j:slf4j-api:1.7.36'
     implementation 'info.picocli:picocli:4.6.3'
+    implementation 'org.greenrobot:eventbus-java:3.3.1'
     implementation 'org.apache.commons:commons-math3:3.6.1'
     implementation 'org.apache.commons:commons-geometry-euclidean:1.0'
 }
