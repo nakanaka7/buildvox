@@ -173,7 +173,7 @@ public class BuildVoxMod implements ModInitializer {
 	private int onBvCommand(CommandContext<ServerCommandSource> context) {
 		CommandRunner runner = (cmdSource0, args, commandOut) -> {
 			CommandSource cmdSource = createCommandSource(cmdSource0);
-			BuildVoxSystem.COMMAND_EVENT_MANAGER.onCommand("bv", args, cmdSource.worldId(), cmdSource.x(), cmdSource.y(), cmdSource.z(),
+			BuildVoxSystem.onBvCommand(args, cmdSource.worldId(), cmdSource.x(), cmdSource.y(), cmdSource.z(),
 					commandOut, cmdSource.playerId());
 		};
 		return onCommand(context, runner);
@@ -182,7 +182,7 @@ public class BuildVoxMod implements ModInitializer {
 	private int onBvdCommand(CommandContext<ServerCommandSource> context) {
 		CommandRunner runner = (cmdSource0, args, commandOut) -> {
 			CommandSource cmdSource = createCommandSource(cmdSource0);
-			BuildVoxSystem.COMMAND_EVENT_MANAGER.onCommand("bvd", args, cmdSource.worldId(), cmdSource.x(), cmdSource.y(), cmdSource.z(),
+			BuildVoxSystem.onBvdCommand(args, cmdSource.worldId(), cmdSource.x(), cmdSource.y(), cmdSource.z(),
 					commandOut, cmdSource.playerId());
 		};
 		return onCommand(context, runner);
@@ -190,13 +190,13 @@ public class BuildVoxMod implements ModInitializer {
 
 	private CompletableFuture<Suggestions> onBvTabComplete(CommandContext<ServerCommandSource> context,
 														   SuggestionsBuilder builder) {
-		TabCompleteListCreator listCreator = (args) -> BuildVoxSystem.COMMAND_EVENT_MANAGER.onTabComplete("bv", args);
+		TabCompleteListCreator listCreator = BuildVoxSystem::onBvTabComplete;
 		return onTabComplete(context, builder, listCreator);
 	}
 
 	private CompletableFuture<Suggestions> onBvdTabComplete(CommandContext<ServerCommandSource> context,
 														   SuggestionsBuilder builder) {
-		TabCompleteListCreator listCreator = (args) -> BuildVoxSystem.COMMAND_EVENT_MANAGER.onTabComplete("bvd", args);
+		TabCompleteListCreator listCreator = BuildVoxSystem::onBvdTabComplete;
 		return onTabComplete(context, builder, listCreator);
 	}
 
@@ -253,7 +253,7 @@ public class BuildVoxMod implements ModInitializer {
 		MessageReceiver msgReceiver = new FabricMessageReceiver(player1.getCommandSource());
 		ItemStack is = player0.getMainHandStack();
 		if(is.getItem().equals(POS_MARKER)){
-			BuildVoxSystem.CLICK_BLOCK_EVENT_MANAGER.onLeft(ToolType.POS_MARKER, playerId, worldId, pos.getX(), pos.getY(), pos.getZ(), msgReceiver);
+			BuildVoxSystem.onLeftClickBlockByPosMarker(playerId, worldId, pos.getX(), pos.getY(), pos.getZ(), msgReceiver);
 			return ActionResult.SUCCESS;
 		}else {
 			return ActionResult.PASS;
@@ -284,7 +284,7 @@ public class BuildVoxMod implements ModInitializer {
 		ItemStack is = player0.getMainHandStack();
 		if(is.getItem().equals(POS_MARKER)){
 			BlockPos pos = hitResult.getBlockPos();
-			BuildVoxSystem.CLICK_BLOCK_EVENT_MANAGER.onRight(ToolType.POS_MARKER, playerId, worldId, pos.getX(), pos.getY(), pos.getZ(), msgReceiver);
+			BuildVoxSystem.onRightClickBlockByPosMarker(playerId, worldId, pos.getX(), pos.getY(), pos.getZ(), msgReceiver);
 			return ActionResult.SUCCESS;
 		}else {
 			return ActionResult.PASS;
