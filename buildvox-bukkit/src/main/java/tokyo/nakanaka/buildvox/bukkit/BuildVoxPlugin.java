@@ -118,8 +118,14 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
             repo.create(playerId, cmdSource.playerEntity());
         }
         MessageReceiver msgReceiver = new BukkitMessageReceiver(cmdSender);
-        BuildVoxSystem.COMMAND_EVENT_MANAGER.onCommand(label, args,
-                cmdSource.worldId(), cmdSource.x(), cmdSource.y(), cmdSource.z(), msgReceiver, cmdSource.playerId());
+        switch (label) {
+            case "bv" ->
+                BuildVoxSystem.onBvCommand(args,
+                        cmdSource.worldId(), cmdSource.x(), cmdSource.y(), cmdSource.z(), msgReceiver, cmdSource.playerId());
+            case  "bvd" ->
+                BuildVoxSystem.onBvdCommand(args,
+                        cmdSource.worldId(), cmdSource.x(), cmdSource.y(), cmdSource.z(), msgReceiver, cmdSource.playerId());
+        }
         return true;
     }
 
@@ -138,7 +144,11 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
         if(player == null) {
             repo.create(playerId, cmdSource.playerEntity());
         }
-        return BuildVoxSystem.COMMAND_EVENT_MANAGER.onTabComplete(label, args);
+        return switch (label) {
+            case "bv" -> BuildVoxSystem.onBvTabComplete(args);
+            case "bvd" -> BuildVoxSystem.onBvdTabComplete(args);
+            default -> new ArrayList<>();
+        };
     }
     
     private void addWorld(org.bukkit.World world0){
@@ -223,12 +233,8 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
         switch (toolType) {
             case POS -> {
                 switch (action) {
-                    case LEFT_CLICK_BLOCK -> BuildVoxSystem
-                            .CLICK_BLOCK_EVENT_MANAGER.onLeft(tokyo.nakanaka.buildvox.core.system.ToolType.POS_MARKER,
-                                    playerId, worldId, x, y, z, commandOut);
-                    case RIGHT_CLICK_BLOCK -> BuildVoxSystem
-                            .CLICK_BLOCK_EVENT_MANAGER.onRight(tokyo.nakanaka.buildvox.core.system.ToolType.POS_MARKER, playerId, worldId, x, y, z, commandOut);
-                    default -> throw new InternalError();
+                    case LEFT_CLICK_BLOCK -> BuildVoxSystem.onLeftClickBlockByPosMarker(playerId, worldId, x, y, z, commandOut);
+                    case RIGHT_CLICK_BLOCK -> BuildVoxSystem.onRightClickBlockByPosMarker(playerId, worldId, x, y, z, commandOut);
                 }
             }
         }
