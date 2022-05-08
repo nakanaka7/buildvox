@@ -2,14 +2,15 @@ package tokyo.nakanaka.buildvox.core.system;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import tokyo.nakanaka.buildvox.core.BlockValidator;
-import tokyo.nakanaka.buildvox.core.ColorCode;
-import tokyo.nakanaka.buildvox.core.Scheduler;
+import tokyo.nakanaka.buildvox.core.*;
 import tokyo.nakanaka.buildvox.core.blockStateTransformer.BlockStateTransformer;
 import tokyo.nakanaka.buildvox.core.system.clickBlockEventHandler.PosMarkerClickBlockEventHandler;
 import tokyo.nakanaka.buildvox.core.system.commandHandler.BvCommandHandler;
 import tokyo.nakanaka.buildvox.core.system.commandHandler.BvdCommandHandler;
 import tokyo.nakanaka.buildvox.core.world.Block;
+
+import java.util.List;
+import java.util.UUID;
 
 /**
  * The entrypoint for the platforms which use BuildVox Core project.
@@ -54,6 +55,37 @@ public class BuildVoxSystem {
 
     public static record Config(String outColor, String errColor, Block backgroundBlock, int posArrayLength) {
         public static final Config DEFAULT = new Config(ColorCode.GREEN, ColorCode.RED, Block.valueOf("minecraft:air"), 2);
+    }
+
+    /** Run "/bv" command. */
+    public static void onBvCommand(String[] args, NamespacedId worldId, int x, int y, int z, MessageReceiver messageReceiver, UUID playerId) {
+        new BvCommandHandler().onCommand(args, worldId, x, y, z, messageReceiver, playerId);
+    }
+
+    /** Returns String list of "/bv" command's tab completion. */
+    public static List<String> onBvTabComplete(String[] args) {
+        return new BvCommandHandler().onTabComplete(args);
+    }
+
+    /** Run "/bvd" command. */
+    public static void onBvdCommand(String[] args, NamespacedId worldId, int x, int y, int z,
+                                    MessageReceiver messageReceiver, UUID playerId) {
+        new BvdCommandHandler().onCommand(args, worldId, x, y, z, messageReceiver, playerId);
+    }
+
+    /** Returns String list of "/bvd" command's tab completion. */
+    public static List<String> onBvdTabComplete(String[] args) {
+        return new BvdCommandHandler().onTabComplete(args);
+    }
+
+    /** Handles a left-clicking block event by pos marker. */
+    public static void onLeftClickBlockByPosMarker(UUID playerId, NamespacedId worldId, int x, int y, int z, MessageReceiver messageReceiver) {
+        new PosMarkerClickBlockEventHandler().onLeft(playerId, worldId, x, y, z, messageReceiver);
+    }
+
+    /** Handles a right-clicking block event by pos marker. */
+    public static void onRightClickBlockByPosMarker(UUID playerId, NamespacedId worldId, int x, int y, int z, MessageReceiver messageReceiver) {
+        new PosMarkerClickBlockEventHandler().onRight(playerId, worldId, x, y, z, messageReceiver);
     }
 
 }
