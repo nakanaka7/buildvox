@@ -29,18 +29,6 @@ public class BuildVoxSystem {
     public static final PlayerRepository PLAYER_REPOSITORY = new PlayerRepository();
     public static final DummyPlayerRepository DUMMY_PLAYER_REPOSITORY = new DummyPlayerRepository();
     public static final ParticleGuiRepository PARTICLE_GUI_REPOSITORY = new ParticleGuiRepository();
-    /** Command handler of this system */
-    @SuppressWarnings("unused")
-    public static final CommandEventManager COMMAND_EVENT_MANAGER = new CommandEventManager();
-    /** Event handler of this system */
-    @SuppressWarnings("unused")
-    public static final ClickBlockEventManager CLICK_BLOCK_EVENT_MANAGER = new ClickBlockEventManager();
-
-    static {
-        COMMAND_EVENT_MANAGER.register("bv", new BvCommandHandler());
-        COMMAND_EVENT_MANAGER.register("bvd", new BvdCommandHandler());
-        CLICK_BLOCK_EVENT_MANAGER.register(ToolType.POS_MARKER, new PosMarkerClickBlockEventHandler());
-    }
 
     private BuildVoxSystem() {
     }
