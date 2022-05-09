@@ -133,17 +133,21 @@ public class BuildVoxSystem {
      * @throws IllegalArgumentException if the world id is not registered.
      */
     public static void onLeftClickBlockByPosMarker(UUID playerId, NamespacedId worldId, int x, int y, int z, MessageReceiver messageReceiver) {
-        if(!BuildVoxSystem.WORLD_REGISTRY.worldIsRegistered(worldId)) {
+        if (!BuildVoxSystem.WORLD_REGISTRY.worldIsRegistered(worldId)) {
             throw new IllegalArgumentException();
         }
         World world = BuildVoxSystem.WORLD_REGISTRY.get(worldId);
+        onLeftClickBlockByPosMarker(playerId, world, new Vector3i(x, y, z), messageReceiver);
+    }
+
+    public static void onLeftClickBlockByPosMarker(UUID playerId, World world, Vector3i pos, MessageReceiver messageReceiver) {
         Player player = BuildVoxSystem.PLAYER_REPOSITORY.get(playerId);
-        if(player == null)throw new IllegalArgumentException();
+        if (player == null) throw new IllegalArgumentException();
         Vector3i[] posData = new Vector3i[player.getPosArrayClone().length];
-        posData[0] = new Vector3i(x, y, z);
+        posData[0] = pos;
         player.setPosArrayWithSelectionNull(world, posData);
         PARTICLE_GUI_REPOSITORY.update(player);
-        messageReceiver.println(config.outColor() + FeedbackMessage.ofPosExit(0, x, y, z));
+        messageReceiver.println(config.outColor() + FeedbackMessage.ofPosExit(0, pos.x(), pos.y(), pos.z()));
     }
 
     /**
@@ -158,29 +162,33 @@ public class BuildVoxSystem {
      * @throws IllegalArgumentException if the world id is not registered.
      */
     public static void onRightClickBlockByPosMarker(UUID playerId, NamespacedId worldId, int x, int y, int z, MessageReceiver messageReceiver) {
-        if(!BuildVoxSystem.WORLD_REGISTRY.worldIsRegistered(worldId)) {
+        if (!BuildVoxSystem.WORLD_REGISTRY.worldIsRegistered(worldId)) {
             throw new IllegalArgumentException();
         }
         World world = BuildVoxSystem.WORLD_REGISTRY.get(worldId);
+        onRightClickBlockByPosMarker(playerId, world, new Vector3i(x, y, z), messageReceiver);
+    }
+
+    public static void onRightClickBlockByPosMarker(UUID playerId, World world, Vector3i pos, MessageReceiver messageReceiver) {
         Player player = BuildVoxSystem.PLAYER_REPOSITORY.get(playerId);
-        if(player == null)throw new IllegalArgumentException();
+        if (player == null) throw new IllegalArgumentException();
         World posOrSelectionWorld = player.getWorld();
         Vector3i[] posData = player.getPosArrayClone();
-        if(world != posOrSelectionWorld){
+        if (world != posOrSelectionWorld) {
             posData = new Vector3i[player.getPosArrayClone().length];
         }
         int dataSize = posData.length;
         int index = dataSize - 1;
-        for(int i = 0; i < dataSize; ++i){
-            if (posData[i] == null){
+        for (int i = 0; i < dataSize; ++i) {
+            if (posData[i] == null) {
                 index = i;
                 break;
             }
         }
-        posData[index] = new Vector3i(x, y, z);
+        posData[index] = pos;
         player.setPosArrayWithSelectionNull(world, posData);
         PARTICLE_GUI_REPOSITORY.update(player);
-        messageReceiver.println(config.outColor() + FeedbackMessage.ofPosExit(index, x, y, z));
+        messageReceiver.println(config.outColor() + FeedbackMessage.ofPosExit(index, pos.x(), pos.y(), pos.z()));
     }
 
 }
