@@ -34,6 +34,7 @@ import net.minecraft.util.registry.RegistryKey;
 import tokyo.nakanaka.buildvox.core.MessageReceiver;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.PlayerEntity;
+import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.world.World;
 
@@ -181,7 +182,8 @@ public class BuildVoxMod implements ModInitializer {
 	private int onBvCommand(CommandContext<ServerCommandSource> context) {
 		CommandRunner runner = (cmdSource0, args, commandOut) -> {
 			CommandSource cmdSource = createCommandSource(cmdSource0);
-			BuildVoxSystem.onBvCommand(args, cmdSource.worldId(), cmdSource.x(), cmdSource.y(), cmdSource.z(),
+			Vector3i pos = new Vector3i(cmdSource.x(), cmdSource.y(), cmdSource.z());
+			BuildVoxSystem.onBvCommand(args, cmdSource.world(), pos,
 					commandOut, cmdSource.playerId());
 		};
 		return onCommand(context, runner);
