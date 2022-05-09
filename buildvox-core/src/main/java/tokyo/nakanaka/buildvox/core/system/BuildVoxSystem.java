@@ -124,22 +124,10 @@ public class BuildVoxSystem {
     /**
      * Handles a left-clicking block event by pos marker.
      * @param playerId the id of a player who invoked this event.
-     * @param worldId the world id of the clicked block.
-     * @param x the x-coordinate of the clicked block.
-     * @param y the y-coordinate of the clicked block.
-     * @param z the z-coordinate of the clicked block.
+     * @param pos the position of the clicked block.
      * @param messageReceiver the receiver of the feedback message of this event.
      * @throws IllegalArgumentException if the player id is not registered into this class.
-     * @throws IllegalArgumentException if the world id is not registered.
      */
-    public static void onLeftClickBlockByPosMarker(UUID playerId, NamespacedId worldId, int x, int y, int z, MessageReceiver messageReceiver) {
-        if (!BuildVoxSystem.WORLD_REGISTRY.worldIsRegistered(worldId)) {
-            throw new IllegalArgumentException();
-        }
-        World world = BuildVoxSystem.WORLD_REGISTRY.get(worldId);
-        onLeftClickBlockByPosMarker(playerId, world, new Vector3i(x, y, z), messageReceiver);
-    }
-
     public static void onLeftClickBlockByPosMarker(UUID playerId, World world, Vector3i pos, MessageReceiver messageReceiver) {
         Player player = BuildVoxSystem.PLAYER_REPOSITORY.get(playerId);
         if (player == null) throw new IllegalArgumentException();
@@ -153,22 +141,10 @@ public class BuildVoxSystem {
     /**
      * Handles a right-clicking block event by pos marker.
      * @param playerId the id of a player who invoked this event.
-     * @param worldId the world id of the clicked block.
-     * @param x the x-coordinate of the clicked block.
-     * @param y the y-coordinate of the clicked block.
-     * @param z the z-coordinate of the clicked block.
+     * @param pos the position of the clicked block.
      * @param messageReceiver the receiver of the feedback message of this event.
      * @throws IllegalArgumentException if the player id is not registered into this class.
-     * @throws IllegalArgumentException if the world id is not registered.
      */
-    public static void onRightClickBlockByPosMarker(UUID playerId, NamespacedId worldId, int x, int y, int z, MessageReceiver messageReceiver) {
-        if (!BuildVoxSystem.WORLD_REGISTRY.worldIsRegistered(worldId)) {
-            throw new IllegalArgumentException();
-        }
-        World world = BuildVoxSystem.WORLD_REGISTRY.get(worldId);
-        onRightClickBlockByPosMarker(playerId, world, new Vector3i(x, y, z), messageReceiver);
-    }
-
     public static void onRightClickBlockByPosMarker(UUID playerId, World world, Vector3i pos, MessageReceiver messageReceiver) {
         Player player = BuildVoxSystem.PLAYER_REPOSITORY.get(playerId);
         if (player == null) throw new IllegalArgumentException();
