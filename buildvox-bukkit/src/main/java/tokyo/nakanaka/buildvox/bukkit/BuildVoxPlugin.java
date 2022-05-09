@@ -61,7 +61,7 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
         server.getPluginManager().registerEvents(this, this);
     }
 
-    private record CommandSource(UUID playerId, PlayerEntity playerEntity, NamespacedId worldId, int x, int y, int z) {
+    private record CommandSource(UUID playerId, PlayerEntity playerEntity, NamespacedId worldId, World world, int x, int y, int z) {
     }
 
     private CommandSource createCommandSource(org.bukkit.command.CommandSender cmdSender) {
@@ -100,7 +100,7 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
         if(worldId == null) {
             throw new IllegalArgumentException();
         }
-        return new CommandSource(playerId, playerEntity, worldId, x, y, z);
+        return new CommandSource(playerId, playerEntity, worldId, convertBukkitWorldToBvWorld(world), x, y, z);
     }
 
     /** convert bukkit World to bv World*/
