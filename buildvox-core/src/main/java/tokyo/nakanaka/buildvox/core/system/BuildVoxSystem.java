@@ -125,6 +125,10 @@ public class BuildVoxSystem {
                 .execute(args);
     }
 
+    public static void onBvdCommand(String[] args, MessageReceiver messageReceiver) {
+        onBvdCommand(args, null, 0, 0, 0, messageReceiver, null);
+    }
+
     /** Returns String list of "/bvd" command's tab completion. */
     public static List<String> onBvdTabComplete(String[] args) {
         CommandLine.Model.CommandSpec spec
