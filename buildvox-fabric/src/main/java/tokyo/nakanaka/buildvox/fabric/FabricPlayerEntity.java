@@ -4,6 +4,7 @@ import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3f;
 import tokyo.nakanaka.buildvox.core.PlayerEntity;
 import tokyo.nakanaka.buildvox.core.particleGui.Color;
@@ -21,6 +22,11 @@ public class FabricPlayerEntity implements PlayerEntity {
      */
     public FabricPlayerEntity(ServerPlayerEntity original) {
         this.original = original;
+    }
+
+    @Override
+    public void println(String msg) {
+        original.sendMessage(Text.of(msg), false);
     }
 
     @Override

@@ -26,6 +26,11 @@ public class BukkitPlayerEntity implements PlayerEntity {
     }
 
     @Override
+    public void println(String msg) {
+        original.sendMessage(msg);
+    }
+
+    @Override
     public void givePosMarker() {
         var itemStack = new org.bukkit.inventory.ItemStack(Material.STICK, 1);
         itemStack.addUnsafeEnchantment(Enchantment.SILK_TOUCH, 0);
