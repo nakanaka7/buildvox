@@ -19,6 +19,15 @@ public class DummyPlayer extends Player {
     }
 
     private static class DummyPlayerEntity implements PlayerEntity {
+        private UUID id = UUID.randomUUID();
+
+        public UUID getId() {
+            return id;
+        }
+
+        public void println(String msg) {
+        }
+
         @Override
         public void givePosMarker() {
         }
