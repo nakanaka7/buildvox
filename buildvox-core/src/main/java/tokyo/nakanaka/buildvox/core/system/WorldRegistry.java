@@ -14,6 +14,10 @@ public class WorldRegistry {
         worldMap.put(id, world);
     }
 
+    public void register(World world) {
+        worldMap.put(world.getId(), world);
+    }
+
     public void unregister(NamespacedId id) {
         worldMap.remove(id);
     }
