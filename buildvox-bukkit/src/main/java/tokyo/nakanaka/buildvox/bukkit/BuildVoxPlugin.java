@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import tokyo.nakanaka.buildvox.core.MessageReceiver;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.PlayerEntity;
+import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.system.PlayerRepository;
 import tokyo.nakanaka.buildvox.core.world.World;
@@ -125,10 +126,11 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
             repo.create(playerId, cmdSource.playerEntity());
         }
         MessageReceiver msgReceiver = new BukkitMessageReceiver(cmdSender);
+        Vector3i pos = new Vector3i(cmdSource.x(), cmdSource.y(), cmdSource.z());
         switch (label) {
             case "bv" ->
                 BuildVoxSystem.onBvCommand(args,
-                        cmdSource.worldId(), cmdSource.x(), cmdSource.y(), cmdSource.z(), msgReceiver, cmdSource.playerId());
+                        cmdSource.world(), pos, msgReceiver, cmdSource.playerId());
             case  "bvd" ->
                 BuildVoxSystem.onBvdCommand(args,
                         cmdSource.worldId(), cmdSource.x(), cmdSource.y(), cmdSource.z(), msgReceiver, cmdSource.playerId());
