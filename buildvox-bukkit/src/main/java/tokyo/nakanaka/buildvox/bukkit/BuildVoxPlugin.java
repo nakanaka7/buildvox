@@ -228,18 +228,13 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
         MessageReceiver commandOut = new BukkitMessageReceiver(player);
         Block block = evt.getClickedBlock();
         org.bukkit.World world0 = block.getWorld();
-        NamespacedId worldId = worldIdMap.get(world0);
-        if(worldId == null) {
-            throw new IllegalArgumentException();
-        }
-        int x = block.getX();
-        int y = block.getY();
-        int z = block.getZ();
+        World world = convertBukkitWorldToBvWorld(world0);
+        Vector3i pos = new Vector3i(block.getX(), block.getY(), block.getZ());
         switch (toolType) {
             case POS -> {
                 switch (action) {
-                    case LEFT_CLICK_BLOCK -> BuildVoxSystem.onLeftClickBlockByPosMarker(playerId, worldId, x, y, z, commandOut);
-                    case RIGHT_CLICK_BLOCK -> BuildVoxSystem.onRightClickBlockByPosMarker(playerId, worldId, x, y, z, commandOut);
+                    case LEFT_CLICK_BLOCK -> BuildVoxSystem.onLeftClickBlockByPosMarker(playerId, world, pos, commandOut);
+                    case RIGHT_CLICK_BLOCK -> BuildVoxSystem.onRightClickBlockByPosMarker(playerId, world, pos, commandOut);
                 }
             }
         }
