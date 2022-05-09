@@ -35,6 +35,7 @@ import tokyo.nakanaka.buildvox.core.MessageReceiver;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.PlayerEntity;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
+import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.world.World;
 
@@ -254,12 +255,12 @@ public class BuildVoxMod implements ModInitializer {
 			return ActionResult.PASS;
 		}
 		UUID playerId = player1.getUuid();
+		Player player = BuildVoxSystem.getPlayerRepository().get(playerId);
 		World world = convertServerWorldToBvWorld(world1);
-		MessageReceiver msgReceiver = new FabricMessageReceiver(player1.getCommandSource());
 		ItemStack is = player0.getMainHandStack();
 		Vector3i pos = new Vector3i(pos0.getX(), pos0.getY(), pos0.getZ());
 		if(is.getItem().equals(POS_MARKER)){
-			BuildVoxSystem.onLeftClickBlockByPosMarker(playerId, world, pos, msgReceiver);
+			BuildVoxSystem.onLeftClickBlockByPosMarker(player, world, pos);
 			return ActionResult.SUCCESS;
 		}else {
 			return ActionResult.PASS;
@@ -282,13 +283,13 @@ public class BuildVoxMod implements ModInitializer {
 			return ActionResult.PASS;
 		}
 		UUID playerId = player1.getUuid();
+		Player player = BuildVoxSystem.getPlayerRepository().get(playerId);
 		World world = convertServerWorldToBvWorld(world1);
-		MessageReceiver msgReceiver = new FabricMessageReceiver(player1.getCommandSource());
 		ItemStack is = player0.getMainHandStack();
 		BlockPos pos0 = hitResult.getBlockPos();
 		Vector3i pos = new Vector3i(pos0.getX(), pos0.getY(), pos0.getZ());
 		if(is.getItem().equals(POS_MARKER)){
-			BuildVoxSystem.onRightClickBlockByPosMarker(playerId, world, pos, msgReceiver);
+			BuildVoxSystem.onRightClickBlockByPosMarker(player, world, pos);
 			return ActionResult.SUCCESS;
 		}else {
 			return ActionResult.PASS;
