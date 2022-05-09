@@ -12,7 +12,7 @@ import java.util.UUID;
 
 import static tokyo.nakanaka.buildvox.core.system.BuildVoxSystem.*;
 
-public class PosMarkerClickBlockEventHandler implements ClickBlockEventHandler {
+public class PosMarkerClickBlockEventHandler {
     /**
      * Handles a left-clicking block event by pos marker.
      * @param playerId the id of a player who invoked this event.
@@ -24,7 +24,6 @@ public class PosMarkerClickBlockEventHandler implements ClickBlockEventHandler {
      * @throws IllegalArgumentException if the player id is not registered into this class.
      * @throws IllegalArgumentException if the world id is not registered.
      */
-    @Override
     public void onLeft(UUID playerId, NamespacedId worldId, int x, int y, int z, MessageReceiver messageReceiver) {
         if(!BuildVoxSystem.WORLD_REGISTRY.worldIsRegistered(worldId)) {
             throw new IllegalArgumentException();
@@ -50,7 +49,6 @@ public class PosMarkerClickBlockEventHandler implements ClickBlockEventHandler {
      * @throws IllegalArgumentException if the player id is not registered into this class.
      * @throws IllegalArgumentException if the world id is not registered.
      */
-    @Override
     public void onRight(UUID playerId, NamespacedId worldId, int x, int y, int z, MessageReceiver messageReceiver) {
         if(!BuildVoxSystem.WORLD_REGISTRY.worldIsRegistered(worldId)) {
             throw new IllegalArgumentException();
