@@ -50,6 +50,11 @@ public class BuildVoxSystem {
         public static final Config DEFAULT = new Config(ColorCode.GREEN, ColorCode.RED, Block.valueOf("minecraft:air"), 2);
     }
 
+    /** Get the world registry */
+    public static WorldRegistry getWorldRegistry() {
+        return WORLD_REGISTRY;
+    }
+
     /**
      * Run "/bv" command.
      * @param playerId the id of a player who run the command. When a command is run by a non-player like command block
