@@ -128,12 +128,8 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
         MessageReceiver msgReceiver = new BukkitMessageReceiver(cmdSender);
         Vector3i pos = new Vector3i(cmdSource.x(), cmdSource.y(), cmdSource.z());
         switch (label) {
-            case "bv" ->
-                BuildVoxSystem.onBvCommand(args,
-                        cmdSource.world(), pos, msgReceiver, cmdSource.playerId());
-            case  "bvd" ->
-                BuildVoxSystem.onBvdCommand(args,
-                        cmdSource.worldId(), cmdSource.x(), cmdSource.y(), cmdSource.z(), msgReceiver, cmdSource.playerId());
+            case "bv" -> BuildVoxSystem.onBvCommand(args, cmdSource.world(), pos, msgReceiver, cmdSource.playerId());
+            case "bvd" -> BuildVoxSystem.onBvdCommand(args, msgReceiver);
         }
         return true;
     }

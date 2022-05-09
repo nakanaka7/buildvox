@@ -191,9 +191,7 @@ public class BuildVoxMod implements ModInitializer {
 
 	private int onBvdCommand(CommandContext<ServerCommandSource> context) {
 		CommandRunner runner = (cmdSource0, args, commandOut) -> {
-			CommandSource cmdSource = createCommandSource(cmdSource0);
-			BuildVoxSystem.onBvdCommand(args, cmdSource.worldId(), cmdSource.x(), cmdSource.y(), cmdSource.z(),
-					commandOut, cmdSource.playerId());
+			BuildVoxSystem.onBvdCommand(args, commandOut);
 		};
 		return onCommand(context, runner);
 	}
