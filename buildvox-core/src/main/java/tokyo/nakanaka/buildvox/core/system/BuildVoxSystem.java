@@ -55,6 +55,11 @@ public class BuildVoxSystem {
         return WORLD_REGISTRY;
     }
 
+    /** Get the player repository */
+    public static PlayerRepository getPlayerRepository() {
+        return PLAYER_REPOSITORY;
+    }
+
     /**
      * Run "/bv" command.
      * @param playerId the id of a player who run the command. When a command is run by a non-player like command block
