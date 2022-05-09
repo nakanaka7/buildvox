@@ -112,8 +112,7 @@ public class BuildVoxSystem {
     }
 
     /** Run "/bvd" command. */
-    public static void onBvdCommand(String[] args, NamespacedId worldId, int x, int y, int z,
-                                    MessageReceiver messageReceiver, UUID playerId) {
+    public static void onBvdCommand(String[] args, MessageReceiver messageReceiver) {
         Writer outWriter = new BuildVoxWriter(config.outColor(), messageReceiver);
         Writer errWriter = new BuildVoxWriter(config.errColor(), messageReceiver);
         PrintWriter out = new PrintWriter(outWriter, true);
@@ -123,10 +122,6 @@ public class BuildVoxSystem {
                 .setErr(err)
                 .setCaseInsensitiveEnumValuesAllowed(true)
                 .execute(args);
-    }
-
-    public static void onBvdCommand(String[] args, MessageReceiver messageReceiver) {
-        onBvdCommand(args, null, 0, 0, 0, messageReceiver, null);
     }
 
     /** Returns String list of "/bvd" command's tab completion. */
