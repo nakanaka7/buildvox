@@ -4,10 +4,24 @@ import tokyo.nakanaka.buildvox.core.particleGui.Color;
 import tokyo.nakanaka.buildvox.core.particleGui.ColoredParticleSpawner;
 import tokyo.nakanaka.buildvox.core.world.World;
 
+import java.util.UUID;
+
 /**
  * Represents a player entity.
  */
 public interface PlayerEntity extends ColoredParticleSpawner, MessageReceiver {
+    /**
+     * Get the id of this player entity.
+     * @return the id of this player entity.
+     */
+    default UUID getId() {
+        return UUID.randomUUID();
+    }
+
+    default void println(String msg) {
+
+    }
+
     /**
      * Give her a pos marker.
      */
@@ -24,9 +38,5 @@ public interface PlayerEntity extends ColoredParticleSpawner, MessageReceiver {
      */
     @Override
     void spawnParticle(Color color, World world, double x, double y, double z);
-
-    default void println(String msg) {
-
-    }
 
 }
