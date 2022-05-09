@@ -10,6 +10,8 @@ import tokyo.nakanaka.buildvox.core.PlayerEntity;
 import tokyo.nakanaka.buildvox.core.particleGui.Color;
 import tokyo.nakanaka.buildvox.core.world.World;
 
+import java.util.UUID;
+
 /**
  * The implementation of PlayerEntity for Fabric platform
  */
@@ -22,6 +24,11 @@ public class FabricPlayerEntity implements PlayerEntity {
      */
     public FabricPlayerEntity(ServerPlayerEntity original) {
         this.original = original;
+    }
+
+    @Override
+    public UUID getId() {
+        return original.getUuid();
     }
 
     @Override

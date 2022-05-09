@@ -11,6 +11,8 @@ import tokyo.nakanaka.buildvox.core.PlayerEntity;
 import tokyo.nakanaka.buildvox.core.particleGui.Color;
 import tokyo.nakanaka.buildvox.core.world.World;
 
+import java.util.UUID;
+
 /**
  * The class which implements {@link PlayerEntity} for Bukkit Platform
  */
@@ -23,6 +25,11 @@ public class BukkitPlayerEntity implements PlayerEntity {
      */
     public BukkitPlayerEntity(Player original) {
         this.original = original;
+    }
+
+    @Override
+    public UUID getId() {
+        return original.getUniqueId();
     }
 
     @Override
