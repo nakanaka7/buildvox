@@ -26,6 +26,7 @@ import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.PlayerEntity;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.system.PlayerRepository;
+import tokyo.nakanaka.buildvox.core.world.World;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
@@ -100,6 +101,12 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
             throw new IllegalArgumentException();
         }
         return new CommandSource(playerId, playerEntity, worldId, x, y, z);
+    }
+
+    /** convert bukkit World to bv World*/
+    private static World convertBukkitWorldToBvWorld(org.bukkit.World world) {
+        NamespacedId worldId = new NamespacedId(world.getName());
+        return BuildVoxSystem.getWorldRegistry().get(worldId);
     }
 
     @Override
