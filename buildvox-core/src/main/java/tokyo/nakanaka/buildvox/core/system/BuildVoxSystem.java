@@ -136,11 +136,15 @@ public class BuildVoxSystem {
     public static void onLeftClickBlockByPosMarker(UUID playerId, World world, Vector3i pos, MessageReceiver messageReceiver) {
         Player player = BuildVoxSystem.PLAYER_REPOSITORY.get(playerId);
         if (player == null) throw new IllegalArgumentException();
+        onLeftClickBlockByPosMarker(player, world, pos);
+    }
+
+    public static void onLeftClickBlockByPosMarker(Player player, World world, Vector3i pos) {
         Vector3i[] posData = new Vector3i[player.getPosArrayClone().length];
         posData[0] = pos;
         player.setPosArrayWithSelectionNull(world, posData);
         PARTICLE_GUI_REPOSITORY.update(player);
-        messageReceiver.println(config.outColor() + FeedbackMessage.ofPosExit(0, pos.x(), pos.y(), pos.z()));
+        player.getPlayerEntity().println(config.outColor() + FeedbackMessage.ofPosExit(0, pos.x(), pos.y(), pos.z()));
     }
 
     /**
@@ -153,6 +157,10 @@ public class BuildVoxSystem {
     public static void onRightClickBlockByPosMarker(UUID playerId, World world, Vector3i pos, MessageReceiver messageReceiver) {
         Player player = BuildVoxSystem.PLAYER_REPOSITORY.get(playerId);
         if (player == null) throw new IllegalArgumentException();
+        onRightClickBlockByPosMarker(player, world, pos);
+    }
+
+    public static void onRightClickBlockByPosMarker(Player player, World world, Vector3i pos) {
         World posOrSelectionWorld = player.getWorld();
         Vector3i[] posData = player.getPosArrayClone();
         if (world != posOrSelectionWorld) {
@@ -169,7 +177,7 @@ public class BuildVoxSystem {
         posData[index] = pos;
         player.setPosArrayWithSelectionNull(world, posData);
         PARTICLE_GUI_REPOSITORY.update(player);
-        messageReceiver.println(config.outColor() + FeedbackMessage.ofPosExit(index, pos.x(), pos.y(), pos.z()));
+        player.getPlayerEntity().println(config.outColor() + FeedbackMessage.ofPosExit(index, pos.x(), pos.y(), pos.z()));
     }
 
 }
