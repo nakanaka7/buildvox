@@ -2,13 +2,20 @@ package tokyo.nakanaka.buildvox.core.system;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import picocli.CommandLine;
 import tokyo.nakanaka.buildvox.core.*;
 import tokyo.nakanaka.buildvox.core.blockStateTransformer.BlockStateTransformer;
+import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
 import tokyo.nakanaka.buildvox.core.system.clickBlockEventHandler.PosMarkerClickBlockEventHandler;
+import tokyo.nakanaka.buildvox.core.system.commandHandler.BuildVoxWriter;
 import tokyo.nakanaka.buildvox.core.system.commandHandler.BvCommandHandler;
 import tokyo.nakanaka.buildvox.core.system.commandHandler.BvdCommandHandler;
+import tokyo.nakanaka.buildvox.core.system.commandHandler.Util;
 import tokyo.nakanaka.buildvox.core.world.Block;
+import tokyo.nakanaka.buildvox.core.world.World;
 
+import java.io.PrintWriter;
+import java.io.Writer;
 import java.util.List;
 import java.util.UUID;
 
@@ -45,14 +52,56 @@ public class BuildVoxSystem {
         public static final Config DEFAULT = new Config(ColorCode.GREEN, ColorCode.RED, Block.valueOf("minecraft:air"), 2);
     }
 
-    /** Run "/bv" command. */
+    /**
+     * Run "/bv" command.
+     * @param playerId the id of a player who run the command. When a command is run by a non-player like command block
+     * or console, set null.
+     * @param worldId the id of the world where the command is run.
+     * @param x the x-coordinate of the position where the command is run.
+     * @param y the y-coordinate of the position where the command is run.
+     * @param z the z-coordinate of the position where the command is run.
+     * @param args the arguments of the command.
+     * @param messageReceiver the receiver the command feedback messages.
+     * @throws IllegalArgumentException if the player id is not registered. If the id is null, an exception will not
+     * be thrown.
+     * @throws IllegalArgumentException if the world id is not registered.
+     */
     public static void onBvCommand(String[] args, NamespacedId worldId, int x, int y, int z, MessageReceiver messageReceiver, UUID playerId) {
-        new BvCommandHandler().onCommand(args, worldId, x, y, z, messageReceiver, playerId);
+        if(playerId != null && PLAYER_REPOSITORY.get(playerId) == null)throw new IllegalArgumentException();
+        if(!BuildVoxSystem.WORLD_REGISTRY.worldIsRegistered(worldId)) {
+            throw new IllegalArgumentException();
+        }
+        World world = BuildVoxSystem.WORLD_REGISTRY.get(worldId);
+        Writer outWriter = new BuildVoxWriter(config.outColor(), messageReceiver);
+        Writer errWriter = new BuildVoxWriter(config.errColor(), messageReceiver);
+        PrintWriter out = new PrintWriter(outWriter, true);
+        PrintWriter err = new PrintWriter(errWriter, true);
+        out.println("Running \"/bv " + String.join(" ", args) + "\"...");
+        BvCommand bvCmd = new BvCommand(playerId, world, x, y, z);
+        new CommandLine(bvCmd)
+                .setOut(out)
+                .setErr(err)
+                .setCaseInsensitiveEnumValuesAllowed(true)
+                .setExecutionStrategy(bvCmd::executionStrategy)
+                .execute(args);
+        BuildVoxSystem.PARTICLE_GUI_REPOSITORY.update(bvCmd.getPlayer());
     }
 
-    /** Returns String list of "/bv" command's tab completion. */
+    /**
+     * Returns String list of "/bv" command's tab completion.
+     * This method has an issue about positional parameters due to picocli. (picocli Issues #1018)
+     * @param args an arguments of the command.
+     * @throws IllegalArgumentException if this system does not contain the player data of playerId.
+     * @throws IllegalArgumentException if the player id is not registered. If the id is null, an exception will not
+     * be thrown.
+     */
     public static List<String> onBvTabComplete(String[] args) {
-        return new BvCommandHandler().onTabComplete(args);
+        BvCommand bvCmd = new BvCommand(null, null, 0, 0, 0);
+        CommandLine.Model.CommandSpec spec
+                = new CommandLine(bvCmd)
+                .setCaseInsensitiveEnumValuesAllowed(true)
+                .getCommandSpec();
+        return Util.getTabCompletionList(spec, args);
     }
 
     /** Run "/bvd" command. */
