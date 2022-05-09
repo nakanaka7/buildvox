@@ -50,6 +50,11 @@ public class BuildVoxSystem {
         public static final Config DEFAULT = new Config(ColorCode.GREEN, ColorCode.RED, Block.valueOf("minecraft:air"), 2);
     }
 
+    /** Get the config */
+    public static Config getConfig() {
+        return config;
+    }
+
     /** Get the world registry */
     public static WorldRegistry getWorldRegistry() {
         return WORLD_REGISTRY;
