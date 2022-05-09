@@ -90,6 +90,10 @@ public class BuildVoxSystem {
         BuildVoxSystem.PARTICLE_GUI_REPOSITORY.update(bvCmd.getPlayer());
     }
 
+    public static void onBvCommand(String[] args, World world, Vector3i pos, MessageReceiver messageReceiver, UUID playerId) {
+        onBvCommand(args, world.getId(), pos.x(), pos.y(), pos.z(), messageReceiver, playerId);
+    }
+
     /**
      * Returns String list of "/bv" command's tab completion.
      * This method has an issue about positional parameters due to picocli. (picocli Issues #1018)
