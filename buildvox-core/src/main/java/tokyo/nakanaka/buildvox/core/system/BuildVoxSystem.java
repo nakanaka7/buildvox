@@ -59,28 +59,20 @@ public class BuildVoxSystem {
      * Run "/bv" command.
      * @param playerId the id of a player who run the command. When a command is run by a non-player like command block
      * or console, set null.
-     * @param worldId the id of the world where the command is run.
-     * @param x the x-coordinate of the position where the command is run.
-     * @param y the y-coordinate of the position where the command is run.
-     * @param z the z-coordinate of the position where the command is run.
+     * @param pos the command execution position.
      * @param args the arguments of the command.
      * @param messageReceiver the receiver the command feedback messages.
      * @throws IllegalArgumentException if the player id is not registered. If the id is null, an exception will not
      * be thrown.
-     * @throws IllegalArgumentException if the world id is not registered.
      */
-    public static void onBvCommand(String[] args, NamespacedId worldId, int x, int y, int z, MessageReceiver messageReceiver, UUID playerId) {
+    public static void onBvCommand(String[] args, World world, Vector3i pos, MessageReceiver messageReceiver, UUID playerId) {
         if(playerId != null && PLAYER_REPOSITORY.get(playerId) == null)throw new IllegalArgumentException();
-        if(!BuildVoxSystem.WORLD_REGISTRY.worldIsRegistered(worldId)) {
-            throw new IllegalArgumentException();
-        }
-        World world = BuildVoxSystem.WORLD_REGISTRY.get(worldId);
         Writer outWriter = new BuildVoxWriter(config.outColor(), messageReceiver);
         Writer errWriter = new BuildVoxWriter(config.errColor(), messageReceiver);
         PrintWriter out = new PrintWriter(outWriter, true);
         PrintWriter err = new PrintWriter(errWriter, true);
         out.println("Running \"/bv " + String.join(" ", args) + "\"...");
-        BvCommand bvCmd = new BvCommand(playerId, world, x, y, z);
+        BvCommand bvCmd = new BvCommand(playerId, world, pos.x(), pos.y(), pos.z());
         new CommandLine(bvCmd)
                 .setOut(out)
                 .setErr(err)
@@ -88,10 +80,6 @@ public class BuildVoxSystem {
                 .setExecutionStrategy(bvCmd::executionStrategy)
                 .execute(args);
         BuildVoxSystem.PARTICLE_GUI_REPOSITORY.update(bvCmd.getPlayer());
-    }
-
-    public static void onBvCommand(String[] args, World world, Vector3i pos, MessageReceiver messageReceiver, UUID playerId) {
-        onBvCommand(args, world.getId(), pos.x(), pos.y(), pos.z(), messageReceiver, playerId);
     }
 
     /**
