@@ -35,7 +35,6 @@ import tokyo.nakanaka.buildvox.core.MessageReceiver;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.PlayerEntity;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
-import tokyo.nakanaka.buildvox.core.system.ToolType;
 import tokyo.nakanaka.buildvox.core.world.World;
 
 import java.util.*;
@@ -155,6 +154,14 @@ public class BuildVoxMod implements ModInitializer {
 		int y = (int)Math.floor(cmdSource0.getPosition().getY());
 		int z = (int)Math.floor(cmdSource0.getPosition().getZ());
 		return new CommandSource(playerId, playerEntity, world, x, y, z);
+	}
+
+	/** convert ServerWorld to {@link World} */
+	private static World convertServerWorldToBvWorld(ServerWorld original) {
+		RegistryKey<net.minecraft.world.World> key = original.getRegistryKey();
+		Identifier worldId0 = key.getValue();
+		NamespacedId worldId = new NamespacedId(worldId0.getNamespace(), worldId0.getPath());
+		return BuildVoxSystem.getWorldRegistry().get(worldId);
 	}
 
 	private interface CommandRunner {
