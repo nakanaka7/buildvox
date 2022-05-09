@@ -128,17 +128,9 @@ public class BuildVoxSystem {
 
     /**
      * Handles a left-clicking block event by pos marker.
-     * @param playerId the id of a player who invoked this event.
+     * @param player the player who invoked this event.
      * @param pos the position of the clicked block.
-     * @param messageReceiver the receiver of the feedback message of this event.
-     * @throws IllegalArgumentException if the player id is not registered into this class.
      */
-    public static void onLeftClickBlockByPosMarker(UUID playerId, World world, Vector3i pos, MessageReceiver messageReceiver) {
-        Player player = BuildVoxSystem.PLAYER_REPOSITORY.get(playerId);
-        if (player == null) throw new IllegalArgumentException();
-        onLeftClickBlockByPosMarker(player, world, pos);
-    }
-
     public static void onLeftClickBlockByPosMarker(Player player, World world, Vector3i pos) {
         Vector3i[] posData = new Vector3i[player.getPosArrayClone().length];
         posData[0] = pos;
@@ -149,17 +141,9 @@ public class BuildVoxSystem {
 
     /**
      * Handles a right-clicking block event by pos marker.
-     * @param playerId the id of a player who invoked this event.
+     * @param player  a player who invoked this event.
      * @param pos the position of the clicked block.
-     * @param messageReceiver the receiver of the feedback message of this event.
-     * @throws IllegalArgumentException if the player id is not registered into this class.
      */
-    public static void onRightClickBlockByPosMarker(UUID playerId, World world, Vector3i pos, MessageReceiver messageReceiver) {
-        Player player = BuildVoxSystem.PLAYER_REPOSITORY.get(playerId);
-        if (player == null) throw new IllegalArgumentException();
-        onRightClickBlockByPosMarker(player, world, pos);
-    }
-
     public static void onRightClickBlockByPosMarker(Player player, World world, Vector3i pos) {
         World posOrSelectionWorld = player.getWorld();
         Vector3i[] posData = player.getPosArrayClone();

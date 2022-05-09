@@ -224,6 +224,7 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
         tokyo.nakanaka.buildvox.core.player.Player bvPlayer = repo.get(playerId);
         if(bvPlayer == null) {
             repo.create(playerId, playerEntity);
+            bvPlayer = repo.get(playerId);
         }
         MessageReceiver commandOut = new BukkitMessageReceiver(player);
         Block block = evt.getClickedBlock();
@@ -233,8 +234,8 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
         switch (toolType) {
             case POS -> {
                 switch (action) {
-                    case LEFT_CLICK_BLOCK -> BuildVoxSystem.onLeftClickBlockByPosMarker(playerId, world, pos, commandOut);
-                    case RIGHT_CLICK_BLOCK -> BuildVoxSystem.onRightClickBlockByPosMarker(playerId, world, pos, commandOut);
+                    case LEFT_CLICK_BLOCK -> BuildVoxSystem.onLeftClickBlockByPosMarker(bvPlayer, world, pos);
+                    case RIGHT_CLICK_BLOCK -> BuildVoxSystem.onRightClickBlockByPosMarker(bvPlayer, world, pos);
                 }
             }
         }
