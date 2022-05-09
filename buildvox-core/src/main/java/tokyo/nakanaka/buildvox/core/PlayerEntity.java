@@ -7,7 +7,7 @@ import tokyo.nakanaka.buildvox.core.world.World;
 /**
  * Represents a player entity.
  */
-public interface PlayerEntity extends ColoredParticleSpawner {
+public interface PlayerEntity extends ColoredParticleSpawner, MessageReceiver {
     /**
      * Give her a pos marker.
      */
@@ -24,5 +24,9 @@ public interface PlayerEntity extends ColoredParticleSpawner {
      */
     @Override
     void spawnParticle(Color color, World world, double x, double y, double z);
+
+    default void println(String msg) {
+
+    }
 
 }
