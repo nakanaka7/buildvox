@@ -6,9 +6,9 @@ import picocli.CommandLine;
 import tokyo.nakanaka.buildvox.core.*;
 import tokyo.nakanaka.buildvox.core.blockStateTransformer.BlockStateTransformer;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
+import tokyo.nakanaka.buildvox.core.command.bvdCommand.BvdCommand;
 import tokyo.nakanaka.buildvox.core.system.clickBlockEventHandler.PosMarkerClickBlockEventHandler;
 import tokyo.nakanaka.buildvox.core.system.commandHandler.BuildVoxWriter;
-import tokyo.nakanaka.buildvox.core.system.commandHandler.BvdCommandHandler;
 import tokyo.nakanaka.buildvox.core.system.commandHandler.Util;
 import tokyo.nakanaka.buildvox.core.world.Block;
 import tokyo.nakanaka.buildvox.core.world.World;
@@ -106,12 +106,24 @@ public class BuildVoxSystem {
     /** Run "/bvd" command. */
     public static void onBvdCommand(String[] args, NamespacedId worldId, int x, int y, int z,
                                     MessageReceiver messageReceiver, UUID playerId) {
-        new BvdCommandHandler().onCommand(args, worldId, x, y, z, messageReceiver, playerId);
+        Writer outWriter = new BuildVoxWriter(config.outColor(), messageReceiver);
+        Writer errWriter = new BuildVoxWriter(config.errColor(), messageReceiver);
+        PrintWriter out = new PrintWriter(outWriter, true);
+        PrintWriter err = new PrintWriter(errWriter, true);
+        new CommandLine(new BvdCommand())
+                .setOut(out)
+                .setErr(err)
+                .setCaseInsensitiveEnumValuesAllowed(true)
+                .execute(args);
     }
 
     /** Returns String list of "/bvd" command's tab completion. */
     public static List<String> onBvdTabComplete(String[] args) {
-        return new BvdCommandHandler().onTabComplete(args);
+        CommandLine.Model.CommandSpec spec
+                = new CommandLine(new BvdCommand())
+                .setCaseInsensitiveEnumValuesAllowed(true)
+                .getCommandSpec();
+        return Util.getTabCompletionList(spec, args);
     }
 
     /** Handles a left-clicking block event by pos marker. */
