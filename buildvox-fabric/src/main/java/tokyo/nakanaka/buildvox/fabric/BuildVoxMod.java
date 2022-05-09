@@ -239,7 +239,7 @@ public class BuildVoxMod implements ModInitializer {
 	}
 
 	private ActionResult onAttackBlock(net.minecraft.entity.player.PlayerEntity player0,
-											  net.minecraft.world.World world0, Hand hand, BlockPos pos, Direction direction) {
+											  net.minecraft.world.World world0, Hand hand, BlockPos pos0, Direction direction) {
 		//One event triggers this function with different combinations of arguments.
 		//So filters the arguments by their super classes.
 		//The following filter may have redundant parts. For example, when the player is a server one, the world
@@ -254,14 +254,12 @@ public class BuildVoxMod implements ModInitializer {
 			return ActionResult.PASS;
 		}
 		UUID playerId = player1.getUuid();
-		NamespacedId worldId = worldIdMap.get(world1);
-		if(worldId == null) {
-			throw new IllegalArgumentException();
-		}
+		World world = convertServerWorldToBvWorld(world1);
 		MessageReceiver msgReceiver = new FabricMessageReceiver(player1.getCommandSource());
 		ItemStack is = player0.getMainHandStack();
+		Vector3i pos = new Vector3i(pos0.getX(), pos0.getY(), pos0.getZ());
 		if(is.getItem().equals(POS_MARKER)){
-			BuildVoxSystem.onLeftClickBlockByPosMarker(playerId, worldId, pos.getX(), pos.getY(), pos.getZ(), msgReceiver);
+			BuildVoxSystem.onLeftClickBlockByPosMarker(playerId, world, pos, msgReceiver);
 			return ActionResult.SUCCESS;
 		}else {
 			return ActionResult.PASS;
@@ -284,15 +282,13 @@ public class BuildVoxMod implements ModInitializer {
 			return ActionResult.PASS;
 		}
 		UUID playerId = player1.getUuid();
-		NamespacedId worldId = worldIdMap.get(world1);
-		if(worldId == null) {
-			throw new IllegalArgumentException();
-		}
+		World world = convertServerWorldToBvWorld(world1);
 		MessageReceiver msgReceiver = new FabricMessageReceiver(player1.getCommandSource());
 		ItemStack is = player0.getMainHandStack();
+		BlockPos pos0 = hitResult.getBlockPos();
+		Vector3i pos = new Vector3i(pos0.getX(), pos0.getY(), pos0.getZ());
 		if(is.getItem().equals(POS_MARKER)){
-			BlockPos pos = hitResult.getBlockPos();
-			BuildVoxSystem.onRightClickBlockByPosMarker(playerId, worldId, pos.getX(), pos.getY(), pos.getZ(), msgReceiver);
+			BuildVoxSystem.onRightClickBlockByPosMarker(playerId, world, pos, msgReceiver);
 			return ActionResult.SUCCESS;
 		}else {
 			return ActionResult.PASS;
