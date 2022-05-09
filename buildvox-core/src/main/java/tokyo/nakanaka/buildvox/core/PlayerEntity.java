@@ -14,13 +14,9 @@ public interface PlayerEntity extends ColoredParticleSpawner, MessageReceiver {
      * Get the id of this player entity.
      * @return the id of this player entity.
      */
-    default UUID getId() {
-        return UUID.randomUUID();
-    }
+    UUID getId();
 
-    default void println(String msg) {
-
-    }
+    void println(String msg);
 
     /**
      * Give her a pos marker.
