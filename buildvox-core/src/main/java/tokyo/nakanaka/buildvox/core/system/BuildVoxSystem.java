@@ -7,6 +7,7 @@ import tokyo.nakanaka.buildvox.core.*;
 import tokyo.nakanaka.buildvox.core.blockStateTransformer.BlockStateTransformer;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
 import tokyo.nakanaka.buildvox.core.command.bvdCommand.BvdCommand;
+import tokyo.nakanaka.buildvox.core.commandSender.CommandSender;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.world.Block;
@@ -113,6 +114,19 @@ public class BuildVoxSystem {
     public static void onBvdCommand(String[] args, MessageReceiver messageReceiver) {
         Writer outWriter = new BuildVoxWriter(config.outColor(), messageReceiver);
         Writer errWriter = new BuildVoxWriter(config.errColor(), messageReceiver);
+        PrintWriter out = new PrintWriter(outWriter, true);
+        PrintWriter err = new PrintWriter(errWriter, true);
+        new CommandLine(new BvdCommand())
+                .setOut(out)
+                .setErr(err)
+                .setCaseInsensitiveEnumValuesAllowed(true)
+                .execute(args);
+    }
+
+    /** Run "/bvd" command. */
+    public static void onBvdCommand(String[] args, CommandSender cmdSender) {
+        Writer outWriter = BuildVoxWriter.newOutInstance(cmdSender);
+        Writer errWriter = BuildVoxWriter.newErrInstance(cmdSender);
         PrintWriter out = new PrintWriter(outWriter, true);
         PrintWriter err = new PrintWriter(errWriter, true);
         new CommandLine(new BvdCommand())
