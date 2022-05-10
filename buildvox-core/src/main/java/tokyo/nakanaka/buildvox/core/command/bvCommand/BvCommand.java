@@ -39,7 +39,6 @@ public class BvCommand implements Runnable {
     private String dummyPlayer;
 
     private Player player;
-    private UUID playerId;
     private World world;
     private int x;
     private int y;
@@ -50,14 +49,6 @@ public class BvCommand implements Runnable {
         public Iterator<String> iterator() {
             return BuildVoxSystem.DUMMY_PLAYER_REPOSITORY.nameSet().stream().iterator();
         }
-    }
-
-    public BvCommand(UUID playerId, World world, int x, int y, int z) {
-        this.playerId = playerId;
-        this.world = world;
-        this.x = x;
-        this.y = y;
-        this.z = z;
     }
 
     public BvCommand(Player execPlayer, World execWorld, Vector3i execPos) {
@@ -74,10 +65,6 @@ public class BvCommand implements Runnable {
      */
     public int executionStrategy(CommandLine.ParseResult parseResult){
         PrintWriter err = commandSpec.commandLine().getErr();
-        PlayerRepository playerRepo = BuildVoxSystem.PLAYER_REPOSITORY;
-        if(playerId != null){
-            player = playerRepo.get(playerId);
-        }
         //-d
         if(dummyPlayer != null){
             DummyPlayerRepository dummyPlayerRepo = BuildVoxSystem.DUMMY_PLAYER_REPOSITORY;
