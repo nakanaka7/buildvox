@@ -77,13 +77,16 @@ public class BuildVoxSystem {
      * be thrown.
      */
     public static void onBvCommand(String[] args, World world, Vector3i pos, MessageReceiver messageReceiver, UUID playerId) {
-        if(playerId != null && PLAYER_REPOSITORY.get(playerId) == null)throw new IllegalArgumentException();
+        Player execPlayer = null;
+        if(playerId != null){
+            execPlayer = PLAYER_REPOSITORY.get(playerId);
+        }
         Writer outWriter = new BuildVoxWriter(config.outColor(), messageReceiver);
         Writer errWriter = new BuildVoxWriter(config.errColor(), messageReceiver);
         PrintWriter out = new PrintWriter(outWriter, true);
         PrintWriter err = new PrintWriter(errWriter, true);
         out.println("Running \"/bv " + String.join(" ", args) + "\"...");
-        BvCommand bvCmd = new BvCommand(playerId, world, pos.x(), pos.y(), pos.z());
+        BvCommand bvCmd = new BvCommand(execPlayer, world, pos);
         new CommandLine(bvCmd)
                 .setOut(out)
                 .setErr(err)
