@@ -160,7 +160,7 @@ public class BuildVoxMod implements ModInitializer {
 	}
 
 	/** convert ServerWorld to {@link World} */
-	private static World convertServerWorldToBvWorld(ServerWorld original) {
+	public static World convertServerWorldToBvWorld(ServerWorld original) {
 		RegistryKey<net.minecraft.world.World> key = original.getRegistryKey();
 		Identifier worldId0 = key.getValue();
 		NamespacedId worldId = new NamespacedId(worldId0.getNamespace(), worldId0.getPath());
