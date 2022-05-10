@@ -2,7 +2,7 @@ package tokyo.nakanaka.buildvox.core.commandSender;
 
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 
-public abstract class ConsoleCommandSender implements CommandSender {
+public abstract class Console implements CommandSender {
     public abstract void sendMessage(String msg);
 
     @Override
