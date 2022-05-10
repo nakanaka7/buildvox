@@ -105,7 +105,7 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
     }
 
     /** convert bukkit World to bv World*/
-    private static World convertBukkitWorldToBvWorld(org.bukkit.World world) {
+    public static World convertBukkitWorldToBvWorld(org.bukkit.World world) {
         NamespacedId worldId = new NamespacedId(world.getName());
         return BuildVoxSystem.getWorldRegistry().get(worldId);
     }
