@@ -8,12 +8,10 @@ import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.system.DummyPlayerRepository;
-import tokyo.nakanaka.buildvox.core.system.PlayerRepository;
 import tokyo.nakanaka.buildvox.core.world.World;
 
 import java.io.PrintWriter;
 import java.util.Iterator;
-import java.util.UUID;
 
 @CommandLine.Command(name = "bv",
         mixinStandardHelpOptions = true,
@@ -38,8 +36,8 @@ public class BvCommand implements Runnable {
     )
     private String dummyPlayer;
 
-    private Player player;
-    private World world;
+    private Player targetPlayer;
+    private World execWorld;
     private final Vector3i execPos;
     
     public static class DummyPlayerIdIterable implements Iterable<String> {
@@ -49,9 +47,14 @@ public class BvCommand implements Runnable {
         }
     }
 
+    /***
+     * @param execPlayer the player who executed this command. It may be null.
+     * @param execWorld the world of this command execution.
+     * @param execPos the block position of this command execution.
+     */
     public BvCommand(Player execPlayer, World execWorld, Vector3i execPos) {
-        this.player = execPlayer;
-        this.world = execWorld;
+        this.targetPlayer = execPlayer;
+        this.execWorld = execWorld;
         this.execPos = execPos;
     }
 
@@ -68,14 +71,14 @@ public class BvCommand implements Runnable {
                 err.println(FeedbackMessage.NOT_FOUND_DUMMY_PLAYER_ERROR);
                 return 0;
             }
-            player = dummyPlayerRepo.get(dummyPlayer);
+            targetPlayer = dummyPlayerRepo.get(dummyPlayer);
         }
-        if(player == null) {
+        if(targetPlayer == null) {
             err.println(FeedbackMessage.SESSION_NULL_ERROR);
             return 0;
         }
-        if(world != player.getWorld() ) {
-            player.setWorldWithPosArrayClearedAndSelectionNull(world);
+        if(execWorld != targetPlayer.getWorld() ) {
+            targetPlayer.setWorldWithPosArrayClearedAndSelectionNull(execWorld);
         }
         return new CommandLine.RunLast().execute(parseResult);
     }
@@ -84,8 +87,12 @@ public class BvCommand implements Runnable {
     public void run(){
     }
 
+    /**
+     *  Get the target player of this command. The player may not be the execPlayer because of specifying a
+     *  dummy player.
+     */
     public Player getPlayer() {
-        return player;
+        return targetPlayer;
     }
 
     /** Get the execution block position of this command */
