@@ -26,6 +26,14 @@ public interface PlayerEntity extends ColoredParticleSpawner, MessageReceiver {
     Vector3i getBlockPos();
 
     /**
+     * Get the world which this player exists in
+     * @return the world which this player exists in
+     */
+    default World getWorld() {
+        return null;
+    }
+
+    /**
      * Give her a pos marker.
      */
     void givePosMarker();
