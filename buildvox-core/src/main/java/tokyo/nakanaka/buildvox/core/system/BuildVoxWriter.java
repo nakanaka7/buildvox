@@ -1,6 +1,7 @@
 package tokyo.nakanaka.buildvox.core.system;
 
 import tokyo.nakanaka.buildvox.core.MessageReceiver;
+import tokyo.nakanaka.buildvox.core.commandSender.CommandSender;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -14,6 +15,14 @@ public class BuildVoxWriter extends Writer {
     public BuildVoxWriter(String colorCode, MessageReceiver messageReceiver){
         this.colorCode = colorCode;
         this.messageReceiver = messageReceiver;
+    }
+
+    public static BuildVoxWriter newOutInstance(CommandSender cmdSender) {
+        return new BuildVoxWriter("", cmdSender::sendOutMessage);
+    }
+
+    public static BuildVoxWriter newErrInstance(CommandSender cmdSender) {
+        return new BuildVoxWriter("", cmdSender::sendErrMessage);
     }
 
     @Override
