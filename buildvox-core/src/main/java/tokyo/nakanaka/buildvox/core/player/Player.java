@@ -31,6 +31,13 @@ public class Player implements CommandSender {
         this.playerEntity = playerEntity;
     }
 
+    public Player(PlayerEntity playerEntity) {
+        this.id = playerEntity.getId();
+        this.posArray = new Vector3i[BuildVoxSystem.config.posArrayLength()];
+        this.backgroundBlock = BuildVoxSystem.config.backgroundBlock();
+        this.playerEntity = playerEntity;
+    }
+
     public UUID getId() {
         return id;
     }
