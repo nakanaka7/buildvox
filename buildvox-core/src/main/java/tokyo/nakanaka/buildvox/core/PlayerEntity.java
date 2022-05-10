@@ -1,5 +1,6 @@
 package tokyo.nakanaka.buildvox.core;
 
+import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.particleGui.Color;
 import tokyo.nakanaka.buildvox.core.particleGui.ColoredParticleSpawner;
 import tokyo.nakanaka.buildvox.core.world.World;
@@ -17,6 +18,14 @@ public interface PlayerEntity extends ColoredParticleSpawner, MessageReceiver {
     UUID getId();
 
     void println(String msg);
+
+    /**
+     * Get the block position of this player
+     * @return the block position of this player
+     */
+    default Vector3i getBlockPos() {
+        return new Vector3i(0, 0, 0);
+    }
 
     /**
      * Give her a pos marker.
