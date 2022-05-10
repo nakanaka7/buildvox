@@ -23,9 +23,7 @@ public interface PlayerEntity extends ColoredParticleSpawner, MessageReceiver {
      * Get the block position of this player
      * @return the block position of this player
      */
-    default Vector3i getBlockPos() {
-        return new Vector3i(0, 0, 0);
-    }
+    Vector3i getBlockPos();
 
     /**
      * Give her a pos marker.
