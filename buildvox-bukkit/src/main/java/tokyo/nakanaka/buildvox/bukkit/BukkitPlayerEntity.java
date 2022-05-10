@@ -39,6 +39,11 @@ public class BukkitPlayerEntity implements PlayerEntity {
     }
 
     @Override
+    public World getWorld() {
+        return BuildVoxPlugin.convertBukkitWorldToBvWorld(original.getWorld());
+    }
+
+    @Override
     public Vector3i getBlockPos() {
         var loc = original.getLocation();
         return new Vector3i(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
