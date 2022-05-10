@@ -152,9 +152,9 @@ public class BuildVoxSystem {
     }
 
     /** Run "/bvd" command. */
-    public static void onBvdCommand(String[] args, CommandSender cmdSender) {
-        Writer outWriter = BuildVoxWriter.newOutInstance(cmdSender);
-        Writer errWriter = BuildVoxWriter.newErrInstance(cmdSender);
+    public static void onBvdCommand(CommandSender sender, String[] args) {
+        Writer outWriter = BuildVoxWriter.newOutInstance(sender);
+        Writer errWriter = BuildVoxWriter.newErrInstance(sender);
         PrintWriter out = new PrintWriter(outWriter, true);
         PrintWriter err = new PrintWriter(errWriter, true);
         new CommandLine(new BvdCommand())
