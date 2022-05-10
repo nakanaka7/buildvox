@@ -105,7 +105,7 @@ public class BuildVoxSystem {
      * be thrown.
      */
     public static List<String> onBvTabComplete(String[] args) {
-        BvCommand bvCmd = new BvCommand(null, null, 0, 0, 0);
+        BvCommand bvCmd = new BvCommand(null, null, new Vector3i(0, 0, 0));
         CommandLine.Model.CommandSpec spec
                 = new CommandLine(bvCmd)
                 .setCaseInsensitiveEnumValuesAllowed(true)
