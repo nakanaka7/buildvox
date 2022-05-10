@@ -93,7 +93,7 @@ public class BuildVoxSystem {
                 .setCaseInsensitiveEnumValuesAllowed(true)
                 .setExecutionStrategy(bvCmd::executionStrategy)
                 .execute(args);
-        BuildVoxSystem.PARTICLE_GUI_REPOSITORY.update(bvCmd.getPlayer());
+        BuildVoxSystem.PARTICLE_GUI_REPOSITORY.update(bvCmd.getTargetPlayer());
     }
 
     /**

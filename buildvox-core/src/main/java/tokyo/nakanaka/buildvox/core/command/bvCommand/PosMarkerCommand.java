@@ -19,7 +19,7 @@ public class PosMarkerCommand implements Runnable {
     @Override
     public void run() {
         PrintWriter err = commandSpec.commandLine().getErr();
-        Player client = bvCmd.getPlayer();
+        Player client = bvCmd.getTargetPlayer();
         PlayerEntity player = client.getPlayerEntity();
         if(player == null){
             err.println(FeedbackMessage.CANNOT_FIND_PLAYER_ERROR);

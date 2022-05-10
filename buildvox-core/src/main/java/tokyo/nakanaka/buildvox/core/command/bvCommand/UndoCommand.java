@@ -21,7 +21,7 @@ public class UndoCommand implements Runnable {
     public void run() {
         PrintWriter out = commandSpec.commandLine().getOut();
         PrintWriter err = commandSpec.commandLine().getErr();
-        Player player = bvCmd.getPlayer();
+        Player player = bvCmd.getTargetPlayer();
         if(count <= 0){
             err.println(FeedbackMessage.UNDO_REDO_COUNT_ERROR);
             return;

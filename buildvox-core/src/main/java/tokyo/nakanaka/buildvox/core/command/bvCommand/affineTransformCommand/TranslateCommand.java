@@ -29,7 +29,7 @@ public class TranslateCommand implements Runnable {
     public void run() {
         PrintWriter out = commandSpec.commandLine().getOut();
         PrintWriter err = commandSpec.commandLine().getErr();
-        Player player = bvCmd.getPlayer();
+        Player player = bvCmd.getTargetPlayer();
         EditExit editExit;
         try {
             editExit = PlayerEdits.translate(player, dx, dy, dz);

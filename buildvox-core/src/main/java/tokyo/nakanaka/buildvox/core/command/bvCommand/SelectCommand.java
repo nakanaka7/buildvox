@@ -70,7 +70,7 @@ public class SelectCommand {
     private void runSubcommand(ShapeMixin shapeMixin) {
         PrintWriter out = commandSpec.commandLine().getOut();
         PrintWriter err = commandSpec.commandLine().getErr();
-        Player player = bvCmd.getPlayer();
+        Player player = bvCmd.getTargetPlayer();
         World world = player.getWorld();
         Selection selection;
         try {

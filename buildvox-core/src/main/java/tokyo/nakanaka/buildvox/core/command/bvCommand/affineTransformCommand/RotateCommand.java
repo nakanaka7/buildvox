@@ -40,7 +40,7 @@ public class RotateCommand implements Runnable {
     public void run() {
         PrintWriter out = commandSpec.commandLine().getOut();
         PrintWriter err = commandSpec.commandLine().getErr();
-        Player player = bvCmd.getPlayer();
+        Player player = bvCmd.getTargetPlayer();
         Vector3d pos = posMixin.calcAbsPos(bvCmd.getExecPos());
         EditExit editExit;
         try {
