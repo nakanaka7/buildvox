@@ -40,9 +40,7 @@ public class BvCommand implements Runnable {
 
     private Player player;
     private World world;
-    private int x;
-    private int y;
-    private int z;
+    private final Vector3i execPos;
     
     public static class DummyPlayerIdIterable implements Iterable<String> {
         @Override
@@ -54,9 +52,7 @@ public class BvCommand implements Runnable {
     public BvCommand(Player execPlayer, World execWorld, Vector3i execPos) {
         this.player = execPlayer;
         this.world = execWorld;
-        this.x = execPos.x();
-        this.y = execPos.y();
-        this.z = execPos.z();
+        this.execPos = execPos;
     }
 
     /**
@@ -92,8 +88,9 @@ public class BvCommand implements Runnable {
         return player;
     }
 
+    /** Get the execution block position of this command */
     public Vector3i getExecPos() {
-        return new Vector3i(x, y, z);
+        return execPos;
     }
 
 }
