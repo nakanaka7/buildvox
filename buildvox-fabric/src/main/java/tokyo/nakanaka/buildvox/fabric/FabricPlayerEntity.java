@@ -38,6 +38,11 @@ public class FabricPlayerEntity implements PlayerEntity {
     }
 
     @Override
+    public World getWorld() {
+        return BuildVoxMod.convertServerWorldToBvWorld(original.getWorld());
+    }
+
+    @Override
     public Vector3i getBlockPos() {
         var pos = original.getBlockPos();
         return new Vector3i(pos.getX(), pos.getY(), pos.getZ());
