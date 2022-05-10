@@ -77,16 +77,37 @@ public class BuildVoxSystem {
      * be thrown.
      */
     public static void onBvCommand(String[] args, World world, Vector3i pos, MessageReceiver messageReceiver, UUID playerId) {
-        Player execPlayer = null;
         if(playerId != null){
-            execPlayer = PLAYER_REPOSITORY.get(playerId);
+            Player execPlayer = PLAYER_REPOSITORY.get(playerId);
+            onBvCommand(execPlayer, args, world, pos);
+            return;
         }
-        Writer outWriter = new BuildVoxWriter(config.outColor(), messageReceiver);
-        Writer errWriter = new BuildVoxWriter(config.errColor(), messageReceiver);
+        CommandSender sender = new CommandSender() {
+            @Override
+            public void sendOutMessage(String msg) {
+                messageReceiver.println(config.outColor() + msg);
+            }
+
+            @Override
+            public void sendErrMessage(String msg) {
+                messageReceiver.println(config.errColor() + msg);
+            }
+        };
+        onBvCommand(sender, args, world, pos);
+    }
+
+    private static void onBvCommand(CommandSender sender, String[] args, World execWorld, Vector3i execPos) {
+        Writer outWriter = BuildVoxWriter.newOutInstance(sender);
+        Writer errWriter = BuildVoxWriter.newErrInstance(sender);
         PrintWriter out = new PrintWriter(outWriter, true);
         PrintWriter err = new PrintWriter(errWriter, true);
+        BvCommand bvCmd;
+        if(sender instanceof Player execPlayer) {
+            bvCmd = new BvCommand(execPlayer, execWorld, execPos);
+        }else {
+            bvCmd = new BvCommand(null, execWorld, execPos);
+        }
         out.println("Running \"/bv " + String.join(" ", args) + "\"...");
-        BvCommand bvCmd = new BvCommand(execPlayer, world, pos);
         new CommandLine(bvCmd)
                 .setOut(out)
                 .setErr(err)
