@@ -29,6 +29,12 @@ public class DummyPlayer extends Player {
         public void println(String msg) {
         }
 
+        @Override
+        public World getWorld() {
+            return null;
+        }
+
+        @Override
         public Vector3i getBlockPos() {
             return new Vector3i(0, 0, 0);
         }
