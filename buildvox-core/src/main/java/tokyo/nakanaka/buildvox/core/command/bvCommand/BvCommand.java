@@ -60,6 +60,14 @@ public class BvCommand implements Runnable {
         this.z = z;
     }
 
+    public BvCommand(Player execPlayer, World execWorld, Vector3i execPos) {
+        this.player = execPlayer;
+        this.world = execWorld;
+        this.x = execPos.x();
+        this.y = execPos.y();
+        this.z = execPos.z();
+    }
+
     /**
      * ExecutionStrategy of this command. This method is called before command execution.
      * https://picocli.info/#_initialization_before_execution
