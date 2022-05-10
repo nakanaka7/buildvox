@@ -1,6 +1,7 @@
 package tokyo.nakanaka.buildvox.core.player;
 
 import tokyo.nakanaka.buildvox.core.PlayerEntity;
+import tokyo.nakanaka.buildvox.core.commandSender.CommandSender;
 import tokyo.nakanaka.buildvox.core.edit.Clipboard;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
@@ -13,7 +14,7 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.UUID;
 
-public class Player {
+public class Player implements CommandSender {
     private UUID id;
     private Block backgroundBlock;
     private Clipboard clipboard;
@@ -99,6 +100,16 @@ public class Player {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public void sendOutMessage(String msg) {
+        playerEntity.println(BuildVoxSystem.getConfig().outColor() + msg);
+    }
+
+    @Override
+    public void sendErrMessage(String msg) {
+        playerEntity.println(BuildVoxSystem.getConfig().errColor() + msg);
     }
 
 }
