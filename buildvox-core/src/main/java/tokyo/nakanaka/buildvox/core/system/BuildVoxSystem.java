@@ -96,6 +96,10 @@ public class BuildVoxSystem {
         onBvCommand(sender, args, world, pos);
     }
 
+    public static void onBvCommand(CommandSender sender, String[] args) {
+        onBvCommand(sender, args, sender.getWorld(), sender.getBlockPos());
+    }
+
     private static void onBvCommand(CommandSender sender, String[] args, World execWorld, Vector3i execPos) {
         Writer outWriter = BuildVoxWriter.newOutInstance(sender);
         Writer errWriter = BuildVoxWriter.newErrInstance(sender);
