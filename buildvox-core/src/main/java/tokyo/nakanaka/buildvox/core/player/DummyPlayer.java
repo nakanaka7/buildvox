@@ -1,6 +1,7 @@
 package tokyo.nakanaka.buildvox.core.player;
 
 import tokyo.nakanaka.buildvox.core.PlayerEntity;
+import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.particleGui.Color;
 import tokyo.nakanaka.buildvox.core.world.World;
 
@@ -26,6 +27,10 @@ public class DummyPlayer extends Player {
         }
 
         public void println(String msg) {
+        }
+
+        public Vector3i getBlockPos() {
+            return new Vector3i(0, 0, 0);
         }
 
         @Override

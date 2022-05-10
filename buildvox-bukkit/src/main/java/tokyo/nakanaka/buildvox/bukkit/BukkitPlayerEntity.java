@@ -8,6 +8,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.meta.ItemMeta;
 import tokyo.nakanaka.buildvox.core.ColorCode;
 import tokyo.nakanaka.buildvox.core.PlayerEntity;
+import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.particleGui.Color;
 import tokyo.nakanaka.buildvox.core.world.World;
 
@@ -35,6 +36,12 @@ public class BukkitPlayerEntity implements PlayerEntity {
     @Override
     public void println(String msg) {
         original.sendMessage(msg);
+    }
+
+    @Override
+    public Vector3i getBlockPos() {
+        var loc = original.getLocation();
+        return new Vector3i(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
     }
 
     @Override

@@ -7,6 +7,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3f;
 import tokyo.nakanaka.buildvox.core.PlayerEntity;
+import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.particleGui.Color;
 import tokyo.nakanaka.buildvox.core.world.World;
 
@@ -34,6 +35,12 @@ public class FabricPlayerEntity implements PlayerEntity {
     @Override
     public void println(String msg) {
         original.sendMessage(Text.of(msg), false);
+    }
+
+    @Override
+    public Vector3i getBlockPos() {
+        var pos = original.getBlockPos();
+        return new Vector3i(pos.getX(), pos.getY(), pos.getZ());
     }
 
     @Override
