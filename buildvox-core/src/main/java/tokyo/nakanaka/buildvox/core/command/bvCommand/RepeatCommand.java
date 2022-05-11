@@ -31,7 +31,7 @@ public class RepeatCommand implements Runnable {
         PrintWriter out = commandSpec.commandLine().getOut();
         PrintWriter err = commandSpec.commandLine().getErr();
         Player player = bvCmd.getTargetPlayer();
-        World world = player.getWorld();
+        World world = player.getEditTargetWorld();
         Vector3i[] posData = player.getPosArrayClone();
         if(posData.length != 2) {
             err.println(FeedbackMessage.ofPosArrayLengthError(2));

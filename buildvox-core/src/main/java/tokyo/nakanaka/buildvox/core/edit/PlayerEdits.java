@@ -78,7 +78,7 @@ public class PlayerEdits {
     public static void applyPhysics(Player player) {
         Selection selFrom = findSelection(player);
         Clipboard clipboard = new Clipboard();
-        EditWorld editWorld = new EditWorld(player.getWorld(), true);
+        EditWorld editWorld = new EditWorld(player.getEditTargetWorld(), true);
         WorldEdits.copy(editWorld, selFrom, Vector3d.ZERO, clipboard);
         WorldEdits.fill(editWorld, selFrom, Block.valueOf("air"), 1);
         WorldEdits.paste(clipboard, editWorld, Vector3d.ZERO);
@@ -88,7 +88,7 @@ public class PlayerEdits {
         }else {
             selTo = selFrom;
         }
-        player.setSelectionWithPosArrayCleared(player.getWorld(), selTo);
+        player.setSelectionWithPosArrayCleared(player.getEditTargetWorld(), selTo);
     }
 
     public static EditExit reflect(Player player, Axis axis, Vector3d pos) {
@@ -148,7 +148,7 @@ public class PlayerEdits {
         }else {
             Clipboard clipboard = new Clipboard();
             Vector3d copyOffset = Vector3d.ZERO;
-            WorldEdits.copy(new EditWorld(player.getWorld()), selectionFrom, copyOffset, clipboard);
+            WorldEdits.copy(new EditWorld(player.getEditTargetWorld()), selectionFrom, copyOffset, clipboard);
             clipboard.lock();
             AffineTransformation3d newClipTrans = trans.linear();
             Vector3d pasteOffset = trans.apply(copyOffset);
@@ -191,7 +191,7 @@ public class PlayerEdits {
     public static EditExit copy(Player player, Vector3d pos) {
         Selection selection = findSelection(player);
         Clipboard clipboard = new Clipboard();
-        WorldEdits.copy(new EditWorld(player.getWorld()), selection, pos, clipboard);
+        WorldEdits.copy(new EditWorld(player.getEditTargetWorld()), selection, pos, clipboard);
         clipboard.lock();
         player.setClipboard(clipboard);
         return new EditExit(clipboard.blockCount(), 0, 0);
@@ -336,7 +336,7 @@ public class PlayerEdits {
      * @throws IllegalArgumentException if endPosArray contains nonNull and selection is not null.
      */
     private static EditExit recordingEdit(Player player, EditWorldEditor editor, Vector3i[] endPosArray, Selection endSelection) {
-        RecordingEditWorld recordingEditWorld = new RecordingEditWorld(player.getWorld());
+        RecordingEditWorld recordingEditWorld = new RecordingEditWorld(player.getEditTargetWorld());
         editor.edit(recordingEditWorld);
         CompoundEdit compoundEdit = new CompoundEdit();
         UndoableEdit blockEdit = createBlockEdit(recordingEditWorld);
@@ -344,14 +344,14 @@ public class PlayerEdits {
         UndoableEdit posArrayOrSelectionEdit;
         if(endSelection == null) {
             posArrayOrSelectionEdit = createPosArrayEdit(player, endPosArray);
-            player.setPosArrayWithSelectionNull(player.getWorld(), endPosArray);
+            player.setPosArrayWithSelectionNull(player.getEditTargetWorld(), endPosArray);
         }else {
             boolean endPosArrayContainsOnlyNull = Arrays.stream(endPosArray).allMatch(Objects::isNull);
             if(!endPosArrayContainsOnlyNull) {
                 throw new IllegalArgumentException();
             }
             posArrayOrSelectionEdit = createSelectionEdit(player, endSelection);
-            player.setSelectionWithPosArrayCleared(player.getWorld(), endSelection);
+            player.setSelectionWithPosArrayCleared(player.getEditTargetWorld(), endSelection);
         }
         compoundEdit.addEdit(posArrayOrSelectionEdit);
         compoundEdit.end();
@@ -384,7 +384,7 @@ public class PlayerEdits {
 
     /* Creates an edit to set a new pos array into the player */
     private static UndoableEdit createPosArrayEdit(Player player, Vector3i[] posArray) {
-        World world = player.getWorld();
+        World world = player.getEditTargetWorld();
         Vector3i[] initPosArray = player.getPosArrayClone();
         Selection initSelection = player.getSelection();
         return createEdit(
@@ -401,7 +401,7 @@ public class PlayerEdits {
 
     /* Creates an edit to set a new selection into the player */
     private static UndoableEdit createSelectionEdit(Player player, Selection selection) {
-        World world = player.getWorld();
+        World world = player.getEditTargetWorld();
         Vector3i[] initPosArray = player.getPosArrayClone();
         Selection initSelection = player.getSelection();
         return createEdit(

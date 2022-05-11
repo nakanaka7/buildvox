@@ -71,7 +71,7 @@ public class SelectCommand {
         PrintWriter out = commandSpec.commandLine().getOut();
         PrintWriter err = commandSpec.commandLine().getErr();
         Player player = bvCmd.getTargetPlayer();
-        World world = player.getWorld();
+        World world = player.getEditTargetWorld();
         Selection selection;
         try {
             selection = shapeMixin.createSelection(player.getPosArrayClone());

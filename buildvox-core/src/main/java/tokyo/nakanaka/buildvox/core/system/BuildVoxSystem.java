@@ -192,7 +192,7 @@ public class BuildVoxSystem {
      * @param pos the position of the clicked block.
      */
     public static void onRightClickBlockByPosMarker(Player player, World world, Vector3i pos) {
-        World posOrSelectionWorld = player.getWorld();
+        World posOrSelectionWorld = player.getEditTargetWorld();
         Vector3i[] posData = player.getPosArrayClone();
         if (world != posOrSelectionWorld) {
             posData = new Vector3i[player.getPosArrayClone().length];

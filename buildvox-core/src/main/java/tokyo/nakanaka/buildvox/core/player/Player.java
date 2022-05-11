@@ -19,7 +19,7 @@ public class Player implements CommandSender {
     private Block backgroundBlock;
     private Clipboard clipboard;
     private UndoManager undoManager = new UndoManager();
-    private World world;
+    private World editTargetWorld;
     private Vector3i[] posArray;
     private Selection selection;
     private PlayerEntity playerEntity;
@@ -50,12 +50,12 @@ public class Player implements CommandSender {
         this.backgroundBlock = backgroundBlock;
     }
 
-    public World getWorld() {
-        return world;
+    public World getEditTargetWorld() {
+        return editTargetWorld;
     }
 
     public void setWorldWithPosArrayClearedAndSelectionNull(World world) {
-        this.world = world;
+        this.editTargetWorld = world;
         Arrays.fill(posArray, null);
         this.selection = null;
     }
@@ -69,13 +69,13 @@ public class Player implements CommandSender {
     }
 
     public void setSelectionWithPosArrayCleared(World world, Selection selection) {
-        this.world = world;
+        this.editTargetWorld = world;
         Arrays.fill(posArray, null);
         this.selection = selection;
     }
 
     public void setPosArrayWithSelectionNull(World world, Vector3i[] posArray) {
-        this.world = world;
+        this.editTargetWorld = world;
         this.posArray = posArray;
         this.selection = null;
     }

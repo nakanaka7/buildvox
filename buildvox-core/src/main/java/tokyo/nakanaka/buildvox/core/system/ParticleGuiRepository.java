@@ -34,7 +34,7 @@ public class ParticleGuiRepository {
         ParticleGui particleGui = guiMap.get(player);
         if(particleGui == null)return;
         particleGui.clearAllLines();
-        World posOrSelectionWorld = player.getWorld();
+        World posOrSelectionWorld = player.getEditTargetWorld();
         if(posOrSelectionWorld == null)return;
         Selection selection = player.getSelection();
         if(selection != null){
