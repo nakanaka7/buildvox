@@ -4,7 +4,7 @@ import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.world.World;
 
-public abstract class Console implements CommandSender {
+public abstract class AbstractConsole implements CommandSender {
     private World world;
     private Vector3i blockPos;
 
