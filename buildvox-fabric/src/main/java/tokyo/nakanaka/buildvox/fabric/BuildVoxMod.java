@@ -33,7 +33,6 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
-import tokyo.nakanaka.buildvox.core.MessageReceiver;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.PlayerEntity;
 import tokyo.nakanaka.buildvox.core.commandSender.CommandSender;
@@ -138,30 +137,6 @@ public class BuildVoxMod implements ModInitializer {
 		);
 	}
 
-	private record CommandSource(UUID playerId, PlayerEntity playerEntity,
-								 NamespacedId worldId, World world, int x, int y, int z) {
-	}
-
-	private CommandSource createCommandSource(ServerCommandSource cmdSource0){
-		UUID playerId = null;
-		PlayerEntity playerEntity = null;
-		ServerPlayerEntity player0 = null;
-		try {
-			player0 = cmdSource0.getPlayer();
-		}catch (CommandSyntaxException e){
-		}
-		if(player0 != null){
-			playerId = player0.getUuid();
-			playerEntity = new FabricPlayerEntity(player0);
-		}
-		NamespacedId worldId = worldIdMap.get(cmdSource0.getWorld());
-		World world = convertServerWorldToBvWorld(cmdSource0.getWorld());
-		int x = (int)Math.floor(cmdSource0.getPosition().getX());
-		int y = (int)Math.floor(cmdSource0.getPosition().getY());
-		int z = (int)Math.floor(cmdSource0.getPosition().getZ());
-		return new CommandSource(playerId, playerEntity, worldId, world, x, y, z);
-	}
-
 	/** convert ServerWorld to {@link World} */
 	public static World convertServerWorldToBvWorld(ServerWorld original) {
 		RegistryKey<net.minecraft.world.World> key = original.getRegistryKey();
@@ -200,19 +175,6 @@ public class BuildVoxMod implements ModInitializer {
 		}
 	}
 
-	private interface CommandRunner {
-		void run(ServerCommandSource cmdSource0, String[] args, MessageReceiver msgReceiver);
-	}
-
-	private int onCommand(CommandContext<ServerCommandSource> context, CommandRunner runner) {
-		String subcommand = StringArgumentType.getString(context, SUBCOMMAND);
-		String[] args = subcommand.split(" ", - 1);
-		ServerCommandSource cmdSource0 = context.getSource();
-		FabricMessageReceiver commandOut = new FabricMessageReceiver(cmdSource0);
-		runner.run(cmdSource0, args, commandOut);
-		return 1;
-	}
-
 	private int onBvCommand(CommandContext<ServerCommandSource> context) {
 		String subcommand = StringArgumentType.getString(context, SUBCOMMAND);
 		String[] args = subcommand.split(" ", - 1);
@@ -222,10 +184,11 @@ public class BuildVoxMod implements ModInitializer {
 	}
 
 	private int onBvdCommand(CommandContext<ServerCommandSource> context) {
-		CommandRunner runner = (cmdSource0, args, commandOut) -> {
-			BuildVoxSystem.onBvdCommand(args, commandOut);
-		};
-		return onCommand(context, runner);
+		String subcommand = StringArgumentType.getString(context, SUBCOMMAND);
+		String[] args = subcommand.split(" ", - 1);
+		CommandSender sender = getCommandSender(context.getSource());
+		BuildVoxSystem.onBvdCommand(sender, args);
+		return 1;
 	}
 
 	private CompletableFuture<Suggestions> onBvTabComplete(CommandContext<ServerCommandSource> context,
