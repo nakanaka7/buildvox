@@ -10,7 +10,7 @@ import java.util.UUID;
 /**
  * Represents a player entity.
  */
-public interface PlayerEntity extends ColoredParticleSpawner, MessageReceiver {
+public interface PlayerEntity extends ColoredParticleSpawner {
     /**
      * Get the id of this player entity.
      * @return the id of this player entity.
