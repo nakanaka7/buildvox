@@ -214,13 +214,11 @@ public class BuildVoxMod implements ModInitializer {
 	}
 
 	private int onBvCommand(CommandContext<ServerCommandSource> context) {
-		CommandRunner runner = (cmdSource0, args, commandOut) -> {
-			CommandSource cmdSource = createCommandSource(cmdSource0);
-			Vector3i pos = new Vector3i(cmdSource.x(), cmdSource.y(), cmdSource.z());
-			BuildVoxSystem.onBvCommand(args, cmdSource.world(), pos,
-					commandOut, cmdSource.playerId());
-		};
-		return onCommand(context, runner);
+		String subcommand = StringArgumentType.getString(context, SUBCOMMAND);
+		String[] args = subcommand.split(" ", - 1);
+		CommandSender sender = getCommandSender(context.getSource());
+		BuildVoxSystem.onBvCommand(sender, args);
+		return 1;
 	}
 
 	private int onBvdCommand(CommandContext<ServerCommandSource> context) {
