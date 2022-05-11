@@ -7,6 +7,7 @@ import org.bukkit.Server;
 import org.bukkit.block.Block;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import tokyo.nakanaka.buildvox.core.MessageReceiver;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.PlayerEntity;
+
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.system.PlayerRepository;
@@ -60,6 +62,19 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
             addWorld(world0);
         }
         server.getPluginManager().registerEvents(this, this);
+    }
+
+    //need fix
+    private static tokyo.nakanaka.buildvox.core.commandSender.CommandSender getBvCommandSender(CommandSender sender) {
+        if(sender instanceof Player player) {
+            return BuildVoxSystem.getPlayerRepository().get(player.getUniqueId());
+        }else if(sender instanceof BlockCommandSender blockSender) {
+            return BukkitCommandBlock.newInstance(blockSender);
+        }else if(sender instanceof ConsoleCommandSender consoleSender) {
+            return new BukkitConsole(consoleSender);
+        }else {
+            return null;
+        }
     }
 
     private record CommandSource(UUID playerId, PlayerEntity playerEntity, NamespacedId worldId, World world, int x, int y, int z) {
