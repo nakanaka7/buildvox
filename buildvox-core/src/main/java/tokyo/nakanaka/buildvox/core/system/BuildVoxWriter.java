@@ -12,7 +12,7 @@ public class BuildVoxWriter extends Writer {
     private String str = "";
     private boolean closed = false;
 
-    public BuildVoxWriter(String colorCode, MessageReceiver messageReceiver){
+    private BuildVoxWriter(String colorCode, MessageReceiver messageReceiver){
         this.colorCode = colorCode;
         this.messageReceiver = messageReceiver;
     }
