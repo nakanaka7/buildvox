@@ -23,17 +23,20 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import tokyo.nakanaka.buildvox.core.MessageReceiver;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.PlayerEntity;
+import tokyo.nakanaka.buildvox.core.commandSender.CommandSender;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
@@ -165,6 +168,36 @@ public class BuildVoxMod implements ModInitializer {
 		Identifier worldId0 = key.getValue();
 		NamespacedId worldId = new NamespacedId(worldId0.getNamespace(), worldId0.getPath());
 		return BuildVoxSystem.getWorldRegistry().get(worldId);
+	}
+
+	private static CommandSender getCommandSender(ServerCommandSource source) {
+		try {
+			ServerPlayerEntity spe = source.getPlayer();
+			return BuildVoxSystem.getPlayerRepository().get(spe.getUuid());
+		}catch (CommandSyntaxException e) {
+			return new CommandSender() {
+				@Override
+				public void sendOutMessage(String msg) {
+					source.sendFeedback(Text.of(msg), false);
+				}
+
+				@Override
+				public void sendErrMessage(String msg) {
+					source.sendFeedback(Text.of(msg), false);
+				}
+
+				@Override
+				public World getWorld() {
+					return convertServerWorldToBvWorld(source.getWorld());
+				}
+
+				@Override
+				public Vector3i getBlockPos() {
+					Vec3d p = source.getPosition();
+					return new Vector3i((int)Math.floor(p.getX()), (int)Math.floor(p.getY()), (int)Math.floor(p.getZ()));
+				}
+			};
+		}
 	}
 
 	private interface CommandRunner {
