@@ -92,6 +92,16 @@ public class BuildVoxSystem {
             public void sendErrMessage(String msg) {
                 messageReceiver.println(config.errColor() + msg);
             }
+
+            @Override
+            public World getWorld() {
+                return null;
+            }
+
+            @Override
+            public Vector3i getBlockPos() {
+                return new Vector3i(0, 0, 0);
+            }
         };
         onBvCommand(sender, args, world, pos);
     }
