@@ -1,9 +1,6 @@
 package tokyo.nakanaka.buildvox.bukkit;
 
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.Server;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
@@ -26,6 +23,7 @@ import tokyo.nakanaka.buildvox.core.MessageReceiver;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.PlayerEntity;
 
+import tokyo.nakanaka.buildvox.core.commandSender.PlainCommandSender;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.system.PlayerRepository;
@@ -40,6 +38,7 @@ import java.util.*;
 public class BuildVoxPlugin extends JavaPlugin implements Listener {
     private static Logger LOGGER = LoggerFactory.getLogger(BuildVoxPlugin.class);
     private Map<org.bukkit.World, NamespacedId> worldIdMap = new HashMap<>();
+    private static BukkitConsole console = new BukkitConsole(Bukkit.getConsoleSender());
     public static String POS_MARKER_LOCALIZED_NAME = "BuildVoxBukkit";
 
     @Override
@@ -64,16 +63,25 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
         server.getPluginManager().registerEvents(this, this);
     }
 
-    //need fix
     private static tokyo.nakanaka.buildvox.core.commandSender.CommandSender getBvCommandSender(CommandSender sender) {
         if(sender instanceof Player player) {
-            return BuildVoxSystem.getPlayerRepository().get(player.getUniqueId());
+            UUID id = player.getUniqueId();
+            var player1 = BuildVoxSystem.getPlayerRepository().get(id);
+            if(player1 != null)return player1;
+            BuildVoxSystem.getPlayerRepository().create(id, new BukkitPlayerEntity(player));
+            return BuildVoxSystem.getPlayerRepository().get(id);
         }else if(sender instanceof BlockCommandSender blockSender) {
             return BukkitCommandBlock.newInstance(blockSender);
-        }else if(sender instanceof ConsoleCommandSender consoleSender) {
-            return new BukkitConsole(consoleSender);
+        }else if(sender instanceof ConsoleCommandSender) {
+            return console;
         }else {
-            return null;
+            return new PlainCommandSender(BuildVoxSystem.getWorldRegistry().get(new NamespacedId("world")),
+                    new Vector3i(0, 0, 0)) {
+                @Override
+                public void sendMessage(String msg) {
+                    sender.sendMessage(msg);
+                }
+            };
         }
     }
 
