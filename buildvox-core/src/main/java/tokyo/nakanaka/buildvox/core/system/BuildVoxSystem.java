@@ -3,7 +3,10 @@ package tokyo.nakanaka.buildvox.core.system;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import picocli.CommandLine;
-import tokyo.nakanaka.buildvox.core.*;
+import tokyo.nakanaka.buildvox.core.BlockValidator;
+import tokyo.nakanaka.buildvox.core.ColorCode;
+import tokyo.nakanaka.buildvox.core.FeedbackMessage;
+import tokyo.nakanaka.buildvox.core.Scheduler;
 import tokyo.nakanaka.buildvox.core.blockStateTransformer.BlockStateTransformer;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
 import tokyo.nakanaka.buildvox.core.command.bvdCommand.BvdCommand;
@@ -16,7 +19,6 @@ import tokyo.nakanaka.buildvox.core.world.World;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * The entrypoint for the platforms which use BuildVox Core project.
@@ -68,53 +70,15 @@ public class BuildVoxSystem {
 
     /**
      * Run "/bv" command.
-     * @param playerId the id of a player who run the command. When a command is run by a non-player like command block
-     * or console, set null.
-     * @param pos the command execution position.
      * @param args the arguments of the command.
-     * @param messageReceiver the receiver the command feedback messages.
-     * @throws IllegalArgumentException if the player id is not registered. If the id is null, an exception will not
-     * be thrown.
      */
-    public static void onBvCommand(String[] args, World world, Vector3i pos, MessageReceiver messageReceiver, UUID playerId) {
-        if(playerId != null){
-            Player execPlayer = PLAYER_REPOSITORY.get(playerId);
-            onBvCommand(execPlayer, args, world, pos);
-            return;
-        }
-        CommandSender sender = new CommandSender() {
-            @Override
-            public void sendOutMessage(String msg) {
-                messageReceiver.println(config.outColor() + msg);
-            }
-
-            @Override
-            public void sendErrMessage(String msg) {
-                messageReceiver.println(config.errColor() + msg);
-            }
-
-            @Override
-            public World getWorld() {
-                return null;
-            }
-
-            @Override
-            public Vector3i getBlockPos() {
-                return new Vector3i(0, 0, 0);
-            }
-        };
-        onBvCommand(sender, args, world, pos);
-    }
-
     public static void onBvCommand(CommandSender sender, String[] args) {
-        onBvCommand(sender, args, sender.getWorld(), sender.getBlockPos());
-    }
-
-    private static void onBvCommand(CommandSender sender, String[] args, World execWorld, Vector3i execPos) {
         Writer outWriter = BuildVoxWriter.newOutInstance(sender);
         Writer errWriter = BuildVoxWriter.newErrInstance(sender);
         PrintWriter out = new PrintWriter(outWriter, true);
         PrintWriter err = new PrintWriter(errWriter, true);
+        World execWorld = sender.getWorld();
+        Vector3i execPos = sender.getBlockPos();
         BvCommand bvCmd;
         if(sender instanceof Player execPlayer) {
             bvCmd = new BvCommand(execPlayer, execWorld, execPos);
@@ -146,19 +110,6 @@ public class BuildVoxSystem {
                 .setCaseInsensitiveEnumValuesAllowed(true)
                 .getCommandSpec();
         return Util.getTabCompletionList(spec, args);
-    }
-
-    /** Run "/bvd" command. */
-    public static void onBvdCommand(String[] args, MessageReceiver messageReceiver) {
-        Writer outWriter = new BuildVoxWriter(config.outColor(), messageReceiver);
-        Writer errWriter = new BuildVoxWriter(config.errColor(), messageReceiver);
-        PrintWriter out = new PrintWriter(outWriter, true);
-        PrintWriter err = new PrintWriter(errWriter, true);
-        new CommandLine(new BvdCommand())
-                .setOut(out)
-                .setErr(err)
-                .setCaseInsensitiveEnumValuesAllowed(true)
-                .execute(args);
     }
 
     /** Run "/bvd" command. */
