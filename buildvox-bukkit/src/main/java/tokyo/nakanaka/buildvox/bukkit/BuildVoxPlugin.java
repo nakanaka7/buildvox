@@ -85,48 +85,6 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
         }
     }
 
-    private record CommandSource(UUID playerId, PlayerEntity playerEntity, NamespacedId worldId, World world, int x, int y, int z) {
-    }
-
-    private CommandSource createCommandSource(org.bukkit.command.CommandSender cmdSender) {
-        UUID playerId = null;
-        PlayerEntity playerEntity = null;
-        org.bukkit.World world;
-        int x;
-        int y;
-        int z;
-        if(cmdSender instanceof Player player) {
-            playerId = player.getUniqueId();
-            playerEntity = new BukkitPlayerEntity(player);
-            world = player.getWorld();
-            Location loc = player.getLocation();
-            x = loc.getBlockX();
-            y = loc.getBlockY();
-            z = loc.getBlockZ();
-        }else if(cmdSender instanceof BlockCommandSender blockCmdSender) {
-            org.bukkit.block.Block block = blockCmdSender.getBlock();
-            world = block.getWorld();
-            x = block.getX();
-            y = block.getY();
-            z = block.getZ();
-        }else if(cmdSender instanceof ConsoleCommandSender consoleCmdSender){
-            Server server = consoleCmdSender.getServer();
-            var world0 = server.getWorld("world");
-            if(world0 == null)throw new IllegalArgumentException();
-            world = world0;
-            x = 0;
-            y = 0;
-            z = 0;
-        }else{
-            throw new IllegalArgumentException();
-        }
-        NamespacedId worldId = worldIdMap.get(world);
-        if(worldId == null) {
-            throw new IllegalArgumentException();
-        }
-        return new CommandSource(playerId, playerEntity, worldId, convertBukkitWorldToBvWorld(world), x, y, z);
-    }
-
     /** convert bukkit World to bv World*/
     public static World convertBukkitWorldToBvWorld(org.bukkit.World world) {
         NamespacedId worldId = new NamespacedId(world.getName());
@@ -146,19 +104,7 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
 
     @Override
     public List<String> onTabComplete(@NotNull org.bukkit.command.CommandSender cmdSender, @NotNull Command command,
-                                      @NotNull String label, @NotNull String[] args){
-        CommandSource cmdSource;
-        try {
-            cmdSource = createCommandSource(cmdSender);
-        }catch (IllegalArgumentException e){
-            return new ArrayList<>();
-        }
-        UUID playerId = cmdSource.playerId();
-        PlayerRepository repo = BuildVoxSystem.PLAYER_REPOSITORY;
-        tokyo.nakanaka.buildvox.core.player.Player player = repo.get(playerId);
-        if(player == null) {
-            repo.create(playerId, cmdSource.playerEntity());
-        }
+                                      @NotNull String label, @NotNull String[] args) {
         return switch (label) {
             case "bv" -> BuildVoxSystem.onBvTabComplete(args);
             case "bvd" -> BuildVoxSystem.onBvdTabComplete(args);
