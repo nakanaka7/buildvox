@@ -134,25 +134,12 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
     }
 
     @Override
-    public boolean onCommand(@NotNull org.bukkit.command.CommandSender cmdSender, @NotNull Command command,
-                             @NotNull String label, @NotNull String[] args){
-        CommandSource cmdSource;
-        try {
-            cmdSource = createCommandSource(cmdSender);
-        }catch (IllegalArgumentException e){
-            return true;
-        }
-        UUID playerId = cmdSource.playerId();
-        PlayerRepository repo = BuildVoxSystem.PLAYER_REPOSITORY;
-        tokyo.nakanaka.buildvox.core.player.Player player = repo.get(playerId);
-        if(player == null) {
-            repo.create(playerId, cmdSource.playerEntity());
-        }
-        MessageReceiver msgReceiver = new BukkitMessageReceiver(cmdSender);
-        Vector3i pos = new Vector3i(cmdSource.x(), cmdSource.y(), cmdSource.z());
+    public boolean onCommand(@NotNull org.bukkit.command.CommandSender sender, @NotNull Command command,
+                             @NotNull String label, @NotNull String[] args) {
+        tokyo.nakanaka.buildvox.core.commandSender.CommandSender sender1 = getBvCommandSender(sender);
         switch (label) {
-            case "bv" -> BuildVoxSystem.onBvCommand(args, cmdSource.world(), pos, msgReceiver, cmdSource.playerId());
-            case "bvd" -> BuildVoxSystem.onBvdCommand(args, msgReceiver);
+            case "bv" -> BuildVoxSystem.onBvCommand(sender1, args);
+            case "bvd" -> BuildVoxSystem.onBvdCommand(sender1, args);
         }
         return true;
     }
