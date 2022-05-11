@@ -1,6 +1,5 @@
 package tokyo.nakanaka.buildvox.core.system;
 
-import tokyo.nakanaka.buildvox.core.MessageReceiver;
 import tokyo.nakanaka.buildvox.core.commandSender.CommandSender;
 
 import java.io.IOException;
@@ -65,6 +64,19 @@ public class BuildVoxWriter extends Writer {
     public void close() throws IOException {
         this.flush();
         this.closed = true;
+    }
+
+    /**
+     * An entity to receive messages.
+     */
+    @Deprecated
+    private interface MessageReceiver {
+        /**
+         * Prints the message as a line.
+         * @param msg the message.
+         */
+        void println(String msg);
+
     }
 
 }
