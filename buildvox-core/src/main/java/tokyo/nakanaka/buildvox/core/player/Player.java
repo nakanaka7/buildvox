@@ -119,4 +119,14 @@ public class Player implements CommandSender {
         playerEntity.println(BuildVoxSystem.getConfig().errColor() + msg);
     }
 
+    @Override
+    public World getWorld() {
+        return playerEntity.getWorld();
+    }
+
+    @Override
+    public Vector3i getBlockPos() {
+        return playerEntity.getBlockPos();
+    }
+
 }
