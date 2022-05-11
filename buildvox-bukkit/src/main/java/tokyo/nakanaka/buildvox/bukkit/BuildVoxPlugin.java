@@ -1,6 +1,9 @@
 package tokyo.nakanaka.buildvox.bukkit;
 
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Server;
 import org.bukkit.block.Block;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
@@ -19,10 +22,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import tokyo.nakanaka.buildvox.core.MessageReceiver;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.PlayerEntity;
-
 import tokyo.nakanaka.buildvox.core.commandSender.PlainCommandSender;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
@@ -182,7 +183,6 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
             repo.create(playerId, playerEntity);
             bvPlayer = repo.get(playerId);
         }
-        MessageReceiver commandOut = new BukkitMessageReceiver(player);
         Block block = evt.getClickedBlock();
         org.bukkit.World world0 = block.getWorld();
         World world = convertBukkitWorldToBvWorld(world0);
