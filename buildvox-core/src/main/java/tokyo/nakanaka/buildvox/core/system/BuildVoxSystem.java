@@ -37,7 +37,6 @@ public class BuildVoxSystem {
     /** Player repository */
     public static final Registry<Player, UUID> PLAYER_REPOSITORY = new Registry<>();
     public static final DummyPlayerRepository DUMMY_PLAYER_REPOSITORY = new DummyPlayerRepository();
-    public static final ParticleGuiRepository PARTICLE_GUI_REPOSITORY = new ParticleGuiRepository();
 
     private BuildVoxSystem() {
     }

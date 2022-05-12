@@ -4,6 +4,7 @@ import tokyo.nakanaka.buildvox.core.PlayerEntity;
 import tokyo.nakanaka.buildvox.core.commandSender.CommandSender;
 import tokyo.nakanaka.buildvox.core.edit.Clipboard;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
+import tokyo.nakanaka.buildvox.core.particleGui.ParticleGuiRepository;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.system.Entity;
@@ -131,16 +132,16 @@ public class Player implements CommandSender, Entity<UUID> {
     public void setParticleGuiVisible(boolean particleGuiVisible) {
         this.particleGuiVisible = particleGuiVisible;
         if(particleGuiVisible) {
-            BuildVoxSystem.PARTICLE_GUI_REPOSITORY.create(this);
+            ParticleGuiRepository.PARTICLE_GUI_REPOSITORY.create(this);
             updateParticleGui();
         }else{
-            BuildVoxSystem.PARTICLE_GUI_REPOSITORY.delete(this);
+            ParticleGuiRepository.PARTICLE_GUI_REPOSITORY.delete(this);
         }
     }
 
     private void updateParticleGui() {
         if(!particleGuiVisible) return;
-        BuildVoxSystem.PARTICLE_GUI_REPOSITORY.update(this);
+        ParticleGuiRepository.PARTICLE_GUI_REPOSITORY.update(this);
     }
 
 }

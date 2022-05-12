@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ParticleGuiRepository {
+    public static final ParticleGuiRepository PARTICLE_GUI_REPOSITORY = new ParticleGuiRepository();
     private Map<Player, ParticleGui> guiMap = new HashMap<>();
 
     public void create(Player player) {
