@@ -110,7 +110,7 @@ public class BuildVoxMod implements ModInitializer {
 		PlayerEntity playerEntity = new FabricPlayerEntity(player0);
 		Player player = new Player(playerEntity);
 		player.setParticleGuiVisible(true);
-		BuildVoxSystem.PLAYER_REPOSITORY.register(player);
+		BuildVoxSystem.getPlayerRepository().register(player);
 	}
 
 	private void onEntityUnload(Entity entity, ServerWorld world) {
@@ -118,7 +118,7 @@ public class BuildVoxMod implements ModInitializer {
 			return;
 		}
 		UUID playerId = player0.getUuid();
-		Player player = BuildVoxSystem.PLAYER_REPOSITORY.unregister(playerId);
+		Player player = BuildVoxSystem.getPlayerRepository().unregister(playerId);
 		player.setParticleGuiVisible(false);
 	}
 

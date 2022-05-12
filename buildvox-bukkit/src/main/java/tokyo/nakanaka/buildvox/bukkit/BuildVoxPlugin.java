@@ -71,7 +71,7 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
             if(player1 != null)return player1;
             var player2 = new tokyo.nakanaka.buildvox.core.player.Player(new BukkitPlayerEntity(player));
             player2.setParticleGuiVisible(true);
-            BuildVoxSystem.PLAYER_REPOSITORY.register(player2);
+            BuildVoxSystem.getPlayerRepository().register(player2);
             return BuildVoxSystem.getPlayerRepository().get(id);
         }else if(sender instanceof BlockCommandSender blockSender) {
             return BukkitCommandBlock.newInstance(blockSender);
@@ -137,7 +137,7 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent evt) {
-        PlayerRepository repo = BuildVoxSystem.PLAYER_REPOSITORY;
+        PlayerRepository repo = BuildVoxSystem.getPlayerRepository();
         var player = repo.unregister(evt.getPlayer().getUniqueId());
         player.setParticleGuiVisible(false);
     }
@@ -180,7 +180,7 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
         Player player = evt.getPlayer();
         UUID playerId = player.getUniqueId();
         PlayerEntity playerEntity = new BukkitPlayerEntity(player);
-        PlayerRepository repo = BuildVoxSystem.PLAYER_REPOSITORY;
+        PlayerRepository repo = BuildVoxSystem.getPlayerRepository();
         tokyo.nakanaka.buildvox.core.player.Player bvPlayer = repo.get(playerId);
         if(bvPlayer == null) {
             bvPlayer = new tokyo.nakanaka.buildvox.core.player.Player(playerEntity);
