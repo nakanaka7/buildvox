@@ -21,7 +21,7 @@ public class PlayerRepository {
         return playerMap.get(id);
     }
 
-    public void delete(UUID id) {
+    public void unregister(UUID id) {
         Player player = playerMap.remove(id);
         BuildVoxSystem.PARTICLE_GUI_REPOSITORY.delete(player);
     }

@@ -136,7 +136,7 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent evt) {
         PlayerRepository repo = BuildVoxSystem.PLAYER_REPOSITORY;
-        repo.delete(evt.getPlayer().getUniqueId());
+        repo.unregister(evt.getPlayer().getUniqueId());
     }
 
     private enum ToolType {
