@@ -18,9 +18,7 @@ public class PlayerRepository {
     }
 
     public Player unregister(UUID id) {
-        Player player = playerMap.remove(id);
-        BuildVoxSystem.PARTICLE_GUI_REPOSITORY.delete(player);
-        return player;
+        return playerMap.remove(id);
     }
 
 }
