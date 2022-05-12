@@ -4,7 +4,6 @@ import tokyo.nakanaka.buildvox.core.player.Player;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 public class PlayerRepository {
@@ -18,9 +17,10 @@ public class PlayerRepository {
         return playerMap.get(id);
     }
 
-    public void unregister(UUID id) {
+    public Player unregister(UUID id) {
         Player player = playerMap.remove(id);
         BuildVoxSystem.PARTICLE_GUI_REPOSITORY.delete(player);
+        return player;
     }
 
 }
