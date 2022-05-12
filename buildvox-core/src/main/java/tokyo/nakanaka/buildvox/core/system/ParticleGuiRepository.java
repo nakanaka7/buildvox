@@ -31,7 +31,9 @@ public class ParticleGuiRepository {
 
     public void delete(Player player) {
         ParticleGui gui = guiMap.remove(player);
-        gui.close();
+        if(gui != null) {
+            gui.close();
+        }
     }
 
     public void update(Player player) {
