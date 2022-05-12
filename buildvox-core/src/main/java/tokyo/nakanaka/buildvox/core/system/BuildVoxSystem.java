@@ -16,6 +16,7 @@ import tokyo.nakanaka.buildvox.core.world.World;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The entrypoint for the platforms which use BuildVox Core project.
@@ -31,7 +32,7 @@ public class BuildVoxSystem {
     /** Block registry */
     public static final BlockRegistry BLOCK_REGISTRY = new BlockRegistry();
     /** Player repository */
-    public static final PlayerRepository PLAYER_REPOSITORY = new PlayerRepository();
+    public static final Registry<Player, UUID> PLAYER_REPOSITORY = new Registry<>();
     public static final DummyPlayerRepository DUMMY_PLAYER_REPOSITORY = new DummyPlayerRepository();
     public static final ParticleGuiRepository PARTICLE_GUI_REPOSITORY = new ParticleGuiRepository();
 
@@ -60,8 +61,8 @@ public class BuildVoxSystem {
         return WORLD_REGISTRY;
     }
 
-    /** Get the player repository */
-    public static PlayerRepository getPlayerRegistry() {
+    /** Get the player registry */
+    public static Registry<Player, UUID> getPlayerRegistry() {
         return PLAYER_REPOSITORY;
     }
 

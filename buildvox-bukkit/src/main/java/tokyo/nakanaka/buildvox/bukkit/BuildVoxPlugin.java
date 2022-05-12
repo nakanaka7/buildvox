@@ -27,7 +27,7 @@ import tokyo.nakanaka.buildvox.core.PlayerEntity;
 import tokyo.nakanaka.buildvox.core.commandSender.PlainCommandSender;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
-import tokyo.nakanaka.buildvox.core.system.PlayerRepository;
+import tokyo.nakanaka.buildvox.core.system.Registry;
 import tokyo.nakanaka.buildvox.core.world.World;
 
 import javax.validation.constraints.NotNull;
@@ -137,8 +137,8 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent evt) {
-        PlayerRepository repo = BuildVoxSystem.getPlayerRegistry();
-        var player = repo.unregister(evt.getPlayer().getUniqueId());
+        var regi = BuildVoxSystem.getPlayerRegistry();
+        var player = regi.unregister(evt.getPlayer().getUniqueId());
         player.setParticleGuiVisible(false);
     }
 
@@ -180,11 +180,11 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
         Player player = evt.getPlayer();
         UUID playerId = player.getUniqueId();
         PlayerEntity playerEntity = new BukkitPlayerEntity(player);
-        PlayerRepository repo = BuildVoxSystem.getPlayerRegistry();
-        tokyo.nakanaka.buildvox.core.player.Player bvPlayer = repo.get(playerId);
+        Registry<tokyo.nakanaka.buildvox.core.player.Player, UUID> regi = BuildVoxSystem.getPlayerRegistry();
+        tokyo.nakanaka.buildvox.core.player.Player bvPlayer = regi.get(playerId);
         if(bvPlayer == null) {
             bvPlayer = new tokyo.nakanaka.buildvox.core.player.Player(playerEntity);
-            repo.register(bvPlayer);
+            regi.register(bvPlayer);
         }
         Block block = evt.getClickedBlock();
         org.bukkit.World world0 = block.getWorld();
