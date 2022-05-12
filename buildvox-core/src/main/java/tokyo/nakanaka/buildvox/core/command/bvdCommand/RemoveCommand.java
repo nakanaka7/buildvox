@@ -23,7 +23,7 @@ public class RemoveCommand implements Runnable {
         if(!dummyPlayerRepository.nameSet().contains(playerName)){
             err.println(FeedbackMessage.ofNotFoundDummyPlayerError(playerName));
         }else{
-            dummyPlayerRepository.delete(playerName);
+            dummyPlayerRepository.unregister(playerName);
             out.println(FeedbackMessage.ofRemoveDummyPlayerExit(playerName));
         }
     }

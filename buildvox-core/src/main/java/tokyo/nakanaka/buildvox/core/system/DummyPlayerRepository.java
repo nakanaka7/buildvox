@@ -17,7 +17,7 @@ public class DummyPlayerRepository {
         return dummyPlayerMap.get(name);
     }
 
-    public void delete(String name) {
+    public void unregister(String name) {
         dummyPlayerMap.remove(name);
     }
 
