@@ -25,6 +25,10 @@ public class ParticleGuiRepository {
         guiMap.put(player, drawer);
     }
 
+    public boolean contains(Player player) {
+        return guiMap.containsKey(player);
+    }
+
     public void delete(Player player) {
         ParticleGui gui = guiMap.remove(player);
         gui.close();
