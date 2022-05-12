@@ -17,6 +17,10 @@ public class PlayerRepository {
         BuildVoxSystem.PARTICLE_GUI_REPOSITORY.create(player);
     }
 
+    public void register(Player player) {
+        playerMap.put(player.getId(), player);
+    }
+
     public Player get(UUID id) {
         return playerMap.get(id);
     }
