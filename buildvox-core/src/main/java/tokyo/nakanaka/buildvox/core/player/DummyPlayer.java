@@ -11,7 +11,7 @@ public class DummyPlayer extends Player {
     private String name;
 
     public DummyPlayer(String name) {
-        super(UUID.randomUUID(), new DummyPlayerEntity());
+        super(new DummyPlayerEntity());
         this.name = name;
     }
 
