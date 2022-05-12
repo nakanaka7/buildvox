@@ -107,9 +107,10 @@ public class BuildVoxMod implements ModInitializer {
 		if(!(entity instanceof ServerPlayerEntity player0)){
 			return;
 		}
-		UUID playerId = player0.getUuid();
 		PlayerEntity playerEntity = new FabricPlayerEntity(player0);
-		BuildVoxSystem.PLAYER_REPOSITORY.create(playerId, playerEntity);
+		Player player = new Player(playerEntity);
+		player.setParticleGuiVisible(true);
+		BuildVoxSystem.PLAYER_REPOSITORY.register(player);
 	}
 
 	private void onEntityUnload(Entity entity, ServerWorld world) {
