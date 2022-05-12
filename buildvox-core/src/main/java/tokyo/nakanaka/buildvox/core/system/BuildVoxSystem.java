@@ -10,6 +10,7 @@ import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
 import tokyo.nakanaka.buildvox.core.command.bvdCommand.BvdCommand;
 import tokyo.nakanaka.buildvox.core.commandSender.CommandSender;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
+import tokyo.nakanaka.buildvox.core.particleGui.ParticleGuiRepository;
 import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.world.Block;
 import tokyo.nakanaka.buildvox.core.world.World;
