@@ -67,12 +67,12 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
     private static tokyo.nakanaka.buildvox.core.commandSender.CommandSender getBvCommandSender(CommandSender sender) {
         if(sender instanceof Player player) {
             UUID id = player.getUniqueId();
-            var player1 = BuildVoxSystem.getPlayerRepository().get(id);
+            var player1 = BuildVoxSystem.getPlayerRegistry().get(id);
             if(player1 != null)return player1;
             var player2 = new tokyo.nakanaka.buildvox.core.player.Player(new BukkitPlayerEntity(player));
             player2.setParticleGuiVisible(true);
-            BuildVoxSystem.getPlayerRepository().register(player2);
-            return BuildVoxSystem.getPlayerRepository().get(id);
+            BuildVoxSystem.getPlayerRegistry().register(player2);
+            return BuildVoxSystem.getPlayerRegistry().get(id);
         }else if(sender instanceof BlockCommandSender blockSender) {
             return BukkitCommandBlock.newInstance(blockSender);
         }else if(sender instanceof ConsoleCommandSender) {
@@ -137,7 +137,7 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent evt) {
-        PlayerRepository repo = BuildVoxSystem.getPlayerRepository();
+        PlayerRepository repo = BuildVoxSystem.getPlayerRegistry();
         var player = repo.unregister(evt.getPlayer().getUniqueId());
         player.setParticleGuiVisible(false);
     }
@@ -180,7 +180,7 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
         Player player = evt.getPlayer();
         UUID playerId = player.getUniqueId();
         PlayerEntity playerEntity = new BukkitPlayerEntity(player);
-        PlayerRepository repo = BuildVoxSystem.getPlayerRepository();
+        PlayerRepository repo = BuildVoxSystem.getPlayerRegistry();
         tokyo.nakanaka.buildvox.core.player.Player bvPlayer = repo.get(playerId);
         if(bvPlayer == null) {
             bvPlayer = new tokyo.nakanaka.buildvox.core.player.Player(playerEntity);

@@ -110,7 +110,7 @@ public class BuildVoxMod implements ModInitializer {
 		PlayerEntity playerEntity = new FabricPlayerEntity(player0);
 		Player player = new Player(playerEntity);
 		player.setParticleGuiVisible(true);
-		BuildVoxSystem.getPlayerRepository().register(player);
+		BuildVoxSystem.getPlayerRegistry().register(player);
 	}
 
 	private void onEntityUnload(Entity entity, ServerWorld world) {
@@ -118,7 +118,7 @@ public class BuildVoxMod implements ModInitializer {
 			return;
 		}
 		UUID playerId = player0.getUuid();
-		Player player = BuildVoxSystem.getPlayerRepository().unregister(playerId);
+		Player player = BuildVoxSystem.getPlayerRegistry().unregister(playerId);
 		player.setParticleGuiVisible(false);
 	}
 
@@ -150,7 +150,7 @@ public class BuildVoxMod implements ModInitializer {
 	private static CommandSender getCommandSender(ServerCommandSource source) {
 		try {
 			ServerPlayerEntity spe = source.getPlayer();
-			return BuildVoxSystem.getPlayerRepository().get(spe.getUuid());
+			return BuildVoxSystem.getPlayerRegistry().get(spe.getUuid());
 		}catch (CommandSyntaxException e) {
 			return new CommandSender() {
 				@Override
@@ -251,7 +251,7 @@ public class BuildVoxMod implements ModInitializer {
 			return ActionResult.PASS;
 		}
 		UUID playerId = player1.getUuid();
-		Player player = BuildVoxSystem.getPlayerRepository().get(playerId);
+		Player player = BuildVoxSystem.getPlayerRegistry().get(playerId);
 		World world = convertServerWorldToBvWorld(world1);
 		ItemStack is = player0.getMainHandStack();
 		Vector3i pos = new Vector3i(pos0.getX(), pos0.getY(), pos0.getZ());
@@ -279,7 +279,7 @@ public class BuildVoxMod implements ModInitializer {
 			return ActionResult.PASS;
 		}
 		UUID playerId = player1.getUuid();
-		Player player = BuildVoxSystem.getPlayerRepository().get(playerId);
+		Player player = BuildVoxSystem.getPlayerRegistry().get(playerId);
 		World world = convertServerWorldToBvWorld(world1);
 		ItemStack is = player0.getMainHandStack();
 		BlockPos pos0 = hitResult.getBlockPos();

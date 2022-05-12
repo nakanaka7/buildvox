@@ -61,7 +61,7 @@ public class BuildVoxSystem {
     }
 
     /** Get the player repository */
-    public static PlayerRepository getPlayerRepository() {
+    public static PlayerRepository getPlayerRegistry() {
         return PLAYER_REPOSITORY;
     }
 
