@@ -84,7 +84,7 @@ public class BuildVoxMod implements ModInitializer {
 				NamespacedId worldId = new NamespacedId(worldId0.getNamespace(), worldId0.getPath());
 				worldIdMap.put(world, worldId);
 				World world1 = new FabricWorld(world);
-				BuildVoxSystem.WORLD_REGISTRY.register(worldId, world1);
+				BuildVoxSystem.WORLD_REGISTRY.register(world1);
 				break;
 			}
 		}
