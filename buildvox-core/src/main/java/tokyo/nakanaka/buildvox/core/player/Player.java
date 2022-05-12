@@ -26,13 +26,6 @@ public class Player implements CommandSender, Entity<UUID> {
     private PlayerEntity playerEntity;
     private boolean particleGuiVisible;
 
-    public Player(UUID id, PlayerEntity playerEntity) {
-        this.id = id;
-        this.posArray = new Vector3i[BuildVoxSystem.config.posArrayLength()];
-        this.backgroundBlock = BuildVoxSystem.config.backgroundBlock();
-        this.playerEntity = playerEntity;
-    }
-
     public Player(PlayerEntity playerEntity) {
         this.id = playerEntity.getId();
         this.posArray = new Vector3i[BuildVoxSystem.config.posArrayLength()];
