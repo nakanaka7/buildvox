@@ -89,7 +89,6 @@ public class BuildVoxSystem {
                 .setCaseInsensitiveEnumValuesAllowed(true)
                 .setExecutionStrategy(bvCmd::executionStrategy)
                 .execute(args);
-        BuildVoxSystem.PARTICLE_GUI_REPOSITORY.update(bvCmd.getTargetPlayer());
     }
 
     /**
@@ -140,7 +139,6 @@ public class BuildVoxSystem {
         Vector3i[] posData = new Vector3i[player.getPosArrayClone().length];
         posData[0] = pos;
         player.setPosArrayWithSelectionNull(world, posData);
-        PARTICLE_GUI_REPOSITORY.update(player);
         player.getPlayerEntity().println(config.outColor() + FeedbackMessage.ofPosExit(0, pos.x(), pos.y(), pos.z()));
     }
 
@@ -165,7 +163,6 @@ public class BuildVoxSystem {
         }
         posData[index] = pos;
         player.setPosArrayWithSelectionNull(world, posData);
-        PARTICLE_GUI_REPOSITORY.update(player);
         player.getPlayerEntity().println(config.outColor() + FeedbackMessage.ofPosExit(index, pos.x(), pos.y(), pos.z()));
     }
 
