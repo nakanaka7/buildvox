@@ -2,6 +2,7 @@ package tokyo.nakanaka.buildvox.core.system;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import picocli.AutoComplete;
 import picocli.CommandLine;
 import tokyo.nakanaka.buildvox.core.*;
 import tokyo.nakanaka.buildvox.core.blockStateTransformer.BlockStateTransformer;
@@ -15,6 +16,7 @@ import tokyo.nakanaka.buildvox.core.world.World;
 
 import java.io.PrintWriter;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -106,7 +108,7 @@ public class BuildVoxSystem {
                 = new CommandLine(bvCmd)
                 .setCaseInsensitiveEnumValuesAllowed(true)
                 .getCommandSpec();
-        return Util.getTabCompletionList(spec, args);
+        return getTabCompletionList(spec, args);
     }
 
     /** Run "/bvd" command. */
@@ -128,7 +130,35 @@ public class BuildVoxSystem {
                 = new CommandLine(new BvdCommand())
                 .setCaseInsensitiveEnumValuesAllowed(true)
                 .getCommandSpec();
-        return Util.getTabCompletionList(spec, args);
+        return getTabCompletionList(spec, args);
+    }
+
+    private static List<String> getTabCompletionList(CommandLine.Model.CommandSpec spec, String[] args) {
+        int argIndex = args.length - 1;
+        List<CharSequence> candidates = new ArrayList<>();
+        int positionInArg = 0;
+        int cursor = 0;
+        AutoComplete.complete(spec, args, argIndex, positionInArg, cursor, candidates);
+        List<String> list = new ArrayList<>();
+        String lastArg = args[argIndex];
+        for (CharSequence s0 : candidates) {
+            String s = s0.toString();
+            boolean put = false;
+            if(s.startsWith(lastArg)) {
+                put = true;
+            }else {
+                String m = "minecraft:";
+                if (s.startsWith(m) && !lastArg.startsWith(m)) {
+                    if (s.startsWith(m + lastArg)) {
+                        put = true;
+                    }
+                }
+            }
+            if(put){
+                list.add(s);
+            }
+        }
+        return list;
     }
 
     /**
