@@ -6,6 +6,7 @@ import tokyo.nakanaka.buildvox.core.edit.Clipboard;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
+import tokyo.nakanaka.buildvox.core.system.Entity;
 import tokyo.nakanaka.buildvox.core.world.Block;
 import tokyo.nakanaka.buildvox.core.world.World;
 
@@ -14,7 +15,7 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.UUID;
 
-public class Player implements CommandSender {
+public class Player implements CommandSender, Entity<UUID> {
     private UUID id;
     private Block backgroundBlock;
     private Clipboard clipboard;
@@ -39,6 +40,7 @@ public class Player implements CommandSender {
         this.playerEntity = playerEntity;
     }
 
+    @Override
     public UUID getId() {
         return id;
     }
