@@ -9,9 +9,7 @@ import tokyo.nakanaka.buildvox.core.system.Entity;
  */
 public interface World extends Entity<NamespacedId> {
     @Override
-    default NamespacedId getId() {
-        return new NamespacedId("buildvox", "world");
-    }
+    NamespacedId getId();
 
     /**
      * Gets a block of the specified position.
