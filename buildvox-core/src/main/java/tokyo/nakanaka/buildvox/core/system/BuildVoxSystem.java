@@ -3,10 +3,7 @@ package tokyo.nakanaka.buildvox.core.system;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import picocli.CommandLine;
-import tokyo.nakanaka.buildvox.core.BlockValidator;
-import tokyo.nakanaka.buildvox.core.ColorCode;
-import tokyo.nakanaka.buildvox.core.FeedbackMessage;
-import tokyo.nakanaka.buildvox.core.Scheduler;
+import tokyo.nakanaka.buildvox.core.*;
 import tokyo.nakanaka.buildvox.core.blockStateTransformer.BlockStateTransformer;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
 import tokyo.nakanaka.buildvox.core.command.bvdCommand.BvdCommand;
@@ -30,7 +27,7 @@ public class BuildVoxSystem {
     /** The config of this system */
     public static Config config = Config.DEFAULT;
     /** World registry */
-    public static final WorldRegistry WORLD_REGISTRY = new WorldRegistry();
+    public static final Registry<World, NamespacedId> WORLD_REGISTRY = new Registry<>();
     /** Block registry */
     public static final BlockRegistry BLOCK_REGISTRY = new BlockRegistry();
     /** Player repository */
@@ -59,7 +56,7 @@ public class BuildVoxSystem {
     }
 
     /** Get the world registry */
-    public static WorldRegistry getWorldRegistry() {
+    public static Registry<World, NamespacedId> getWorldRegistry() {
         return WORLD_REGISTRY;
     }
 
