@@ -41,10 +41,11 @@ public class Registry<E extends Entity<I>, I> {
 
     /**
      * Unregister the entity. If the entity with the id is not registered, this will do nothing.
-     * @param id the entity to unregister
+     * @param id the entity id to unregister
+     * @return E the entity which was unregistered. If an entity of id was not registered, returns null.
      */
-    public void unregister(I id) {
-        entityMap.remove(id);
+    public E unregister(I id) {
+        return entityMap.remove(id);
     }
 
     /**
