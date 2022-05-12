@@ -69,7 +69,9 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
             UUID id = player.getUniqueId();
             var player1 = BuildVoxSystem.getPlayerRepository().get(id);
             if(player1 != null)return player1;
-            BuildVoxSystem.getPlayerRepository().create(id, new BukkitPlayerEntity(player));
+            var player2 = new tokyo.nakanaka.buildvox.core.player.Player(new BukkitPlayerEntity(player));
+            player2.setParticleGuiVisible(true);
+            BuildVoxSystem.PLAYER_REPOSITORY.register(player2);
             return BuildVoxSystem.getPlayerRepository().get(id);
         }else if(sender instanceof BlockCommandSender blockSender) {
             return BukkitCommandBlock.newInstance(blockSender);
@@ -180,8 +182,8 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
         PlayerRepository repo = BuildVoxSystem.PLAYER_REPOSITORY;
         tokyo.nakanaka.buildvox.core.player.Player bvPlayer = repo.get(playerId);
         if(bvPlayer == null) {
-            repo.create(playerId, playerEntity);
-            bvPlayer = repo.get(playerId);
+            bvPlayer = new tokyo.nakanaka.buildvox.core.player.Player(playerEntity);
+            repo.register(bvPlayer);
         }
         Block block = evt.getClickedBlock();
         org.bukkit.World world0 = block.getWorld();
