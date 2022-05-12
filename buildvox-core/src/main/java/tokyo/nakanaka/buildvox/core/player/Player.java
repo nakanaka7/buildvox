@@ -23,6 +23,7 @@ public class Player implements CommandSender {
     private Vector3i[] posArray;
     private Selection selection;
     private PlayerEntity playerEntity;
+    private boolean particleGuiVisible;
 
     public Player(UUID id, PlayerEntity playerEntity) {
         this.id = id;
@@ -58,6 +59,7 @@ public class Player implements CommandSender {
         this.editTargetWorld = world;
         Arrays.fill(posArray, null);
         this.selection = null;
+        updateParticleGui();
     }
 
     public Vector3i[] getPosArrayClone() {
@@ -72,12 +74,14 @@ public class Player implements CommandSender {
         this.editTargetWorld = world;
         Arrays.fill(posArray, null);
         this.selection = selection;
+        updateParticleGui();
     }
 
     public void setPosArrayWithSelectionNull(World world, Vector3i[] posArray) {
         this.editTargetWorld = world;
         this.posArray = posArray;
         this.selection = null;
+        updateParticleGui();
     }
 
     public UndoManager getUndoManager() {
@@ -127,6 +131,21 @@ public class Player implements CommandSender {
     @Override
     public Vector3i getBlockPos() {
         return playerEntity.getBlockPos();
+    }
+
+    public void setParticleGuiVisible(boolean particleGuiVisible) {
+        this.particleGuiVisible = particleGuiVisible;
+        if(particleGuiVisible) {
+            BuildVoxSystem.PARTICLE_GUI_REPOSITORY.create(this);
+            updateParticleGui();
+        }else{
+            BuildVoxSystem.PARTICLE_GUI_REPOSITORY.delete(this);
+        }
+    }
+
+    private void updateParticleGui() {
+        if(!particleGuiVisible) return;
+        BuildVoxSystem.PARTICLE_GUI_REPOSITORY.update(this);
     }
 
 }
