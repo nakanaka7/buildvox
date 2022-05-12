@@ -118,7 +118,8 @@ public class BuildVoxMod implements ModInitializer {
 			return;
 		}
 		UUID playerId = player0.getUuid();
-		BuildVoxSystem.PLAYER_REPOSITORY.unregister(playerId);
+		Player player = BuildVoxSystem.PLAYER_REPOSITORY.unregister(playerId);
+		player.setParticleGuiVisible(false);
 	}
 
 	private void onCommandRegistration(CommandDispatcher<ServerCommandSource> dispatcher, boolean dedicated) {
