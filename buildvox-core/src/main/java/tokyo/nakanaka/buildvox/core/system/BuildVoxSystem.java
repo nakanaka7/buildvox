@@ -10,7 +10,6 @@ import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
 import tokyo.nakanaka.buildvox.core.command.bvdCommand.BvdCommand;
 import tokyo.nakanaka.buildvox.core.commandSender.CommandSender;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
-import tokyo.nakanaka.buildvox.core.particleGui.ParticleGuiRepository;
 import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.world.Block;
 import tokyo.nakanaka.buildvox.core.world.World;
@@ -169,7 +168,7 @@ public class BuildVoxSystem {
     public static void onLeftClickBlockByPosMarker(Player player, World world, Vector3i pos) {
         Vector3i[] posData = new Vector3i[player.getPosArrayClone().length];
         posData[0] = pos;
-        player.setPosArrayWithSelectionNull(world, posData);
+        player.setPosArray(world, posData);
         player.getPlayerEntity().println(config.outColor() + FeedbackMessage.ofPosExit(0, pos.x(), pos.y(), pos.z()));
     }
 
@@ -193,7 +192,7 @@ public class BuildVoxSystem {
             }
         }
         posData[index] = pos;
-        player.setPosArrayWithSelectionNull(world, posData);
+        player.setPosArray(world, posData);
         player.getPlayerEntity().println(config.outColor() + FeedbackMessage.ofPosExit(index, pos.x(), pos.y(), pos.z()));
     }
 

@@ -85,7 +85,7 @@ public class Player implements CommandSender, Entity<UUID> {
         updateParticleGui();
     }
 
-    public void setPosArrayWithSelectionNull(World world, Vector3i[] posArray) {
+    public void setPosArray(World world, Vector3i[] posArray) {
         this.editTargetWorld = world;
         this.posArray = posArray;
         this.selection = null;

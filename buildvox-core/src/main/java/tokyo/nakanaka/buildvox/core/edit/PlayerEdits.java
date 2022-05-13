@@ -344,7 +344,7 @@ public class PlayerEdits {
         UndoableEdit posArrayOrSelectionEdit;
         if(endSelection == null) {
             posArrayOrSelectionEdit = createPosArrayEdit(player, endPosArray);
-            player.setPosArrayWithSelectionNull(player.getEditTargetWorld(), endPosArray);
+            player.setPosArray(player.getEditTargetWorld(), endPosArray);
         }else {
             boolean endPosArrayContainsOnlyNull = Arrays.stream(endPosArray).allMatch(Objects::isNull);
             if(!endPosArrayContainsOnlyNull) {
@@ -390,12 +390,12 @@ public class PlayerEdits {
         return createEdit(
             () -> {
                 if(initSelection == null) {
-                    player.setPosArrayWithSelectionNull(world, initPosArray.clone());
+                    player.setPosArray(world, initPosArray.clone());
                 }else{
                     player.setSelection(world, initSelection);
                 }
             },
-            () -> player.setPosArrayWithSelectionNull(world, posArray)
+            () -> player.setPosArray(world, posArray)
         );
     }
 
@@ -407,7 +407,7 @@ public class PlayerEdits {
         return createEdit(
             () -> {
                 if(initSelection == null) {
-                    player.setPosArrayWithSelectionNull(world, initPosArray.clone());
+                    player.setPosArray(world, initPosArray.clone());
                 }else{
                     player.setSelection(world, initSelection);
                 }
