@@ -78,7 +78,7 @@ public class BvCommand implements Runnable {
             return 0;
         }
         if(execWorld != targetPlayer.getEditTargetWorld() ) {
-            targetPlayer.setWorldWithPosArrayClearedAndSelectionNull(execWorld);
+            targetPlayer.setEditTargetWorld(execWorld);
         }
         return new CommandLine.RunLast().execute(parseResult);
     }

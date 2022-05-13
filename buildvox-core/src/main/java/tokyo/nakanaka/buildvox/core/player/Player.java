@@ -51,8 +51,12 @@ public class Player implements CommandSender, Entity<UUID> {
         return editTargetWorld;
     }
 
-    public void setWorldWithPosArrayClearedAndSelectionNull(World world) {
-        this.editTargetWorld = world;
+    /**
+     * Set an edit target world. The all elements of pos array will be set null and the selection will be null.
+     * @param editTargetWorld a world to edit
+     */
+    public void setEditTargetWorld(World editTargetWorld) {
+        this.editTargetWorld = editTargetWorld;
         Arrays.fill(posArray, null);
         this.selection = null;
         updateParticleGui();
