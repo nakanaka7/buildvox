@@ -70,7 +70,7 @@ public class Player implements CommandSender, Entity<UUID> {
         return selection;
     }
 
-    public void setSelectionWithPosArrayCleared(World world, Selection selection) {
+    public void setSelection(World world, Selection selection) {
         this.editTargetWorld = world;
         Arrays.fill(posArray, null);
         this.selection = selection;

@@ -88,7 +88,7 @@ public class PlayerEdits {
         }else {
             selTo = selFrom;
         }
-        player.setSelectionWithPosArrayCleared(player.getEditTargetWorld(), selTo);
+        player.setSelection(player.getEditTargetWorld(), selTo);
     }
 
     public static EditExit reflect(Player player, Axis axis, Vector3d pos) {
@@ -351,7 +351,7 @@ public class PlayerEdits {
                 throw new IllegalArgumentException();
             }
             posArrayOrSelectionEdit = createSelectionEdit(player, endSelection);
-            player.setSelectionWithPosArrayCleared(player.getEditTargetWorld(), endSelection);
+            player.setSelection(player.getEditTargetWorld(), endSelection);
         }
         compoundEdit.addEdit(posArrayOrSelectionEdit);
         compoundEdit.end();
@@ -392,7 +392,7 @@ public class PlayerEdits {
                 if(initSelection == null) {
                     player.setPosArrayWithSelectionNull(world, initPosArray.clone());
                 }else{
-                    player.setSelectionWithPosArrayCleared(world, initSelection);
+                    player.setSelection(world, initSelection);
                 }
             },
             () -> player.setPosArrayWithSelectionNull(world, posArray)
@@ -409,10 +409,10 @@ public class PlayerEdits {
                 if(initSelection == null) {
                     player.setPosArrayWithSelectionNull(world, initPosArray.clone());
                 }else{
-                    player.setSelectionWithPosArrayCleared(world, initSelection);
+                    player.setSelection(world, initSelection);
                 }
             },
-            () -> player.setSelectionWithPosArrayCleared(world, selection)
+            () -> player.setSelection(world, selection)
         );
     }
 

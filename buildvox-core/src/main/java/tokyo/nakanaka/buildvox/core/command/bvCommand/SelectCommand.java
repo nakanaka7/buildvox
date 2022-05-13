@@ -88,7 +88,7 @@ public class SelectCommand {
             err.println("Invalid shape argument(s)");
             return;
         }
-        player.setSelectionWithPosArrayCleared(world, selection);
+        player.setSelection(world, selection);
         out.println("Selected.");
     }
 
