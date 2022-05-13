@@ -47,6 +47,10 @@ public class Player implements CommandSender, Entity<UUID> {
         this.backgroundBlock = backgroundBlock;
     }
 
+    /**
+     * Get the edit target world.
+     * @return the edit target world.
+     */
     public World getEditTargetWorld() {
         return editTargetWorld;
     }
@@ -62,10 +66,18 @@ public class Player implements CommandSender, Entity<UUID> {
         updateParticleGui();
     }
 
+    /**
+     * Get the cloned pos array.
+     * @return the cloned pos array.
+     */
     public Vector3i[] getPosArrayClone() {
         return posArray.clone();
     }
 
+    /**
+     * Get the selection.
+     * @return the selection.
+     */
     public Selection getSelection() {
         return selection;
     }
@@ -104,10 +116,18 @@ public class Player implements CommandSender, Entity<UUID> {
         return undoManager;
     }
 
+    /**
+     * Get the clipboard.
+     * @return the clipboard.
+     */
     public Clipboard getClipboard() {
         return clipboard;
     }
 
+    /**
+     * Set the clipboard.
+     * @param clipboard the clipboard.
+     */
     public void setClipboard(Clipboard clipboard) {
         this.clipboard = clipboard;
     }
