@@ -76,7 +76,7 @@ public class Player implements CommandSender, Entity<UUID> {
     }
 
     /**
-     * Set the selection. The all elements of pos array will be set null.
+     * Set a selection. The all elements of pos array will be set null.
      * @param selection the selection
      */
     public void setSelection(Selection selection) {
@@ -87,6 +87,14 @@ public class Player implements CommandSender, Entity<UUID> {
 
     public void setPosArray(World world, Vector3i[] posArray) {
         this.editTargetWorld = world;
+        setPosArray(posArray);
+    }
+
+    /**
+     * Set a pos array. The selection will be set null.
+     * @param posArray the pos array.
+     */
+    public void setPosArray(Vector3i[] posArray) {
         this.posArray = posArray;
         this.selection = null;
         updateParticleGui();
