@@ -1,15 +1,15 @@
 package tokyo.nakanaka.buildvox.core.world;
 
 import tokyo.nakanaka.buildvox.core.NamespacedId;
+import tokyo.nakanaka.buildvox.core.system.Entity;
 
 /**
  * Represents a world. A world is a single space. It does not contain 3 parallel "dimension"
  * spaces(over-world, nether, and end). Each dimension is considered as a single world.
  */
-public interface World extends OutputWorld {
-    default NamespacedId getId() {
-        return new NamespacedId("buildvox", "world");
-    }
+public interface World extends Entity<NamespacedId> {
+    @Override
+    NamespacedId getId();
 
     /**
      * Gets a block of the specified position.

@@ -4,7 +4,6 @@ package tokyo.nakanaka.buildvox.core;
  * Represents namespaced ID
  */
 public record NamespacedId(String namespace, String name) {
-
     /**
      * Gets a namespace value of the given arg.
      * @param arg the argument. It must contain 0 or 1 ":".
@@ -26,6 +25,10 @@ public record NamespacedId(String namespace, String name) {
         }else{
             throw new IllegalArgumentException("must contain 0 or 1 :");
         }
+    }
+
+    public NamespacedId(String name) {
+        this("minecraft", name);
     }
 
     /**

@@ -30,7 +30,7 @@ public class PosCommand implements Runnable {
     public void run() {
         PrintWriter out = commandSpec.commandLine().getOut();
         PrintWriter err = commandSpec.commandLine().getErr();
-        Player player = bvCmd.getPlayer();
+        Player player = bvCmd.getTargetPlayer();
         Vector3i[] posArray = player.getPosArrayClone();
         int posDataSize = posArray.length;
         if(index < 0 || posDataSize <= index){
@@ -42,7 +42,7 @@ public class PosCommand implements Runnable {
         int posY = (int)Math.floor(pos.y());
         int posZ = (int)Math.floor(pos.z());
         posArray[index] = new Vector3i(posX, posY, posZ);
-        player.setPosArrayWithSelectionNull(player.getWorld(), posArray);
+        player.setPosArray(player.getEditTargetWorld(), posArray);
         out.println(FeedbackMessage.ofPosExit(index, posX, posY, posZ));
     }
 

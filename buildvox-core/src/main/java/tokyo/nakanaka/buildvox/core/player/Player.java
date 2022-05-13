@@ -1,10 +1,13 @@
 package tokyo.nakanaka.buildvox.core.player;
 
 import tokyo.nakanaka.buildvox.core.PlayerEntity;
+import tokyo.nakanaka.buildvox.core.commandSender.CommandSender;
 import tokyo.nakanaka.buildvox.core.edit.Clipboard;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
+import tokyo.nakanaka.buildvox.core.particleGui.ParticleGuiRepository;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
+import tokyo.nakanaka.buildvox.core.system.Entity;
 import tokyo.nakanaka.buildvox.core.world.Block;
 import tokyo.nakanaka.buildvox.core.world.World;
 
@@ -13,23 +16,25 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.UUID;
 
-public class Player {
+public class Player implements CommandSender, Entity<UUID> {
     private UUID id;
     private Block backgroundBlock;
     private Clipboard clipboard;
     private UndoManager undoManager = new UndoManager();
-    private World world;
+    private World editTargetWorld;
     private Vector3i[] posArray;
     private Selection selection;
     private PlayerEntity playerEntity;
+    private boolean particleGuiVisible;
 
-    public Player(UUID id, PlayerEntity playerEntity) {
-        this.id = id;
+    public Player(PlayerEntity playerEntity) {
+        this.id = playerEntity.getId();
         this.posArray = new Vector3i[BuildVoxSystem.config.posArrayLength()];
         this.backgroundBlock = BuildVoxSystem.config.backgroundBlock();
         this.playerEntity = playerEntity;
     }
 
+    @Override
     public UUID getId() {
         return id;
     }
@@ -42,44 +47,87 @@ public class Player {
         this.backgroundBlock = backgroundBlock;
     }
 
-    public World getWorld() {
-        return world;
+    /**
+     * Get the edit target world.
+     * @return the edit target world.
+     */
+    public World getEditTargetWorld() {
+        return editTargetWorld;
     }
 
-    public void setWorldWithPosArrayClearedAndSelectionNull(World world) {
-        this.world = world;
+    /**
+     * Set an edit target world. The all elements of pos array will be set null and the selection will be null.
+     * @param editTargetWorld a world to edit
+     */
+    public void setEditTargetWorld(World editTargetWorld) {
+        this.editTargetWorld = editTargetWorld;
         Arrays.fill(posArray, null);
         this.selection = null;
+        updateParticleGui();
     }
 
+    /**
+     * Get the cloned pos array.
+     * @return the cloned pos array.
+     */
     public Vector3i[] getPosArrayClone() {
         return posArray.clone();
     }
 
+    /**
+     * Get the selection.
+     * @return the selection.
+     */
     public Selection getSelection() {
         return selection;
     }
 
-    public void setSelectionWithPosArrayCleared(World world, Selection selection) {
-        this.world = world;
-        Arrays.fill(posArray, null);
-        this.selection = selection;
+    public void setSelection(World world, Selection selection) {
+        this.editTargetWorld = world;
+        setSelection(selection);
     }
 
-    public void setPosArrayWithSelectionNull(World world, Vector3i[] posArray) {
-        this.world = world;
+    /**
+     * Set a selection. The all elements of pos array will be set null.
+     * @param selection the selection
+     */
+    public void setSelection(Selection selection) {
+        Arrays.fill(posArray, null);
+        this.selection = selection;
+        updateParticleGui();
+    }
+
+    public void setPosArray(World world, Vector3i[] posArray) {
+        this.editTargetWorld = world;
+        setPosArray(posArray);
+    }
+
+    /**
+     * Set a pos array. The selection will be set null.
+     * @param posArray the pos array.
+     */
+    public void setPosArray(Vector3i[] posArray) {
         this.posArray = posArray;
         this.selection = null;
+        updateParticleGui();
     }
 
     public UndoManager getUndoManager() {
         return undoManager;
     }
 
+    /**
+     * Get the clipboard.
+     * @return the clipboard.
+     */
     public Clipboard getClipboard() {
         return clipboard;
     }
 
+    /**
+     * Set the clipboard.
+     * @param clipboard the clipboard.
+     */
     public void setClipboard(Clipboard clipboard) {
         this.clipboard = clipboard;
     }
@@ -99,6 +147,41 @@ public class Player {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public void sendOutMessage(String msg) {
+        playerEntity.println(BuildVoxSystem.getConfig().outColor() + msg);
+    }
+
+    @Override
+    public void sendErrMessage(String msg) {
+        playerEntity.println(BuildVoxSystem.getConfig().errColor() + msg);
+    }
+
+    @Override
+    public World getWorld() {
+        return playerEntity.getWorld();
+    }
+
+    @Override
+    public Vector3i getBlockPos() {
+        return playerEntity.getBlockPos();
+    }
+
+    public void setParticleGuiVisible(boolean particleGuiVisible) {
+        this.particleGuiVisible = particleGuiVisible;
+        if(particleGuiVisible) {
+            ParticleGuiRepository.PARTICLE_GUI_REPOSITORY.create(this);
+            updateParticleGui();
+        }else{
+            ParticleGuiRepository.PARTICLE_GUI_REPOSITORY.delete(this);
+        }
+    }
+
+    private void updateParticleGui() {
+        if(!particleGuiVisible) return;
+        ParticleGuiRepository.PARTICLE_GUI_REPOSITORY.update(this);
     }
 
 }

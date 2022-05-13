@@ -33,7 +33,7 @@ public class ScaleCommand implements Runnable {
     public void run() {
         PrintWriter out = commandSpec.commandLine().getOut();
         PrintWriter err = commandSpec.commandLine().getErr();
-        Player player = bvCmd.getPlayer();
+        Player player = bvCmd.getTargetPlayer();
         if(factorX * factorY * factorZ == 0) {
             err.println(FeedbackMessage.SCALE_FACTOR_ERROR);
             return;

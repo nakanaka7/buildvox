@@ -23,7 +23,7 @@ public class BackgroundCommand implements Runnable {
     public void run() {
         PrintWriter out = commandSpec.commandLine().getOut();
         PrintWriter err = commandSpec.commandLine().getErr();
-        Player player = bvCmd.getPlayer();
+        Player player = bvCmd.getTargetPlayer();
         Block b;
         try {
             b = Block.valueOf(this.block);

@@ -1,6 +1,7 @@
 package tokyo.nakanaka.buildvox.core.player;
 
 import tokyo.nakanaka.buildvox.core.PlayerEntity;
+import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.particleGui.Color;
 import tokyo.nakanaka.buildvox.core.world.World;
 
@@ -10,7 +11,7 @@ public class DummyPlayer extends Player {
     private String name;
 
     public DummyPlayer(String name) {
-        super(UUID.randomUUID(), new DummyPlayerEntity());
+        super(new DummyPlayerEntity());
         this.name = name;
     }
 
@@ -19,6 +20,25 @@ public class DummyPlayer extends Player {
     }
 
     private static class DummyPlayerEntity implements PlayerEntity {
+        private UUID id = UUID.randomUUID();
+
+        public UUID getId() {
+            return id;
+        }
+
+        public void println(String msg) {
+        }
+
+        @Override
+        public World getWorld() {
+            return null;
+        }
+
+        @Override
+        public Vector3i getBlockPos() {
+            return new Vector3i(0, 0, 0);
+        }
+
         @Override
         public void givePosMarker() {
         }

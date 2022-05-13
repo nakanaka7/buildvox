@@ -20,10 +20,10 @@ public class ClearCommand implements Runnable {
     public void run() {
         PrintWriter out = commandSpec.commandLine().getOut();
         BvCommand bvCmd = posArrayCmd.getParentCommand();
-        Player player = bvCmd.getPlayer();
+        Player player = bvCmd.getTargetPlayer();
         Vector3i[] posArray = player.getPosArrayClone();
         if(player.getSelection() == null) {
-            player.setPosArrayWithSelectionNull(player.getWorld(), new Vector3i[posArray.length]);
+            player.setPosArray(player.getEditTargetWorld(), new Vector3i[posArray.length]);
         }
         out.println("Cleared pos array.");
     }

@@ -94,7 +94,7 @@ public class FillCommand implements Runnable {
     private void run(SelectionFactory selectionFactory) {
         PrintWriter out = commandSpec.commandLine().getOut();
         PrintWriter err = commandSpec.commandLine().getErr();
-        Player player = bvCmd.getPlayer();
+        Player player = bvCmd.getTargetPlayer();
         try{
             integrityMixin.checkValue();
         }catch (IllegalStateException ex) {
@@ -148,7 +148,7 @@ public class FillCommand implements Runnable {
      * @throws MissingPosDataException
      */
     private Selection createSelection() {
-        Player player = bvCmd.getPlayer();
+        Player player = bvCmd.getTargetPlayer();
         Selection selection = player.getSelection();
         if (selection != null) {
             return selection;
@@ -168,7 +168,7 @@ public class FillCommand implements Runnable {
      * @throws IllegalShapeArgumentException
      */
     private Selection createSubcommandSelection(ShapeMixin shapeMixin) {
-        Vector3i[] posData = bvCmd.getPlayer().getPosArrayClone();
+        Vector3i[] posData = bvCmd.getTargetPlayer().getPosArrayClone();
         try {
             return shapeMixin.createSelection(posData);
         }catch (IllegalStateException ex) {

@@ -8,8 +8,11 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.meta.ItemMeta;
 import tokyo.nakanaka.buildvox.core.ColorCode;
 import tokyo.nakanaka.buildvox.core.PlayerEntity;
+import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.particleGui.Color;
 import tokyo.nakanaka.buildvox.core.world.World;
+
+import java.util.UUID;
 
 /**
  * The class which implements {@link PlayerEntity} for Bukkit Platform
@@ -23,6 +26,27 @@ public class BukkitPlayerEntity implements PlayerEntity {
      */
     public BukkitPlayerEntity(Player original) {
         this.original = original;
+    }
+
+    @Override
+    public UUID getId() {
+        return original.getUniqueId();
+    }
+
+    @Override
+    public void println(String msg) {
+        original.sendMessage(msg);
+    }
+
+    @Override
+    public World getWorld() {
+        return BuildVoxPlugin.convertBukkitWorldToBvWorld(original.getWorld());
+    }
+
+    @Override
+    public Vector3i getBlockPos() {
+        var loc = original.getLocation();
+        return new Vector3i(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
     }
 
     @Override

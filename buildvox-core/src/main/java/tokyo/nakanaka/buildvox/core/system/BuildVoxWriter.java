@@ -1,6 +1,6 @@
-package tokyo.nakanaka.buildvox.core.system.commandHandler;
+package tokyo.nakanaka.buildvox.core.system;
 
-import tokyo.nakanaka.buildvox.core.MessageReceiver;
+import tokyo.nakanaka.buildvox.core.commandSender.CommandSender;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -11,9 +11,17 @@ public class BuildVoxWriter extends Writer {
     private String str = "";
     private boolean closed = false;
 
-    public BuildVoxWriter(String colorCode, MessageReceiver messageReceiver){
+    private BuildVoxWriter(String colorCode, MessageReceiver messageReceiver){
         this.colorCode = colorCode;
         this.messageReceiver = messageReceiver;
+    }
+
+    public static BuildVoxWriter newOutInstance(CommandSender cmdSender) {
+        return new BuildVoxWriter("", cmdSender::sendOutMessage);
+    }
+
+    public static BuildVoxWriter newErrInstance(CommandSender cmdSender) {
+        return new BuildVoxWriter("", cmdSender::sendErrMessage);
     }
 
     @Override
@@ -56,6 +64,19 @@ public class BuildVoxWriter extends Writer {
     public void close() throws IOException {
         this.flush();
         this.closed = true;
+    }
+
+    /**
+     * An entity to receive messages.
+     */
+    @Deprecated
+    private interface MessageReceiver {
+        /**
+         * Prints the message as a line.
+         * @param msg the message.
+         */
+        void println(String msg);
+
     }
 
 }

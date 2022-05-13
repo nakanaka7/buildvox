@@ -2,9 +2,7 @@ package tokyo.nakanaka.buildvox.core.system;
 
 import tokyo.nakanaka.buildvox.core.player.DummyPlayer;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class DummyPlayerRepository {
     private Map<String, DummyPlayer> dummyPlayerMap = new HashMap<>();
@@ -17,12 +15,16 @@ public class DummyPlayerRepository {
         return dummyPlayerMap.get(name);
     }
 
-    public void delete(String name) {
+    public void unregister(String name) {
         dummyPlayerMap.remove(name);
     }
 
     public Set<String> nameSet() {
         return dummyPlayerMap.keySet();
+    }
+
+    public List<String> idList() {
+        return new ArrayList<>(nameSet());
     }
 
 }

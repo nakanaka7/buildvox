@@ -1,4 +1,4 @@
-package tokyo.nakanaka.buildvox.core.system;
+package tokyo.nakanaka.buildvox.core.particleGui;
 
 import tokyo.nakanaka.buildvox.core.PlayerEntity;
 import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
@@ -9,12 +9,14 @@ import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.selection.FillSelection;
 import tokyo.nakanaka.buildvox.core.selection.PasteSelection;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
+import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.world.World;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class ParticleGuiRepository {
+    public static final ParticleGuiRepository PARTICLE_GUI_REPOSITORY = new ParticleGuiRepository();
     private Map<Player, ParticleGui> guiMap = new HashMap<>();
 
     public void create(Player player) {
@@ -27,14 +29,16 @@ public class ParticleGuiRepository {
 
     public void delete(Player player) {
         ParticleGui gui = guiMap.remove(player);
-        gui.close();
+        if(gui != null) {
+            gui.close();
+        }
     }
 
     public void update(Player player) {
         ParticleGui particleGui = guiMap.get(player);
         if(particleGui == null)return;
         particleGui.clearAllLines();
-        World posOrSelectionWorld = player.getWorld();
+        World posOrSelectionWorld = player.getEditTargetWorld();
         if(posOrSelectionWorld == null)return;
         Selection selection = player.getSelection();
         if(selection != null){

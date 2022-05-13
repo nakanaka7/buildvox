@@ -22,7 +22,7 @@ public class PrintCommand implements Runnable {
     public void run() {
         PrintWriter out = commandSpec.commandLine().getOut();
         BvCommand bvCmd = posArrayCmd.getParentCommand();
-        Player player = bvCmd.getPlayer();
+        Player player = bvCmd.getTargetPlayer();
         Vector3i[] posArray = player.getPosArrayClone();
         List<String> strPosList = new ArrayList<>();
         for(var pos : posArray) {

@@ -20,7 +20,7 @@ public class ApplyPhysicsCommand implements Runnable {
     public void run() {
         PrintWriter out = commandSpec.commandLine().getOut();
         PrintWriter err = commandSpec.commandLine().getErr();
-        Player player = bvCmd.getPlayer();
+        Player player = bvCmd.getTargetPlayer();
         try{
             PlayerEdits.applyPhysics(player);
         }catch (PlayerEdits.SelectionNotFoundException ex) {

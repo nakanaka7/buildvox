@@ -23,19 +23,22 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
-import tokyo.nakanaka.buildvox.core.MessageReceiver;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.PlayerEntity;
+import tokyo.nakanaka.buildvox.core.commandSender.CommandSender;
+import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
+import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
-import tokyo.nakanaka.buildvox.core.system.ToolType;
 import tokyo.nakanaka.buildvox.core.world.World;
 
 import java.util.*;
@@ -81,7 +84,7 @@ public class BuildVoxMod implements ModInitializer {
 				NamespacedId worldId = new NamespacedId(worldId0.getNamespace(), worldId0.getPath());
 				worldIdMap.put(world, worldId);
 				World world1 = new FabricWorld(world);
-				BuildVoxSystem.WORLD_REGISTRY.register(worldId, world1);
+				BuildVoxSystem.WORLD_REGISTRY.register(world1);
 				break;
 			}
 		}
@@ -104,9 +107,10 @@ public class BuildVoxMod implements ModInitializer {
 		if(!(entity instanceof ServerPlayerEntity player0)){
 			return;
 		}
-		UUID playerId = player0.getUuid();
 		PlayerEntity playerEntity = new FabricPlayerEntity(player0);
-		BuildVoxSystem.PLAYER_REPOSITORY.create(playerId, playerEntity);
+		Player player = new Player(playerEntity);
+		player.setParticleGuiVisible(true);
+		BuildVoxSystem.getPlayerRegistry().register(player);
 	}
 
 	private void onEntityUnload(Entity entity, ServerWorld world) {
@@ -114,7 +118,8 @@ public class BuildVoxMod implements ModInitializer {
 			return;
 		}
 		UUID playerId = player0.getUuid();
-		BuildVoxSystem.PLAYER_REPOSITORY.delete(playerId);
+		Player player = BuildVoxSystem.getPlayerRegistry().unregister(playerId);
+		player.setParticleGuiVisible(false);
 	}
 
 	private void onCommandRegistration(CommandDispatcher<ServerCommandSource> dispatcher, boolean dedicated) {
@@ -134,69 +139,69 @@ public class BuildVoxMod implements ModInitializer {
 		);
 	}
 
-	private record CommandSource(UUID playerId, PlayerEntity playerEntity,
-								 NamespacedId worldId, int x, int y, int z) {
+	/** convert ServerWorld to {@link World} */
+	public static World convertServerWorldToBvWorld(ServerWorld original) {
+		RegistryKey<net.minecraft.world.World> key = original.getRegistryKey();
+		Identifier worldId0 = key.getValue();
+		NamespacedId worldId = new NamespacedId(worldId0.getNamespace(), worldId0.getPath());
+		return BuildVoxSystem.getWorldRegistry().get(worldId);
 	}
 
-	private CommandSource createCommandSource(ServerCommandSource cmdSource0){
-		UUID playerId = null;
-		PlayerEntity playerEntity = null;
-		ServerPlayerEntity player0 = null;
+	private static CommandSender getCommandSender(ServerCommandSource source) {
 		try {
-			player0 = cmdSource0.getPlayer();
-		}catch (CommandSyntaxException e){
-		}
-		if(player0 != null){
-			playerId = player0.getUuid();
-			playerEntity = new FabricPlayerEntity(player0);
-		}
-		NamespacedId world = worldIdMap.get(cmdSource0.getWorld());
-		int x = (int)Math.floor(cmdSource0.getPosition().getX());
-		int y = (int)Math.floor(cmdSource0.getPosition().getY());
-		int z = (int)Math.floor(cmdSource0.getPosition().getZ());
-		return new CommandSource(playerId, playerEntity, world, x, y, z);
-	}
+			ServerPlayerEntity spe = source.getPlayer();
+			return BuildVoxSystem.getPlayerRegistry().get(spe.getUuid());
+		}catch (CommandSyntaxException e) {
+			return new CommandSender() {
+				@Override
+				public void sendOutMessage(String msg) {
+					source.sendFeedback(Text.of(msg), false);
+				}
 
-	private interface CommandRunner {
-		void run(ServerCommandSource cmdSource0, String[] args, MessageReceiver msgReceiver);
-	}
+				@Override
+				public void sendErrMessage(String msg) {
+					source.sendFeedback(Text.of(msg), false);
+				}
 
-	private int onCommand(CommandContext<ServerCommandSource> context, CommandRunner runner) {
-		String subcommand = StringArgumentType.getString(context, SUBCOMMAND);
-		String[] args = subcommand.split(" ", - 1);
-		ServerCommandSource cmdSource0 = context.getSource();
-		FabricMessageReceiver commandOut = new FabricMessageReceiver(cmdSource0);
-		runner.run(cmdSource0, args, commandOut);
-		return 1;
+				@Override
+				public World getWorld() {
+					return convertServerWorldToBvWorld(source.getWorld());
+				}
+
+				@Override
+				public Vector3i getBlockPos() {
+					Vec3d p = source.getPosition();
+					return new Vector3i((int)Math.floor(p.getX()), (int)Math.floor(p.getY()), (int)Math.floor(p.getZ()));
+				}
+			};
+		}
 	}
 
 	private int onBvCommand(CommandContext<ServerCommandSource> context) {
-		CommandRunner runner = (cmdSource0, args, commandOut) -> {
-			CommandSource cmdSource = createCommandSource(cmdSource0);
-			BuildVoxSystem.COMMAND_EVENT_MANAGER.onCommand("bv", args, cmdSource.worldId(), cmdSource.x(), cmdSource.y(), cmdSource.z(),
-					commandOut, cmdSource.playerId());
-		};
-		return onCommand(context, runner);
+		String subcommand = StringArgumentType.getString(context, SUBCOMMAND);
+		String[] args = subcommand.split(" ", - 1);
+		CommandSender sender = getCommandSender(context.getSource());
+		BuildVoxSystem.onBvCommand(sender, args);
+		return 1;
 	}
 
 	private int onBvdCommand(CommandContext<ServerCommandSource> context) {
-		CommandRunner runner = (cmdSource0, args, commandOut) -> {
-			CommandSource cmdSource = createCommandSource(cmdSource0);
-			BuildVoxSystem.COMMAND_EVENT_MANAGER.onCommand("bvd", args, cmdSource.worldId(), cmdSource.x(), cmdSource.y(), cmdSource.z(),
-					commandOut, cmdSource.playerId());
-		};
-		return onCommand(context, runner);
+		String subcommand = StringArgumentType.getString(context, SUBCOMMAND);
+		String[] args = subcommand.split(" ", - 1);
+		CommandSender sender = getCommandSender(context.getSource());
+		BuildVoxSystem.onBvdCommand(sender, args);
+		return 1;
 	}
 
 	private CompletableFuture<Suggestions> onBvTabComplete(CommandContext<ServerCommandSource> context,
 														   SuggestionsBuilder builder) {
-		TabCompleteListCreator listCreator = (args) -> BuildVoxSystem.COMMAND_EVENT_MANAGER.onTabComplete("bv", args);
+		TabCompleteListCreator listCreator = BuildVoxSystem::onBvTabComplete;
 		return onTabComplete(context, builder, listCreator);
 	}
 
 	private CompletableFuture<Suggestions> onBvdTabComplete(CommandContext<ServerCommandSource> context,
 														   SuggestionsBuilder builder) {
-		TabCompleteListCreator listCreator = (args) -> BuildVoxSystem.COMMAND_EVENT_MANAGER.onTabComplete("bvd", args);
+		TabCompleteListCreator listCreator = BuildVoxSystem::onBvdTabComplete;
 		return onTabComplete(context, builder, listCreator);
 	}
 
@@ -231,7 +236,7 @@ public class BuildVoxMod implements ModInitializer {
 	}
 
 	private ActionResult onAttackBlock(net.minecraft.entity.player.PlayerEntity player0,
-											  net.minecraft.world.World world0, Hand hand, BlockPos pos, Direction direction) {
+											  net.minecraft.world.World world0, Hand hand, BlockPos pos0, Direction direction) {
 		//One event triggers this function with different combinations of arguments.
 		//So filters the arguments by their super classes.
 		//The following filter may have redundant parts. For example, when the player is a server one, the world
@@ -246,14 +251,12 @@ public class BuildVoxMod implements ModInitializer {
 			return ActionResult.PASS;
 		}
 		UUID playerId = player1.getUuid();
-		NamespacedId worldId = worldIdMap.get(world1);
-		if(worldId == null) {
-			throw new IllegalArgumentException();
-		}
-		MessageReceiver msgReceiver = new FabricMessageReceiver(player1.getCommandSource());
+		Player player = BuildVoxSystem.getPlayerRegistry().get(playerId);
+		World world = convertServerWorldToBvWorld(world1);
 		ItemStack is = player0.getMainHandStack();
+		Vector3i pos = new Vector3i(pos0.getX(), pos0.getY(), pos0.getZ());
 		if(is.getItem().equals(POS_MARKER)){
-			BuildVoxSystem.CLICK_BLOCK_EVENT_MANAGER.onLeft(ToolType.POS_MARKER, playerId, worldId, pos.getX(), pos.getY(), pos.getZ(), msgReceiver);
+			BuildVoxSystem.onLeftClickBlockByPosMarker(player, world, pos);
 			return ActionResult.SUCCESS;
 		}else {
 			return ActionResult.PASS;
@@ -276,15 +279,13 @@ public class BuildVoxMod implements ModInitializer {
 			return ActionResult.PASS;
 		}
 		UUID playerId = player1.getUuid();
-		NamespacedId worldId = worldIdMap.get(world1);
-		if(worldId == null) {
-			throw new IllegalArgumentException();
-		}
-		MessageReceiver msgReceiver = new FabricMessageReceiver(player1.getCommandSource());
+		Player player = BuildVoxSystem.getPlayerRegistry().get(playerId);
+		World world = convertServerWorldToBvWorld(world1);
 		ItemStack is = player0.getMainHandStack();
+		BlockPos pos0 = hitResult.getBlockPos();
+		Vector3i pos = new Vector3i(pos0.getX(), pos0.getY(), pos0.getZ());
 		if(is.getItem().equals(POS_MARKER)){
-			BlockPos pos = hitResult.getBlockPos();
-			BuildVoxSystem.CLICK_BLOCK_EVENT_MANAGER.onRight(ToolType.POS_MARKER, playerId, worldId, pos.getX(), pos.getY(), pos.getZ(), msgReceiver);
+			BuildVoxSystem.onRightClickBlockByPosMarker(player, world, pos);
 			return ActionResult.SUCCESS;
 		}else {
 			return ActionResult.PASS;
