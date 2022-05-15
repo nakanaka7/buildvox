@@ -17,16 +17,11 @@ public class PasteSelection extends BlockSelection {
     private Clipboard backwardClip = new Clipboard();
 
     private PasteSelection(Region3d region3d, Parallelepiped bound, Clipboard clipboard, Vector3d offset,
-                           AffineTransformation3d clipTrans) {
+                           AffineTransformation3d clipTrans, double integrity) {
         super(region3d, bound);
         this.clipboard = clipboard;
         this.offset = offset;
         this.clipTrans = clipTrans;
-    }
-
-    private PasteSelection(Region3d region3d, Parallelepiped bound, Clipboard clipboard, Vector3d offset,
-                           AffineTransformation3d clipTrans, double integrity) {
-        this(region3d, bound, clipboard, offset, clipTrans);
         this.integrity = integrity;
     }
 
