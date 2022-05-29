@@ -2,7 +2,10 @@ package tokyo.nakanaka.buildvox.core.commandSender;
 
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.world.World;
-
+@Deprecated
+/**
+ * Use PlainCommandSender
+ */
 public abstract class AbstractCommandBlock implements CommandSender {
     private World world;
     private Vector3i blockPos;
