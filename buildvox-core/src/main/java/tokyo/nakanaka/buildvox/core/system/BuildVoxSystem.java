@@ -69,6 +69,11 @@ public class BuildVoxSystem {
         return PLAYER_REPOSITORY;
     }
 
+    /** Get the dummy player registry */
+    public static Registry<DummyPlayer, String> getDummyPlayerRegistry() {
+        return DUMMY_PLAYER_REPOSITORY;
+    }
+
     /**
      * Run "/bv" command.
      * @param args the arguments of the command.
