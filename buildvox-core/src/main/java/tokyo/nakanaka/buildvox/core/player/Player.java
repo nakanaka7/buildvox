@@ -220,8 +220,7 @@ public class Player implements CommandSender {
         this.particleGuiVisible = b;
         if (b) {
             if(playerEntity == null) return;
-            particleGui = new ParticleGui(BuildVoxSystem.environment.scheduler());
-            particleGui.setOut(playerEntity);
+            particleGui = new ParticleGui(playerEntity);
             updateParticleGui();
         } else {
             particleGui.close();
