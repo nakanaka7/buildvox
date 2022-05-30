@@ -11,6 +11,7 @@ import tokyo.nakanaka.buildvox.core.command.bvdCommand.BvdCommand;
 import tokyo.nakanaka.buildvox.core.commandSender.CommandSender;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.Player;
+import tokyo.nakanaka.buildvox.core.player.RealPlayer;
 import tokyo.nakanaka.buildvox.core.world.Block;
 import tokyo.nakanaka.buildvox.core.world.World;
 
@@ -34,7 +35,7 @@ public class BuildVoxSystem {
     /** Block registry */
     public static final BlockRegistry BLOCK_REGISTRY = new BlockRegistry();
     /** Player repository */
-    public static final Registry<Player, UUID> PLAYER_REPOSITORY = new Registry<>();
+    public static final Registry<RealPlayer, UUID> PLAYER_REPOSITORY = new Registry<>();
     public static final DummyPlayerRepository DUMMY_PLAYER_REPOSITORY = new DummyPlayerRepository();
 
     private BuildVoxSystem() {
@@ -63,7 +64,7 @@ public class BuildVoxSystem {
     }
 
     /** Get the player registry */
-    public static Registry<Player, UUID> getPlayerRegistry() {
+    public static Registry<RealPlayer, UUID> getPlayerRegistry() {
         return PLAYER_REPOSITORY;
     }
 

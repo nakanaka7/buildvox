@@ -180,8 +180,8 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
         Player player = evt.getPlayer();
         UUID playerId = player.getUniqueId();
         PlayerEntity playerEntity = new BukkitPlayerEntity(player);
-        Registry<tokyo.nakanaka.buildvox.core.player.Player, UUID> regi = BuildVoxSystem.getPlayerRegistry();
-        tokyo.nakanaka.buildvox.core.player.Player bvPlayer = regi.get(playerId);
+        Registry<tokyo.nakanaka.buildvox.core.player.RealPlayer, UUID> regi = BuildVoxSystem.getPlayerRegistry();
+        tokyo.nakanaka.buildvox.core.player.RealPlayer bvPlayer = regi.get(playerId);
         if(bvPlayer == null) {
             bvPlayer = new tokyo.nakanaka.buildvox.core.player.RealPlayer(playerEntity);
             regi.register(bvPlayer);
