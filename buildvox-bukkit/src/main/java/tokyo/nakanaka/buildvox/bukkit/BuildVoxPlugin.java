@@ -69,7 +69,7 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
             UUID id = player.getUniqueId();
             var player1 = BuildVoxSystem.getPlayerRegistry().get(id);
             if(player1 != null)return player1;
-            var player2 = new tokyo.nakanaka.buildvox.core.player.Player(new BukkitPlayerEntity(player));
+            var player2 = new tokyo.nakanaka.buildvox.core.player.RealPlayer(new BukkitPlayerEntity(player));
             player2.setParticleGuiVisible(true);
             BuildVoxSystem.getPlayerRegistry().register(player2);
             return BuildVoxSystem.getPlayerRegistry().get(id);
@@ -183,7 +183,7 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
         Registry<tokyo.nakanaka.buildvox.core.player.Player, UUID> regi = BuildVoxSystem.getPlayerRegistry();
         tokyo.nakanaka.buildvox.core.player.Player bvPlayer = regi.get(playerId);
         if(bvPlayer == null) {
-            bvPlayer = new tokyo.nakanaka.buildvox.core.player.Player(playerEntity);
+            bvPlayer = new tokyo.nakanaka.buildvox.core.player.RealPlayer(playerEntity);
             regi.register(bvPlayer);
         }
         Block block = evt.getClickedBlock();

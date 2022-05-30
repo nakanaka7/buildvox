@@ -38,6 +38,7 @@ import tokyo.nakanaka.buildvox.core.player.PlayerEntity;
 import tokyo.nakanaka.buildvox.core.commandSender.CommandSender;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.Player;
+import tokyo.nakanaka.buildvox.core.player.RealPlayer;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.world.World;
 
@@ -108,7 +109,7 @@ public class BuildVoxMod implements ModInitializer {
 			return;
 		}
 		PlayerEntity playerEntity = new FabricPlayerEntity(player0);
-		Player player = new Player(playerEntity);
+		Player player = new RealPlayer(playerEntity);
 		player.setParticleGuiVisible(true);
 		BuildVoxSystem.getPlayerRegistry().register(player);
 	}
