@@ -16,6 +16,9 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * Represents a player.
+ */
 public class Player implements CommandSender, Entity<UUID> {
     private UUID id;
     private Block backgroundBlock;
@@ -39,10 +42,18 @@ public class Player implements CommandSender, Entity<UUID> {
         return id;
     }
 
+    /**
+     * Get the background block
+     * @return the background block
+     */
     public Block getBackgroundBlock() {
         return backgroundBlock;
     }
 
+    /**
+     * Set the background block
+     * @param backgroundBlock a background block
+     */
     public void setBackgroundBlock(Block backgroundBlock) {
         this.backgroundBlock = backgroundBlock;
     }
@@ -82,6 +93,10 @@ public class Player implements CommandSender, Entity<UUID> {
         return selection;
     }
 
+    /**
+     * Use setSelection without world.
+     */
+    @Deprecated
     public void setSelection(World world, Selection selection) {
         this.editTargetWorld = world;
         setSelection(selection);
@@ -97,6 +112,10 @@ public class Player implements CommandSender, Entity<UUID> {
         updateParticleGui();
     }
 
+    /**
+     * Use setPosArray without world
+     */
+    @Deprecated
     public void setPosArray(World world, Vector3i[] posArray) {
         this.editTargetWorld = world;
         setPosArray(posArray);
@@ -112,6 +131,9 @@ public class Player implements CommandSender, Entity<UUID> {
         updateParticleGui();
     }
 
+    /**
+     * Get the undo-manager.
+     */
     public UndoManager getUndoManager() {
         return undoManager;
     }
@@ -169,9 +191,13 @@ public class Player implements CommandSender, Entity<UUID> {
         return playerEntity.getBlockPos();
     }
 
-    public void setParticleGuiVisible(boolean particleGuiVisible) {
-        this.particleGuiVisible = particleGuiVisible;
-        if(particleGuiVisible) {
+    /**
+     * Set whether the particle gui is visible
+     * @param b true if the gui is visible, otherwise false.
+     */
+    public void setParticleGuiVisible(boolean b) {
+        this.particleGuiVisible = b;
+        if(b) {
             ParticleGuiRepository.PARTICLE_GUI_REPOSITORY.create(this);
             updateParticleGui();
         }else{
