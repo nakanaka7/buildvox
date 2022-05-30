@@ -34,10 +34,11 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
-import tokyo.nakanaka.buildvox.core.PlayerEntity;
+import tokyo.nakanaka.buildvox.core.player.PlayerEntity;
 import tokyo.nakanaka.buildvox.core.commandSender.CommandSender;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.Player;
+import tokyo.nakanaka.buildvox.core.player.RealPlayer;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.world.World;
 
@@ -108,9 +109,9 @@ public class BuildVoxMod implements ModInitializer {
 			return;
 		}
 		PlayerEntity playerEntity = new FabricPlayerEntity(player0);
-		Player player = new Player(playerEntity);
+		var player = new RealPlayer(playerEntity);
 		player.setParticleGuiVisible(true);
-		BuildVoxSystem.getPlayerRegistry().register(player);
+		BuildVoxSystem.getRealPlayerRegistry().register(player);
 	}
 
 	private void onEntityUnload(Entity entity, ServerWorld world) {
@@ -118,7 +119,7 @@ public class BuildVoxMod implements ModInitializer {
 			return;
 		}
 		UUID playerId = player0.getUuid();
-		Player player = BuildVoxSystem.getPlayerRegistry().unregister(playerId);
+		Player player = BuildVoxSystem.getRealPlayerRegistry().unregister(playerId);
 		player.setParticleGuiVisible(false);
 	}
 
@@ -150,7 +151,7 @@ public class BuildVoxMod implements ModInitializer {
 	private static CommandSender getCommandSender(ServerCommandSource source) {
 		try {
 			ServerPlayerEntity spe = source.getPlayer();
-			return BuildVoxSystem.getPlayerRegistry().get(spe.getUuid());
+			return BuildVoxSystem.getRealPlayerRegistry().get(spe.getUuid());
 		}catch (CommandSyntaxException e) {
 			return new CommandSender() {
 				@Override
@@ -251,7 +252,7 @@ public class BuildVoxMod implements ModInitializer {
 			return ActionResult.PASS;
 		}
 		UUID playerId = player1.getUuid();
-		Player player = BuildVoxSystem.getPlayerRegistry().get(playerId);
+		Player player = BuildVoxSystem.getRealPlayerRegistry().get(playerId);
 		World world = convertServerWorldToBvWorld(world1);
 		ItemStack is = player0.getMainHandStack();
 		Vector3i pos = new Vector3i(pos0.getX(), pos0.getY(), pos0.getZ());
@@ -279,7 +280,7 @@ public class BuildVoxMod implements ModInitializer {
 			return ActionResult.PASS;
 		}
 		UUID playerId = player1.getUuid();
-		Player player = BuildVoxSystem.getPlayerRegistry().get(playerId);
+		Player player = BuildVoxSystem.getRealPlayerRegistry().get(playerId);
 		World world = convertServerWorldToBvWorld(world1);
 		ItemStack is = player0.getMainHandStack();
 		BlockPos pos0 = hitResult.getBlockPos();

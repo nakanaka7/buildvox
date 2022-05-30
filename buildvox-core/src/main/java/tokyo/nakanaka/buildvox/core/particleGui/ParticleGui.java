@@ -4,6 +4,7 @@ import tokyo.nakanaka.buildvox.core.Scheduler;
 import tokyo.nakanaka.buildvox.core.math.LineSegment3d;
 import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
+import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.world.World;
 
 import java.util.HashSet;
@@ -19,11 +20,12 @@ public class ParticleGui implements AutoCloseable {
     private boolean drawing;
 
     /**
-     * Constructs a new particle drawer.
-     * @param scheduler a scheduler
+     * Creates a new instance.
+     * @param out the output colored particle spawner
      */
-    public ParticleGui(Scheduler scheduler) {
-        this.scheduler = scheduler;
+    public ParticleGui(ColoredParticleSpawner out) {
+        this.out = out;
+        this.scheduler = BuildVoxSystem.environment.scheduler();
         drawing = true;
         tickTask();
     }

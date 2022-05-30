@@ -3,7 +3,6 @@ package tokyo.nakanaka.buildvox.core.command.bvdCommand;
 import picocli.CommandLine;
 import tokyo.nakanaka.buildvox.core.FeedbackMessage;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
-import tokyo.nakanaka.buildvox.core.system.DummyPlayerRepository;
 
 import java.io.PrintWriter;
 
@@ -19,8 +18,8 @@ public class RemoveCommand implements Runnable {
     public void run() {
         PrintWriter out = commandSpec.commandLine().getOut();
         PrintWriter err = commandSpec.commandLine().getErr();
-        DummyPlayerRepository dummyPlayerRepository = BuildVoxSystem.DUMMY_PLAYER_REPOSITORY;
-        if(!dummyPlayerRepository.nameSet().contains(playerName)){
+        var dummyPlayerRepository = BuildVoxSystem.getDummyPlayerRegistry();
+        if(!dummyPlayerRepository.idList().contains(playerName)){
             err.println(FeedbackMessage.ofNotFoundDummyPlayerError(playerName));
         }else{
             dummyPlayerRepository.unregister(playerName);

@@ -1,21 +1,33 @@
 package tokyo.nakanaka.buildvox.core.player;
 
-import tokyo.nakanaka.buildvox.core.PlayerEntity;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.particleGui.Color;
+import tokyo.nakanaka.buildvox.core.system.Entity;
 import tokyo.nakanaka.buildvox.core.world.World;
 
 import java.util.UUID;
 
-public class DummyPlayer extends Player {
+/**
+ * Represents a dummy player. A random uuid will be given to this player.
+ */
+public class DummyPlayer extends Player implements Entity<String> {
     private String name;
 
+    /**
+     * Creates a new object.
+     * @param name the name of dummy player
+     */
     public DummyPlayer(String name) {
         super(new DummyPlayerEntity());
         this.name = name;
     }
 
-    public String getName() {
+    /**
+     * Get the name of this dummy player.
+     * @return the name of this dummy player
+     */
+    @Override
+    public String getId() {
         return name;
     }
 

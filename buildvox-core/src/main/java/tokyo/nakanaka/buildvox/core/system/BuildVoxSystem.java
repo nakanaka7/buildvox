@@ -10,7 +10,9 @@ import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
 import tokyo.nakanaka.buildvox.core.command.bvdCommand.BvdCommand;
 import tokyo.nakanaka.buildvox.core.commandSender.CommandSender;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
+import tokyo.nakanaka.buildvox.core.player.DummyPlayer;
 import tokyo.nakanaka.buildvox.core.player.Player;
+import tokyo.nakanaka.buildvox.core.player.RealPlayer;
 import tokyo.nakanaka.buildvox.core.world.Block;
 import tokyo.nakanaka.buildvox.core.world.World;
 
@@ -33,9 +35,8 @@ public class BuildVoxSystem {
     public static final Registry<World, NamespacedId> WORLD_REGISTRY = new Registry<>();
     /** Block registry */
     public static final BlockRegistry BLOCK_REGISTRY = new BlockRegistry();
-    /** Player repository */
-    public static final Registry<Player, UUID> PLAYER_REPOSITORY = new Registry<>();
-    public static final DummyPlayerRepository DUMMY_PLAYER_REPOSITORY = new DummyPlayerRepository();
+    private static final Registry<RealPlayer, UUID> realPlayerRegistry = new Registry<>();
+    private static final Registry<DummyPlayer, String> dummyPlayerRegistry = new Registry<>();
 
     private BuildVoxSystem() {
     }
@@ -62,9 +63,14 @@ public class BuildVoxSystem {
         return WORLD_REGISTRY;
     }
 
-    /** Get the player registry */
-    public static Registry<Player, UUID> getPlayerRegistry() {
-        return PLAYER_REPOSITORY;
+    /** Get the real player registry */
+    public static Registry<RealPlayer, UUID> getRealPlayerRegistry() {
+        return realPlayerRegistry;
+    }
+
+    /** Get the dummy player registry */
+    public static Registry<DummyPlayer, String> getDummyPlayerRegistry() {
+        return dummyPlayerRegistry;
     }
 
     /**

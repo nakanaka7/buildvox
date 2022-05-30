@@ -1,4 +1,4 @@
-package tokyo.nakanaka.buildvox.core;
+package tokyo.nakanaka.buildvox.core.player;
 
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.particleGui.Color;

@@ -2,7 +2,7 @@ package tokyo.nakanaka.buildvox.core.command.bvCommand;
 
 import picocli.CommandLine;
 import tokyo.nakanaka.buildvox.core.FeedbackMessage;
-import tokyo.nakanaka.buildvox.core.PlayerEntity;
+import tokyo.nakanaka.buildvox.core.player.PlayerEntity;
 import tokyo.nakanaka.buildvox.core.player.Player;
 
 import java.io.PrintWriter;
