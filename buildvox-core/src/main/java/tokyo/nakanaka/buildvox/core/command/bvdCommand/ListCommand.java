@@ -17,7 +17,7 @@ public class ListCommand implements Runnable {
     @Override
     public void run() {
         PrintWriter out = commandSpec.commandLine().getOut();
-        List<String> playerNameList = BuildVoxSystem.DUMMY_PLAYER_REPOSITORY.idList();
+        List<String> playerNameList = BuildVoxSystem.getDummyPlayerRegistry().idList();
         out.println(FeedbackMessage.ofDummyPlayerListExit(playerNameList));
     }
 

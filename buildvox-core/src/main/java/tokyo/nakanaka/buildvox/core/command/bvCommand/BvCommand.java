@@ -42,7 +42,7 @@ public class BvCommand implements Runnable {
     public static class DummyPlayerIdIterable implements Iterable<String> {
         @Override
         public Iterator<String> iterator() {
-            return BuildVoxSystem.DUMMY_PLAYER_REPOSITORY.idList().stream().iterator();
+            return BuildVoxSystem.getDummyPlayerRegistry().idList().stream().iterator();
         }
     }
 
@@ -65,7 +65,7 @@ public class BvCommand implements Runnable {
         PrintWriter err = commandSpec.commandLine().getErr();
         //-d
         if(dummyPlayer != null){
-            var dummyPlayerRepo = BuildVoxSystem.DUMMY_PLAYER_REPOSITORY;
+            var dummyPlayerRepo = BuildVoxSystem.getDummyPlayerRegistry();
             if(!dummyPlayerRepo.idList().contains(dummyPlayer)){
                 err.println(FeedbackMessage.NOT_FOUND_DUMMY_PLAYER_ERROR);
                 return 0;

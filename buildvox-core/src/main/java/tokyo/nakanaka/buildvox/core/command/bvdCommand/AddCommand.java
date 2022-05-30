@@ -19,7 +19,7 @@ public class AddCommand implements Runnable {
     public void run() {
         PrintWriter out = commandSpec.commandLine().getOut();
         PrintWriter err = commandSpec.commandLine().getErr();
-        var playerRepo = BuildVoxSystem.DUMMY_PLAYER_REPOSITORY;
+        var playerRepo = BuildVoxSystem.getDummyPlayerRegistry();
         if(playerRepo.idList().contains(playerName)){
             err.println(FeedbackMessage.ofDummyPlayerAlreadyExistError(playerName));
             return;

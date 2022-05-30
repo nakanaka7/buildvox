@@ -18,7 +18,7 @@ public class RemoveCommand implements Runnable {
     public void run() {
         PrintWriter out = commandSpec.commandLine().getOut();
         PrintWriter err = commandSpec.commandLine().getErr();
-        var dummyPlayerRepository = BuildVoxSystem.DUMMY_PLAYER_REPOSITORY;
+        var dummyPlayerRepository = BuildVoxSystem.getDummyPlayerRegistry();
         if(!dummyPlayerRepository.idList().contains(playerName)){
             err.println(FeedbackMessage.ofNotFoundDummyPlayerError(playerName));
         }else{
