@@ -63,8 +63,8 @@ public class BuildVoxSystem {
         return WORLD_REGISTRY;
     }
 
-    /** Get the player registry */
-    public static Registry<RealPlayer, UUID> getPlayerRegistry() {
+    /** Get the real player registry */
+    public static Registry<RealPlayer, UUID> getRealPlayerRegistry() {
         return realPlayerRegistry;
     }
 

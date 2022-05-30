@@ -67,12 +67,12 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
     private static tokyo.nakanaka.buildvox.core.commandSender.CommandSender getBvCommandSender(CommandSender sender) {
         if(sender instanceof Player player) {
             UUID id = player.getUniqueId();
-            var player1 = BuildVoxSystem.getPlayerRegistry().get(id);
+            var player1 = BuildVoxSystem.getRealPlayerRegistry().get(id);
             if(player1 != null)return player1;
             var player2 = new tokyo.nakanaka.buildvox.core.player.RealPlayer(new BukkitPlayerEntity(player));
             player2.setParticleGuiVisible(true);
-            BuildVoxSystem.getPlayerRegistry().register(player2);
-            return BuildVoxSystem.getPlayerRegistry().get(id);
+            BuildVoxSystem.getRealPlayerRegistry().register(player2);
+            return BuildVoxSystem.getRealPlayerRegistry().get(id);
         }else if(sender instanceof BlockCommandSender blockSender) {
             return BukkitCommandBlock.newInstance(blockSender);
         }else if(sender instanceof ConsoleCommandSender) {
@@ -137,7 +137,7 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent evt) {
-        var regi = BuildVoxSystem.getPlayerRegistry();
+        var regi = BuildVoxSystem.getRealPlayerRegistry();
         var player = regi.unregister(evt.getPlayer().getUniqueId());
         player.setParticleGuiVisible(false);
     }
@@ -180,7 +180,7 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
         Player player = evt.getPlayer();
         UUID playerId = player.getUniqueId();
         PlayerEntity playerEntity = new BukkitPlayerEntity(player);
-        Registry<tokyo.nakanaka.buildvox.core.player.RealPlayer, UUID> regi = BuildVoxSystem.getPlayerRegistry();
+        Registry<tokyo.nakanaka.buildvox.core.player.RealPlayer, UUID> regi = BuildVoxSystem.getRealPlayerRegistry();
         tokyo.nakanaka.buildvox.core.player.RealPlayer bvPlayer = regi.get(playerId);
         if(bvPlayer == null) {
             bvPlayer = new tokyo.nakanaka.buildvox.core.player.RealPlayer(playerEntity);
