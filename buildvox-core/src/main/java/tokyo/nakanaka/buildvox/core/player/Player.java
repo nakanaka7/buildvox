@@ -23,7 +23,7 @@ import java.util.UUID;
 /**
  * Represents a player.
  */
-public class Player implements CommandSender, Entity<UUID> {
+public class Player implements CommandSender {
     private UUID id;
     private Block backgroundBlock;
     private Clipboard clipboard;
@@ -40,11 +40,6 @@ public class Player implements CommandSender, Entity<UUID> {
         this.posArray = new Vector3i[BuildVoxSystem.config.posArrayLength()];
         this.backgroundBlock = BuildVoxSystem.config.backgroundBlock();
         this.playerEntity = playerEntity;
-    }
-
-    @Override
-    public UUID getId() {
-        return id;
     }
 
     /**
