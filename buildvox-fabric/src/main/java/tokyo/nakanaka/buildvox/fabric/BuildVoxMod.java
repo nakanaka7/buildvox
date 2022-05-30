@@ -109,7 +109,7 @@ public class BuildVoxMod implements ModInitializer {
 			return;
 		}
 		PlayerEntity playerEntity = new FabricPlayerEntity(player0);
-		Player player = new RealPlayer(playerEntity);
+		var player = new RealPlayer(playerEntity);
 		player.setParticleGuiVisible(true);
 		BuildVoxSystem.getPlayerRegistry().register(player);
 	}
