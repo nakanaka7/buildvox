@@ -35,9 +35,8 @@ public class BuildVoxSystem {
     public static final Registry<World, NamespacedId> WORLD_REGISTRY = new Registry<>();
     /** Block registry */
     public static final BlockRegistry BLOCK_REGISTRY = new BlockRegistry();
-    /** Player repository */
-    public static final Registry<RealPlayer, UUID> PLAYER_REPOSITORY = new Registry<>();
-    public static final Registry<DummyPlayer, String> DUMMY_PLAYER_REPOSITORY = new Registry<>();
+    private static final Registry<RealPlayer, UUID> realPlayerRegistry = new Registry<>();
+    private static final Registry<DummyPlayer, String> dummyPlayerRegistry = new Registry<>();
 
     private BuildVoxSystem() {
     }
@@ -66,12 +65,12 @@ public class BuildVoxSystem {
 
     /** Get the player registry */
     public static Registry<RealPlayer, UUID> getPlayerRegistry() {
-        return PLAYER_REPOSITORY;
+        return realPlayerRegistry;
     }
 
     /** Get the dummy player registry */
     public static Registry<DummyPlayer, String> getDummyPlayerRegistry() {
-        return DUMMY_PLAYER_REPOSITORY;
+        return dummyPlayerRegistry;
     }
 
     /**
