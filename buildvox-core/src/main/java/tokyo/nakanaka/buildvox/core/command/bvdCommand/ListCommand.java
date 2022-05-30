@@ -5,7 +5,6 @@ import tokyo.nakanaka.buildvox.core.FeedbackMessage;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 
 @CommandLine.Command(name = "list",
@@ -18,7 +17,7 @@ public class ListCommand implements Runnable {
     @Override
     public void run() {
         PrintWriter out = commandSpec.commandLine().getOut();
-        List<String> playerNameList = new ArrayList<>(BuildVoxSystem.DUMMY_PLAYER_REPOSITORY.nameSet());
+        List<String> playerNameList = BuildVoxSystem.DUMMY_PLAYER_REPOSITORY.idList();
         out.println(FeedbackMessage.ofDummyPlayerListExit(playerNameList));
     }
 

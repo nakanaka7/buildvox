@@ -7,7 +7,6 @@ import tokyo.nakanaka.buildvox.core.command.bvCommand.posArray.PosArrayCommand;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
-import tokyo.nakanaka.buildvox.core.system.DummyPlayerRepository;
 import tokyo.nakanaka.buildvox.core.world.World;
 
 import java.io.PrintWriter;
@@ -43,7 +42,7 @@ public class BvCommand implements Runnable {
     public static class DummyPlayerIdIterable implements Iterable<String> {
         @Override
         public Iterator<String> iterator() {
-            return BuildVoxSystem.DUMMY_PLAYER_REPOSITORY.nameSet().stream().iterator();
+            return BuildVoxSystem.DUMMY_PLAYER_REPOSITORY.idList().stream().iterator();
         }
     }
 
@@ -66,8 +65,8 @@ public class BvCommand implements Runnable {
         PrintWriter err = commandSpec.commandLine().getErr();
         //-d
         if(dummyPlayer != null){
-            DummyPlayerRepository dummyPlayerRepo = BuildVoxSystem.DUMMY_PLAYER_REPOSITORY;
-            if(!dummyPlayerRepo.nameSet().contains(dummyPlayer)){
+            var dummyPlayerRepo = BuildVoxSystem.DUMMY_PLAYER_REPOSITORY;
+            if(!dummyPlayerRepo.idList().contains(dummyPlayer)){
                 err.println(FeedbackMessage.NOT_FOUND_DUMMY_PLAYER_ERROR);
                 return 0;
             }

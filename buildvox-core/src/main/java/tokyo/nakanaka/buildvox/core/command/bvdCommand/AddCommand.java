@@ -2,8 +2,8 @@ package tokyo.nakanaka.buildvox.core.command.bvdCommand;
 
 import picocli.CommandLine;
 import tokyo.nakanaka.buildvox.core.FeedbackMessage;
+import tokyo.nakanaka.buildvox.core.player.DummyPlayer;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
-import tokyo.nakanaka.buildvox.core.system.DummyPlayerRepository;
 
 import java.io.PrintWriter;
 
@@ -19,12 +19,12 @@ public class AddCommand implements Runnable {
     public void run() {
         PrintWriter out = commandSpec.commandLine().getOut();
         PrintWriter err = commandSpec.commandLine().getErr();
-        DummyPlayerRepository playerRepo = BuildVoxSystem.DUMMY_PLAYER_REPOSITORY;
-        if(playerRepo.nameSet().contains(playerName)){
+        var playerRepo = BuildVoxSystem.DUMMY_PLAYER_REPOSITORY;
+        if(playerRepo.idList().contains(playerName)){
             err.println(FeedbackMessage.ofDummyPlayerAlreadyExistError(playerName));
             return;
         }
-        playerRepo.create(playerName);
+        playerRepo.register(new DummyPlayer(playerName));
         out.println(FeedbackMessage.ofAddNewDummyPlayerExit(playerName));
     }
 
