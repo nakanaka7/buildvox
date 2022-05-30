@@ -6,14 +6,25 @@ import tokyo.nakanaka.buildvox.core.world.World;
 
 import java.util.UUID;
 
+/**
+ * Represents a dummy player. A random uuid will be given to this player.
+ */
 public class DummyPlayer extends Player {
     private String name;
 
+    /**
+     * Creates a new object.
+     * @param name the name of dummy player
+     */
     public DummyPlayer(String name) {
         super(new DummyPlayerEntity());
         this.name = name;
     }
 
+    /**
+     * Get the name of this dummy player.
+     * @return the name of this dummy player
+     */
     public String getName() {
         return name;
     }
