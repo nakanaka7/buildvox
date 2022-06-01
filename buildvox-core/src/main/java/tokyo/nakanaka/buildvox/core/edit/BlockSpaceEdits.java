@@ -8,6 +8,7 @@ import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
 
 import java.util.Set;
+import java.util.function.Predicate;
 
 /**
  * The utility class of block space edits.
@@ -52,6 +53,27 @@ public class BlockSpaceEdits {
         }
     }
 
+    /**
+     * Replace the blocks of the space to the blocks of another type.
+     * @param space the block space.
+     * @param posSet the pos set of blocks.
+     * @param blockCondition block-replacing condition.
+     * @param toBlock the block type after replacing.
+     * @param <B> the block type.
+     */
+    public static <B> void replace(BlockSpace3<B> space, Set<Vector3i> posSet, Predicate<B> blockCondition, B toBlock) {
+        for(Vector3i pos : posSet) {
+            B a = space.getBlock(pos);
+            if(blockCondition.test(a)) {
+                space.setBlock(pos, toBlock);
+            }
+        }
+    }
+
+    /**
+     * Use replace() with Predicate.
+     */
+    @Deprecated
     public static <B> void replace(BlockSpace3<B> space, Set<Vector3i> posSet, BlockCondition<B> condition, B toBlock) {
         for(Vector3i pos : posSet) {
             B a = space.getBlock(pos);
@@ -61,6 +83,7 @@ public class BlockSpaceEdits {
         }
     }
 
+    @Deprecated
     public static interface BlockCondition<B> {
         boolean match(B block);
     }
