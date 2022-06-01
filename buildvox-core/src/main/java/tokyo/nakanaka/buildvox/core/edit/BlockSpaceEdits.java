@@ -52,15 +52,6 @@ public class BlockSpaceEdits {
         }
     }
 
-    public static <B> void replace(BlockSpace3<B> space, Set<Vector3i> posSet, B fromBlock, B toBlock) {
-        for(Vector3i pos : posSet) {
-            B a = space.getBlock(pos);
-            if(a.equals(fromBlock)) {
-                space.setBlock(pos, toBlock);
-            }
-        }
-    }
-
     public static <B> void replace(BlockSpace3<B> space, Set<Vector3i> posSet, BlockCondition<B> condition, B toBlock) {
         for(Vector3i pos : posSet) {
             B a = space.getBlock(pos);
