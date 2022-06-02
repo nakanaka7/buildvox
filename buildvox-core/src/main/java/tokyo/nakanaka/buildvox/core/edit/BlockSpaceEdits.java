@@ -8,11 +8,23 @@ import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
 
 import java.util.Set;
+import java.util.function.Predicate;
 
+/**
+ * The utility class of block space edits.
+ */
 public class BlockSpaceEdits {
     private BlockSpaceEdits() {
     }
 
+    /**
+     * Copy the source blocks and paste them into the destination space.
+     * @param src the source block space.
+     * @param srcPosSet the pos set of the source.
+     * @param dest the destination block space.
+     * @param trans the affine transformation.
+     * @param <B> the block type.
+     */
     public static <B> void copy(BlockSpace3<B> src, Set<Vector3i> srcPosSet, BlockSpace3<B> dest, AffineTransformation3d trans) {
         for(Vector3i pos : srcPosSet) {
             B block = src.getBlock(pos);
@@ -28,21 +40,40 @@ public class BlockSpaceEdits {
         }
     }
 
+    /**
+     * Fill the blocks into the destination.
+     * @param dest the destination block space.
+     * @param destPosSet the destination pos set.
+     * @param block the block.
+     * @param <B> the block type.
+     */
     public static <B> void fill(BlockSpace3<B> dest, Set<Vector3i> destPosSet, B block) {
         for(Vector3i e : destPosSet){
             dest.setBlock(e, block);
         }
     }
 
-    public static <B> void replace(BlockSpace3<B> space, Set<Vector3i> posSet, B fromBlock, B toBlock) {
+    /**
+     * Replace the blocks of the space to the blocks of another type.
+     * @param space the block space.
+     * @param posSet the pos set of blocks.
+     * @param blockCondition block-replacing condition.
+     * @param toBlock the block type after replacing.
+     * @param <B> the block type.
+     */
+    public static <B> void replace(BlockSpace3<B> space, Set<Vector3i> posSet, Predicate<B> blockCondition, B toBlock) {
         for(Vector3i pos : posSet) {
             B a = space.getBlock(pos);
-            if(a.equals(fromBlock)) {
+            if(blockCondition.test(a)) {
                 space.setBlock(pos, toBlock);
             }
         }
     }
 
+    /**
+     * Use replace() with Predicate.
+     */
+    @Deprecated
     public static <B> void replace(BlockSpace3<B> space, Set<Vector3i> posSet, BlockCondition<B> condition, B toBlock) {
         for(Vector3i pos : posSet) {
             B a = space.getBlock(pos);
@@ -52,6 +83,7 @@ public class BlockSpaceEdits {
         }
     }
 
+    @Deprecated
     public static interface BlockCondition<B> {
         boolean match(B block);
     }
