@@ -19,11 +19,17 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * The utility class of player edits.
+ */
 public class PlayerEdits {
     private PlayerEdits() {
     }
 
     /**
+     * Undo the player's edits.
+     * @param player the player.
+     * @param count the counts to try undoing.
      * @return actual undo count
      */
     public static int undo(Player player, int count) {
@@ -41,6 +47,9 @@ public class PlayerEdits {
     }
 
     /**
+     * Redo the player's edits.
+     * @param player the player.
+     * @param count the counts to try redoing.
      * @return actual redo count
      */
     public static int redo(Player player, int count) {
@@ -57,6 +66,9 @@ public class PlayerEdits {
         return count - remains;
     }
 
+    /**
+     * The exception which represents a selection was not found.
+     */
     public static class SelectionNotFoundException extends RuntimeException {
     }
 
@@ -73,6 +85,7 @@ public class PlayerEdits {
     }
 
     /**
+     * Applies physics in the selection.
      * @throws SelectionNotFoundException if a selection is not found
      */
     public static void applyPhysics(Player player) {
@@ -91,6 +104,13 @@ public class PlayerEdits {
         player.setSelection(player.getEditTargetWorld(), selTo);
     }
 
+    /**
+     * Reflects the blocks in the player's selection.
+     * @param player the player.
+     * @param axis the direction of reflection.
+     * @param pos the block position which the reflection plane goes throw.
+     * @return the edit exit.
+     */
     public static EditExit reflect(Player player, Axis axis, Vector3d pos) {
         AffineTransformation3d relativeTrans = switch (axis){
             case X -> AffineTransformation3d.ofScale(- 1, 1, 1);
@@ -101,6 +121,12 @@ public class PlayerEdits {
     }
 
     /**
+     * Rotates the blocks in the player's selection.
+     * @param player the player
+     * @param axis the axis which parallels to the rotating-axis.
+     * @param angle the rotation angle.
+     * @param pos the block position which the rotating-axis goes throw.
+     * @return the edit exit.
      * @throws SelectionNotFoundException if a selection is not found
      */
     public static EditExit rotate(Player player, Axis axis, double angle, Vector3d pos) {
@@ -114,7 +140,14 @@ public class PlayerEdits {
     }
 
     /**
-     * @throws IllegalArgumentException if more than 0 factors are zero.
+     * Scales the blocks in the player's selection.
+     * @param player the player
+     * @param factorX the scale factor about x-axis.
+     * @param factorY the scale factor about y-axis.
+     * @param factorZ the scale factor about z-axis.
+     * @param pos the center position of scaling.
+     * @return the edit exit.
+     * @throws SelectionNotFoundException if a selection is not found
      */
     public static EditExit scale(Player player, double factorX, double factorY, double factorZ, Vector3d pos) {
         if(factorX * factorY * factorZ == 0) throw new IllegalArgumentException();
@@ -122,6 +155,16 @@ public class PlayerEdits {
         return affineTransform(player, pos, relativeTrans);
     }
 
+    /**
+     * Shears the blocks in the player's selection.
+     * @param player the player.
+     * @param axis the axis.
+     * @param factorI the 1st factor.
+     * @param factorJ the 2nd factor.
+     * @param pos the center position of shearing.
+     * @return the edit-exit
+     * @throws SelectionNotFoundException if a selection is not found
+     */
     public static EditExit shear(Player player, Axis axis, double factorI, double factorJ, Vector3d pos) {
         AffineTransformation3d relativeTrans = switch (axis) {
             case X -> AffineTransformation3d.ofShearX(factorI, factorJ);
@@ -131,12 +174,26 @@ public class PlayerEdits {
         return affineTransform(player, pos, relativeTrans);
     }
 
+    /**
+     * Translates the blocks in the player's selection.
+     * @param player the player.
+     * @param dx the displacement along x-axis.
+     * @param dy the displacement along y-axis.
+     * @param dz the displacement along z-axis.
+     * @return the edit exit.
+     * @throws SelectionNotFoundException if a selection is not found
+     */
     public static EditExit translate(Player player, double dx, double dy, double dz) {
         AffineTransformation3d relativeTrans = AffineTransformation3d.ofTranslation(dx, dy, dz);
         return affineTransform(player, Vector3d.ZERO, relativeTrans);
     }
 
     /**
+     * Affine transform the player's selection.
+     * @param player the player.
+     * @param pos the block position of the center of affine transformation
+     * @param relativeTrans the affine transformation.
+     * @return the edit exit.
      * @throws SelectionNotFoundException if a selection is not found
      */
     private static EditExit affineTransform(Player player, Vector3d pos, AffineTransformation3d relativeTrans) {
@@ -186,6 +243,8 @@ public class PlayerEdits {
     }
 
     /**
+     * Copies the blocks in the selection.
+     * @param pos the position which corresponds to the origin of the clipboard.
      * @throws SelectionNotFoundException if a selection is not found
      */
     public static EditExit copy(Player player, Vector3d pos) {
@@ -198,6 +257,9 @@ public class PlayerEdits {
     }
 
     /**
+     * Pastes the blocks of the clipboard.
+     * @param player the player.
+     * @param pos the position which corresponds to the origin of the clipboard.
      * @throws IllegalStateException if clipboard is null
      * @throws IllegalArgumentException if integrity is less than 0 or more than 1.
      */
@@ -210,6 +272,14 @@ public class PlayerEdits {
         return recordingEdit(player, pasteSelection::setForwardBlocks, pasteSelection);
     }
 
+    /**
+     * Fills the block into the selection
+     * @param player the player.
+     * @param selection the selection.
+     * @param block the block
+     * @param integrity the integrity of block-setting.
+     * @return the edit-exit.
+     */
     public static EditExit fill(Player player, Selection selection, Block block, double integrity) {
         FillSelection fillSelection = new FillSelection(selection.getRegion3d(), selection.getBound(), block, integrity);
         return recordingEdit(player, fillSelection::setForwardBlocks, fillSelection
@@ -217,6 +287,12 @@ public class PlayerEdits {
     }
 
     /**
+     * Replaces blocks.
+     * @param player the player.
+     * @param blockFrom the block to be replaced from
+     * @param blockTo the block to be replaced to
+     * @param integrity the integrity of replacing.
+     * @return the edit-exit.
      * @throws IllegalArgumentException if integrity is less than 0 or larger than 1.
      * @throws SelectionNotFoundException if a selection is not found
      */
@@ -234,6 +310,15 @@ public class PlayerEdits {
         );
     }
 
+    /**
+     * Repeats the blocks in the cuboid specified by pos0 and pos1.
+     * @param player the player.
+     * @param pos0 the position of a corner.
+     * @param pos1 the position of another corner.
+     * @param countX the count along x-axis.
+     * @param countY the count along y-axis.
+     * @param countZ the count along z-axis.
+     */
     public static EditExit repeat(Player player, Vector3i pos0, Vector3i pos1, int countX, int countY, int countZ) {
         int maxX = Math.max(pos0.x(), pos1.x());
         int maxY = Math.max(pos0.y(), pos1.y());
