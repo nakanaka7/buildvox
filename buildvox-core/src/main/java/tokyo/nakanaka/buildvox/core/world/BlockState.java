@@ -75,6 +75,7 @@ public class BlockState {
      * Gets the block state map.
      * @return the block state map.
      */
+    @Deprecated
     public Map<String, String> getStateMap() {
         return stateMap;
     }
@@ -128,6 +129,7 @@ public class BlockState {
      * @param newStateMap a map for new block state.
      * @return a new instance with a new state map.
      */
+    @Deprecated
     public BlockState withStateMap(Map<String, String> newStateMap) {
         return new BlockState(id, newStateMap);
     }
