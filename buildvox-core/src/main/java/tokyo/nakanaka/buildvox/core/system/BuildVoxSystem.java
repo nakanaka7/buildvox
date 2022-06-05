@@ -58,6 +58,11 @@ public class BuildVoxSystem {
         return config;
     }
 
+    /** Get the environment */
+    public static Environment getEnvironment() {
+        return environment;
+    }
+
     /** Get the world registry */
     public static Registry<World, NamespacedId> getWorldRegistry() {
         return WORLD_REGISTRY;
