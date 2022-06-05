@@ -13,7 +13,7 @@ import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.DummyPlayer;
 import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.player.RealPlayer;
-import tokyo.nakanaka.buildvox.core.world.Block;
+import tokyo.nakanaka.buildvox.core.world.BlockState;
 import tokyo.nakanaka.buildvox.core.world.World;
 
 import java.io.PrintWriter;
@@ -49,8 +49,8 @@ public class BuildVoxSystem {
                 (runnable, tick) -> {});
     }
 
-    public static record Config(String outColor, String errColor, Block backgroundBlock, int posArrayLength) {
-        public static final Config DEFAULT = new Config(ColorCode.GREEN, ColorCode.RED, Block.valueOf("minecraft:air"), 2);
+    public static record Config(String outColor, String errColor, BlockState backgroundBlock, int posArrayLength) {
+        public static final Config DEFAULT = new Config(ColorCode.GREEN, ColorCode.RED, BlockState.valueOf("minecraft:air"), 2);
     }
 
     /** Get the config */

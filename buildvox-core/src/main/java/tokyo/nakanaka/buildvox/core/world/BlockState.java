@@ -7,7 +7,7 @@ import java.util.*;
 /**
  * Represents block.
  */
-public class Block {
+public class BlockState {
     private NamespacedId id;
     private Map<String, String> stateMap;
 
@@ -17,7 +17,7 @@ public class Block {
      * @param stateMap the block state map. This map is expressed as [key1=value1,key2=value2...] which follows block
      * in game.
      */
-    public Block(NamespacedId id, Map<String, String> stateMap) {
+    public BlockState(NamespacedId id, Map<String, String> stateMap) {
         this.id = id;
         this.stateMap = stateMap;
     }
@@ -27,7 +27,7 @@ public class Block {
      * blockId or block state part may be omitted. blockId must be namespaced id.
      * @throws IllegalArgumentException if the specified String is not the form stated above.
      */
-    public static Block valueOf(String str) {
+    public static BlockState valueOf(String str) {
         String strId;
         Map<String, String> stateMap = new HashMap<>();
         if(str.contains("[")) {
@@ -49,7 +49,7 @@ public class Block {
             strId = str;
         }
         NamespacedId id = NamespacedId.valueOf(strId);
-        return new Block(id, stateMap);
+        return new BlockState(id, stateMap);
     }
 
     /**
@@ -91,8 +91,8 @@ public class Block {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Block)) return false;
-        Block block = (Block) o;
+        if (!(o instanceof BlockState)) return false;
+        BlockState block = (BlockState) o;
         return id.equals(block.id) && stateMap.equals(block.stateMap);
     }
 
@@ -106,8 +106,8 @@ public class Block {
      * @param newStateMap a map for new block state.
      * @return a new instance with a new state map.
      */
-    public Block withStateMap(Map<String, String> newStateMap) {
-        return new Block(id, newStateMap);
+    public BlockState withStateMap(Map<String, String> newStateMap) {
+        return new BlockState(id, newStateMap);
     }
 
 }

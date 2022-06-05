@@ -13,7 +13,7 @@ public interface WorldExperimental {
      * @param z the z-coordinate of the block.
      * @return a block of the specified position.
      */
-    Block getBlock(int x, int y, int z);
+    BlockState getBlock(int x, int y, int z);
 
     /**
      * Set a block into the specified position. Block interface implementation depends on the platform.
@@ -24,7 +24,7 @@ public interface WorldExperimental {
      * @param physics whether applying physics or not.
      * @throws IllegalArgumentException if the block interface is not for the platform.
      */
-    void setBlock(int x, int y, int z, Block block, boolean physics);
+    void setBlock(int x, int y, int z, BlockState block, boolean physics);
 
     /**
      * Gets biome dimension. 2 or 3 must be return.

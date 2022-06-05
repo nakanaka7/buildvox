@@ -1,7 +1,6 @@
 package tokyo.nakanaka.buildvox.bukkit;
 
 import org.bukkit.Server;
-import org.bukkit.block.BlockState;
 import org.bukkit.block.CommandBlock;
 import org.bukkit.block.Container;
 import org.bukkit.block.Sign;
@@ -9,29 +8,29 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
-import tokyo.nakanaka.buildvox.core.world.Block;
+import tokyo.nakanaka.buildvox.core.world.BlockState;
 
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 /**
- * A class which extends {@link Block} for Bukkit Platform
+ * A class which extends {@link BlockState} for Bukkit Platform
  */
-public class BukkitBlock extends Block {
+public class BukkitBlockState extends BlockState {
     private Set<BlockEntityData> blockEntityDataSet = new HashSet<>();
     private Inventory inventory;
 
-    private BukkitBlock(NamespacedId id, Map<String, String> stateMap) {
+    private BukkitBlockState(NamespacedId id, Map<String, String> stateMap) {
         super(id, stateMap);
     }
 
     private interface BlockEntityData {
-        void merge(BlockState blockState);
+        void merge(org.bukkit.block.BlockState blockState);
     }
 
     private static record CommandBlockData(String command, String name) implements BlockEntityData {
-        public void merge(BlockState blockState){
+        public void merge(org.bukkit.block.BlockState blockState){
             if(blockState instanceof CommandBlock commandBlock) {
                 commandBlock.setCommand(command);
                 commandBlock.setName(name);
@@ -41,7 +40,7 @@ public class BukkitBlock extends Block {
 
     private static record SignData(String[] lines, boolean glowing) implements BlockEntityData {
         @Override
-        public void merge(BlockState blockState) {
+        public void merge(org.bukkit.block.BlockState blockState) {
             if(blockState instanceof Sign sign) {
                 for (int index = 0; index < lines.length; ++index) {
                     sign.setLine(index, lines[index]);
@@ -56,11 +55,11 @@ public class BukkitBlock extends Block {
      * @param blockState a block state.
      * @return a new instance
      */
-    public static BukkitBlock newInstance(BlockState blockState) {
+    public static BukkitBlockState newInstance(org.bukkit.block.BlockState blockState) {
         BlockData blockData = blockState.getBlockData();
         String blockStr = blockData.getAsString();
-        Block block = Block.valueOf(blockStr);
-        BukkitBlock bukkitBlock = new BukkitBlock(block.getId(), block.getStateMap());
+        BlockState block = BlockState.valueOf(blockStr);
+        BukkitBlockState bukkitBlock = new BukkitBlockState(block.getId(), block.getStateMap());
         if(blockState instanceof CommandBlock commandBlock) {
             bukkitBlock.blockEntityDataSet.add(new CommandBlockData(commandBlock.getCommand(), commandBlock.getName()));
         }
@@ -77,7 +76,7 @@ public class BukkitBlock extends Block {
         String blockStr = toString();
         BlockData blockData = server.createBlockData(blockStr);
         targetBlock.setBlockData(blockData, physics);
-        BlockState blockState = targetBlock.getState();
+        org.bukkit.block.BlockState blockState = targetBlock.getState();
         for(var blockEntityData : blockEntityDataSet) {
             blockEntityData.merge(blockState);
         }
@@ -89,8 +88,8 @@ public class BukkitBlock extends Block {
     }
 
     @Override
-    public BukkitBlock withStateMap(Map<String, String> stateMap) {
-        BukkitBlock newBlock = new BukkitBlock(super.getId(), stateMap);
+    public BukkitBlockState withStateMap(Map<String, String> stateMap) {
+        BukkitBlockState newBlock = new BukkitBlockState(super.getId(), stateMap);
         newBlock.inventory = this.inventory;
         newBlock.blockEntityDataSet = new HashSet<>(blockEntityDataSet);
         return newBlock;

@@ -12,7 +12,7 @@ import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
-import tokyo.nakanaka.buildvox.core.world.Block;
+import tokyo.nakanaka.buildvox.core.world.BlockState;
 import tokyo.nakanaka.buildvox.core.world.World;
 import tokyo.nakanaka.buildvox.core.blockSpace.BlockSpace3;
 
@@ -87,10 +87,10 @@ public class WorldEdits {
      * @param integrity the integrity of the block-settings.
      */
     public static void paste(Clipboard srcClip, EditWorld dest, Vector3d pos, AffineTransformation3d clipboardTrans, double integrity) {
-        BlockSpace3<Block> src = new ClipboardBlockSpace3(srcClip);
+        BlockSpace3<BlockState> src = new ClipboardBlockSpace3(srcClip);
         Set<Vector3i> srcPosSet = srcClip.blockPosSet();
         BlockTransformation blockTrans = BlockTransformApproximator.approximateToBlockTrans(clipboardTrans);
-        BlockSpace3<Block> transDest = new BlockStateTransformingBlockSpace3(dest, BuildVoxSystem.environment.blockStateTransformer(), blockTrans);
+        BlockSpace3<BlockState> transDest = new BlockStateTransformingBlockSpace3(dest, BuildVoxSystem.environment.blockStateTransformer(), blockTrans);
         transDest = new IntegrityAdjustableBlockSpace3<>(transDest, integrity);
         AffineTransformation3d trans = AffineTransformation3d.ofTranslation(pos.x(), pos.y(), pos.z()).compose(clipboardTrans);
         BlockSpaceEdits.copy(src, srcPosSet, transDest, trans);
@@ -103,8 +103,8 @@ public class WorldEdits {
      * @param block the block.
      * @param integrity the integrity of block-setting.
      */
-    public static void fill(EditWorld world, Selection sel, Block block, double integrity) {
-        BlockSpace3<Block> dest = new IntegrityAdjustableBlockSpace3<>(world, integrity);
+    public static void fill(EditWorld world, Selection sel, BlockState block, double integrity) {
+        BlockSpace3<BlockState> dest = new IntegrityAdjustableBlockSpace3<>(world, integrity);
         BlockSpaceEdits.fill(dest, sel.calculateBlockPosSet(), block);
     }
 
@@ -116,12 +116,12 @@ public class WorldEdits {
      * @param toBlock the block type to be replaced to.
      * @param integrity the integrity of block-setting.
      */
-    public static void replace(EditWorld world, Selection sel, Block fromBlock, Block toBlock, double integrity) {
-        BlockSpace3<Block> space = new IntegrityAdjustableBlockSpace3<>(world, integrity);
+    public static void replace(EditWorld world, Selection sel, BlockState fromBlock, BlockState toBlock, double integrity) {
+        BlockSpace3<BlockState> space = new IntegrityAdjustableBlockSpace3<>(world, integrity);
         NamespacedId fromId = fromBlock.getId();
         Map<String, String> fromStateMap = fromBlock.getStateMap();
         BlockSpaceEdits.replace(space, sel.calculateBlockPosSet(),
-            (BlockSpaceEdits.BlockCondition<Block>) (block) -> {
+            (BlockSpaceEdits.BlockCondition<BlockState>) (block) -> {
                 NamespacedId id = block.getId();
                 Map<String, String> stateMap = block.getStateMap();
                 if(!fromId.equals(id)) return false;

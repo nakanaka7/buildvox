@@ -1,24 +1,23 @@
 package tokyo.nakanaka.buildvox.fabric;
 
-import net.minecraft.block.BlockState;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.state.property.Property;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
-import tokyo.nakanaka.buildvox.core.world.Block;
+import tokyo.nakanaka.buildvox.core.world.BlockState;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * The special class which extends {@link Block} class for Fabric platform. This class can store nbt of a block entity.
+ * The special class which extends {@link BlockState} class for Fabric platform. This class can store nbt of a block entity.
  */
-public class FabricBlock extends Block {
+public class FabricBlockState extends BlockState {
     private NbtCompound nbt;
 
-    private FabricBlock(NamespacedId id, Map<String, String> stateMap, NbtCompound nbt) {
+    private FabricBlockState(NamespacedId id, Map<String, String> stateMap, NbtCompound nbt) {
         super(id, stateMap);
         this.nbt = nbt;
     }
@@ -28,8 +27,8 @@ public class FabricBlock extends Block {
      * @param blockState a block state.
      * @return an instance from a BlockState.
      */
-    public static FabricBlock newInstance(BlockState blockState) {
-        return FabricBlock.newInstance(blockState, null);
+    public static FabricBlockState newInstance(net.minecraft.block.BlockState blockState) {
+        return FabricBlockState.newInstance(blockState, null);
     }
 
     /**
@@ -38,7 +37,7 @@ public class FabricBlock extends Block {
      * @param nbt the nbt of a block entity.
      * @return an instance from a BlockState.
      */
-    public static FabricBlock newInstance(BlockState blockState, NbtCompound nbt) {
+    public static FabricBlockState newInstance(net.minecraft.block.BlockState blockState, NbtCompound nbt) {
         net.minecraft.block.Block block0 = blockState.getBlock();
         Identifier id0 = Registry.BLOCK.getId(block0);
         NamespacedId id = new NamespacedId(id0.getNamespace(), id0.getPath());
@@ -48,7 +47,7 @@ public class FabricBlock extends Block {
             Object value0 = blockState.get(key0);
             stateMap.put(key0.getName().toLowerCase(), value0.toString().toLowerCase());
         }
-        return new FabricBlock(id, stateMap, nbt);
+        return new FabricBlockState(id, stateMap, nbt);
     }
 
     /**
@@ -60,8 +59,8 @@ public class FabricBlock extends Block {
     }
 
     @Override
-    public FabricBlock withStateMap(Map<String, String> stateMap){
-        return new FabricBlock(super.getId(), stateMap, nbt);
+    public FabricBlockState withStateMap(Map<String, String> stateMap){
+        return new FabricBlockState(super.getId(), stateMap, nbt);
     }
 
 }

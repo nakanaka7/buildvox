@@ -1,6 +1,6 @@
 package tokyo.nakanaka.buildvox.core;
 
-import tokyo.nakanaka.buildvox.core.world.Block;
+import tokyo.nakanaka.buildvox.core.world.BlockState;
 
 /**
  * A functional interface to validate the given block is settable into the world of the platform.
@@ -11,5 +11,5 @@ public interface BlockValidator {
      * @param block a block
      * @return true if the given block is settable into the world of the platform, otherwise false.
      */
-    boolean validate(Block block);
+    boolean validate(BlockState block);
 }

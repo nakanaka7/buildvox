@@ -13,7 +13,7 @@ import tokyo.nakanaka.buildvox.core.blockStateTransformer.BlockStateTransformer;
 import tokyo.nakanaka.buildvox.core.blockStateTransformer.BlockTransformation;
 import tokyo.nakanaka.buildvox.core.math.transformation.*;
 import tokyo.nakanaka.buildvox.core.math.vector.*;
-import tokyo.nakanaka.buildvox.core.world.Block;
+import tokyo.nakanaka.buildvox.core.world.BlockState;
 
 import java.util.*;
 
@@ -32,7 +32,7 @@ public class BukkitBlockStateTransformer implements BlockStateTransformer {
     @Override
     public Map<String, String> transform(NamespacedId blockId, Map<String, String> stateMap, BlockTransformation blockTrans){
         Matrix3x3i transMatrix = blockTrans.toMatrix3x3i();
-        String blockStr = new Block(blockId, stateMap).toString();
+        String blockStr = new BlockState(blockId, stateMap).toString();
         BlockData blockData;
         try {
             blockData = server.createBlockData(blockStr);
@@ -65,7 +65,7 @@ public class BukkitBlockStateTransformer implements BlockStateTransformer {
         if(blockData instanceof Stairs stairs){
             blockData = transformStairsShape(stairs, transMatrix);
         }
-        return Block.valueOf(blockData.getAsString()).getStateMap();
+        return BlockState.valueOf(blockData.getAsString()).getStateMap();
     }
 
     private Bisected transformBisected(Bisected bisected, Matrix3x3i transMatrix){

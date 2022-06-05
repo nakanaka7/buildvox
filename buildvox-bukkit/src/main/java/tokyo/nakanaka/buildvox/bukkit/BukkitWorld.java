@@ -3,7 +3,7 @@ package tokyo.nakanaka.buildvox.bukkit;
 import org.bukkit.Server;
 import org.bukkit.block.data.BlockData;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
-import tokyo.nakanaka.buildvox.core.world.Block;
+import tokyo.nakanaka.buildvox.core.world.BlockState;
 import tokyo.nakanaka.buildvox.core.world.World;
 
 import java.util.Objects;
@@ -42,15 +42,15 @@ public class BukkitWorld implements World {
     }
 
     @Override
-    public Block getBlock(int x, int y, int z){
+    public BlockState getBlock(int x, int y, int z){
         org.bukkit.block.Block voxel = original.getBlockAt(x, y, z);
-        return BukkitBlock.newInstance(voxel.getState());
+        return BukkitBlockState.newInstance(voxel.getState());
     }
 
     @Override
-    public void setBlock(int x, int y, int z, Block block, boolean physics){
+    public void setBlock(int x, int y, int z, BlockState block, boolean physics){
         org.bukkit.block.Block targetBlock = original.getBlockAt(x, y, z);
-        if(block instanceof BukkitBlock bukkitBlock) {
+        if(block instanceof BukkitBlockState bukkitBlock) {
             bukkitBlock.setToWorld(server, targetBlock, physics);
         }else{
             String blockStr = block.toString();

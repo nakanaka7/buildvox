@@ -1,6 +1,5 @@
 package tokyo.nakanaka.buildvox.fabric;
 
-import net.minecraft.block.BlockState;
 import net.minecraft.block.StairsBlock;
 import net.minecraft.block.enums.StairShape;
 import net.minecraft.util.BlockMirror;
@@ -10,7 +9,7 @@ import tokyo.nakanaka.buildvox.core.blockStateTransformer.BlockStateTransformer;
 import tokyo.nakanaka.buildvox.core.blockStateTransformer.BlockTransformation;
 import tokyo.nakanaka.buildvox.core.math.transformation.Matrix3x3i;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
-import tokyo.nakanaka.buildvox.core.world.Block;
+import tokyo.nakanaka.buildvox.core.world.BlockState;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,12 +21,12 @@ public class FabricBlockStateTransformer implements BlockStateTransformer {
     @Override
     public Map<String, String> transform(NamespacedId blockId, Map<String, String> stateMap, BlockTransformation blockTrans) {
         Matrix3x3i transMatrix = blockTrans.toMatrix3x3i();
-        String blockStr = new Block(blockId, stateMap).toString();
-        BlockState blockState = Utils.parseBlockState(blockStr);
+        String blockStr = new BlockState(blockId, stateMap).toString();
+        net.minecraft.block.BlockState blockState = Utils.parseBlockState(blockStr);
         Vector3i transI = transMatrix.apply(Vector3i.PLUS_I);
         Vector3i transJ = transMatrix.apply(Vector3i.PLUS_J);
         Vector3i transK = transMatrix.apply(Vector3i.PLUS_K);
-        BlockState transState;
+        net.minecraft.block.BlockState transState;
         if(transJ.equals(Vector3i.PLUS_J) || transJ.equals(Vector3i.MINUS_J)) {
             if (transK.equals(Vector3i.PLUS_K)) {
                 if (transI.equals(Vector3i.PLUS_I)) {
@@ -59,7 +58,7 @@ public class FabricBlockStateTransformer implements BlockStateTransformer {
         }else {
             transState = blockState;
         }
-        FabricBlock transBlock = FabricBlock.newInstance(transState);
+        FabricBlockState transBlock = FabricBlockState.newInstance(transState);
         return transBlock.getStateMap();
     }
 

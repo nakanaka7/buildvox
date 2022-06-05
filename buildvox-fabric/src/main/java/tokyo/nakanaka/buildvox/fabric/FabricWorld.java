@@ -1,13 +1,12 @@
 package tokyo.nakanaka.buildvox.fabric;
 
-import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
-import tokyo.nakanaka.buildvox.core.world.Block;
+import tokyo.nakanaka.buildvox.core.world.BlockState;
 import tokyo.nakanaka.buildvox.core.world.World;
 
 import java.util.HashSet;
@@ -50,21 +49,21 @@ public class FabricWorld implements World {
     }
 
     @Override
-    public Block getBlock(int x, int y, int z) {
-        BlockState blockState = original.getBlockState(new BlockPos(x, y, z));
+    public BlockState getBlock(int x, int y, int z) {
+        net.minecraft.block.BlockState blockState = original.getBlockState(new BlockPos(x, y, z));
         BlockEntity blockEntity = original.getBlockEntity(new BlockPos(x, y, z));
         if(blockEntity == null) {
-            return FabricBlock.newInstance(blockState);
+            return FabricBlockState.newInstance(blockState);
         }else {
             NbtCompound nbt = blockEntity.createNbtWithId();
-            return FabricBlock.newInstance(blockState, nbt);
+            return FabricBlockState.newInstance(blockState, nbt);
         }
     }
     
     @Override
-    public void setBlock(int x, int y, int z, Block block, boolean physics) {
+    public void setBlock(int x, int y, int z, BlockState block, boolean physics) {
         String blockStr = block.toString();
-        BlockState blockState = Utils.parseBlockState(blockStr);
+        net.minecraft.block.BlockState blockState = Utils.parseBlockState(blockStr);
         if(physics) {
             original.setBlockState(new BlockPos(x, y, z), blockState, net.minecraft.block.Block.NOTIFY_ALL);
         }else{
@@ -72,7 +71,7 @@ public class FabricWorld implements World {
             original.setBlockState(new BlockPos(x, y, z), blockState, net.minecraft.block.Block.NOTIFY_LISTENERS, 0);
             stopPhysicsWorlds.remove(original);
         }
-        if(block instanceof FabricBlock fabricBlock) {
+        if(block instanceof FabricBlockState fabricBlock) {
             NbtCompound nbt = fabricBlock.getNbt();
             if(nbt == null) {
                 return;

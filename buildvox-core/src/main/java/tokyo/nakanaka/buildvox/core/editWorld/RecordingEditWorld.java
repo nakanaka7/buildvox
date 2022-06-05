@@ -2,7 +2,7 @@ package tokyo.nakanaka.buildvox.core.editWorld;
 
 import tokyo.nakanaka.buildvox.core.edit.Clipboard;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
-import tokyo.nakanaka.buildvox.core.world.Block;
+import tokyo.nakanaka.buildvox.core.world.BlockState;
 import tokyo.nakanaka.buildvox.core.world.World;
 
 /**
@@ -27,12 +27,12 @@ public class RecordingEditWorld extends EditWorld {
      * @param block the block to set.
      */
     @Override
-    public void setBlock(Vector3i pos, Block block) {
+    public void setBlock(Vector3i pos, BlockState block) {
         int x = pos.x();
         int y = pos.y();
         int z = pos.z();
         if(undoClip.getBlock(x, y, z) == null) {
-            Block originalBlock = getBlock(pos);
+            BlockState originalBlock = getBlock(pos);
             undoClip.setBlock(x, y, z, originalBlock);
         }
         super.setBlock(pos, block);
