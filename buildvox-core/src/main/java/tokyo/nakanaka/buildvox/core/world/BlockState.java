@@ -1,6 +1,7 @@
 package tokyo.nakanaka.buildvox.core.world;
 
 import tokyo.nakanaka.buildvox.core.NamespacedId;
+import tokyo.nakanaka.buildvox.core.blockStateTransformer.BlockTransformation;
 
 import java.util.*;
 
@@ -20,6 +21,10 @@ public class BlockState {
     public BlockState(NamespacedId id, Map<String, String> stateMap) {
         this.id = id;
         this.stateMap = stateMap;
+    }
+
+    public BlockState(Block<State> block, State state) {
+        this(block.getId(), state.getStateMap());
     }
 
     /**
@@ -62,12 +67,27 @@ public class BlockState {
         return id;
     }
 
+    public Block<State> getBlock() {
+        return new BlockImpl(id);
+    }
+
     /**
      * Gets the block state map.
      * @return the block state map.
      */
     public Map<String, String> getStateMap() {
         return stateMap;
+    }
+
+    public State getState() {
+        return new State(stateMap);
+    }
+
+    public BlockState transform(BlockTransformation trans) {
+        Block<State> block = getBlock();
+        State state = getState();
+        State newState = block.transform(state, trans);
+        return new BlockState(block, newState);
     }
 
     /**
