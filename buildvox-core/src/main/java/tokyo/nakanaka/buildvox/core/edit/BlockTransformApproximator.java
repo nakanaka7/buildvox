@@ -9,8 +9,8 @@ import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
 import java.util.HashSet;
 import java.util.Set;
 
-public class BlockTransformApproximator {
-    public static int[] approximate(AffineTransformation3d trans){
+class BlockTransformApproximator {
+    private static int[] approximate(AffineTransformation3d trans){
         trans = trans.linear();
         Vector3d transI = trans.apply(Vector3d.PLUS_I);
         Vector3d transJ = trans.apply(Vector3d.PLUS_J);
@@ -33,13 +33,13 @@ public class BlockTransformApproximator {
                 (int)Math.round(ni.z()), (int)Math.round(nj.z()), (int)Math.round(nk.z())};
     }
 
-    public static BlockTransformation approximateToBlockTrans(AffineTransformation3d trans) {
+    static BlockTransformation approximateToBlockTrans(AffineTransformation3d trans) {
         int[] e = approximate(trans);
         Matrix3x3i matrix = new Matrix3x3i(e[0], e[1], e[2], e[3], e[4], e[5], e[6], e[7], e[8]);
         return new BlockTransformation(matrix);
     }
 
-    public static AffineTransformation3d approximateToTrans(AffineTransformation3d trans){
+    private static AffineTransformation3d approximateToTrans(AffineTransformation3d trans){
         int[] a = approximate(trans);
         Matrix3x3d matrix = new Matrix3x3d(a[0], a[1], a[2],
                 a[3], a[4], a[5],
