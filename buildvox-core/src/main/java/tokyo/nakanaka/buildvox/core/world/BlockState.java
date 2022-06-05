@@ -23,10 +23,12 @@ public class BlockState {
     }
 
     /**
+     * Use BlockParserImpl.
      * Gets a block instance parsed of the given String. The String must be the form "blockId[key1=value1,key2=value2...]".
      * blockId or block state part may be omitted. blockId must be namespaced id.
      * @throws IllegalArgumentException if the specified String is not the form stated above.
      */
+    @Deprecated
     public static BlockState valueOf(String str) {
         String strId;
         Map<String, String> stateMap = new HashMap<>();
