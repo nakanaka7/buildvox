@@ -42,11 +42,11 @@ public class BuildVoxSystem {
     }
 
     public static record Environment(BlockValidator blockValidator, BlockStateTransformer blockStateTransformer,
-                                     Scheduler scheduler) {
+                                     Scheduler scheduler, BlockParser parser) {
         public static final Environment DEFAULT = new Environment(
                 (block) -> false,
                 (blockId, stateMap, trans) -> stateMap,
-                (runnable, tick) -> {});
+                (runnable, tick) -> {}, new BlockParserImpl());
     }
 
     public static record Config(String outColor, String errColor, BlockState backgroundBlock, int posArrayLength) {
