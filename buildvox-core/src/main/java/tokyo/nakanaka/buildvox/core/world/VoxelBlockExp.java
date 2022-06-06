@@ -9,8 +9,8 @@ import tokyo.nakanaka.buildvox.core.block.BlockTransformation;
  * @param <S> the state object.
  * @param <E> the entity object.
  */
-public class VoxelBlockExp<S, E> {
-    private final Block<S> block;
+public class VoxelBlockExp<S extends Block.State, E extends Block.Entity> {
+    private final Block<S, E> block;
     private final S state;
     private final E entity;
 
@@ -19,7 +19,7 @@ public class VoxelBlockExp<S, E> {
      * @param block the block.
      * @param state the state.
      */
-    public VoxelBlockExp(Block<S> block, S state) {
+    public VoxelBlockExp(Block<S, E> block, S state) {
         this(block, state, null);
     }
 
@@ -29,7 +29,7 @@ public class VoxelBlockExp<S, E> {
      * @param state the state.
      * @param entity the entity.
      */
-    public VoxelBlockExp(Block<S> block, S state, E entity) {
+    public VoxelBlockExp(Block<S, E> block, S state, E entity) {
         this.block = block;
         this.state = state;
         this.entity = entity;
@@ -49,7 +49,7 @@ public class VoxelBlockExp<S, E> {
      * Gets the block.
      * @return the block.
      */
-    public Block<S> getBlock() {
+    public Block<S, E> getBlock() {
         return block;
     }
 
