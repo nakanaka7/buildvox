@@ -1,10 +1,8 @@
 package tokyo.nakanaka.buildvox.core.block;
 
 import tokyo.nakanaka.buildvox.core.NamespacedId;
-import tokyo.nakanaka.buildvox.core.block.Block;
 import tokyo.nakanaka.buildvox.core.blockStateTransformer.BlockTransformation;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
-import tokyo.nakanaka.buildvox.core.world.State;
 
 import java.util.Map;
 

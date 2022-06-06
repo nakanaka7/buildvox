@@ -1,4 +1,4 @@
-package tokyo.nakanaka.buildvox.core.world;
+package tokyo.nakanaka.buildvox.core.block;
 
 import java.util.Map;
 
