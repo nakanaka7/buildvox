@@ -1,5 +1,6 @@
 package tokyo.nakanaka.buildvox.core;
 
+import tokyo.nakanaka.buildvox.core.block.BlockParser;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 
 /* temporary */
