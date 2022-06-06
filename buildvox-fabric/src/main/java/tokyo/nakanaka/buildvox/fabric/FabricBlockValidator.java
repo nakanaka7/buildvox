@@ -1,6 +1,6 @@
 package tokyo.nakanaka.buildvox.fabric;
 
-import tokyo.nakanaka.buildvox.core.BlockValidator;
+import tokyo.nakanaka.buildvox.core.block.BlockValidator;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 
 /**

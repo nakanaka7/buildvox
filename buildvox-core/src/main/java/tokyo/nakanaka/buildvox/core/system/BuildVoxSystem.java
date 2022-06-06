@@ -7,6 +7,7 @@ import picocli.CommandLine;
 import tokyo.nakanaka.buildvox.core.*;
 import tokyo.nakanaka.buildvox.core.block.BlockParser;
 import tokyo.nakanaka.buildvox.core.block.BlockParserImpl;
+import tokyo.nakanaka.buildvox.core.block.BlockValidator;
 import tokyo.nakanaka.buildvox.core.blockStateTransformer.BlockStateTransformer;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
 import tokyo.nakanaka.buildvox.core.command.bvdCommand.BvdCommand;
