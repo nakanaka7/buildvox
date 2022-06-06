@@ -70,6 +70,11 @@ public class BuildVoxSystem {
         return environment;
     }
 
+    /** Parses the String to a {@link VoxelBlock} */
+    public VoxelBlock parseBlock(String s) {
+        return environment.blockParser().parse(s);
+    }
+
     /** Get the world registry */
     public static Registry<World, NamespacedId> getWorldRegistry() {
         return WORLD_REGISTRY;
