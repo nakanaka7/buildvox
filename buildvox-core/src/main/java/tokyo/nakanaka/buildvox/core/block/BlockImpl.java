@@ -7,7 +7,7 @@ import java.util.Map;
 
 /* temporary */
 @Deprecated
-public class BlockImpl implements Block<State> {
+public class BlockImpl implements Block<StateImpl> {
     private NamespacedId id;
 
     public BlockImpl(NamespacedId id) {
@@ -20,10 +20,10 @@ public class BlockImpl implements Block<State> {
     }
 
     @Override
-    public State transformState(State state, BlockTransformation trans) {
+    public StateImpl transformState(StateImpl state, BlockTransformation trans) {
         var transformer = BuildVoxSystem.environment.blockStateTransformer();
         Map<String, String> transMap = transformer.transform(id, state.getStateMap(), trans);
-        return new State(transMap);
+        return new StateImpl(transMap);
     }
 
 }

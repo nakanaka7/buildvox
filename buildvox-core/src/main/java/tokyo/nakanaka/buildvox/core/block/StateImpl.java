@@ -6,10 +6,10 @@ import java.util.Map;
    The state object of BlockState
  */
 @Deprecated
-public class State {
+public class StateImpl {
     private Map<String, String> stateMap;
 
-    public State(Map<String, String> stateMap) {
+    public StateImpl(Map<String, String> stateMap) {
         this.stateMap = stateMap;
     }
 

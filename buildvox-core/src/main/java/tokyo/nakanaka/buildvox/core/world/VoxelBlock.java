@@ -3,7 +3,7 @@ package tokyo.nakanaka.buildvox.core.world;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.block.Block;
 import tokyo.nakanaka.buildvox.core.block.BlockImpl;
-import tokyo.nakanaka.buildvox.core.block.State;
+import tokyo.nakanaka.buildvox.core.block.StateImpl;
 import tokyo.nakanaka.buildvox.core.block.BlockTransformation;
 
 import java.util.*;
@@ -26,7 +26,7 @@ public class VoxelBlock {
         this.stateMap = stateMap;
     }
 
-    public VoxelBlock(Block<State> block, State state) {
+    public VoxelBlock(Block<StateImpl> block, StateImpl state) {
         this(block.getId(), state.getStateMap());
     }
 
@@ -70,7 +70,7 @@ public class VoxelBlock {
         return id;
     }
 
-    public Block<State> getBlock() {
+    public Block<StateImpl> getBlock() {
         return new BlockImpl(id);
     }
 
@@ -83,14 +83,14 @@ public class VoxelBlock {
         return stateMap;
     }
 
-    public State getState() {
-        return new State(stateMap);
+    public StateImpl getState() {
+        return new StateImpl(stateMap);
     }
 
     public VoxelBlock transform(BlockTransformation trans) {
-        Block<State> block = getBlock();
-        State state = getState();
-        State newState = block.transformState(state, trans);
+        Block<StateImpl> block = getBlock();
+        StateImpl state = getState();
+        StateImpl newState = block.transformState(state, trans);
         return new VoxelBlock(block, newState);
     }
 
