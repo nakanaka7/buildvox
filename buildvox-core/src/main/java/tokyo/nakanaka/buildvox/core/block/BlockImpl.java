@@ -7,7 +7,7 @@ import java.util.Map;
 
 /* temporary */
 @Deprecated
-public class BlockImpl implements Block<StateImpl> {
+public class BlockImpl implements Block<StateImpl, Block.EmptyEntity> {
     private NamespacedId id;
 
     public BlockImpl(NamespacedId id) {
