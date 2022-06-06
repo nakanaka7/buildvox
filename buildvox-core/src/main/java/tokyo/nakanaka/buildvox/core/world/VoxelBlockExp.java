@@ -7,7 +7,7 @@ import tokyo.nakanaka.buildvox.core.blockStateTransformer.BlockTransformation;
  * Represents a block state.
  * @param <S> the state object.
  */
-public class BlockStateExp<S> {
+public class VoxelBlockExp<S> {
     private final Block<S> block;
     private final S state;
 
@@ -16,7 +16,7 @@ public class BlockStateExp<S> {
      * @param block the block.
      * @param state the state.
      */
-    public BlockStateExp(Block<S> block, S state) {
+    public VoxelBlockExp(Block<S> block, S state) {
         this.block = block;
         this.state = state;
     }
@@ -26,9 +26,9 @@ public class BlockStateExp<S> {
      * @param trans the block transformation.
      * @return the transformed block state. The block will remain.
      */
-    public BlockStateExp<S> transform(BlockTransformation trans) {
+    public VoxelBlockExp<S> transform(BlockTransformation trans) {
         S newState = block.transform(state, trans);
-        return new BlockStateExp<>(block, newState);
+        return new VoxelBlockExp<>(block, newState);
     }
 
     /**
