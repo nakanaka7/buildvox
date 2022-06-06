@@ -7,15 +7,7 @@ import tokyo.nakanaka.buildvox.core.system.Entity;
  * Represents a block.
  * @param <S> the state object.
  */
-public interface Block<S> extends Entity<NamespacedId> {
-    /**
-     * Transforms the state.
-     * @param state the original state.
-     * @param trans the block transformation.
-     * @return the transformed state.
-     */
-    S transformState(S state, BlockTransformation trans);
-
+public interface Block<S extends Block.State, E extends Block.Entity> extends Entity<NamespacedId> {
     /**
      * Represents the block state.
      */
@@ -27,5 +19,13 @@ public interface Block<S> extends Entity<NamespacedId> {
      */
     interface Entity {
     }
+
+    /**
+     * Transforms the state.
+     * @param state the original state.
+     * @param trans the block transformation.
+     * @return the transformed state.
+     */
+    S transformState(S state, BlockTransformation trans);
 
 }
