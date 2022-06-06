@@ -18,15 +18,6 @@ public class VoxelBlockExp<S extends Block.State, E extends Block.Entity> {
      * Creates a voxel block.
      * @param block the block.
      * @param state the state.
-     */
-    public VoxelBlockExp(Block<S, E> block, S state) {
-        this(block, state, null);
-    }
-
-    /**
-     * Creates a voxel block.
-     * @param block the block.
-     * @param state the state.
      * @param entity the entity.
      */
     public VoxelBlockExp(Block<S, E> block, S state, E entity) {
