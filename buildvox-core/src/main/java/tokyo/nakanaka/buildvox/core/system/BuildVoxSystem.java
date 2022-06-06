@@ -43,6 +43,10 @@ public class BuildVoxSystem {
 
     public static record Environment(BlockValidator blockValidator, BlockStateTransformer blockStateTransformer,
                                      Scheduler scheduler, BlockParser blockParser) {
+        public Environment(BlockValidator blockValidator, BlockStateTransformer blockStateTransformer,
+                           Scheduler scheduler) {
+            this(blockValidator, blockStateTransformer, scheduler, new BlockParserImpl());
+        }
         public static final Environment DEFAULT = new Environment(
                 (block) -> false,
                 (blockId, stateMap, trans) -> stateMap,
