@@ -15,6 +15,6 @@ public interface Block<S> extends Entity<NamespacedId> {
      * @param trans the block transformation.
      * @return the transformed state.
      */
-    S transform(S state, BlockTransformation trans);
+    S transformState(S state, BlockTransformation trans);
 
 }

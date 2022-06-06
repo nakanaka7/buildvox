@@ -87,7 +87,7 @@ public class BlockState {
     public BlockState transform(BlockTransformation trans) {
         Block<State> block = getBlock();
         State state = getState();
-        State newState = block.transform(state, trans);
+        State newState = block.transformState(state, trans);
         return new BlockState(block, newState);
     }
 

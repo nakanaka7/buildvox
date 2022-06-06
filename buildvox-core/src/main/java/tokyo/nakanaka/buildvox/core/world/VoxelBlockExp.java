@@ -40,7 +40,7 @@ public class VoxelBlockExp<S, E> {
      * @return the transformed voxel block. The block will remain.
      */
     public VoxelBlockExp<S, E> transform(BlockTransformation trans) {
-        S newState = block.transform(state, trans);
+        S newState = block.transformState(state, trans);
         return new VoxelBlockExp<>(block, newState);
     }
 

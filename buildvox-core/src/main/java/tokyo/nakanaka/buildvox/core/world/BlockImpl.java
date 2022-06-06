@@ -21,7 +21,7 @@ public class BlockImpl implements Block<State> {
     }
 
     @Override
-    public State transform(State state, BlockTransformation trans) {
+    public State transformState(State state, BlockTransformation trans) {
         var transformer = BuildVoxSystem.environment.blockStateTransformer();
         Map<String, String> transMap = transformer.transform(id, state.getStateMap(), trans);
         return new State(transMap);
