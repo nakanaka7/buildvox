@@ -72,7 +72,7 @@ public class BuildVoxSystem {
 
     /** Parses the String to a {@link VoxelBlock} */
     public VoxelBlock parseBlock(String s) {
-        return environment.blockParser().parse(s);
+        return VoxelBlock.valueOf(s);
     }
 
     /** Get the world registry */
