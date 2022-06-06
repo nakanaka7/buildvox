@@ -6,18 +6,19 @@ import tokyo.nakanaka.buildvox.core.system.Entity;
 /**
  * Represents a block.
  * @param <S> the state object.
+ * @param <E> the entity object.
  */
 public interface Block<S extends Block.State, E extends Block.Entity> extends Entity<NamespacedId> {
-    /**
-     * Represents the block state.
-     */
+    /** * Represents a block state. */
     interface State {
     }
 
-    /**
-     * Represents the block entity.
-     */
+    /** Represents a block entity. */
     interface Entity {
+    }
+
+    /** Empty block entity */
+    class EmptyEntity implements Block.Entity {
     }
 
     /**
