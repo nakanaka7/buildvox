@@ -2,7 +2,7 @@ package tokyo.nakanaka.buildvox.core.editWorld;
 
 import tokyo.nakanaka.buildvox.core.blockSpace.BlockSpace3;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
-import tokyo.nakanaka.buildvox.core.world.BlockState;
+import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.world.World;
 import tokyo.nakanaka.buildvox.core.edit.WorldEdits;
 
@@ -10,7 +10,7 @@ import tokyo.nakanaka.buildvox.core.edit.WorldEdits;
  * A wrapped class of World used by {@link WorldEdits}. This class's instance fixes
  * physics of block settings.
  */
-public class EditWorld implements BlockSpace3<BlockState> {
+public class EditWorld implements BlockSpace3<VoxelBlock> {
     private World original;
     private boolean physics;
 
@@ -40,7 +40,7 @@ public class EditWorld implements BlockSpace3<BlockState> {
      * @param pos the position of the block
      * @return a block
      */
-    public BlockState getBlock(Vector3i pos) {
+    public VoxelBlock getBlock(Vector3i pos) {
         return original.getBlock(pos.x(), pos.y(), pos.z());
     }
 
@@ -49,7 +49,7 @@ public class EditWorld implements BlockSpace3<BlockState> {
      * @param pos the position to set a block.
      * @param block the block to set.
      */
-    public void setBlock(Vector3i pos, BlockState block) {
+    public void setBlock(Vector3i pos, VoxelBlock block) {
         original.setBlock(pos.x(), pos.y(), pos.z(), block, physics);
     }
 

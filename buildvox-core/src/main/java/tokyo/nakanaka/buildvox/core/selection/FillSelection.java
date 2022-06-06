@@ -7,14 +7,14 @@ import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
 import tokyo.nakanaka.buildvox.core.math.region3d.Region3d;
 import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
-import tokyo.nakanaka.buildvox.core.world.BlockState;
+import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 
 public class FillSelection extends BlockSelection {
-    private BlockState block;
+    private VoxelBlock block;
     private double integrity;
     private Clipboard backwardClip = new Clipboard();
 
-    public FillSelection(Region3d region3d, Parallelepiped bound, BlockState block, double integrity) {
+    public FillSelection(Region3d region3d, Parallelepiped bound, VoxelBlock block, double integrity) {
         super(region3d, bound);
         this.block = block;
         this.integrity = integrity;

@@ -8,7 +8,7 @@ import java.util.*;
 /**
  * Represents block.
  */
-public class BlockState {
+public class VoxelBlock {
     private NamespacedId id;
     private Map<String, String> stateMap;
 
@@ -18,12 +18,12 @@ public class BlockState {
      * @param stateMap the block state map. This map is expressed as [key1=value1,key2=value2...] which follows block
      * in game.
      */
-    public BlockState(NamespacedId id, Map<String, String> stateMap) {
+    public VoxelBlock(NamespacedId id, Map<String, String> stateMap) {
         this.id = id;
         this.stateMap = stateMap;
     }
 
-    public BlockState(Block<State> block, State state) {
+    public VoxelBlock(Block<State> block, State state) {
         this(block.getId(), state.getStateMap());
     }
 
@@ -34,7 +34,7 @@ public class BlockState {
      * @throws IllegalArgumentException if the specified String is not the form stated above.
      */
     @Deprecated
-    public static BlockState valueOf(String str) {
+    public static VoxelBlock valueOf(String str) {
         String strId;
         Map<String, String> stateMap = new HashMap<>();
         if(str.contains("[")) {
@@ -56,7 +56,7 @@ public class BlockState {
             strId = str;
         }
         NamespacedId id = NamespacedId.valueOf(strId);
-        return new BlockState(id, stateMap);
+        return new VoxelBlock(id, stateMap);
     }
 
     /**
@@ -84,11 +84,11 @@ public class BlockState {
         return new State(stateMap);
     }
 
-    public BlockState transform(BlockTransformation trans) {
+    public VoxelBlock transform(BlockTransformation trans) {
         Block<State> block = getBlock();
         State state = getState();
         State newState = block.transformState(state, trans);
-        return new BlockState(block, newState);
+        return new VoxelBlock(block, newState);
     }
 
     /**
@@ -114,8 +114,8 @@ public class BlockState {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof BlockState)) return false;
-        BlockState block = (BlockState) o;
+        if (!(o instanceof VoxelBlock)) return false;
+        VoxelBlock block = (VoxelBlock) o;
         return id.equals(block.id) && stateMap.equals(block.stateMap);
     }
 
@@ -130,8 +130,8 @@ public class BlockState {
      * @return a new instance with a new state map.
      */
     @Deprecated
-    public BlockState withStateMap(Map<String, String> newStateMap) {
-        return new BlockState(id, newStateMap);
+    public VoxelBlock withStateMap(Map<String, String> newStateMap) {
+        return new VoxelBlock(id, newStateMap);
     }
 
 }

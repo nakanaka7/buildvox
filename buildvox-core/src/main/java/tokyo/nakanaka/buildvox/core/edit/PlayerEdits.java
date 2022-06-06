@@ -9,7 +9,7 @@ import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.property.Axis;
 import tokyo.nakanaka.buildvox.core.selection.*;
-import tokyo.nakanaka.buildvox.core.world.BlockState;
+import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.world.World;
 
 import javax.swing.undo.CompoundEdit;
@@ -93,7 +93,7 @@ public class PlayerEdits {
         Clipboard clipboard = new Clipboard();
         EditWorld editWorld = new EditWorld(player.getEditTargetWorld(), true);
         WorldEdits.copy(editWorld, selFrom, Vector3d.ZERO, clipboard);
-        WorldEdits.fill(editWorld, selFrom, BlockState.valueOf("air"), 1);
+        WorldEdits.fill(editWorld, selFrom, VoxelBlock.valueOf("air"), 1);
         WorldEdits.paste(clipboard, editWorld, Vector3d.ZERO);
         Selection selTo;
         if(selFrom instanceof BlockSelection bs) {
@@ -280,7 +280,7 @@ public class PlayerEdits {
      * @param integrity the integrity of block-setting.
      * @return the edit-exit.
      */
-    public static EditExit fill(Player player, Selection selection, BlockState block, double integrity) {
+    public static EditExit fill(Player player, Selection selection, VoxelBlock block, double integrity) {
         FillSelection fillSelection = new FillSelection(selection.getRegion3d(), selection.getBound(), block, integrity);
         return recordingEdit(player, fillSelection::setForwardBlocks, fillSelection
         );
@@ -296,7 +296,7 @@ public class PlayerEdits {
      * @throws IllegalArgumentException if integrity is less than 0 or larger than 1.
      * @throws SelectionNotFoundException if a selection is not found
      */
-    public static EditExit replace(Player player, BlockState blockFrom, BlockState blockTo, double integrity) {
+    public static EditExit replace(Player player, VoxelBlock blockFrom, VoxelBlock blockTo, double integrity) {
         if(integrity < 0 || 1 < integrity) throw new IllegalArgumentException();
         Selection selFrom = findSelection(player);
         Selection selTo;
@@ -453,14 +453,14 @@ public class PlayerEdits {
             () -> {
                 Set<Vector3i> blockPosSet = undoClipboard.blockPosSet();
                 for(Vector3i pos : blockPosSet) {
-                    BlockState block = undoClipboard.getBlock(pos.x(), pos.y(), pos.z());
+                    VoxelBlock block = undoClipboard.getBlock(pos.x(), pos.y(), pos.z());
                     editWorld.setBlock(pos, block);
                 }
             },
             () -> {
                 Set<Vector3i> blockPosSet = redoClipboard.blockPosSet();
                 for(Vector3i pos : blockPosSet) {
-                    BlockState block = redoClipboard.getBlock(pos.x(), pos.y(), pos.z());
+                    VoxelBlock block = redoClipboard.getBlock(pos.x(), pos.y(), pos.z());
                     editWorld.setBlock(pos, block);
                 }
             }

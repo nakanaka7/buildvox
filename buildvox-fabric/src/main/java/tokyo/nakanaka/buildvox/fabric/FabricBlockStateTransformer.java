@@ -9,7 +9,7 @@ import tokyo.nakanaka.buildvox.core.blockStateTransformer.BlockStateTransformer;
 import tokyo.nakanaka.buildvox.core.blockStateTransformer.BlockTransformation;
 import tokyo.nakanaka.buildvox.core.math.transformation.Matrix3x3i;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
-import tokyo.nakanaka.buildvox.core.world.BlockState;
+import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +21,7 @@ public class FabricBlockStateTransformer implements BlockStateTransformer {
     @Override
     public Map<String, String> transform(NamespacedId blockId, Map<String, String> stateMap, BlockTransformation blockTrans) {
         Matrix3x3i transMatrix = blockTrans.toMatrix3x3i();
-        String blockStr = new BlockState(blockId, stateMap).toString();
+        String blockStr = new VoxelBlock(blockId, stateMap).toString();
         net.minecraft.block.BlockState blockState = Utils.parseBlockState(blockStr);
         Vector3i transI = transMatrix.apply(Vector3i.PLUS_I);
         Vector3i transJ = transMatrix.apply(Vector3i.PLUS_J);
@@ -58,7 +58,7 @@ public class FabricBlockStateTransformer implements BlockStateTransformer {
         }else {
             transState = blockState;
         }
-        FabricBlockState transBlock = FabricBlockState.newInstance(transState);
+        FabricVoxelBlock transBlock = FabricVoxelBlock.newInstance(transState);
         return transBlock.getStateMap();
     }
 

@@ -1,12 +1,12 @@
 package tokyo.nakanaka.buildvox.core;
 
-import tokyo.nakanaka.buildvox.core.world.BlockState;
+import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 
 /* temporary */
 public class BlockParserImpl implements BlockParser {
     @Override
-    public BlockState parse(String s) {
-        return BlockState.valueOf(s);
+    public VoxelBlock parse(String s) {
+        return VoxelBlock.valueOf(s);
     }
 
 }

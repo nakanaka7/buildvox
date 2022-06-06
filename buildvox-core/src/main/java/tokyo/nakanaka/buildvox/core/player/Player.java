@@ -11,7 +11,7 @@ import tokyo.nakanaka.buildvox.core.selection.FillSelection;
 import tokyo.nakanaka.buildvox.core.selection.PasteSelection;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
-import tokyo.nakanaka.buildvox.core.world.BlockState;
+import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.world.World;
 
 import javax.swing.undo.UndoManager;
@@ -24,7 +24,7 @@ import java.util.UUID;
  */
 public class Player implements CommandSender {
     private UUID id;
-    private BlockState backgroundBlock;
+    private VoxelBlock backgroundBlock;
     private Clipboard clipboard;
     private UndoManager undoManager = new UndoManager();
     private World editTargetWorld;
@@ -45,7 +45,7 @@ public class Player implements CommandSender {
      * Get the background block
      * @return the background block
      */
-    public BlockState getBackgroundBlock() {
+    public VoxelBlock getBackgroundBlock() {
         return backgroundBlock;
     }
 
@@ -53,7 +53,7 @@ public class Player implements CommandSender {
      * Set the background block
      * @param backgroundBlock a background block
      */
-    public void setBackgroundBlock(BlockState backgroundBlock) {
+    public void setBackgroundBlock(VoxelBlock backgroundBlock) {
         this.backgroundBlock = backgroundBlock;
     }
 

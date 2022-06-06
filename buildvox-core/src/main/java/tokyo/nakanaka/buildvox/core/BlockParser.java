@@ -1,6 +1,6 @@
 package tokyo.nakanaka.buildvox.core;
 
-import tokyo.nakanaka.buildvox.core.world.BlockState;
+import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 
 /**
  * A functional interface to parse a String to the BlockState.
@@ -12,5 +12,5 @@ public interface BlockParser {
      * @return the BlockState.
      * @throws IllegalArgumentException if s cannot be parsed to a BlockState.
      */
-    BlockState parse(String s);
+    VoxelBlock parse(String s);
 }

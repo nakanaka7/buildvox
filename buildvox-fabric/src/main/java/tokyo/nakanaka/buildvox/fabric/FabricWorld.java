@@ -6,7 +6,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
-import tokyo.nakanaka.buildvox.core.world.BlockState;
+import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.world.World;
 
 import java.util.HashSet;
@@ -49,19 +49,19 @@ public class FabricWorld implements World {
     }
 
     @Override
-    public BlockState getBlock(int x, int y, int z) {
+    public VoxelBlock getBlock(int x, int y, int z) {
         net.minecraft.block.BlockState blockState = original.getBlockState(new BlockPos(x, y, z));
         BlockEntity blockEntity = original.getBlockEntity(new BlockPos(x, y, z));
         if(blockEntity == null) {
-            return FabricBlockState.newInstance(blockState);
+            return FabricVoxelBlock.newInstance(blockState);
         }else {
             NbtCompound nbt = blockEntity.createNbtWithId();
-            return FabricBlockState.newInstance(blockState, nbt);
+            return FabricVoxelBlock.newInstance(blockState, nbt);
         }
     }
     
     @Override
-    public void setBlock(int x, int y, int z, BlockState block, boolean physics) {
+    public void setBlock(int x, int y, int z, VoxelBlock block, boolean physics) {
         String blockStr = block.toString();
         net.minecraft.block.BlockState blockState = Utils.parseBlockState(blockStr);
         if(physics) {
@@ -71,7 +71,7 @@ public class FabricWorld implements World {
             original.setBlockState(new BlockPos(x, y, z), blockState, net.minecraft.block.Block.NOTIFY_LISTENERS, 0);
             stopPhysicsWorlds.remove(original);
         }
-        if(block instanceof FabricBlockState fabricBlock) {
+        if(block instanceof FabricVoxelBlock fabricBlock) {
             NbtCompound nbt = fabricBlock.getNbt();
             if(nbt == null) {
                 return;

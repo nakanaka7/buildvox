@@ -3,7 +3,7 @@ package tokyo.nakanaka.buildvox.core.command.bvCommand;
 import picocli.CommandLine;
 import tokyo.nakanaka.buildvox.core.command.completionCandidates.BlockCandidates;
 import tokyo.nakanaka.buildvox.core.player.Player;
-import tokyo.nakanaka.buildvox.core.world.BlockState;
+import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 
 import java.io.PrintWriter;
 
@@ -24,9 +24,9 @@ public class BackgroundCommand implements Runnable {
         PrintWriter out = commandSpec.commandLine().getOut();
         PrintWriter err = commandSpec.commandLine().getErr();
         Player player = bvCmd.getTargetPlayer();
-        BlockState b;
+        VoxelBlock b;
         try {
-            b = BlockState.valueOf(this.block);
+            b = VoxelBlock.valueOf(this.block);
         }catch (IllegalArgumentException e){
             err.println("Cannot parse \"" + this.block + "\" to a block.");
             return;

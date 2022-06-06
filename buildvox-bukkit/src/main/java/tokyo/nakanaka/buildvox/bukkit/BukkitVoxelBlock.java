@@ -8,20 +8,20 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
-import tokyo.nakanaka.buildvox.core.world.BlockState;
+import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 /**
- * A class which extends {@link BlockState} for Bukkit Platform
+ * A class which extends {@link VoxelBlock} for Bukkit Platform
  */
-public class BukkitBlockState extends BlockState {
+public class BukkitVoxelBlock extends VoxelBlock {
     private Set<BlockEntityData> blockEntityDataSet = new HashSet<>();
     private Inventory inventory;
 
-    private BukkitBlockState(NamespacedId id, Map<String, String> stateMap) {
+    private BukkitVoxelBlock(NamespacedId id, Map<String, String> stateMap) {
         super(id, stateMap);
     }
 
@@ -55,11 +55,11 @@ public class BukkitBlockState extends BlockState {
      * @param blockState a block state.
      * @return a new instance
      */
-    public static BukkitBlockState newInstance(org.bukkit.block.BlockState blockState) {
+    public static BukkitVoxelBlock newInstance(org.bukkit.block.BlockState blockState) {
         BlockData blockData = blockState.getBlockData();
         String blockStr = blockData.getAsString();
-        BlockState block = BlockState.valueOf(blockStr);
-        BukkitBlockState bukkitBlock = new BukkitBlockState(block.getId(), block.getStateMap());
+        VoxelBlock block = VoxelBlock.valueOf(blockStr);
+        BukkitVoxelBlock bukkitBlock = new BukkitVoxelBlock(block.getId(), block.getStateMap());
         if(blockState instanceof CommandBlock commandBlock) {
             bukkitBlock.blockEntityDataSet.add(new CommandBlockData(commandBlock.getCommand(), commandBlock.getName()));
         }
@@ -88,8 +88,8 @@ public class BukkitBlockState extends BlockState {
     }
 
     @Override
-    public BukkitBlockState withStateMap(Map<String, String> stateMap) {
-        BukkitBlockState newBlock = new BukkitBlockState(super.getId(), stateMap);
+    public BukkitVoxelBlock withStateMap(Map<String, String> stateMap) {
+        BukkitVoxelBlock newBlock = new BukkitVoxelBlock(super.getId(), stateMap);
         newBlock.inventory = this.inventory;
         newBlock.blockEntityDataSet = new HashSet<>(blockEntityDataSet);
         return newBlock;
