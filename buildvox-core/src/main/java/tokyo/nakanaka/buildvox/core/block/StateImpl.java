@@ -6,7 +6,7 @@ import java.util.Map;
    The state object of BlockState
  */
 @Deprecated
-public class StateImpl {
+public class StateImpl implements Block.State {
     private Map<String, String> stateMap;
 
     public StateImpl(Map<String, String> stateMap) {
