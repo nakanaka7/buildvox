@@ -16,4 +16,16 @@ public interface Block<S> extends Entity<NamespacedId> {
      */
     S transformState(S state, BlockTransformation trans);
 
+    /**
+     * Represents the block state.
+     */
+    interface State {
+    }
+
+    /**
+     * Represents the block entity.
+     */
+    interface Entity {
+    }
+
 }
