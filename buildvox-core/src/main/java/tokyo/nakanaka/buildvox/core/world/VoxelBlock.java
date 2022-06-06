@@ -46,19 +46,25 @@ public class VoxelBlock {
             String[] strIdState = str.substring(0, str.length() - 1).split("\\[");
             strId = strIdState[0];
             String strState = strIdState[1];
-            String[] stateArray = strState.split(",");
-            for(String state : stateArray){
-                String[] kv = state.split("=", -1);
-                if(kv.length != 2){
-                    throw new IllegalArgumentException();
-                }
-                stateMap.put(kv[0], kv[1]);
-            }
+            stateMap = parseStateMap(strState);
         }else{
             strId = str;
         }
         NamespacedId id = NamespacedId.valueOf(strId);
         return new VoxelBlock(id, stateMap);
+    }
+
+    public static Map<String, String> parseStateMap(String strState) {
+        Map<String, String> stateMap = new HashMap<>();
+        String[] stateArray = strState.split(",");
+        for(String state : stateArray){
+            String[] kv = state.split("=", -1);
+            if(kv.length != 2){
+                throw new IllegalArgumentException();
+            }
+            stateMap.put(kv[0], kv[1]);
+        }
+        return stateMap;
     }
 
     /**
