@@ -1,4 +1,4 @@
-package tokyo.nakanaka.buildvox.core;
+package tokyo.nakanaka.buildvox.core.block;
 
 import tokyo.nakanaka.buildvox.core.block.BlockParser;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
