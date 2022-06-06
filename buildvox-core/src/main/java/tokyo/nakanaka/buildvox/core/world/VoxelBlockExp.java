@@ -42,7 +42,7 @@ public class VoxelBlockExp<S extends Block.State, E extends Block.Entity> {
      */
     public VoxelBlockExp<S, E> transform(BlockTransformation trans) {
         S newState = block.transformState(state, trans);
-        return new VoxelBlockExp<>(block, newState);
+        return new VoxelBlockExp<>(block, newState, entity);
     }
 
     /**
