@@ -1,7 +1,7 @@
 package tokyo.nakanaka.buildvox.core.blockSpace;
 
 import tokyo.nakanaka.buildvox.core.block.BlockStateTransformer;
-import tokyo.nakanaka.buildvox.core.blockStateTransformer.BlockTransformation;
+import tokyo.nakanaka.buildvox.core.block.BlockTransformation;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 

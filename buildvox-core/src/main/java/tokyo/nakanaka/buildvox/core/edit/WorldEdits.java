@@ -4,7 +4,7 @@ import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.blockSpace.BlockStateTransformingBlockSpace3;
 import tokyo.nakanaka.buildvox.core.blockSpace.ClipboardBlockSpace3;
 import tokyo.nakanaka.buildvox.core.blockSpace.IntegrityAdjustableBlockSpace3;
-import tokyo.nakanaka.buildvox.core.blockStateTransformer.BlockTransformation;
+import tokyo.nakanaka.buildvox.core.block.BlockTransformation;
 import tokyo.nakanaka.buildvox.core.editWorld.EditWorld;
 import tokyo.nakanaka.buildvox.core.math.region3d.Cuboid;
 import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
