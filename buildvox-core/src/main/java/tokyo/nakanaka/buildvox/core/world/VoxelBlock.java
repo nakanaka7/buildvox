@@ -112,15 +112,19 @@ public class VoxelBlock {
     public String toString() {
         String stateStr;
         if(stateMap.size() > 0){
-            Set<String> keyValueSet = new HashSet<>();
-            for (Map.Entry<String, String> e : stateMap.entrySet()) {
-                keyValueSet.add(e.getKey() + "=" + e.getValue());
-            }
-            stateStr = "[" + String.join(",", keyValueSet) + "]";
+            stateStr = "[" + getStateString(stateMap) + "]";
         }else{
             stateStr = "";
         }
         return id.toString() + stateStr;
+    }
+
+    public static String getStateString(Map<String, String> stateMap) {
+        Set<String> keyValueSet = new HashSet<>();
+        for (Map.Entry<String, String> e : stateMap.entrySet()) {
+            keyValueSet.add(e.getKey() + "=" + e.getValue());
+        }
+        return String.join(",", keyValueSet);
     }
 
     @Override
