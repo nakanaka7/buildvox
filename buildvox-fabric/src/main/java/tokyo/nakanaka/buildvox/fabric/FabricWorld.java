@@ -1,11 +1,17 @@
 package tokyo.nakanaka.buildvox.fabric;
 
+import net.fabricmc.fabric.impl.lookup.entity.EntityApiLookupImpl;
+import net.fabricmc.fabric.impl.registry.sync.RemapStateImpl;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.Registry;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
+import tokyo.nakanaka.buildvox.core.block.BlockImpl;
+import tokyo.nakanaka.buildvox.core.block.EntityImpl;
+import tokyo.nakanaka.buildvox.core.block.StateImpl;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.world.World;
 
@@ -59,7 +65,23 @@ public class FabricWorld implements World {
             return FabricVoxelBlock.newInstance(blockState, nbt);
         }
     }
-    
+
+    public VoxelBlock getBlockNew(int x, int y, int z) {
+        net.minecraft.block.BlockState blockState = original.getBlockState(new BlockPos(x, y, z));
+        BlockEntity blockEntity = original.getBlockEntity(new BlockPos(x, y, z));
+        net.minecraft.block.Block block0 = blockState.getBlock();
+        Identifier id0 = Registry.BLOCK.getId(block0);
+        NamespacedId id = new NamespacedId(id0.getNamespace(), id0.getPath());
+        BlockImpl block = new BlockImpl(id, new FabricBlockStateTransformer());
+        StateImpl state = FabricVoxelBlock.convertToStateImpl(blockState);
+        EntityImpl entity = null;
+        if(blockEntity != null) {
+            NbtCompound nbt = blockEntity.createNbtWithId();
+            entity = new EntityImpl(nbt);
+        }
+        return new VoxelBlock(block, state, entity);
+    }
+
     @Override
     public void setBlock(int x, int y, int z, VoxelBlock block, boolean physics) {
         String blockStr = block.toString();
@@ -84,10 +106,14 @@ public class FabricWorld implements World {
         }
     }
 
-    /**
-     * Get the original ServerWorld of this world.
-     * @return the original ServerWorld of this world.
-     */
+    public void setBlockNew(int x, int y, int z, VoxelBlock block, boolean physics) {
+
+    }
+
+        /**
+         * Get the original ServerWorld of this world.
+         * @return the original ServerWorld of this world.
+         */
     public ServerWorld getOriginal() {
         return original;
     }
