@@ -96,6 +96,10 @@ public class VoxelBlock {
         return new StateImpl(stateMap);
     }
 
+    public Block.Entity getEntity() {
+        return entity;
+    }
+
     public VoxelBlock transform(BlockTransformation trans) {
         BlockImpl block = getBlock();
         StateImpl state = getState();
