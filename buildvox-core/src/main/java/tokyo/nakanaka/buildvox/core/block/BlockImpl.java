@@ -10,9 +10,16 @@ import java.util.Map;
 @Deprecated
 public class BlockImpl implements Block<StateImpl, EntityImpl> {
     private NamespacedId id;
+    private BlockStateTransformer stateTransformer;
 
-    public BlockImpl(NamespacedId id) {
+    public BlockImpl(NamespacedId id, BlockStateTransformer stateTransformer) {
         this.id = id;
+        this.stateTransformer = stateTransformer;
+    }
+
+    @Deprecated
+    public BlockImpl(NamespacedId id) {
+        this(id, BuildVoxSystem.environment.blockStateTransformer());
     }
 
     @Override
@@ -22,8 +29,7 @@ public class BlockImpl implements Block<StateImpl, EntityImpl> {
 
     @Override
     public StateImpl transformState(StateImpl state, BlockTransformation trans) {
-        var transformer = BuildVoxSystem.environment.blockStateTransformer();
-        Map<String, String> transMap = transformer.transform(id, state.getStateMap(), trans);
+        Map<String, String> transMap = stateTransformer.transform(id, state.getStateMap(), trans);
         return new StateImpl(transMap);
     }
 
