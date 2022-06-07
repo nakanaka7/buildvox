@@ -143,7 +143,9 @@ public class VoxelBlock {
      */
     @Deprecated
     public VoxelBlock withStateMap(Map<String, String> newStateMap) {
-        return new VoxelBlock(id, newStateMap);
+        var b = new VoxelBlock(id, newStateMap);
+        b.entity = entity;
+        return b;
     }
 
 }
