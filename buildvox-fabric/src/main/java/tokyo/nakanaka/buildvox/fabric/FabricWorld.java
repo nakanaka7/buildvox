@@ -1,7 +1,5 @@
 package tokyo.nakanaka.buildvox.fabric;
 
-import net.fabricmc.fabric.impl.lookup.entity.EntityApiLookupImpl;
-import net.fabricmc.fabric.impl.registry.sync.RemapStateImpl;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
@@ -54,8 +52,7 @@ public class FabricWorld implements World {
         return Objects.hash(original);
     }
 
-    @Override
-    public VoxelBlock getBlock(int x, int y, int z) {
+    public VoxelBlock getBlockOld(int x, int y, int z) {
         net.minecraft.block.BlockState blockState = original.getBlockState(new BlockPos(x, y, z));
         BlockEntity blockEntity = original.getBlockEntity(new BlockPos(x, y, z));
         if(blockEntity == null) {
@@ -66,7 +63,8 @@ public class FabricWorld implements World {
         }
     }
 
-    public VoxelBlock getBlockNew(int x, int y, int z) {
+    @Override
+    public VoxelBlock getBlock(int x, int y, int z) {
         net.minecraft.block.BlockState blockState = original.getBlockState(new BlockPos(x, y, z));
         BlockEntity blockEntity = original.getBlockEntity(new BlockPos(x, y, z));
         net.minecraft.block.Block block0 = blockState.getBlock();
@@ -82,8 +80,7 @@ public class FabricWorld implements World {
         return new VoxelBlock(block, state, entity);
     }
 
-    @Override
-    public void setBlock(int x, int y, int z, VoxelBlock block, boolean physics) {
+    public void setBlockOld(int x, int y, int z, VoxelBlock block, boolean physics) {
         String blockStr = block.toString();
         net.minecraft.block.BlockState blockState = Utils.parseBlockState(blockStr);
         if(physics) {
@@ -106,7 +103,8 @@ public class FabricWorld implements World {
         }
     }
 
-    public void setBlockNew(int x, int y, int z, VoxelBlock block, boolean physics) {
+    @Override
+    public void setBlock(int x, int y, int z, VoxelBlock block, boolean physics) {
         String blockStr = block.toString();
         net.minecraft.block.BlockState blockState = Utils.parseBlockState(blockStr);
         if(physics) {
