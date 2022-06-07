@@ -1,6 +1,7 @@
 package tokyo.nakanaka.buildvox.core.world;
 
 import tokyo.nakanaka.buildvox.core.NamespacedId;
+import tokyo.nakanaka.buildvox.core.block.Block;
 import tokyo.nakanaka.buildvox.core.block.BlockImpl;
 import tokyo.nakanaka.buildvox.core.block.BlockTransformation;
 import tokyo.nakanaka.buildvox.core.block.StateImpl;
@@ -13,6 +14,7 @@ import java.util.*;
 public class VoxelBlock {
     private NamespacedId id;
     private Map<String, String> stateMap;
+    private Block.Entity entity = null;
 
     /**
      * Constructs a block.
@@ -20,13 +22,15 @@ public class VoxelBlock {
      * @param stateMap the block state map. This map is expressed as [key1=value1,key2=value2...] which follows block
      * in game.
      */
+    @Deprecated
     public VoxelBlock(NamespacedId id, Map<String, String> stateMap) {
         this.id = id;
         this.stateMap = stateMap;
     }
 
-    public VoxelBlock(BlockImpl block, StateImpl state) {
+    public VoxelBlock(BlockImpl block, StateImpl state, Block.Entity entity) {
         this(block.getId(), state.getStateMap());
+        this.entity = entity;
     }
 
     /**
@@ -96,7 +100,7 @@ public class VoxelBlock {
         BlockImpl block = getBlock();
         StateImpl state = getState();
         StateImpl newState = block.transformState(state, trans);
-        return new VoxelBlock(block, newState);
+        return new VoxelBlock(block, newState, entity);
     }
 
     /**
