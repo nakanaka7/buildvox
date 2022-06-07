@@ -107,13 +107,31 @@ public class FabricWorld implements World {
     }
 
     public void setBlockNew(int x, int y, int z, VoxelBlock block, boolean physics) {
-
+        String blockStr = block.toString();
+        net.minecraft.block.BlockState blockState = Utils.parseBlockState(blockStr);
+        if(physics) {
+            original.setBlockState(new BlockPos(x, y, z), blockState, net.minecraft.block.Block.NOTIFY_ALL);
+        }else{
+            stopPhysicsWorlds.add(original);
+            original.setBlockState(new BlockPos(x, y, z), blockState, net.minecraft.block.Block.NOTIFY_LISTENERS, 0);
+            stopPhysicsWorlds.remove(original);
+        }
+        EntityImpl entity = (EntityImpl) block.getEntity();
+        if(entity == null) {
+            return;
+        }
+        NbtCompound nbt = (NbtCompound) entity.getObj();
+        BlockEntity blockEntity = BlockEntity.createFromNbt(new BlockPos(x, y, z), blockState, nbt);
+        if(blockEntity == null) {
+            return;
+        }
+        original.addBlockEntity(blockEntity);
     }
 
-        /**
-         * Get the original ServerWorld of this world.
-         * @return the original ServerWorld of this world.
-         */
+    /**
+     * Get the original ServerWorld of this world.
+     * @return the original ServerWorld of this world.
+     */
     public ServerWorld getOriginal() {
         return original;
     }
