@@ -2,11 +2,15 @@ package tokyo.nakanaka.buildvox.bukkit;
 
 import org.bukkit.Server;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.inventory.Inventory;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
+import tokyo.nakanaka.buildvox.core.block.EntityImpl;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.world.World;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -45,6 +49,21 @@ public class BukkitWorld implements World {
     public VoxelBlock getBlock(int x, int y, int z){
         org.bukkit.block.Block voxel = original.getBlockAt(x, y, z);
         return BukkitVoxelBlock.newInstance(voxel.getState());
+    }
+
+    private static record BlockEntityContent(Set<BukkitVoxelBlock.BlockEntityData> blockEntityDataSet, Inventory inventory) {
+    }
+
+    public VoxelBlock getBlockNew(int x, int y, int z) {
+        org.bukkit.block.Block voxel = original.getBlockAt(x, y, z);
+        var b = BukkitVoxelBlock.newInstance(voxel.getState());
+        var block = b.getBlock();
+        var state = b.getState();
+        var blockEntityDataSet = b.getBlockEntityDataSet();
+        var inventory = b.getInventory();
+        var entityContent = new BlockEntityContent(blockEntityDataSet, inventory);
+        var entity = new EntityImpl(entityContent);
+        return new VoxelBlock(block, state, entity);
     }
 
     @Override
