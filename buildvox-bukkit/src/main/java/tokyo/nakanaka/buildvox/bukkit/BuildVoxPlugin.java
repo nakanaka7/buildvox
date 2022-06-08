@@ -26,6 +26,7 @@ import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.player.PlayerEntity;
 import tokyo.nakanaka.buildvox.core.commandSender.PlainCommandSender;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
+import tokyo.nakanaka.buildvox.core.player.RealPlayer;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.system.Registry;
 import tokyo.nakanaka.buildvox.core.world.World;
@@ -66,13 +67,7 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
 
     private static tokyo.nakanaka.buildvox.core.commandSender.CommandSender getBvCommandSender(CommandSender sender) {
         if(sender instanceof Player player) {
-            UUID id = player.getUniqueId();
-            var player1 = BuildVoxSystem.getRealPlayerRegistry().get(id);
-            if(player1 != null)return player1;
-            var player2 = new tokyo.nakanaka.buildvox.core.player.RealPlayer(new BukkitPlayerEntity(player));
-            player2.setParticleGuiVisible(true);
-            BuildVoxSystem.getRealPlayerRegistry().register(player2);
-            return BuildVoxSystem.getRealPlayerRegistry().get(id);
+            return getRealPlayer(player);
         }else if(sender instanceof BlockCommandSender blockSender) {
             return BukkitCommandBlock.newInstance(blockSender);
         }else if(sender instanceof ConsoleCommandSender) {
@@ -86,6 +81,17 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
                 }
             };
         }
+    }
+
+    /** Gets the {@link RealPlayer} of {@link Player}. */
+    private static RealPlayer getRealPlayer(Player player) {
+        UUID id = player.getUniqueId();
+        var player1 = BuildVoxSystem.getRealPlayerRegistry().get(id);
+        if(player1 != null)return player1;
+        var player2 = new tokyo.nakanaka.buildvox.core.player.RealPlayer(new BukkitPlayerEntity(player));
+        player2.setParticleGuiVisible(true);
+        BuildVoxSystem.getRealPlayerRegistry().register(player2);
+        return BuildVoxSystem.getRealPlayerRegistry().get(id);
     }
 
     /** convert bukkit World to bv World*/
