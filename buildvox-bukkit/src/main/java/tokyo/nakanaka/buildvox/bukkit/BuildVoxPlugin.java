@@ -95,8 +95,8 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
         return BuildVoxSystem.getRealPlayerRegistry().get(id);
     }
 
-    /** convert bukkit World to bv World*/
-    public static World convertBukkitWorldToBvWorld(org.bukkit.World world) {
+    /** Gets the {@link World} of the {@link org.bukkit.World} */
+    public static World getWorld(org.bukkit.World world) {
         NamespacedId worldId = new NamespacedId(world.getName());
         return BuildVoxSystem.getWorldRegistry().get(worldId);
     }
@@ -195,7 +195,7 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
         }
         Block block = evt.getClickedBlock();
         org.bukkit.World world0 = block.getWorld();
-        World world = convertBukkitWorldToBvWorld(world0);
+        World world = getWorld(world0);
         Vector3i pos = new Vector3i(block.getX(), block.getY(), block.getZ());
         switch (toolType) {
             case POS -> {

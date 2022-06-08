@@ -11,7 +11,7 @@ public class BukkitCommandBlock extends AbstractCommandBlock {
     public static BukkitCommandBlock newInstance(BlockCommandSender blockSender) {
         var block = blockSender.getBlock();
         World world = block.getWorld();
-        tokyo.nakanaka.buildvox.core.world.World world1 = BuildVoxPlugin.convertBukkitWorldToBvWorld(world);
+        tokyo.nakanaka.buildvox.core.world.World world1 = BuildVoxPlugin.getWorld(world);
         Vector3i blockPos = new Vector3i(block.getX(), block.getY(), block.getZ());
         return new BukkitCommandBlock(world1, blockPos, blockSender);
     }
