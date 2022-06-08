@@ -25,10 +25,8 @@ import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.commandSender.CommandSender;
 import tokyo.nakanaka.buildvox.core.commandSender.PlainCommandSender;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
-import tokyo.nakanaka.buildvox.core.player.PlayerEntity;
 import tokyo.nakanaka.buildvox.core.player.RealPlayer;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
-import tokyo.nakanaka.buildvox.core.system.Registry;
 import tokyo.nakanaka.buildvox.core.world.World;
 
 import javax.validation.constraints.NotNull;
@@ -184,15 +182,7 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
         }
         //checked all for the item being a tool, so cancel the event
         evt.setCancelled(true);
-        Player player = evt.getPlayer();
-        UUID playerId = player.getUniqueId();
-        PlayerEntity playerEntity = new BukkitPlayerEntity(player);
-        Registry<tokyo.nakanaka.buildvox.core.player.RealPlayer, UUID> regi = BuildVoxSystem.getRealPlayerRegistry();
-        tokyo.nakanaka.buildvox.core.player.RealPlayer bvPlayer = regi.get(playerId);
-        if(bvPlayer == null) {
-            bvPlayer = new tokyo.nakanaka.buildvox.core.player.RealPlayer(playerEntity);
-            regi.register(bvPlayer);
-        }
+        tokyo.nakanaka.buildvox.core.player.RealPlayer bvPlayer = getRealPlayer(evt.getPlayer());
         Block block = evt.getClickedBlock();
         org.bukkit.World world0 = block.getWorld();
         World world = getWorld(world0);
