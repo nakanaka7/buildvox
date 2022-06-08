@@ -25,8 +25,16 @@ public class BukkitVoxelBlock extends VoxelBlock {
         super(id, stateMap);
     }
 
-    private interface BlockEntityData {
+    public interface BlockEntityData {
         void merge(org.bukkit.block.BlockState blockState);
+    }
+
+    public Set<BlockEntityData> getBlockEntityDataSet() {
+        return blockEntityDataSet;
+    }
+
+    public Inventory getInventory() {
+        return inventory;
     }
 
     private static record CommandBlockData(String command, String name) implements BlockEntityData {
