@@ -7,7 +7,6 @@ import org.bukkit.Server;
 import org.bukkit.block.Block;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,9 +22,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
-import tokyo.nakanaka.buildvox.core.player.PlayerEntity;
+import tokyo.nakanaka.buildvox.core.commandSender.CommandSender;
 import tokyo.nakanaka.buildvox.core.commandSender.PlainCommandSender;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
+import tokyo.nakanaka.buildvox.core.player.PlayerEntity;
 import tokyo.nakanaka.buildvox.core.player.RealPlayer;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.system.Registry;
@@ -65,7 +65,8 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
         server.getPluginManager().registerEvents(this, this);
     }
 
-    private static tokyo.nakanaka.buildvox.core.commandSender.CommandSender getBvCommandSender(CommandSender sender) {
+    /** Gets the {@link CommandSender} of the {@link org.bukkit.command.CommandSender} */
+    private static CommandSender getCommandSender(org.bukkit.command.CommandSender sender) {
         if(sender instanceof Player player) {
             return getRealPlayer(player);
         }else if(sender instanceof BlockCommandSender blockSender) {
@@ -83,7 +84,7 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
         }
     }
 
-    /** Gets the {@link RealPlayer} of {@link Player}. */
+    /** Gets the {@link RealPlayer} of the {@link Player}. */
     private static RealPlayer getRealPlayer(Player player) {
         UUID id = player.getUniqueId();
         var player1 = BuildVoxSystem.getRealPlayerRegistry().get(id);
@@ -103,7 +104,7 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
     @Override
     public boolean onCommand(@NotNull org.bukkit.command.CommandSender sender, @NotNull Command command,
                              @NotNull String label, @NotNull String[] args) {
-        tokyo.nakanaka.buildvox.core.commandSender.CommandSender sender1 = getBvCommandSender(sender);
+        tokyo.nakanaka.buildvox.core.commandSender.CommandSender sender1 = getCommandSender(sender);
         switch (label) {
             case "bv" -> BuildVoxSystem.onBvCommand(sender1, args);
             case "bvd" -> BuildVoxSystem.onBvdCommand(sender1, args);
