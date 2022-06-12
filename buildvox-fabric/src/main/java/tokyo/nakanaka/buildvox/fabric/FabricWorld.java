@@ -52,17 +52,6 @@ public class FabricWorld implements World {
         return Objects.hash(original);
     }
 
-    public VoxelBlock getBlockOld(int x, int y, int z) {
-        net.minecraft.block.BlockState blockState = original.getBlockState(new BlockPos(x, y, z));
-        BlockEntity blockEntity = original.getBlockEntity(new BlockPos(x, y, z));
-        if(blockEntity == null) {
-            return FabricVoxelBlock.newInstance(blockState);
-        }else {
-            NbtCompound nbt = blockEntity.createNbtWithId();
-            return FabricVoxelBlock.newInstance(blockState, nbt);
-        }
-    }
-
     @Override
     public VoxelBlock getBlock(int x, int y, int z) {
         net.minecraft.block.BlockState blockState = original.getBlockState(new BlockPos(x, y, z));
@@ -78,29 +67,6 @@ public class FabricWorld implements World {
             entity = new EntityImpl(nbt);
         }
         return new VoxelBlock(block, state, entity);
-    }
-
-    public void setBlockOld(int x, int y, int z, VoxelBlock block, boolean physics) {
-        String blockStr = block.toString();
-        net.minecraft.block.BlockState blockState = Utils.parseBlockState(blockStr);
-        if(physics) {
-            original.setBlockState(new BlockPos(x, y, z), blockState, net.minecraft.block.Block.NOTIFY_ALL);
-        }else{
-            stopPhysicsWorlds.add(original);
-            original.setBlockState(new BlockPos(x, y, z), blockState, net.minecraft.block.Block.NOTIFY_LISTENERS, 0);
-            stopPhysicsWorlds.remove(original);
-        }
-        if(block instanceof FabricVoxelBlock fabricBlock) {
-            NbtCompound nbt = fabricBlock.getNbt();
-            if(nbt == null) {
-                return;
-            }
-            BlockEntity blockEntity = BlockEntity.createFromNbt(new BlockPos(x, y, z), blockState, nbt);
-            if(blockEntity == null) {
-                throw new IllegalArgumentException();
-            }
-            original.addBlockEntity(blockEntity);
-        }
     }
 
     @Override
