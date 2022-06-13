@@ -34,11 +34,6 @@ public class VoxelBlock {
         this.entity = entity;
     }
 
-    public VoxelBlock(BlockImpl block, StateImpl state, Block.Entity entity) {
-        this(block.getId(), state.getStateMap());
-        this.entity = entity;
-    }
-
     /**
      * Use BuildVoxSystem.parseBlock().
      * Gets a block instance parsed of the given String. The String must be the form "blockId[key1=value1,key2=value2...]".
