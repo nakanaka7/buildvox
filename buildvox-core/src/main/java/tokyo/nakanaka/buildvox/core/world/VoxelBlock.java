@@ -144,16 +144,4 @@ public class VoxelBlock {
         return Objects.hash(id, stateMap);
     }
 
-    /**
-     * Gets a new instance with a new state map.
-     * @param newStateMap a map for new block state.
-     * @return a new instance with a new state map.
-     */
-    @Deprecated
-    public VoxelBlock withStateMap(Map<String, String> newStateMap) {
-        var b = new VoxelBlock(id, newStateMap);
-        b.entity = entity;
-        return b;
-    }
-
 }

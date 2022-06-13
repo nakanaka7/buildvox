@@ -95,12 +95,4 @@ public class BukkitVoxelBlock extends VoxelBlock {
         }
     }
 
-    @Override
-    public BukkitVoxelBlock withStateMap(Map<String, String> stateMap) {
-        BukkitVoxelBlock newBlock = new BukkitVoxelBlock(super.getId(), stateMap);
-        newBlock.inventory = this.inventory;
-        newBlock.blockEntityDataSet = new HashSet<>(blockEntityDataSet);
-        return newBlock;
-    }
-
 }

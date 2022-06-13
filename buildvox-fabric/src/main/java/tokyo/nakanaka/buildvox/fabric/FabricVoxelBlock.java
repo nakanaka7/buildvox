@@ -65,9 +65,4 @@ public class FabricVoxelBlock extends VoxelBlock {
         return nbt;
     }
 
-    @Override
-    public FabricVoxelBlock withStateMap(Map<String, String> stateMap){
-        return new FabricVoxelBlock(super.getId(), stateMap, nbt);
-    }
-
 }
