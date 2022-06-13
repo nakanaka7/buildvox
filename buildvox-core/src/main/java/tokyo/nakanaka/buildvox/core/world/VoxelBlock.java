@@ -86,9 +86,8 @@ public class VoxelBlock {
 
     public VoxelBlock transform(BlockTransformation trans) {
         BlockImpl block = getBlock();
-        StateImpl state = getState();
         StateImpl newState = block.transformState(state, trans);
-        return new VoxelBlock(block, newState, entity);
+        return new VoxelBlock(blockId, newState, entity);
     }
 
     /**
