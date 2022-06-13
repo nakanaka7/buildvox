@@ -119,11 +119,11 @@ public class WorldEdits {
     public static void replace(EditWorld world, Selection sel, VoxelBlock fromBlock, VoxelBlock toBlock, double integrity) {
         BlockSpace3<VoxelBlock> space = new IntegrityAdjustableBlockSpace3<>(world, integrity);
         NamespacedId fromId = fromBlock.getId();
-        Map<String, String> fromStateMap = fromBlock.getStateMap();
+        Map<String, String> fromStateMap = fromBlock.getState().getStateMap();
         BlockSpaceEdits.replace(space, sel.calculateBlockPosSet(),
             (BlockSpaceEdits.BlockCondition<VoxelBlock>) (block) -> {
                 NamespacedId id = block.getId();
-                Map<String, String> stateMap = block.getStateMap();
+                Map<String, String> stateMap = block.getState().getStateMap();
                 if(!fromId.equals(id)) return false;
                 for(Map.Entry<String, String> entry : fromStateMap.entrySet()) {
                     String value = stateMap.get(entry.getKey());

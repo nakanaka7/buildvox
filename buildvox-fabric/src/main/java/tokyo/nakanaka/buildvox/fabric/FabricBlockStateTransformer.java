@@ -59,7 +59,7 @@ public class FabricBlockStateTransformer implements BlockStateTransformer {
             transState = blockState;
         }
         FabricVoxelBlock transBlock = FabricVoxelBlock.newInstance(transState);
-        return transBlock.getStateMap();
+        return transBlock.getState().getStateMap();
     }
 
     private Map<String, String> transformStairsShape(Map<String, String> stateMap, Matrix3x3i transMatrix) {
