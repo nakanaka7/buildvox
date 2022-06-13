@@ -1,7 +1,6 @@
 package tokyo.nakanaka.buildvox.core.block;
 
-import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
-
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -19,6 +18,19 @@ public class StateImpl implements Block.State {
 
     public Map<String, String> getStateMap() {
         return stateMap;
+    }
+
+    public static StateImpl valueOf(String s) {
+        Map<String, String> stateMap = new HashMap<>();
+        String[] stateArray = s.split(",");
+        for(String state : stateArray){
+            String[] kv = state.split("=", -1);
+            if(kv.length != 2){
+                throw new IllegalArgumentException();
+            }
+            stateMap.put(kv[0], kv[1]);
+        }
+        return new StateImpl(stateMap);
     }
 
     @Override
