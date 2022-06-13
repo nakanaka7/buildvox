@@ -66,7 +66,7 @@ public class FabricWorld implements World {
             NbtCompound nbt = blockEntity.createNbtWithId();
             entity = new EntityImpl(nbt);
         }
-        return new VoxelBlock(block, state, entity);
+        return new VoxelBlock(block.getId(), state, entity);
     }
 
     @Override

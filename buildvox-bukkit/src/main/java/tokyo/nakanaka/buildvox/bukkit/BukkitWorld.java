@@ -59,7 +59,7 @@ public class BukkitWorld implements World {
         var inventory = b.getInventory();
         var entityContent = new BlockEntityContent(blockEntityDataSet, inventory);
         var entity = new EntityImpl(entityContent);
-        return new VoxelBlock(block, state, entity);
+        return new VoxelBlock(block.getId(), state, entity);
     }
 
     @Override
