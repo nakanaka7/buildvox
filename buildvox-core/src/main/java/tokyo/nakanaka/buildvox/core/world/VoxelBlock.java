@@ -28,6 +28,12 @@ public class VoxelBlock {
         this.state = new StateImpl(stateMap);
     }
 
+    public VoxelBlock(NamespacedId blockId, StateImpl state, Block.Entity entity) {
+        this.blockId = blockId;
+        this.state = state;
+        this.entity = entity;
+    }
+
     public VoxelBlock(BlockImpl block, StateImpl state, Block.Entity entity) {
         this(block.getId(), state.getStateMap());
         this.entity = entity;
