@@ -83,15 +83,6 @@ public class VoxelBlock {
         return new BlockImpl(id);
     }
 
-    /**
-     * Gets the block state map.
-     * @return the block state map.
-     */
-    @Deprecated
-    public Map<String, String> getStateMap() {
-        return stateMap;
-    }
-
     public StateImpl getState() {
         return new StateImpl(stateMap);
     }
