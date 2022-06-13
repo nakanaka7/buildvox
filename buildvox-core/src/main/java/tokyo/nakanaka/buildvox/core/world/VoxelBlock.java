@@ -50,16 +50,12 @@ public class VoxelBlock {
             String[] strIdState = str.substring(0, str.length() - 1).split("\\[");
             strId = strIdState[0];
             String strState = strIdState[1];
-            stateMap = parseStateMap(strState);
+            stateMap = StateImpl.valueOf(strState).getStateMap();
         }else{
             strId = str;
         }
         NamespacedId id = NamespacedId.valueOf(strId);
         return new VoxelBlock(id, stateMap);
-    }
-
-    public static Map<String, String> parseStateMap(String strState) {
-        return StateImpl.valueOf(strState).getStateMap();
     }
 
     /**
