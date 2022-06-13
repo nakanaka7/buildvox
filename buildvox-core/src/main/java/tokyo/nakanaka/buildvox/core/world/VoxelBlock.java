@@ -59,16 +59,7 @@ public class VoxelBlock {
     }
 
     public static Map<String, String> parseStateMap(String strState) {
-        Map<String, String> stateMap = new HashMap<>();
-        String[] stateArray = strState.split(",");
-        for(String state : stateArray){
-            String[] kv = state.split("=", -1);
-            if(kv.length != 2){
-                throw new IllegalArgumentException();
-            }
-            stateMap.put(kv[0], kv[1]);
-        }
-        return stateMap;
+        return StateImpl.valueOf(strState).getStateMap();
     }
 
     /**
