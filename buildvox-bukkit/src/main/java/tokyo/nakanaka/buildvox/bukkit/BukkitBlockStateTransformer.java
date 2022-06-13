@@ -13,6 +13,7 @@ import tokyo.nakanaka.buildvox.core.block.BlockStateTransformer;
 import tokyo.nakanaka.buildvox.core.block.BlockTransformation;
 import tokyo.nakanaka.buildvox.core.math.transformation.*;
 import tokyo.nakanaka.buildvox.core.math.vector.*;
+import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 
 import java.util.*;
@@ -65,7 +66,7 @@ public class BukkitBlockStateTransformer implements BlockStateTransformer {
         if(blockData instanceof Stairs stairs){
             blockData = transformStairsShape(stairs, transMatrix);
         }
-        return VoxelBlock.valueOf(blockData.getAsString()).getState().getStateMap();
+        return BuildVoxSystem.parseBlock(blockData.getAsString()).getState().getStateMap();
     }
 
     private Bisected transformBisected(Bisected bisected, Matrix3x3i transMatrix){

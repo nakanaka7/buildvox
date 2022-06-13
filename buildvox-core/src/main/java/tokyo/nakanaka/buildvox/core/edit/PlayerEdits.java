@@ -9,6 +9,7 @@ import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.property.Axis;
 import tokyo.nakanaka.buildvox.core.selection.*;
+import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.world.World;
 
@@ -93,7 +94,7 @@ public class PlayerEdits {
         Clipboard clipboard = new Clipboard();
         EditWorld editWorld = new EditWorld(player.getEditTargetWorld(), true);
         WorldEdits.copy(editWorld, selFrom, Vector3d.ZERO, clipboard);
-        WorldEdits.fill(editWorld, selFrom, VoxelBlock.valueOf("air"), 1);
+        WorldEdits.fill(editWorld, selFrom, BuildVoxSystem.parseBlock("air"), 1);
         WorldEdits.paste(clipboard, editWorld, Vector3d.ZERO);
         Selection selTo;
         if(selFrom instanceof BlockSelection bs) {

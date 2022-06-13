@@ -8,6 +8,7 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
+import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 
 import java.util.HashSet;
@@ -66,7 +67,7 @@ public class BukkitVoxelBlock extends VoxelBlock {
     public static BukkitVoxelBlock newInstance(org.bukkit.block.BlockState blockState) {
         BlockData blockData = blockState.getBlockData();
         String blockStr = blockData.getAsString();
-        VoxelBlock block = VoxelBlock.valueOf(blockStr);
+        VoxelBlock block = BuildVoxSystem.parseBlock(blockStr);
         BukkitVoxelBlock bukkitBlock = new BukkitVoxelBlock(block.getId(), block.getState().getStateMap());
         if(blockState instanceof CommandBlock commandBlock) {
             bukkitBlock.blockEntityDataSet.add(new CommandBlockData(commandBlock.getCommand(), commandBlock.getName()));

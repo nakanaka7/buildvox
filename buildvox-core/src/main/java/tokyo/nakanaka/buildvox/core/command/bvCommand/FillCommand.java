@@ -103,7 +103,7 @@ public class FillCommand implements Runnable {
         }
         VoxelBlock b;
         try {
-            b = VoxelBlock.valueOf(block);
+            b = BuildVoxSystem.parseBlock(block);
         }catch (IllegalArgumentException e) {
             err.println(FeedbackMessage.ofBlockParseError(block));
             return;
