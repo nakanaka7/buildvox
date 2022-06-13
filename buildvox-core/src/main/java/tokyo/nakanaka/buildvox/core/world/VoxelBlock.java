@@ -13,7 +13,7 @@ import java.util.*;
  */
 public class VoxelBlock {
     private NamespacedId id;
-    private Map<String, String> stateMap;
+    private StateImpl state;
     private Block.Entity entity = null;
 
     /**
@@ -25,7 +25,7 @@ public class VoxelBlock {
     @Deprecated
     public VoxelBlock(NamespacedId id, Map<String, String> stateMap) {
         this.id = id;
-        this.stateMap = stateMap;
+        this.state = new StateImpl(stateMap);
     }
 
     public VoxelBlock(BlockImpl block, StateImpl state, Block.Entity entity) {
@@ -71,7 +71,7 @@ public class VoxelBlock {
     }
 
     public StateImpl getState() {
-        return new StateImpl(stateMap);
+        return state;
     }
 
     public Block.Entity getEntity() {
@@ -93,7 +93,7 @@ public class VoxelBlock {
     @Override
     public String toString() {
         String stateStr;
-        if(stateMap.size() > 0){
+        if(state.getStateMap().size() > 0){
             stateStr = "[" + getState().toString() + "]";
         }else{
             stateStr = "";
@@ -106,12 +106,12 @@ public class VoxelBlock {
         if (this == o) return true;
         if (!(o instanceof VoxelBlock)) return false;
         VoxelBlock block = (VoxelBlock) o;
-        return id.equals(block.id) && stateMap.equals(block.stateMap);
+        return id.equals(block.id) && state.getStateMap().equals(block.getState().getStateMap());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, stateMap);
+        return Objects.hash(id, state.getStateMap());
     }
 
 }
