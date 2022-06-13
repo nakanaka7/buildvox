@@ -2,7 +2,6 @@ package tokyo.nakanaka.buildvox.core.block;
 
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
-import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 
 import java.util.Map;
 
@@ -34,7 +33,7 @@ public class BlockImpl implements Block<StateImpl, EntityImpl> {
     }
 
     public StateImpl parseState(String s) {
-        return new StateImpl(VoxelBlock.parseStateMap(s));
+        return StateImpl.valueOf(s);
     }
 
 }
