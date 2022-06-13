@@ -2,7 +2,9 @@ package tokyo.nakanaka.buildvox.core.block;
 
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /* temporary
    The state object of BlockState
@@ -21,7 +23,11 @@ public class StateImpl implements Block.State {
 
     @Override
     public String toString() {
-        return VoxelBlock.getStateString(stateMap);
+        Set<String> keyValueSet = new HashSet<>();
+        for (Map.Entry<String, String> e : stateMap.entrySet()) {
+            keyValueSet.add(e.getKey() + "=" + e.getValue());
+        }
+        return String.join(",", keyValueSet);
     }
 
 }
