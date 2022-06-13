@@ -25,9 +25,7 @@ public class BlockStateTransformingBlockSpace3 implements BlockSpace3<VoxelBlock
 
     @Override
     public void setBlock(Vector3i pos, VoxelBlock block) {
-        Map<String, String> transStateMap = blockStateTransformer.transform(block.getId(), block.getStateMap(), blockTrans);
-        VoxelBlock transBlock = block.withStateMap(transStateMap);
-        original.setBlock(pos, transBlock);
+        original.setBlock(pos, block.transform(blockTrans));
     }
 
 }
