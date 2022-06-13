@@ -68,7 +68,7 @@ public class BuildVoxSystem {
     }
 
     /** Parses the String to a {@link VoxelBlock} */
-    public VoxelBlock parseBlock(String s) {
+    public static VoxelBlock parseBlock(String s) {
         return VoxelBlock.valueOf(s);
     }
 
