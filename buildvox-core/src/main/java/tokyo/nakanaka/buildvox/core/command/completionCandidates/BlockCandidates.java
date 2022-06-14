@@ -8,7 +8,7 @@ import java.util.Iterator;
 public class BlockCandidates implements Iterable<String> {
     @Override
     public Iterator<String> iterator() {
-        return BuildVoxSystem.BLOCK_REGISTRY.getBlockIdList().stream()
+        return BuildVoxSystem.BLOCK_REGISTRY.idList().stream()
                 .map(NamespacedId::toString)
                 .iterator();
     }

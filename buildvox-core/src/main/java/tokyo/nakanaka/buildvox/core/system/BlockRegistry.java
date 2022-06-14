@@ -23,7 +23,7 @@ public class BlockRegistry {
         register(block.getId());
     }
 
-    public List<NamespacedId> getBlockIdList() {
+    public List<NamespacedId> idList() {
         return blockIdList;
     }
 
