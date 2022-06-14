@@ -34,6 +34,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
+import tokyo.nakanaka.buildvox.core.block.BlockImpl;
 import tokyo.nakanaka.buildvox.core.player.PlayerEntity;
 import tokyo.nakanaka.buildvox.core.commandSender.CommandSender;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
@@ -73,7 +74,8 @@ public class BuildVoxMod implements ModInitializer {
 		BuildVoxSystem.environment = new BuildVoxSystem.Environment(new FabricBlockValidator(),
 				new FabricBlockStateTransformer(), FabricScheduler.getInstance());
 		for(Identifier blockId0 : Registry.BLOCK.getIds()) {
-			BuildVoxSystem.BLOCK_REGISTRY.register(new NamespacedId(blockId0.getNamespace(), blockId0.getPath()));
+			NamespacedId id = new NamespacedId(blockId0.getNamespace(), blockId0.getPath());
+			BuildVoxSystem.BLOCK_REGISTRY.register(new BlockImpl(id, new FabricBlockStateTransformer()));
 		}
 	}
 
