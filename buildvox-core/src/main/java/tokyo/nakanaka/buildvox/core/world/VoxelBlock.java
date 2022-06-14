@@ -60,6 +60,46 @@ public class VoxelBlock {
         return new VoxelBlock(id, stateMap);
     }
 
+    public static VoxelBlock valueOfNew(String s) {
+        String idStr;
+        String stateStr;
+        String entityStr;
+        if(s.contains("[") || s.contains("{")) {
+            int a = s.indexOf("[");
+            int b = s.indexOf("{");
+            idStr = s.substring(0, Math.min(a, b));
+        } else {
+            idStr = s;
+        }
+        s = s.substring(idStr.length());
+        if(s.startsWith("[")) {
+            int e = s.indexOf("]");
+            if(e == -1) throw new IllegalArgumentException();
+            stateStr = s.substring(1, e);
+            s = s.substring(e + 1);
+        }else{
+            stateStr = "";
+        }
+        if(s.startsWith("{")) {
+            int e = s.indexOf("}");
+            if(e == -1) throw new IllegalArgumentException();
+            entityStr = s.substring(1, e);
+            s = s.substring(e + 1);
+        } else {
+            entityStr = "";
+        }
+        if(!s.isEmpty()) throw new IllegalArgumentException();
+        NamespacedId blockId = NamespacedId.valueOf(idStr);
+        Block<?,?> block = BuildVoxSystem.getBlockRegistry().get(blockId);
+        if(block == null) throw new IllegalArgumentException();
+        Block.State state = block.parseState(stateStr);
+        Block.Entity entity = null;
+        if(!entityStr.isEmpty()) {
+            entity = block.parseEntity(entityStr);
+        }
+        return new VoxelBlock(blockId, state, entity);
+    }
+
     /**
      * Gets the block id.
      * @return the block id.
