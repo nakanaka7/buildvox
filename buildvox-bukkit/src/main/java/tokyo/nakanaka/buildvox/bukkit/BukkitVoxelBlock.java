@@ -68,7 +68,7 @@ public class BukkitVoxelBlock extends VoxelBlock {
         BlockData blockData = blockState.getBlockData();
         String blockStr = blockData.getAsString();
         VoxelBlock block = BuildVoxSystem.parseBlock(blockStr);
-        BukkitVoxelBlock bukkitBlock = new BukkitVoxelBlock(block.getBlockId(), block.getState().getStateMap());
+        BukkitVoxelBlock bukkitBlock = new BukkitVoxelBlock(block.getBlockId(), block.getStateImpl().getStateMap());
         if(blockState instanceof CommandBlock commandBlock) {
             bukkitBlock.blockEntityDataSet.add(new CommandBlockData(commandBlock.getCommand(), commandBlock.getName()));
         }

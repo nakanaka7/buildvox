@@ -66,7 +66,7 @@ public class BukkitBlockStateTransformer implements BlockStateTransformer {
         if(blockData instanceof Stairs stairs){
             blockData = transformStairsShape(stairs, transMatrix);
         }
-        return BuildVoxSystem.parseBlock(blockData.getAsString()).getState().getStateMap();
+        return BuildVoxSystem.parseBlock(blockData.getAsString()).getStateImpl().getStateMap();
     }
 
     private Bisected transformBisected(Bisected bisected, Matrix3x3i transMatrix){

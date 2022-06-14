@@ -68,7 +68,8 @@ public class VoxelBlock {
         return blockId;
     }
 
-    public StateImpl getState() {
+    @Deprecated
+    public StateImpl getStateImpl() {
         return (StateImpl) state;
     }
 

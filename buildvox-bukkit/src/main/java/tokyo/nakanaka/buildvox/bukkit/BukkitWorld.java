@@ -53,7 +53,7 @@ public class BukkitWorld implements World {
     public VoxelBlock getBlock(int x, int y, int z) {
         org.bukkit.block.Block voxel = original.getBlockAt(x, y, z);
         var b = BukkitVoxelBlock.newInstance(voxel.getState());
-        var state = b.getState();
+        var state = b.getStateImpl();
         var blockEntityDataSet = b.getBlockEntityDataSet();
         var inventory = b.getInventory();
         var entityContent = new BlockEntityContent(blockEntityDataSet, inventory);
