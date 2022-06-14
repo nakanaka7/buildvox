@@ -91,13 +91,13 @@ public class VoxelBlock {
      */
     @Override
     public String toString() {
-        String stateStr;
-        if(((StateImpl)state).getStateMap().size() > 0){
-            stateStr = "[" + getState().toString() + "]";
-        }else{
-            stateStr = "";
+        String blockStr = blockId.toString();
+        String stateStr = state.toString();
+        if(stateStr.isEmpty()) {
+            return blockStr;
+        }else {
+            return blockStr + "[" + stateStr + "]";
         }
-        return blockId.toString() + stateStr;
     }
 
     @Override
