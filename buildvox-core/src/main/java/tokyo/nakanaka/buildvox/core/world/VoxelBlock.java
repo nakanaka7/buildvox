@@ -13,7 +13,7 @@ import java.util.*;
  */
 public class VoxelBlock {
     private NamespacedId blockId;
-    private StateImpl state;
+    private Block.State state;
     private Block.Entity entity = null;
 
     /**
@@ -72,7 +72,7 @@ public class VoxelBlock {
     }
 
     public StateImpl getState() {
-        return state;
+        return (StateImpl) state;
     }
 
     public Block.Entity getEntity() {
@@ -81,7 +81,7 @@ public class VoxelBlock {
 
     public VoxelBlock transform(BlockTransformation trans) {
         BlockImpl block = getBlock();
-        StateImpl newState = block.transformState(state, trans);
+        StateImpl newState = block.transformState((StateImpl) state, trans);
         return new VoxelBlock(blockId, newState, entity);
     }
 
@@ -93,7 +93,7 @@ public class VoxelBlock {
     @Override
     public String toString() {
         String stateStr;
-        if(state.getStateMap().size() > 0){
+        if(((StateImpl)state).getStateMap().size() > 0){
             stateStr = "[" + getState().toString() + "]";
         }else{
             stateStr = "";
@@ -106,12 +106,12 @@ public class VoxelBlock {
         if (this == o) return true;
         if (!(o instanceof VoxelBlock)) return false;
         VoxelBlock block = (VoxelBlock) o;
-        return blockId.equals(block.blockId) && state.getStateMap().equals(block.getState().getStateMap());
+        return blockId.equals(block.blockId) && ((StateImpl)state).getStateMap().equals(block.getState().getStateMap());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(blockId, state.getStateMap());
+        return Objects.hash(blockId, ((StateImpl)state).getStateMap());
     }
 
 }
