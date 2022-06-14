@@ -62,7 +62,7 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
                 NamespacedKey key = material.getKey();
                 NamespacedId id = new NamespacedId(key.getNamespace().toLowerCase(), key.getKey().toLowerCase());
                 tokyo.nakanaka.buildvox.core.block.Block block = new BlockImpl(id, new BukkitBlockStateTransformer(getServer()));
-                BuildVoxSystem.BLOCK_REGISTRY.register(block);
+                BuildVoxSystem.getBlockRegistry().register(block);
             }
         }
     }

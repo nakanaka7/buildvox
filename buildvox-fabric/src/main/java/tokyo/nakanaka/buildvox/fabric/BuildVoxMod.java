@@ -75,7 +75,7 @@ public class BuildVoxMod implements ModInitializer {
 				new FabricBlockStateTransformer(), FabricScheduler.getInstance());
 		for(Identifier blockId0 : Registry.BLOCK.getIds()) {
 			NamespacedId id = new NamespacedId(blockId0.getNamespace(), blockId0.getPath());
-			BuildVoxSystem.BLOCK_REGISTRY.register(new BlockImpl(id, new FabricBlockStateTransformer()));
+			BuildVoxSystem.getBlockRegistry().register(new BlockImpl(id, new FabricBlockStateTransformer()));
 		}
 	}
 
