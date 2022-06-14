@@ -1,6 +1,7 @@
 package tokyo.nakanaka.buildvox.core.system;
 
 import tokyo.nakanaka.buildvox.core.NamespacedId;
+import tokyo.nakanaka.buildvox.core.block.Block;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,10 @@ public class BlockRegistry {
         if(!blockIdList.contains(blockId)) {
             blockIdList.add(blockId);
         }
+    }
+
+    public void register(Block<?, ?> block) {
+        register(block.getId());
     }
 
     public List<NamespacedId> getBlockIdList() {
