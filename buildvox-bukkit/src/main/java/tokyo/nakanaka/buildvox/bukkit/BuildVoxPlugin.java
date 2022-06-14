@@ -22,6 +22,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
+import tokyo.nakanaka.buildvox.core.block.BlockImpl;
 import tokyo.nakanaka.buildvox.core.commandSender.CommandSender;
 import tokyo.nakanaka.buildvox.core.commandSender.PlainCommandSender;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
@@ -59,8 +60,9 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
         for(var material : Material.values()){
             if(material.isBlock()) {
                 NamespacedKey key = material.getKey();
-                BuildVoxSystem.BLOCK_REGISTRY.register(
-                        new NamespacedId(key.getNamespace().toLowerCase(), key.getKey().toLowerCase()));
+                NamespacedId id = new NamespacedId(key.getNamespace().toLowerCase(), key.getKey().toLowerCase());
+                tokyo.nakanaka.buildvox.core.block.Block block = new BlockImpl(id, new BukkitBlockStateTransformer(getServer()));
+                BuildVoxSystem.BLOCK_REGISTRY.register(block);
             }
         }
     }
