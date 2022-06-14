@@ -50,6 +50,12 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
         Server server = this.getServer();
         BuildVoxSystem.environment = new BuildVoxSystem.Environment(new BukkitBlockValidator(server),
                 new BukkitBlockStateTransformer(server), new BukkitScheduler(this));
+        registerBlocks();
+        registerWorlds();
+        server.getPluginManager().registerEvents(this, this);
+    }
+
+    private void registerBlocks() {
         for(var material : Material.values()){
             if(material.isBlock()) {
                 NamespacedKey key = material.getKey();
@@ -57,10 +63,12 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
                         new NamespacedId(key.getNamespace().toLowerCase(), key.getKey().toLowerCase()));
             }
         }
-        for(var world0 : server.getWorlds()) {
+    }
+
+    private void registerWorlds() {
+        for(var world0 : getServer().getWorlds()) {
             addWorld(world0);
         }
-        server.getPluginManager().registerEvents(this, this);
     }
 
     /** Gets the {@link CommandSender} of the {@link org.bukkit.command.CommandSender} */
