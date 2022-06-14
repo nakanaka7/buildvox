@@ -77,6 +77,11 @@ public class BuildVoxSystem {
         return WORLD_REGISTRY;
     }
 
+    /** Gets the block registry */
+    public static BlockRegistry getBlockRegistry() {
+        return BLOCK_REGISTRY;
+    }
+
     /** Get the real player registry */
     public static Registry<RealPlayer, UUID> getRealPlayerRegistry() {
         return realPlayerRegistry;
