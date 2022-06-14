@@ -73,6 +73,12 @@ public class VoxelBlock {
         return (StateImpl) state;
     }
 
+    /** Gets the state */
+    public Block.State getState() {
+        return state;
+    }
+
+    /** Gets the entity */
     public Block.Entity getEntity() {
         return entity;
     }
