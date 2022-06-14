@@ -8,7 +8,6 @@ import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Represents block.
@@ -98,19 +97,6 @@ public class VoxelBlock {
         }else {
             return blockStr + "[" + stateStr + "]";
         }
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof VoxelBlock)) return false;
-        VoxelBlock block = (VoxelBlock) o;
-        return blockId.equals(block.blockId) && ((StateImpl)state).getStateMap().equals(block.getState().getStateMap());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(blockId, ((StateImpl)state).getStateMap());
     }
 
 }
