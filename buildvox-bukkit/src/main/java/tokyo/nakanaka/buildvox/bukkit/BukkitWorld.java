@@ -7,6 +7,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.block.EntityImpl;
+import tokyo.nakanaka.buildvox.core.block.StateImpl;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.world.World;
 
@@ -53,7 +54,7 @@ public class BukkitWorld implements World {
     public VoxelBlock getBlock(int x, int y, int z) {
         org.bukkit.block.Block voxel = original.getBlockAt(x, y, z);
         var b = BukkitVoxelBlock.newInstance(voxel.getState());
-        var state = b.getStateImpl();
+        var state = (StateImpl)b.getState();
         var blockEntityDataSet = b.getBlockEntityDataSet();
         var inventory = b.getInventory();
         var entityContent = new BlockEntityContent(blockEntityDataSet, inventory);

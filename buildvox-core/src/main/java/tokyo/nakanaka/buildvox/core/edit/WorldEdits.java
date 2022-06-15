@@ -1,6 +1,7 @@
 package tokyo.nakanaka.buildvox.core.edit;
 
 import tokyo.nakanaka.buildvox.core.NamespacedId;
+import tokyo.nakanaka.buildvox.core.block.StateImpl;
 import tokyo.nakanaka.buildvox.core.blockSpace.BlockStateTransformingBlockSpace3;
 import tokyo.nakanaka.buildvox.core.blockSpace.ClipboardBlockSpace3;
 import tokyo.nakanaka.buildvox.core.blockSpace.IntegrityAdjustableBlockSpace3;
@@ -119,11 +120,11 @@ public class WorldEdits {
     public static void replace(EditWorld world, Selection sel, VoxelBlock fromBlock, VoxelBlock toBlock, double integrity) {
         BlockSpace3<VoxelBlock> space = new IntegrityAdjustableBlockSpace3<>(world, integrity);
         NamespacedId fromId = fromBlock.getBlockId();
-        Map<String, String> fromStateMap = fromBlock.getStateImpl().getStateMap();
+        Map<String, String> fromStateMap = ((StateImpl)fromBlock.getState()).getStateMap();
         BlockSpaceEdits.replace(space, sel.calculateBlockPosSet(),
             (BlockSpaceEdits.BlockCondition<VoxelBlock>) (block) -> {
                 NamespacedId id = block.getBlockId();
-                Map<String, String> stateMap = block.getStateImpl().getStateMap();
+                Map<String, String> stateMap = ((StateImpl)block.getState()).getStateMap();
                 if(!fromId.equals(id)) return false;
                 for(Map.Entry<String, String> entry : fromStateMap.entrySet()) {
                     String value = stateMap.get(entry.getKey());
