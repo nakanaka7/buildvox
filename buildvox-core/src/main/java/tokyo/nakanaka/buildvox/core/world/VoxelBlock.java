@@ -15,7 +15,7 @@ import java.util.Map;
 public class VoxelBlock {
     private NamespacedId blockId;
     private Block.State state;
-    private Block.Entity entity = null;
+    private Block.Entity entity;
 
     /**
      * Constructs a block.
@@ -27,12 +27,17 @@ public class VoxelBlock {
     public VoxelBlock(NamespacedId id, Map<String, String> stateMap) {
         this.blockId = id;
         this.state = new StateImpl(stateMap);
+        this.entity = null;
     }
 
     public VoxelBlock(NamespacedId blockId, Block.State state, Block.Entity entity) {
         this.blockId = blockId;
         this.state = state;
         this.entity = entity;
+    }
+
+    public VoxelBlock(NamespacedId blockId, Block.State state) {
+        this(blockId, state, null);
     }
 
     /**
