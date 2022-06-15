@@ -62,7 +62,7 @@ public class VoxelBlock {
             strId = str;
         }
         NamespacedId id = NamespacedId.valueOf(strId);
-        return new VoxelBlock(id, stateMap);
+        return new VoxelBlock(id, new StateImpl(stateMap));
     }
 
     public static VoxelBlock valueOfNew(String s) {

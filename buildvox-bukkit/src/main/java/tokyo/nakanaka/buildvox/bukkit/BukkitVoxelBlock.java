@@ -8,6 +8,7 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
+import tokyo.nakanaka.buildvox.core.block.StateImpl;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 
@@ -23,7 +24,7 @@ public class BukkitVoxelBlock extends VoxelBlock {
     private Inventory inventory;
 
     private BukkitVoxelBlock(NamespacedId id, Map<String, String> stateMap) {
-        super(id, stateMap);
+        super(id, new StateImpl(stateMap));
     }
 
     public interface BlockEntityData {

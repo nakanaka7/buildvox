@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.block.BlockStateTransformer;
 import tokyo.nakanaka.buildvox.core.block.BlockTransformation;
+import tokyo.nakanaka.buildvox.core.block.StateImpl;
 import tokyo.nakanaka.buildvox.core.math.transformation.*;
 import tokyo.nakanaka.buildvox.core.math.vector.*;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
@@ -33,7 +34,7 @@ public class BukkitBlockStateTransformer implements BlockStateTransformer {
     @Override
     public Map<String, String> transform(NamespacedId blockId, Map<String, String> stateMap, BlockTransformation blockTrans){
         Matrix3x3i transMatrix = blockTrans.toMatrix3x3i();
-        String blockStr = new VoxelBlock(blockId, stateMap).toString();
+        String blockStr = new VoxelBlock(blockId, new StateImpl(stateMap)).toString();
         BlockData blockData;
         try {
             blockData = server.createBlockData(blockStr);

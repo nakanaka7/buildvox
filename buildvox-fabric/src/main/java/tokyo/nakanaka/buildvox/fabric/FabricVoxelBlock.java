@@ -20,7 +20,7 @@ public class FabricVoxelBlock extends VoxelBlock {
     private NbtCompound nbt;
 
     private FabricVoxelBlock(NamespacedId id, Map<String, String> stateMap, NbtCompound nbt) {
-        super(id, stateMap);
+        super(id, new StateImpl(stateMap));
         this.nbt = nbt;
     }
 
