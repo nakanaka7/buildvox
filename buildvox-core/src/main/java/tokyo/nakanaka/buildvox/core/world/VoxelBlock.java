@@ -3,11 +3,7 @@ package tokyo.nakanaka.buildvox.core.world;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.block.Block;
 import tokyo.nakanaka.buildvox.core.block.BlockTransformation;
-import tokyo.nakanaka.buildvox.core.block.StateImpl;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Represents block.
@@ -28,38 +24,22 @@ public class VoxelBlock {
     }
 
     /**
-     * Use BuildVoxSystem.parseBlock().
      * Gets a block instance parsed of the given String. The String must be the form "blockId[key1=value1,key2=value2...]".
      * blockId or block state part may be omitted. blockId must be namespaced id.
      * @throws IllegalArgumentException if the specified String is not the form stated above.
      */
-    @Deprecated
-    public static VoxelBlock valueOf(String str) {
-        String strId;
-        Map<String, String> stateMap = new HashMap<>();
-        if(str.contains("[")) {
-            if(!str.endsWith("]")){
-                throw new IllegalArgumentException();
-            }
-            String[] strIdState = str.substring(0, str.length() - 1).split("\\[");
-            strId = strIdState[0];
-            String strState = strIdState[1];
-            stateMap = StateImpl.valueOf(strState).getStateMap();
-        }else{
-            strId = str;
-        }
-        NamespacedId id = NamespacedId.valueOf(strId);
-        return new VoxelBlock(id, new StateImpl(stateMap));
-    }
-
-    public static VoxelBlock valueOfNew(String s) {
+    public static VoxelBlock valueOf(String s) {
         String idStr;
         String stateStr;
         String entityStr;
         if(s.contains("[") || s.contains("{")) {
             int a = s.indexOf("[");
             int b = s.indexOf("{");
-            idStr = s.substring(0, Math.min(a, b));
+            int c;
+            if(a == -1) c = b;
+            else if(b == -1) c = a;
+            else c = Math.min(a, b);
+            idStr = s.substring(0, c);
         } else {
             idStr = s;
         }
