@@ -54,8 +54,8 @@ public class BuildVoxSystem {
                 (runnable, tick) -> {});
     }
 
-    public static record Config(String outColor, String errColor, VoxelBlock backgroundBlock, int posArrayLength) {
-        public static final Config DEFAULT = new Config(ColorCode.GREEN, ColorCode.RED, parseBlock("minecraft:air"), 2);
+    public static record Config(String outColor, String errColor, String backgroundBlock, int posArrayLength) {
+        public static final Config DEFAULT = new Config(ColorCode.GREEN, ColorCode.RED, "minecraft:air", 2);
     }
 
     /** Get the config */
