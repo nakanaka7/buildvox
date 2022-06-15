@@ -22,6 +22,7 @@ public class StateImpl implements Block.State {
 
     public static StateImpl valueOf(String s) {
         Map<String, String> stateMap = new HashMap<>();
+        if(s.isEmpty()) return new StateImpl(stateMap);
         String[] stateArray = s.split(",");
         for(String state : stateArray){
             String[] kv = state.split("=", -1);
