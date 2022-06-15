@@ -17,19 +17,6 @@ public class VoxelBlock {
     private Block.State state;
     private Block.Entity entity;
 
-    /**
-     * Constructs a block.
-     * @param id the block id
-     * @param stateMap the block state map. This map is expressed as [key1=value1,key2=value2...] which follows block
-     * in game.
-     */
-    @Deprecated
-    public VoxelBlock(NamespacedId id, Map<String, String> stateMap) {
-        this.blockId = id;
-        this.state = new StateImpl(stateMap);
-        this.entity = null;
-    }
-
     public VoxelBlock(NamespacedId blockId, Block.State state, Block.Entity entity) {
         this.blockId = blockId;
         this.state = state;
