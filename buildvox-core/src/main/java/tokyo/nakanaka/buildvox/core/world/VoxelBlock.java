@@ -100,11 +100,6 @@ public class VoxelBlock {
         return blockId;
     }
 
-    @Deprecated
-    public StateImpl getStateImpl() {
-        return (StateImpl) state;
-    }
-
     /** Gets the state */
     public Block.State getState() {
         return state;
