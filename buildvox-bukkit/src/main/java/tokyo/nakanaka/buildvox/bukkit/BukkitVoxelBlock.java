@@ -17,14 +17,10 @@ import java.util.Set;
  * A class which extends {@link VoxelBlock} for Bukkit Platform
  */
 public class BukkitVoxelBlock {
-    private static Server server;
+    private static final Server server = BuildVoxPlugin.getInstance().getServer();
 
     public interface BlockEntityData {
         void merge(org.bukkit.block.BlockState blockState);
-    }
-
-    public static void setServer(Server server) {
-        BukkitVoxelBlock.server = server;
     }
 
     private static record CommandBlockData(String command, String name) implements BlockEntityData {

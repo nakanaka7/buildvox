@@ -57,7 +57,6 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
         Server server = this.getServer();
         BuildVoxSystem.environment = new BuildVoxSystem.Environment(new BukkitBlockValidator(server),
                 new BukkitBlockStateTransformer(server), new BukkitScheduler(this));
-        BukkitVoxelBlock.setServer(server);
         registerBlocks();
         registerWorlds();
         server.getPluginManager().registerEvents(this, this);
