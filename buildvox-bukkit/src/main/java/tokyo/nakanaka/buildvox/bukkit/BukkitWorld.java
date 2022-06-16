@@ -10,16 +10,14 @@ import tokyo.nakanaka.buildvox.core.world.World;
  */
 public class BukkitWorld implements World {
     private org.bukkit.World original;
-    private Server server;
 
     /**
      * Constructs an instance from a Server and the original world of org.bukkit.World
      * @param server a server
      * @param original the original world
      */
-    public BukkitWorld(Server server, org.bukkit.World original) {
+    public BukkitWorld(org.bukkit.World original) {
         this.original = original;
-        this.server = server;
     }
 
     /**
