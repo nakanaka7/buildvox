@@ -18,10 +18,7 @@ import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * A class which extends {@link VoxelBlock} for Bukkit Platform
- */
-public class BukkitVoxelBlock {
+public class VoxelBlockUtils {
     private static final Server server = BuildVoxPlugin.getInstance().getServer();
 
     public interface BlockEntityData {
@@ -89,7 +86,7 @@ public class BukkitVoxelBlock {
         org.bukkit.block.BlockState blockState = voxel.getState();
         EntityImpl entity = (EntityImpl) block.getEntity();
         if(entity != null) {
-            BukkitVoxelBlock.BlockEntityContent entityContent = (BukkitVoxelBlock.BlockEntityContent) entity.getObj();
+            VoxelBlockUtils.BlockEntityContent entityContent = (VoxelBlockUtils.BlockEntityContent) entity.getObj();
             for (var blockEntityData : entityContent.blockEntityDataSet()) {
                 blockEntityData.merge(blockState);
             }

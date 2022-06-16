@@ -1,6 +1,5 @@
 package tokyo.nakanaka.buildvox.bukkit;
 
-import org.bukkit.Server;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.world.World;
@@ -36,13 +35,13 @@ public class BukkitWorld implements World {
     @Override
     public VoxelBlock getBlock(int x, int y, int z) {
         org.bukkit.block.Block block = original.getBlockAt(x, y, z);
-        return BukkitVoxelBlock.getVoxelBlock(block);
+        return VoxelBlockUtils.getVoxelBlock(block);
     }
 
     @Override
     public void setBlock(int x, int y, int z, VoxelBlock block, boolean physics){
         org.bukkit.block.Block voxel = original.getBlockAt(x, y, z);
-        BukkitVoxelBlock.setVoxelBlock(voxel, block, physics);
+        VoxelBlockUtils.setVoxelBlock(voxel, block, physics);
     }
 
 }
