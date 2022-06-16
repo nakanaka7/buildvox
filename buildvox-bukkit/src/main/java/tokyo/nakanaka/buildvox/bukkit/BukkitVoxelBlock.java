@@ -7,24 +7,17 @@ import org.bukkit.block.Sign;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.block.EntityImpl;
-import tokyo.nakanaka.buildvox.core.block.StateImpl;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 /**
  * A class which extends {@link VoxelBlock} for Bukkit Platform
  */
-public class BukkitVoxelBlock extends VoxelBlock {
+public class BukkitVoxelBlock {
     private static Server server;
-
-    private BukkitVoxelBlock(NamespacedId id, Map<String, String> stateMap) {
-        super(id, new StateImpl(stateMap));
-    }
 
     public interface BlockEntityData {
         void merge(org.bukkit.block.BlockState blockState);
