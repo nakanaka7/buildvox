@@ -20,7 +20,6 @@ public class BukkitBlockValidator implements BlockValidator {
 
     @Override
     public boolean validate(VoxelBlock block) {
-        if(block instanceof BukkitVoxelBlock)return true;
         String blockStr = block.toString();
         try{
             server.createBlockData(blockStr);
