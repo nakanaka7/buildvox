@@ -1,11 +1,7 @@
 package tokyo.nakanaka.buildvox.bukkit;
 
 import org.bukkit.Server;
-import org.bukkit.block.Container;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.inventory.ItemStack;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
-import tokyo.nakanaka.buildvox.core.block.EntityImpl;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.world.World;
 
@@ -52,26 +48,8 @@ public class BukkitWorld implements World {
 
     @Override
     public void setBlock(int x, int y, int z, VoxelBlock block, boolean physics){
-        org.bukkit.block.Block targetBlock = original.getBlockAt(x, y, z);
-        String blockStr = block.toString();
-        BlockData blockData = server.createBlockData(blockStr);
-        targetBlock.setBlockData(blockData, physics);
-        org.bukkit.block.BlockState blockState = targetBlock.getState();
-        EntityImpl entity = (EntityImpl) block.getEntity();
-        if(entity != null) {
-            BukkitVoxelBlock.BlockEntityContent entityContent = (BukkitVoxelBlock.BlockEntityContent) entity.getObj();
-            for (var blockEntityData : entityContent.blockEntityDataSet()) {
-                blockEntityData.merge(blockState);
-            }
-            blockState.update();
-            var inventory = entityContent.inventory();
-            if (blockState instanceof Container container && inventory != null) {
-                ItemStack[] contents = inventory.getContents();
-                container.getInventory().setContents(contents);
-            }
-        }else {
-            blockState.update();
-        }
+        org.bukkit.block.Block voxel = original.getBlockAt(x, y, z);
+        BukkitVoxelBlock.setVoxelBlock(server, voxel, block, physics);
     }
 
     @Override

@@ -96,6 +96,28 @@ public class BukkitVoxelBlock extends VoxelBlock {
         return bukkitBlock;
     }
 
+    public static void setVoxelBlock(Server server, org.bukkit.block.Block voxel, VoxelBlock block, boolean physics) {
+        String blockStr = block.toString();
+        BlockData blockData = server.createBlockData(blockStr);
+        voxel.setBlockData(blockData, physics);
+        org.bukkit.block.BlockState blockState = voxel.getState();
+        EntityImpl entity = (EntityImpl) block.getEntity();
+        if(entity != null) {
+            BukkitVoxelBlock.BlockEntityContent entityContent = (BukkitVoxelBlock.BlockEntityContent) entity.getObj();
+            for (var blockEntityData : entityContent.blockEntityDataSet()) {
+                blockEntityData.merge(blockState);
+            }
+            blockState.update();
+            var inventory = entityContent.inventory();
+            if (blockState instanceof Container container && inventory != null) {
+                ItemStack[] contents = inventory.getContents();
+                container.getInventory().setContents(contents);
+            }
+        }else {
+            blockState.update();
+        }
+    }
+
     void setToWorld(Server server, org.bukkit.block.Block targetBlock, boolean physics) {
         String blockStr = toString();
         BlockData blockData = server.createBlockData(blockStr);
