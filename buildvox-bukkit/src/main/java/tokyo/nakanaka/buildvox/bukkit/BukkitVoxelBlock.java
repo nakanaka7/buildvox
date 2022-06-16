@@ -123,19 +123,4 @@ public class BukkitVoxelBlock extends VoxelBlock {
         }
     }
 
-    void setToWorld(Server server, org.bukkit.block.Block targetBlock, boolean physics) {
-        String blockStr = toString();
-        BlockData blockData = server.createBlockData(blockStr);
-        targetBlock.setBlockData(blockData, physics);
-        org.bukkit.block.BlockState blockState = targetBlock.getState();
-        for(var blockEntityData : blockEntityDataSet) {
-            blockEntityData.merge(blockState);
-        }
-        blockState.update();
-        if(blockState instanceof Container container && inventory != null) {
-            ItemStack[] contents = inventory.getContents();
-            container.getInventory().setContents(contents);
-        }
-    }
-
 }
