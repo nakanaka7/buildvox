@@ -14,10 +14,18 @@ import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.block.BlockImpl;
 import tokyo.nakanaka.buildvox.core.block.EntityImpl;
 import tokyo.nakanaka.buildvox.core.block.StateImpl;
+import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 
 public class BlockUtils {
     private BlockUtils() {
+    }
+
+    public static void registerBlocks() {
+        for(Identifier blockId0 : Registry.BLOCK.getIds()) {
+            NamespacedId id = new NamespacedId(blockId0.getNamespace(), blockId0.getPath());
+            BuildVoxSystem.getBlockRegistry().register(new BlockImpl(id, new FabricBlockStateTransformer()));
+        }
     }
 
     public static VoxelBlock getBlock(net.minecraft.block.BlockState blockState, BlockEntity blockEntity) {
@@ -58,5 +66,5 @@ public class BlockUtils {
         }
         return blockStateArg.getBlockState();
     }
-    
+
 }
