@@ -70,35 +70,26 @@ public class BukkitVoxelBlock extends VoxelBlock {
     }
 
     public static VoxelBlock getVoxelBlock(org.bukkit.block.Block voxel) {
-        var b = BukkitVoxelBlock.newInstance(voxel.getState());
+        org.bukkit.block.BlockState blockState = voxel.getState();
+        BlockData blockData = blockState.getBlockData();
+        String blockStr = blockData.getAsString();
+        VoxelBlock block = BuildVoxSystem.parseBlock(blockStr);
+        BukkitVoxelBlock b = new BukkitVoxelBlock(block.getBlockId(), ((StateImpl)block.getState()).getStateMap());
+        if(blockState instanceof CommandBlock commandBlock) {
+            b.blockEntityDataSet.add(new CommandBlockData(commandBlock.getCommand(), commandBlock.getName()));
+        }
+        if(blockState instanceof Sign sign) {
+            b.blockEntityDataSet.add(new SignData(sign.getLines(), sign.isGlowingText()));
+        }
+        if(blockState instanceof Container container) {
+            b.inventory = container.getSnapshotInventory();
+        }
         var state = (StateImpl)b.getState();
         var blockEntityDataSet = b.getBlockEntityDataSet();
         var inventory = b.getInventory();
         var entityContent = new BlockEntityContent(blockEntityDataSet, inventory);
         var entity = new EntityImpl(entityContent);
         return new VoxelBlock(b.getBlockId(), state, entity);
-    }
-
-    /**
-     * Get a new instance from a BlockState.
-     * @param blockState a block state.
-     * @return a new instance
-     */
-    public static BukkitVoxelBlock newInstance(org.bukkit.block.BlockState blockState) {
-        BlockData blockData = blockState.getBlockData();
-        String blockStr = blockData.getAsString();
-        VoxelBlock block = BuildVoxSystem.parseBlock(blockStr);
-        BukkitVoxelBlock bukkitBlock = new BukkitVoxelBlock(block.getBlockId(), ((StateImpl)block.getState()).getStateMap());
-        if(blockState instanceof CommandBlock commandBlock) {
-            bukkitBlock.blockEntityDataSet.add(new CommandBlockData(commandBlock.getCommand(), commandBlock.getName()));
-        }
-        if(blockState instanceof Sign sign) {
-            bukkitBlock.blockEntityDataSet.add(new SignData(sign.getLines(), sign.isGlowingText()));
-        }
-        if(blockState instanceof Container container) {
-            bukkitBlock.inventory = container.getSnapshotInventory();
-        }
-        return bukkitBlock;
     }
 
     public static void setVoxelBlock(org.bukkit.block.Block voxel, VoxelBlock block, boolean physics) {
