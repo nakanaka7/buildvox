@@ -47,7 +47,7 @@ public class BukkitWorld implements World {
         return new NamespacedId(original.getName());
     }
 
-    private static record BlockEntityContent(Set<BukkitVoxelBlock.BlockEntityData> blockEntityDataSet, Inventory inventory) {
+    public static record BlockEntityContent(Set<BukkitVoxelBlock.BlockEntityData> blockEntityDataSet, Inventory inventory) {
     }
 
     @Override
