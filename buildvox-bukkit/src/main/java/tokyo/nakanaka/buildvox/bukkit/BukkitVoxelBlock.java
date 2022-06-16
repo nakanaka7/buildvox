@@ -23,6 +23,7 @@ import java.util.Set;
 public class BukkitVoxelBlock extends VoxelBlock {
     private Set<BlockEntityData> blockEntityDataSet = new HashSet<>();
     private Inventory inventory;
+    private static Server server;
 
     private BukkitVoxelBlock(NamespacedId id, Map<String, String> stateMap) {
         super(id, new StateImpl(stateMap));
@@ -30,6 +31,10 @@ public class BukkitVoxelBlock extends VoxelBlock {
 
     public interface BlockEntityData {
         void merge(org.bukkit.block.BlockState blockState);
+    }
+
+    public static void setServer(Server server) {
+        BukkitVoxelBlock.server = server;
     }
 
     public Set<BlockEntityData> getBlockEntityDataSet() {
