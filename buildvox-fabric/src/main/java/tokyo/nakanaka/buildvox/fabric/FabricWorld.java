@@ -61,8 +61,7 @@ public class FabricWorld implements World {
 
     @Override
     public void setBlock(int x, int y, int z, VoxelBlock block, boolean physics) {
-        String blockStr = block.toString();
-        net.minecraft.block.BlockState blockState = Utils.parseBlockState(blockStr);
+        net.minecraft.block.BlockState blockState = BlockUtils.getBlockState(block);
         if(physics) {
             original.setBlockState(new BlockPos(x, y, z), blockState, net.minecraft.block.Block.NOTIFY_ALL);
         }else{
@@ -70,16 +69,10 @@ public class FabricWorld implements World {
             original.setBlockState(new BlockPos(x, y, z), blockState, net.minecraft.block.Block.NOTIFY_LISTENERS, 0);
             stopPhysicsWorlds.remove(original);
         }
-        EntityImpl entity = (EntityImpl) block.getEntity();
-        if(entity == null) {
-            return;
+        BlockEntity blockEntity = BlockUtils.createBlockEntity(x, y, z, block, blockState);
+        if(blockEntity != null) {
+            original.addBlockEntity(blockEntity);
         }
-        NbtCompound nbt = (NbtCompound) entity.getObj();
-        BlockEntity blockEntity = BlockEntity.createFromNbt(new BlockPos(x, y, z), blockState, nbt);
-        if(blockEntity == null) {
-            return;
-        }
-        original.addBlockEntity(blockEntity);
     }
 
     /**

@@ -1,5 +1,6 @@
 package tokyo.nakanaka.buildvox.fabric;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
@@ -27,6 +28,20 @@ public class BlockUtils {
             entity = new EntityImpl(nbt);
         }
         return new VoxelBlock(block.getId(), state, entity);
+    }
+
+    public static BlockState getBlockState(VoxelBlock block) {
+        String blockStr = block.toString();
+        return Utils.parseBlockState(blockStr);
+    }
+
+    public static BlockEntity createBlockEntity(int x, int y, int z, VoxelBlock block, BlockState blockState) {
+        EntityImpl entity = (EntityImpl) block.getEntity();
+        if(entity == null) {
+            return null;
+        }
+        NbtCompound nbt = (NbtCompound) entity.getObj();
+        return BlockEntity.createFromNbt(new BlockPos(x, y, z), blockState, nbt);
     }
 
 }
