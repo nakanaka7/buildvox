@@ -8,6 +8,7 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
+import tokyo.nakanaka.buildvox.core.block.EntityImpl;
 import tokyo.nakanaka.buildvox.core.block.StateImpl;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
@@ -58,6 +59,16 @@ public class BukkitVoxelBlock extends VoxelBlock {
                 sign.setGlowingText(glowing);
             }
         }
+    }
+
+    public static VoxelBlock getVoxelBlock(org.bukkit.block.Block voxel) {
+        var b = BukkitVoxelBlock.newInstance(voxel.getState());
+        var state = (StateImpl)b.getState();
+        var blockEntityDataSet = b.getBlockEntityDataSet();
+        var inventory = b.getInventory();
+        var entityContent = new BukkitWorld.BlockEntityContent(blockEntityDataSet, inventory);
+        var entity = new EntityImpl(entityContent);
+        return new VoxelBlock(b.getBlockId(), state, entity);
     }
 
     /**
