@@ -3,16 +3,13 @@ package tokyo.nakanaka.buildvox.bukkit;
 import org.bukkit.Server;
 import org.bukkit.block.Container;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.block.EntityImpl;
-import tokyo.nakanaka.buildvox.core.block.StateImpl;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.world.World;
 
 import java.util.Objects;
-import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -47,9 +44,6 @@ public class BukkitWorld implements World {
         return new NamespacedId(original.getName());
     }
 
-    public static record BlockEntityContent(Set<BukkitVoxelBlock.BlockEntityData> blockEntityDataSet, Inventory inventory) {
-    }
-
     @Override
     public VoxelBlock getBlock(int x, int y, int z) {
         org.bukkit.block.Block block = original.getBlockAt(x, y, z);
@@ -65,7 +59,7 @@ public class BukkitWorld implements World {
         org.bukkit.block.BlockState blockState = targetBlock.getState();
         EntityImpl entity = (EntityImpl) block.getEntity();
         if(entity != null) {
-            BlockEntityContent entityContent = (BlockEntityContent) entity.getObj();
+            BukkitVoxelBlock.BlockEntityContent entityContent = (BukkitVoxelBlock.BlockEntityContent) entity.getObj();
             for (var blockEntityData : entityContent.blockEntityDataSet()) {
                 blockEntityData.merge(blockState);
             }

@@ -61,12 +61,15 @@ public class BukkitVoxelBlock extends VoxelBlock {
         }
     }
 
+    public static record BlockEntityContent(Set<BlockEntityData> blockEntityDataSet, Inventory inventory) {
+    }
+
     public static VoxelBlock getVoxelBlock(org.bukkit.block.Block voxel) {
         var b = BukkitVoxelBlock.newInstance(voxel.getState());
         var state = (StateImpl)b.getState();
         var blockEntityDataSet = b.getBlockEntityDataSet();
         var inventory = b.getInventory();
-        var entityContent = new BukkitWorld.BlockEntityContent(blockEntityDataSet, inventory);
+        var entityContent = new BlockEntityContent(blockEntityDataSet, inventory);
         var entity = new EntityImpl(entityContent);
         return new VoxelBlock(b.getBlockId(), state, entity);
     }
