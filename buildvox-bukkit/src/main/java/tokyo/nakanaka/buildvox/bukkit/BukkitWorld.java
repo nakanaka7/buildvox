@@ -44,7 +44,7 @@ public class BukkitWorld implements World {
     @Override
     public void setBlock(int x, int y, int z, VoxelBlock block, boolean physics){
         org.bukkit.block.Block voxel = original.getBlockAt(x, y, z);
-        BukkitVoxelBlock.setVoxelBlock(server, voxel, block, physics);
+        BukkitVoxelBlock.setVoxelBlock(voxel, block, physics);
     }
 
 }

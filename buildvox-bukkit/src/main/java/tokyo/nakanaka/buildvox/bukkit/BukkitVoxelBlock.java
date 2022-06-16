@@ -101,7 +101,7 @@ public class BukkitVoxelBlock extends VoxelBlock {
         return bukkitBlock;
     }
 
-    public static void setVoxelBlock(Server server, org.bukkit.block.Block voxel, VoxelBlock block, boolean physics) {
+    public static void setVoxelBlock(org.bukkit.block.Block voxel, VoxelBlock block, boolean physics) {
         String blockStr = block.toString();
         BlockData blockData = server.createBlockData(blockStr);
         voxel.setBlockData(blockData, physics);
