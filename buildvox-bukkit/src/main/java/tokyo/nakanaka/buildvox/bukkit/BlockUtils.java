@@ -18,7 +18,7 @@ import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 import java.util.HashSet;
 import java.util.Set;
 
-public class VoxelBlockUtils {
+public class BlockUtils {
     private static final Server server = BuildVoxPlugin.getInstance().getServer();
 
     public interface BlockEntityData {
@@ -86,7 +86,7 @@ public class VoxelBlockUtils {
         org.bukkit.block.BlockState blockState = voxel.getState();
         EntityImpl entity = (EntityImpl) block.getEntity();
         if(entity != null) {
-            VoxelBlockUtils.BlockEntityContent entityContent = (VoxelBlockUtils.BlockEntityContent) entity.getObj();
+            BlockUtils.BlockEntityContent entityContent = (BlockUtils.BlockEntityContent) entity.getObj();
             for (var blockEntityData : entityContent.blockEntityDataSet()) {
                 blockEntityData.merge(blockState);
             }

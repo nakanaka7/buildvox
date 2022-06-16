@@ -35,13 +35,13 @@ public class BukkitWorld implements World {
     @Override
     public VoxelBlock getBlock(int x, int y, int z) {
         org.bukkit.block.Block block = original.getBlockAt(x, y, z);
-        return VoxelBlockUtils.getVoxelBlock(block);
+        return BlockUtils.getVoxelBlock(block);
     }
 
     @Override
     public void setBlock(int x, int y, int z, VoxelBlock block, boolean physics){
         org.bukkit.block.Block voxel = original.getBlockAt(x, y, z);
-        VoxelBlockUtils.setVoxelBlock(voxel, block, physics);
+        BlockUtils.setVoxelBlock(voxel, block, physics);
     }
 
 }
