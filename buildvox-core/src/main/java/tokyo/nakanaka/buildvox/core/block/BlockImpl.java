@@ -1,7 +1,6 @@
 package tokyo.nakanaka.buildvox.core.block;
 
 import tokyo.nakanaka.buildvox.core.NamespacedId;
-import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 
 import java.util.Map;
 
@@ -14,11 +13,6 @@ public class BlockImpl implements Block<StateImpl, EntityImpl> {
     public BlockImpl(NamespacedId id, BlockStateTransformer stateTransformer) {
         this.id = id;
         this.stateTransformer = stateTransformer;
-    }
-
-    @Deprecated
-    public BlockImpl(NamespacedId id) {
-        this(id, BuildVoxSystem.environment.blockStateTransformer());
     }
 
     @Override
