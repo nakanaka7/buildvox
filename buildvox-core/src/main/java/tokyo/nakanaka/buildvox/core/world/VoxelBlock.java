@@ -113,4 +113,16 @@ public class VoxelBlock {
         }
     }
 
+    public String toStringNew() {
+        String s = blockId.toString();
+        String stateStr = state.toString();
+        if(!stateStr.isEmpty()) {
+            s = s + "[" + stateStr + "]";
+        }
+        if(entity != null) {
+            s = s + "{" + entity + "}";
+        }
+        return s;
+    }
+
 }
