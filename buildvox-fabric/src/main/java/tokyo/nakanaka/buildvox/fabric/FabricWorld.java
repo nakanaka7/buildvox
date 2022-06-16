@@ -56,17 +56,7 @@ public class FabricWorld implements World {
     public VoxelBlock getBlock(int x, int y, int z) {
         net.minecraft.block.BlockState blockState = original.getBlockState(new BlockPos(x, y, z));
         BlockEntity blockEntity = original.getBlockEntity(new BlockPos(x, y, z));
-        net.minecraft.block.Block block0 = blockState.getBlock();
-        Identifier id0 = Registry.BLOCK.getId(block0);
-        NamespacedId id = new NamespacedId(id0.getNamespace(), id0.getPath());
-        BlockImpl block = new BlockImpl(id, new FabricBlockStateTransformer());
-        StateImpl state = FabricVoxelBlock.convertToStateImpl(blockState);
-        EntityImpl entity = null;
-        if(blockEntity != null) {
-            NbtCompound nbt = blockEntity.createNbtWithId();
-            entity = new EntityImpl(nbt);
-        }
-        return new VoxelBlock(block.getId(), state, entity);
+        return BlockUtils.getBlock(blockState, blockEntity);
     }
 
     @Override
