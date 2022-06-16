@@ -10,7 +10,6 @@ import org.bukkit.inventory.ItemStack;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.block.EntityImpl;
 import tokyo.nakanaka.buildvox.core.block.StateImpl;
-import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 
 import java.util.HashSet;
@@ -21,8 +20,6 @@ import java.util.Set;
  * A class which extends {@link VoxelBlock} for Bukkit Platform
  */
 public class BukkitVoxelBlock extends VoxelBlock {
-    private Set<BlockEntityData> blockEntityDataSet = new HashSet<>();
-    private Inventory inventory;
     private static Server server;
 
     private BukkitVoxelBlock(NamespacedId id, Map<String, String> stateMap) {
@@ -35,14 +32,6 @@ public class BukkitVoxelBlock extends VoxelBlock {
 
     public static void setServer(Server server) {
         BukkitVoxelBlock.server = server;
-    }
-
-    public Set<BlockEntityData> getBlockEntityDataSet() {
-        return blockEntityDataSet;
-    }
-
-    public Inventory getInventory() {
-        return inventory;
     }
 
     private static record CommandBlockData(String command, String name) implements BlockEntityData {
