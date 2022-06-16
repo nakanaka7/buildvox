@@ -9,9 +9,9 @@ import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
  * Represents block.
  */
 public class VoxelBlock {
-    private NamespacedId blockId;
-    private Block.State state;
-    private Block.Entity entity;
+    private final NamespacedId blockId;
+    private final Block.State state;
+    private final Block.Entity entity;
 
     public VoxelBlock(NamespacedId blockId, Block.State state, Block.Entity entity) {
         this.blockId = blockId;
