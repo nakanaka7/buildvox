@@ -1,7 +1,11 @@
 package tokyo.nakanaka.buildvox.fabric;
 
+import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.command.argument.BlockStateArgument;
+import net.minecraft.command.argument.BlockStateArgumentType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -32,7 +36,7 @@ public class BlockUtils {
 
     public static BlockState getBlockState(VoxelBlock block) {
         String blockStr = block.toString();
-        return Utils.parseBlockState(blockStr);
+        return parseBlockState(blockStr);
     }
 
     public static BlockEntity createBlockEntity(int x, int y, int z, VoxelBlock block, BlockState blockState) {
@@ -44,4 +48,15 @@ public class BlockUtils {
         return BlockEntity.createFromNbt(new BlockPos(x, y, z), blockState, nbt);
     }
 
+    public static BlockState parseBlockState(String s) {
+        StringReader strReader = new StringReader(s);
+        BlockStateArgument blockStateArg;
+        try {
+            blockStateArg = new BlockStateArgumentType().parse(strReader);
+        } catch (CommandSyntaxException e) {
+            throw new IllegalArgumentException("Cannot parse:" + s);
+        }
+        return blockStateArg.getBlockState();
+    }
+    
 }

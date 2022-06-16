@@ -23,7 +23,7 @@ public class FabricBlockStateTransformer implements BlockStateTransformer {
     public Map<String, String> transform(NamespacedId blockId, Map<String, String> stateMap, BlockTransformation blockTrans) {
         Matrix3x3i transMatrix = blockTrans.toMatrix3x3i();
         String blockStr = new VoxelBlock(blockId, new StateImpl(stateMap)).toString();
-        net.minecraft.block.BlockState blockState = Utils.parseBlockState(blockStr);
+        net.minecraft.block.BlockState blockState = BlockUtils.parseBlockState(blockStr);
         Vector3i transI = transMatrix.apply(Vector3i.PLUS_I);
         Vector3i transJ = transMatrix.apply(Vector3i.PLUS_J);
         Vector3i transK = transMatrix.apply(Vector3i.PLUS_K);

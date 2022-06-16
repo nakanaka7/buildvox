@@ -12,7 +12,7 @@ public class FabricBlockValidator implements BlockValidator {
         if(block instanceof FabricVoxelBlock)return true;
         String blockStr = block.toString();
         try{
-            Utils.parseBlockState(blockStr);
+            BlockUtils.parseBlockState(blockStr);
         }catch (IllegalArgumentException e){
             return false;
         }
