@@ -5,15 +5,11 @@ import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.world.World;
 
-import java.util.Objects;
-import java.util.UUID;
-
 /**
  * The class which implements {@link World} for Bukkit Platform
  */
 public class BukkitWorld implements World {
     private org.bukkit.World original;
-    private UUID uuid;
     private Server server;
 
     /**
@@ -23,7 +19,6 @@ public class BukkitWorld implements World {
      */
     public BukkitWorld(Server server, org.bukkit.World original) {
         this.original = original;
-        this.uuid = original.getUID();
         this.server = server;
     }
 
@@ -50,19 +45,6 @@ public class BukkitWorld implements World {
     public void setBlock(int x, int y, int z, VoxelBlock block, boolean physics){
         org.bukkit.block.Block voxel = original.getBlockAt(x, y, z);
         BukkitVoxelBlock.setVoxelBlock(server, voxel, block, physics);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        BukkitWorld world = (BukkitWorld) o;
-        return uuid.equals(world.uuid);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(uuid);
     }
 
 }
