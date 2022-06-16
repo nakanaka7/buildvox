@@ -71,25 +71,21 @@ public class BukkitVoxelBlock extends VoxelBlock {
 
     public static VoxelBlock getVoxelBlock(org.bukkit.block.Block voxel) {
         org.bukkit.block.BlockState blockState = voxel.getState();
-        BlockData blockData = blockState.getBlockData();
-        String blockStr = blockData.getAsString();
-        VoxelBlock block = BuildVoxSystem.parseBlock(blockStr);
-        BukkitVoxelBlock b = new BukkitVoxelBlock(block.getBlockId(), ((StateImpl)block.getState()).getStateMap());
+        VoxelBlock block = VoxelBlock.valueOf(blockState.getBlockData().getAsString());
+        Set<BlockEntityData> blockEntityDataSet = new HashSet<>();
+        Inventory inventory = null;
         if(blockState instanceof CommandBlock commandBlock) {
-            b.blockEntityDataSet.add(new CommandBlockData(commandBlock.getCommand(), commandBlock.getName()));
+            blockEntityDataSet.add(new CommandBlockData(commandBlock.getCommand(), commandBlock.getName()));
         }
         if(blockState instanceof Sign sign) {
-            b.blockEntityDataSet.add(new SignData(sign.getLines(), sign.isGlowingText()));
+            blockEntityDataSet.add(new SignData(sign.getLines(), sign.isGlowingText()));
         }
         if(blockState instanceof Container container) {
-            b.inventory = container.getSnapshotInventory();
+            inventory = container.getSnapshotInventory();
         }
-        var state = (StateImpl)b.getState();
-        var blockEntityDataSet = b.getBlockEntityDataSet();
-        var inventory = b.getInventory();
         var entityContent = new BlockEntityContent(blockEntityDataSet, inventory);
         var entity = new EntityImpl(entityContent);
-        return new VoxelBlock(b.getBlockId(), state, entity);
+        return new VoxelBlock(block.getBlockId(), block.getState(), entity);
     }
 
     public static void setVoxelBlock(org.bukkit.block.Block voxel, VoxelBlock block, boolean physics) {
