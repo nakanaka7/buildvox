@@ -38,9 +38,14 @@ import java.util.*;
  */
 public class BuildVoxPlugin extends JavaPlugin implements Listener {
     private static Logger LOGGER = LoggerFactory.getLogger(BuildVoxPlugin.class);
+    private static BuildVoxPlugin instance;
     private Map<org.bukkit.World, NamespacedId> worldIdMap = new HashMap<>();
     private static BukkitConsole console = new BukkitConsole(Bukkit.getConsoleSender());
     public static String POS_MARKER_LOCALIZED_NAME = "BuildVoxBukkit";
+
+    public static BuildVoxPlugin getInstance() {
+        return instance;
+    }
 
     @Override
     public void onLoad(){
@@ -48,6 +53,7 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable(){
+        instance = this;
         Server server = this.getServer();
         BuildVoxSystem.environment = new BuildVoxSystem.Environment(new BukkitBlockValidator(server),
                 new BukkitBlockStateTransformer(server), new BukkitScheduler(this));
