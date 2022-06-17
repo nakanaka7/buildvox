@@ -30,21 +30,11 @@ public class FabricVoxelBlock extends VoxelBlock {
      * @return an instance from a BlockState.
      */
     public static FabricVoxelBlock newInstance(net.minecraft.block.BlockState blockState) {
-        return FabricVoxelBlock.newInstance(blockState, null);
-    }
-
-    /**
-     * Get a new instance from a BlockState and nbt of a block entity.
-     * @param blockState a block state.
-     * @param nbt the nbt of a block entity.
-     * @return an instance from a BlockState.
-     */
-    public static FabricVoxelBlock newInstance(net.minecraft.block.BlockState blockState, NbtCompound nbt) {
         net.minecraft.block.Block block0 = blockState.getBlock();
         Identifier id0 = Registry.BLOCK.getId(block0);
         NamespacedId id = new NamespacedId(id0.getNamespace(), id0.getPath());
         var stateMap = convertToStateImpl(blockState).getStateMap();
-        return new FabricVoxelBlock(id, stateMap, nbt);
+        return new FabricVoxelBlock(id, stateMap, null);
     }
 
     public static StateImpl convertToStateImpl(BlockState blockState) {
