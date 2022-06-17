@@ -17,11 +17,9 @@ import java.util.Map;
  * The special class which extends {@link VoxelBlock} class for Fabric platform. This class can store nbt of a block entity.
  */
 public class FabricVoxelBlock extends VoxelBlock {
-    private NbtCompound nbt;
 
-    private FabricVoxelBlock(NamespacedId id, Map<String, String> stateMap, NbtCompound nbt) {
+    private FabricVoxelBlock(NamespacedId id, Map<String, String> stateMap) {
         super(id, new StateImpl(stateMap));
-        this.nbt = nbt;
     }
 
     /**
@@ -34,7 +32,7 @@ public class FabricVoxelBlock extends VoxelBlock {
         Identifier id0 = Registry.BLOCK.getId(block0);
         NamespacedId id = new NamespacedId(id0.getNamespace(), id0.getPath());
         var stateMap = convertToStateImpl(blockState).getStateMap();
-        return new FabricVoxelBlock(id, stateMap, null);
+        return new FabricVoxelBlock(id, stateMap);
     }
 
     public static StateImpl convertToStateImpl(BlockState blockState) {
