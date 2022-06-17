@@ -4,6 +4,8 @@ import net.minecraft.block.StairsBlock;
 import net.minecraft.block.enums.StairShape;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.block.BlockStateTransformer;
 import tokyo.nakanaka.buildvox.core.block.BlockTransformation;
@@ -19,6 +21,7 @@ import java.util.Map;
  * The implementation of {@link BlockStateTransformer} for Fabric platform
  */
 public class FabricBlockStateTransformer implements BlockStateTransformer {
+
     @Override
     public Map<String, String> transform(NamespacedId blockId, Map<String, String> stateMap, BlockTransformation blockTrans) {
         Matrix3x3i transMatrix = blockTrans.toMatrix3x3i();
@@ -59,8 +62,16 @@ public class FabricBlockStateTransformer implements BlockStateTransformer {
         }else {
             transState = blockState;
         }
-        VoxelBlock transBlock = FabricVoxelBlock.getVoxelBlock(transState);
+        VoxelBlock transBlock = getVoxelBlock(transState);
         return ((StateImpl)transBlock.getState()).getStateMap();
+    }
+
+    public static VoxelBlock getVoxelBlock(net.minecraft.block.BlockState blockState) {
+        net.minecraft.block.Block block0 = blockState.getBlock();
+        Identifier id0 = Registry.BLOCK.getId(block0);
+        NamespacedId id = new NamespacedId(id0.getNamespace(), id0.getPath());
+        var stateMap = FabricVoxelBlock.convertToStateImpl(blockState).getStateMap();
+        return new VoxelBlock(id, new StateImpl(stateMap));
     }
 
     private Map<String, String> transformStairsShape(Map<String, String> stateMap, Matrix3x3i transMatrix) {

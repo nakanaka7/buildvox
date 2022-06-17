@@ -22,19 +22,6 @@ public class FabricVoxelBlock extends VoxelBlock {
         super(id, new StateImpl(stateMap));
     }
 
-    /**
-     * Get a new instance from a BlockState.
-     * @param blockState a block state.
-     * @return an instance from a BlockState.
-     */
-    public static VoxelBlock getVoxelBlock(net.minecraft.block.BlockState blockState) {
-        net.minecraft.block.Block block0 = blockState.getBlock();
-        Identifier id0 = Registry.BLOCK.getId(block0);
-        NamespacedId id = new NamespacedId(id0.getNamespace(), id0.getPath());
-        var stateMap = convertToStateImpl(blockState).getStateMap();
-        return new VoxelBlock(id, new StateImpl(stateMap));
-    }
-
     public static StateImpl convertToStateImpl(BlockState blockState) {
         Collection<Property<?>> properties0 = blockState.getProperties();
         Map<String, String> stateMap = new HashMap<>();
