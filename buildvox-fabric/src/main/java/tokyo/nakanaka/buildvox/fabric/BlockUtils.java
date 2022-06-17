@@ -65,14 +65,10 @@ public class BlockUtils {
     }
 
     public static StateEntity getBlockStateEntity(int x, int y, int z, VoxelBlock block) {
-        var state = getBlockState(block);
+        String blockStr = block.withoutEntity().toString();
+        var state = parseBlockState(blockStr);
         var entity = createBlockEntity(x, y, z, block, state);
         return new StateEntity(state, entity);
-    }
-
-    private static BlockState getBlockState(VoxelBlock block) {
-        String blockStr = block.withoutEntity().toString();
-        return parseBlockState(blockStr);
     }
 
     private static BlockEntity createBlockEntity(int x, int y, int z, VoxelBlock block, BlockState blockState) {
