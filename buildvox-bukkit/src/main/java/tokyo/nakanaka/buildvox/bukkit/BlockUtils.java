@@ -80,7 +80,7 @@ public class BlockUtils {
     }
 
     public static void setVoxelBlock(org.bukkit.block.Block voxel, VoxelBlock block, boolean physics) {
-        String blockStr = block.toString();
+        String blockStr = block.withoutEntity().toString();
         BlockData blockData = server.createBlockData(blockStr);
         voxel.setBlockData(blockData, physics);
         org.bukkit.block.BlockState blockState = voxel.getState();

@@ -20,7 +20,7 @@ public class BukkitBlockValidator implements BlockValidator {
 
     @Override
     public boolean validate(VoxelBlock block) {
-        String blockStr = block.toString();
+        String blockStr = block.withoutEntity().toString();
         try{
             server.createBlockData(blockStr);
         }catch (IllegalArgumentException e){

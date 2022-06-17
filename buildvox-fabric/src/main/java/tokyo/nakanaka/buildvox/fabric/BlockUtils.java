@@ -52,7 +52,7 @@ public class BlockUtils {
     }
 
     private static BlockState getBlockState(VoxelBlock block) {
-        String blockStr = block.toString();
+        String blockStr = block.withoutEntity().toString();
         return parseBlockState(blockStr);
     }
 

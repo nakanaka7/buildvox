@@ -10,7 +10,7 @@ public class FabricBlockValidator implements BlockValidator {
     @Override
     public boolean validate(VoxelBlock block) {
         if(block instanceof FabricVoxelBlock)return true;
-        String blockStr = block.toString();
+        String blockStr = block.withoutEntity().toString();
         try{
             BlockUtils.parseBlockState(blockStr);
         }catch (IllegalArgumentException e){
