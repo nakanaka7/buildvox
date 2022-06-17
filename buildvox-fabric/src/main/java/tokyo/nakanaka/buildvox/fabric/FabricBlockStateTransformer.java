@@ -59,7 +59,7 @@ public class FabricBlockStateTransformer implements BlockStateTransformer {
         }else {
             transState = blockState;
         }
-        FabricVoxelBlock transBlock = FabricVoxelBlock.newInstance(transState);
+        VoxelBlock transBlock = FabricVoxelBlock.getVoxelBlock(transState);
         return ((StateImpl)transBlock.getState()).getStateMap();
     }
 
