@@ -70,7 +70,7 @@ public class FabricBlockStateTransformer implements BlockStateTransformer {
         net.minecraft.block.Block block0 = blockState.getBlock();
         Identifier id0 = Registry.BLOCK.getId(block0);
         NamespacedId id = new NamespacedId(id0.getNamespace(), id0.getPath());
-        var stateMap = FabricVoxelBlock.convertToStateImpl(blockState).getStateMap();
+        var stateMap = BlockUtils.convertToStateImpl(blockState).getStateMap();
         return new VoxelBlock(id, new StateImpl(stateMap));
     }
 

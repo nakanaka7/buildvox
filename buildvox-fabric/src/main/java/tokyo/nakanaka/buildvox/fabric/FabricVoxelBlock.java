@@ -22,14 +22,4 @@ public class FabricVoxelBlock extends VoxelBlock {
         super(id, new StateImpl(stateMap));
     }
 
-    public static StateImpl convertToStateImpl(BlockState blockState) {
-        Collection<Property<?>> properties0 = blockState.getProperties();
-        Map<String, String> stateMap = new HashMap<>();
-        for(var key0 : properties0){
-            Object value0 = blockState.get(key0);
-            stateMap.put(key0.getName().toLowerCase(), value0.toString().toLowerCase());
-        }
-        return new StateImpl(stateMap);
-    }
-
 }

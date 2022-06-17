@@ -7,6 +7,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.command.argument.BlockStateArgument;
 import net.minecraft.command.argument.BlockStateArgumentType;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.state.property.Property;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
@@ -16,6 +17,10 @@ import tokyo.nakanaka.buildvox.core.block.EntityImpl;
 import tokyo.nakanaka.buildvox.core.block.StateImpl;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BlockUtils {
     private BlockUtils() {
@@ -33,13 +38,23 @@ public class BlockUtils {
         Identifier id0 = Registry.BLOCK.getId(block0);
         NamespacedId id = new NamespacedId(id0.getNamespace(), id0.getPath());
         BlockImpl block = new BlockImpl(id, new FabricBlockStateTransformer());
-        StateImpl state = FabricVoxelBlock.convertToStateImpl(blockState);
+        StateImpl state = convertToStateImpl(blockState);
         EntityImpl entity = null;
         if(blockEntity != null) {
             NbtCompound nbt = blockEntity.createNbtWithId();
             entity = new EntityImpl(nbt);
         }
         return new VoxelBlock(block.getId(), state, entity);
+    }
+
+    public static StateImpl convertToStateImpl(BlockState blockState) {
+        Collection<Property<?>> properties0 = blockState.getProperties();
+        Map<String, String> stateMap = new HashMap<>();
+        for(var key0 : properties0){
+            Object value0 = blockState.get(key0);
+            stateMap.put(key0.getName().toLowerCase(), value0.toString().toLowerCase());
+        }
+        return new StateImpl(stateMap);
     }
 
     public record StateEntity(BlockState state, BlockEntity entity) {
