@@ -57,12 +57,4 @@ public class FabricVoxelBlock extends VoxelBlock {
         return new StateImpl(stateMap);
     }
 
-    /**
-     * Gets nbt of the block entity. If this block is not a block entity, return null.
-     * @return nbt of the block entity.
-     */
-    public NbtCompound getNbt() {
-        return nbt;
-    }
-
 }
