@@ -34,7 +34,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
-import tokyo.nakanaka.buildvox.core.block.BlockImpl;
 import tokyo.nakanaka.buildvox.core.player.PlayerEntity;
 import tokyo.nakanaka.buildvox.core.commandSender.CommandSender;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
@@ -71,7 +70,7 @@ public class BuildVoxMod implements ModInitializer {
 
 	private void onServerStarting(MinecraftServer server) {
 		FabricScheduler.initialize();
-		BuildVoxSystem.environment = new BuildVoxSystem.Environment(new FabricBlockValidator()
+		BuildVoxSystem.environment = new BuildVoxSystem.Environment(new BlockUtils.FabricBlockValidator()
 				, FabricScheduler.getInstance());
 		BlockUtils.registerBlocks();
 	}
