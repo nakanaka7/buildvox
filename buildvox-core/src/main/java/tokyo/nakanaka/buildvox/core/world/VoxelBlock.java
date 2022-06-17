@@ -90,6 +90,11 @@ public class VoxelBlock {
         return entity;
     }
 
+    /** Gets a new instance without entity */
+    public VoxelBlock withoutEntity() {
+        return new VoxelBlock(blockId, state);
+    }
+
     @SuppressWarnings({"unchecked", "rawtypes"})
     public VoxelBlock transform(BlockTransformation trans) {
         Block block = BuildVoxSystem.getBlockRegistry().get(blockId);
