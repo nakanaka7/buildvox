@@ -9,7 +9,6 @@ import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 public class FabricBlockValidator implements BlockValidator {
     @Override
     public boolean validate(VoxelBlock block) {
-        if(block instanceof FabricVoxelBlock)return true;
         String blockStr = block.withoutEntity().toString();
         try{
             BlockUtils.parseBlockState(blockStr);
