@@ -1,15 +1,10 @@
 package tokyo.nakanaka.buildvox.fabric;
 
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
-import tokyo.nakanaka.buildvox.core.block.BlockImpl;
-import tokyo.nakanaka.buildvox.core.block.EntityImpl;
-import tokyo.nakanaka.buildvox.core.block.StateImpl;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.world.World;
 
@@ -56,22 +51,23 @@ public class FabricWorld implements World {
     public VoxelBlock getBlock(int x, int y, int z) {
         net.minecraft.block.BlockState blockState = original.getBlockState(new BlockPos(x, y, z));
         BlockEntity blockEntity = original.getBlockEntity(new BlockPos(x, y, z));
-        return BlockUtils.getBlock(blockState, blockEntity);
+        return BlockUtils.getVoxelBlock(blockState, blockEntity);
     }
 
     @Override
     public void setBlock(int x, int y, int z, VoxelBlock block, boolean physics) {
-        net.minecraft.block.BlockState blockState = BlockUtils.getBlockState(block);
+        var stateEntity = BlockUtils.getBlockStateEntity(x, y, z, block);
+        var state = stateEntity.state();
         if(physics) {
-            original.setBlockState(new BlockPos(x, y, z), blockState, net.minecraft.block.Block.NOTIFY_ALL);
+            original.setBlockState(new BlockPos(x, y, z), state, net.minecraft.block.Block.NOTIFY_ALL);
         }else{
             stopPhysicsWorlds.add(original);
-            original.setBlockState(new BlockPos(x, y, z), blockState, net.minecraft.block.Block.NOTIFY_LISTENERS, 0);
+            original.setBlockState(new BlockPos(x, y, z), state, net.minecraft.block.Block.NOTIFY_LISTENERS, 0);
             stopPhysicsWorlds.remove(original);
         }
-        BlockEntity blockEntity = BlockUtils.createBlockEntity(x, y, z, block, blockState);
-        if(blockEntity != null) {
-            original.addBlockEntity(blockEntity);
+        BlockEntity entity = stateEntity.entity();
+        if(entity != null) {
+            original.addBlockEntity(entity);
         }
     }
 

@@ -28,7 +28,7 @@ public class BlockUtils {
         }
     }
 
-    public static VoxelBlock getBlock(net.minecraft.block.BlockState blockState, BlockEntity blockEntity) {
+    public static VoxelBlock getVoxelBlock(net.minecraft.block.BlockState blockState, BlockEntity blockEntity) {
         net.minecraft.block.Block block0 = blockState.getBlock();
         Identifier id0 = Registry.BLOCK.getId(block0);
         NamespacedId id = new NamespacedId(id0.getNamespace(), id0.getPath());
@@ -42,12 +42,21 @@ public class BlockUtils {
         return new VoxelBlock(block.getId(), state, entity);
     }
 
-    public static BlockState getBlockState(VoxelBlock block) {
+    public record StateEntity(BlockState state, BlockEntity entity) {
+    }
+
+    public static StateEntity getBlockStateEntity(int x, int y, int z, VoxelBlock block) {
+        var state = getBlockState(block);
+        var entity = createBlockEntity(x, y, z, block, state);
+        return new StateEntity(state, entity);
+    }
+
+    private static BlockState getBlockState(VoxelBlock block) {
         String blockStr = block.toString();
         return parseBlockState(blockStr);
     }
 
-    public static BlockEntity createBlockEntity(int x, int y, int z, VoxelBlock block, BlockState blockState) {
+    private static BlockEntity createBlockEntity(int x, int y, int z, VoxelBlock block, BlockState blockState) {
         EntityImpl entity = (EntityImpl) block.getEntity();
         if(entity == null) {
             return null;
