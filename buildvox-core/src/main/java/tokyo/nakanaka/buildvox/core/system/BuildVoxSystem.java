@@ -130,9 +130,33 @@ public class BuildVoxSystem {
     }
 
     /**
+     * @throws IllegalArgumentException if the world of the world id is not registered.
+     */
+    public static void onBvCommand(String[] args, NamespacedId worldId, Vector3i pos, Messenger messenger) {
+        var world = worldRegistry.get(worldId);
+        if(world == null) throw new IllegalArgumentException();
+        var sender = new CommandSender() {
+            public void sendOutMessage(String msg) {
+                messenger.sendOutMessage(msg);
+            }
+            public void sendErrMessage(String msg) {
+                messenger.sendErrMessage(msg);
+            }
+            public World getWorld() {
+                return world;
+            }
+            public Vector3i getBlockPos() {
+                return pos;
+            }
+        };
+        onBvCommand(sender, args);
+    }
+
+    /**
      * Run "/bv" command.
      * @param args the arguments of the command.
      */
+    @Deprecated
     public static void onBvCommand(CommandSender sender, String[] args) {
         Writer outWriter = BuildVoxWriter.newOutInstance(sender);
         Writer errWriter = BuildVoxWriter.newErrInstance(sender);
