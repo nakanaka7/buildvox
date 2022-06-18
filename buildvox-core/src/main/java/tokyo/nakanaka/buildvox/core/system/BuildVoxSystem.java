@@ -36,7 +36,7 @@ public class BuildVoxSystem {
     /** The config of this system */
     public static Config config = Config.DEFAULT;
     /** World registry */
-    public static final Registry<World, NamespacedId> worldRegistry = new Registry<>();
+    private static final Registry<World, NamespacedId> worldRegistry = new Registry<>();
     private static final Registry<Block<?,?>, NamespacedId> blockRegistry = new Registry<>();
     private static final Registry<RealPlayer, UUID> realPlayerRegistry = new Registry<>();
     private static final Registry<DummyPlayer, String> dummyPlayerRegistry = new Registry<>();
