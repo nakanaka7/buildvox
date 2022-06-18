@@ -67,13 +67,13 @@ public class BuildVoxSystem {
         return VoxelBlock.valueOf(s);
     }
 
-    /** Set the scheduler */
+    /** Sets the scheduler */
     public static void setScheduler(Scheduler scheduler) {
         var e = new Environment(environment.blockValidator, scheduler);
         environment = e;
     }
 
-    /** Get the scheduler */
+    /** Gets the scheduler */
     public static Scheduler getScheduler() {
         return environment.scheduler();
     }
@@ -87,7 +87,20 @@ public class BuildVoxSystem {
         return environment.blockValidator();
     }
 
-    /** Get the world registry */
+    public String getOutColor() {
+        return config.outColor;
+    }
+
+    public String getErrColor() {
+        return config.errColor;
+    }
+
+    /** Gets the default background block id */
+    public NamespacedId getDefaultBackgroundBlockId() {
+        return new NamespacedId("air");
+    }
+
+    /** Gets the world registry */
     public static Registry<World, NamespacedId> getWorldRegistry() {
         return worldRegistry;
     }
@@ -97,12 +110,12 @@ public class BuildVoxSystem {
         return blockRegistry;
     }
 
-    /** Get the real player registry */
+    /** Gets the real player registry */
     public static Registry<RealPlayer, UUID> getRealPlayerRegistry() {
         return realPlayerRegistry;
     }
 
-    /** Get the dummy player registry */
+    /** Gets the dummy player registry */
     public static Registry<DummyPlayer, String> getDummyPlayerRegistry() {
         return dummyPlayerRegistry;
     }
