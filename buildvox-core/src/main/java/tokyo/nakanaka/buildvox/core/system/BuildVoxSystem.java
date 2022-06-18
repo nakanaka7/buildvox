@@ -70,6 +70,26 @@ public class BuildVoxSystem {
         return VoxelBlock.valueOf(s);
     }
 
+    /** Set the scheduler */
+    public static void setScheduler(Scheduler scheduler) {
+        var e = new Environment(environment.blockValidator, scheduler);
+        environment = e;
+    }
+
+    /** Get the scheduler */
+    public static Scheduler getScheduler() {
+        return environment.scheduler();
+    }
+
+    public static void setBlockValidator(BlockValidator blockValidator) {
+        var e = new Environment(blockValidator, environment.scheduler());
+        environment = e;
+    }
+
+    public static BlockValidator getBlockValidator() {
+        return environment.blockValidator();
+    }
+
     /** Get the world registry */
     public static Registry<World, NamespacedId> getWorldRegistry() {
         return worldRegistry;
