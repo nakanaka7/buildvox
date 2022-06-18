@@ -121,6 +121,15 @@ public class BuildVoxSystem {
     }
 
     /**
+     * @throws IllegalArgumentException if the player of the id is not registered.
+     */
+    public static void onBvCommand(String[] args, UUID playerId) {
+        var player = realPlayerRegistry.get(playerId);
+        if(player == null) throw new IllegalArgumentException();
+        onBvCommand(player, args);
+    }
+
+    /**
      * Run "/bv" command.
      * @param args the arguments of the command.
      */
