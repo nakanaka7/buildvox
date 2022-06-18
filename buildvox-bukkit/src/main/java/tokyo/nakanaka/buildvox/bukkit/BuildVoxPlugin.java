@@ -21,6 +21,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tokyo.nakanaka.buildvox.bukkit.block.BlockUtils;
+import tokyo.nakanaka.buildvox.bukkit.block.BukkitBlockValidator;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.commandSender.CommandSender;
 import tokyo.nakanaka.buildvox.core.commandSender.PlainCommandSender;

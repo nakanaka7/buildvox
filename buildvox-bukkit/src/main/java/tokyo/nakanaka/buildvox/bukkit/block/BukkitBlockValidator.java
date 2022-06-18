@@ -1,4 +1,4 @@
-package tokyo.nakanaka.buildvox.bukkit;
+package tokyo.nakanaka.buildvox.bukkit.block;
 
 import org.bukkit.Server;
 import tokyo.nakanaka.buildvox.core.block.BlockValidator;
