@@ -214,10 +214,21 @@ public class BuildVoxSystem {
     }
 
     /**
+     * @throws IllegalArgumentException if the player of the id is not registered.
+     */
+    public static void onLeftClickBlockByPosMarker(UUID playerId, Vector3i pos) {
+        var player = realPlayerRegistry.get(playerId);
+        if(player == null) throw new IllegalArgumentException();
+        var world = player.getWorld();
+        onLeftClickBlockByPosMarker(player, world, pos);
+    }
+
+    /**
      * Handles a left-clicking block event by pos marker.
      * @param player the player who invoked this event.
      * @param pos the position of the clicked block.
      */
+    @Deprecated
     public static void onLeftClickBlockByPosMarker(Player player, World world, Vector3i pos) {
         Vector3i[] posArray = new Vector3i[player.getPosArrayClone().length];
         posArray[0] = pos;
@@ -226,10 +237,21 @@ public class BuildVoxSystem {
     }
 
     /**
+     * @throws IllegalArgumentException if the player of the id is not registered.
+     */
+    public static void onRightClickBlockByPosMarker(UUID playerId, Vector3i pos) {
+        var player = realPlayerRegistry.get(playerId);
+        if(player == null) throw new IllegalArgumentException();
+        var world = player.getWorld();
+        onRightClickBlockByPosMarker(player, world, pos);
+    }
+
+    /**
      * Handles a right-clicking block event by pos marker.
      * @param player  a player who invoked this event.
      * @param pos the position of the clicked block.
      */
+    @Deprecated
     public static void onRightClickBlockByPosMarker(Player player, World world, Vector3i pos) {
         World editWorld = player.getEditTargetWorld();
         Vector3i[] posArray = player.getPosArrayClone();
