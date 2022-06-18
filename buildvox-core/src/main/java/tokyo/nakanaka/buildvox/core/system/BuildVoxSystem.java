@@ -31,7 +31,8 @@ import java.util.UUID;
  */
 public class BuildVoxSystem {
     public static final Logger CORE_LOGGER = LoggerFactory.getLogger("BuildVoxCore");
-    /** The environment of this system */
+    /** Use getter and setter of BlockValidator or Scheduler */
+    @Deprecated
     public static Environment environment = Environment.DEFAULT;
     /** The config of this system */
     public static Config config = Config.DEFAULT;
