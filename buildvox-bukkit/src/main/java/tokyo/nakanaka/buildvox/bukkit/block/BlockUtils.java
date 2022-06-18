@@ -10,7 +10,6 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import tokyo.nakanaka.buildvox.bukkit.BuildVoxPlugin;
-import tokyo.nakanaka.buildvox.bukkit.BukkitBlockStateTransformer;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.block.BlockImpl;
 import tokyo.nakanaka.buildvox.core.block.EntityImpl;
