@@ -34,7 +34,7 @@ public class BuildVoxSystem {
     /** Use getter and setter of BlockValidator or Scheduler */
     @Deprecated
     public static Environment environment = Environment.DEFAULT;
-    /** The config of this system */
+    @Deprecated
     public static Config config = Config.DEFAULT;
     /** World registry */
     private static final Registry<World, NamespacedId> worldRegistry = new Registry<>();
