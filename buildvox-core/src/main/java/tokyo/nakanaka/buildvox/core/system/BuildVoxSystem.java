@@ -61,7 +61,8 @@ public class BuildVoxSystem {
         return config;
     }
 
-    /** Parses the String to a {@link VoxelBlock} */
+    /** Use VoxelBlock.valueOf() */
+    @Deprecated
     public static VoxelBlock parseBlock(String s) {
         return VoxelBlock.valueOf(s);
     }
