@@ -9,7 +9,6 @@ import tokyo.nakanaka.buildvox.core.FeedbackMessage;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.Scheduler;
 import tokyo.nakanaka.buildvox.core.block.Block;
-import tokyo.nakanaka.buildvox.core.block.BlockStateTransformer;
 import tokyo.nakanaka.buildvox.core.block.BlockValidator;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
 import tokyo.nakanaka.buildvox.core.command.bvdCommand.BvdCommand;
@@ -37,9 +36,9 @@ public class BuildVoxSystem {
     /** The config of this system */
     public static Config config = Config.DEFAULT;
     /** World registry */
-    public static final Registry<World, NamespacedId> WORLD_REGISTRY = new Registry<>();
+    public static final Registry<World, NamespacedId> worldRegistry = new Registry<>();
     /** Block registry */
-    public static final Registry<Block<?,?>, NamespacedId> BLOCK_REGISTRY = new Registry<>();
+    public static final Registry<Block<?,?>, NamespacedId> blockRegistry = new Registry<>();
     private static final Registry<RealPlayer, UUID> realPlayerRegistry = new Registry<>();
     private static final Registry<DummyPlayer, String> dummyPlayerRegistry = new Registry<>();
 
@@ -74,12 +73,12 @@ public class BuildVoxSystem {
 
     /** Get the world registry */
     public static Registry<World, NamespacedId> getWorldRegistry() {
-        return WORLD_REGISTRY;
+        return worldRegistry;
     }
 
     /** Gets the block registry */
     public static Registry<Block<?,?>, NamespacedId> getBlockRegistry() {
-        return BLOCK_REGISTRY;
+        return blockRegistry;
     }
 
     /** Get the real player registry */
