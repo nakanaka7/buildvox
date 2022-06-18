@@ -128,7 +128,7 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
     private void addWorld(org.bukkit.World world0){
         NamespacedId worldId = NamespacedId.valueOf(world0.getName());
         worldIdMap.put(world0, worldId);
-        BuildVoxSystem.worldRegistry.register(new BukkitWorld(world0));
+        BuildVoxSystem.getWorldRegistry().register(new BukkitWorld(world0));
     }
 
     @EventHandler
@@ -141,7 +141,7 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
     public void onWorldUnLoad(WorldUnloadEvent evt) {
         org.bukkit.World world0 = evt.getWorld();
         NamespacedId worldId = worldIdMap.get(world0);
-        BuildVoxSystem.worldRegistry.unregister(worldId);
+        BuildVoxSystem.getWorldRegistry().unregister(worldId);
         worldIdMap.remove(world0);
     }
 
