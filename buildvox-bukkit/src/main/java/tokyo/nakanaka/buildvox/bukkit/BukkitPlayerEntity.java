@@ -40,7 +40,7 @@ public class BukkitPlayerEntity implements PlayerEntity {
 
     @Override
     public World getWorld() {
-        return BuildVoxPlugin.convertBukkitWorldToBvWorld(original.getWorld());
+        return BuildVoxPlugin.getWorld(original.getWorld());
     }
 
     @Override

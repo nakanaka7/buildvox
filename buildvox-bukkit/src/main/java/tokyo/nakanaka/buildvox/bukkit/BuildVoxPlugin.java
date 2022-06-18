@@ -2,12 +2,10 @@ package tokyo.nakanaka.buildvox.bukkit;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.Server;
 import org.bukkit.block.Block;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -22,12 +20,14 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tokyo.nakanaka.buildvox.bukkit.block.BlockUtils;
+import tokyo.nakanaka.buildvox.bukkit.block.BukkitBlockValidator;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
-import tokyo.nakanaka.buildvox.core.player.PlayerEntity;
+import tokyo.nakanaka.buildvox.core.commandSender.CommandSender;
 import tokyo.nakanaka.buildvox.core.commandSender.PlainCommandSender;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
+import tokyo.nakanaka.buildvox.core.player.RealPlayer;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
-import tokyo.nakanaka.buildvox.core.system.Registry;
 import tokyo.nakanaka.buildvox.core.world.World;
 
 import javax.validation.constraints.NotNull;
@@ -38,9 +38,14 @@ import java.util.*;
  */
 public class BuildVoxPlugin extends JavaPlugin implements Listener {
     private static Logger LOGGER = LoggerFactory.getLogger(BuildVoxPlugin.class);
+    private static BuildVoxPlugin instance;
     private Map<org.bukkit.World, NamespacedId> worldIdMap = new HashMap<>();
     private static BukkitConsole console = new BukkitConsole(Bukkit.getConsoleSender());
     public static String POS_MARKER_LOCALIZED_NAME = "BuildVoxBukkit";
+
+    public static BuildVoxPlugin getInstance() {
+        return instance;
+    }
 
     @Override
     public void onLoad(){
@@ -48,31 +53,25 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable(){
+        instance = this;
         Server server = this.getServer();
-        BuildVoxSystem.environment = new BuildVoxSystem.Environment(new BukkitBlockValidator(server),
-                new BukkitBlockStateTransformer(server), new BukkitScheduler(this));
-        for(var material : Material.values()){
-            if(material.isBlock()) {
-                NamespacedKey key = material.getKey();
-                BuildVoxSystem.BLOCK_REGISTRY.register(
-                        new NamespacedId(key.getNamespace().toLowerCase(), key.getKey().toLowerCase()));
-            }
-        }
-        for(var world0 : server.getWorlds()) {
-            addWorld(world0);
-        }
+        BuildVoxSystem.environment = new BuildVoxSystem.Environment(new BukkitBlockValidator(server)
+                , new BukkitScheduler(this));
+        BlockUtils.registerBlocks();
+        registerWorlds();
         server.getPluginManager().registerEvents(this, this);
     }
 
-    private static tokyo.nakanaka.buildvox.core.commandSender.CommandSender getBvCommandSender(CommandSender sender) {
+    private void registerWorlds() {
+        for(var world0 : getServer().getWorlds()) {
+            addWorld(world0);
+        }
+    }
+
+    /** Gets the {@link CommandSender} of the {@link org.bukkit.command.CommandSender} */
+    private static CommandSender getCommandSender(org.bukkit.command.CommandSender sender) {
         if(sender instanceof Player player) {
-            UUID id = player.getUniqueId();
-            var player1 = BuildVoxSystem.getRealPlayerRegistry().get(id);
-            if(player1 != null)return player1;
-            var player2 = new tokyo.nakanaka.buildvox.core.player.RealPlayer(new BukkitPlayerEntity(player));
-            player2.setParticleGuiVisible(true);
-            BuildVoxSystem.getRealPlayerRegistry().register(player2);
-            return BuildVoxSystem.getRealPlayerRegistry().get(id);
+            return getRealPlayer(player);
         }else if(sender instanceof BlockCommandSender blockSender) {
             return BukkitCommandBlock.newInstance(blockSender);
         }else if(sender instanceof ConsoleCommandSender) {
@@ -88,8 +87,19 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
         }
     }
 
-    /** convert bukkit World to bv World*/
-    public static World convertBukkitWorldToBvWorld(org.bukkit.World world) {
+    /** Gets the {@link RealPlayer} of the {@link Player}. */
+    private static RealPlayer getRealPlayer(Player player) {
+        UUID id = player.getUniqueId();
+        var player1 = BuildVoxSystem.getRealPlayerRegistry().get(id);
+        if(player1 != null)return player1;
+        var player2 = new tokyo.nakanaka.buildvox.core.player.RealPlayer(new BukkitPlayerEntity(player));
+        player2.setParticleGuiVisible(true);
+        BuildVoxSystem.getRealPlayerRegistry().register(player2);
+        return BuildVoxSystem.getRealPlayerRegistry().get(id);
+    }
+
+    /** Gets the {@link World} of the {@link org.bukkit.World} */
+    public static World getWorld(org.bukkit.World world) {
         NamespacedId worldId = new NamespacedId(world.getName());
         return BuildVoxSystem.getWorldRegistry().get(worldId);
     }
@@ -97,7 +107,7 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
     @Override
     public boolean onCommand(@NotNull org.bukkit.command.CommandSender sender, @NotNull Command command,
                              @NotNull String label, @NotNull String[] args) {
-        tokyo.nakanaka.buildvox.core.commandSender.CommandSender sender1 = getBvCommandSender(sender);
+        tokyo.nakanaka.buildvox.core.commandSender.CommandSender sender1 = getCommandSender(sender);
         switch (label) {
             case "bv" -> BuildVoxSystem.onBvCommand(sender1, args);
             case "bvd" -> BuildVoxSystem.onBvdCommand(sender1, args);
@@ -118,7 +128,7 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
     private void addWorld(org.bukkit.World world0){
         NamespacedId worldId = NamespacedId.valueOf(world0.getName());
         worldIdMap.put(world0, worldId);
-        BuildVoxSystem.WORLD_REGISTRY.register(new BukkitWorld(getServer(), world0));
+        BuildVoxSystem.WORLD_REGISTRY.register(new BukkitWorld(world0));
     }
 
     @EventHandler
@@ -177,18 +187,10 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
         }
         //checked all for the item being a tool, so cancel the event
         evt.setCancelled(true);
-        Player player = evt.getPlayer();
-        UUID playerId = player.getUniqueId();
-        PlayerEntity playerEntity = new BukkitPlayerEntity(player);
-        Registry<tokyo.nakanaka.buildvox.core.player.RealPlayer, UUID> regi = BuildVoxSystem.getRealPlayerRegistry();
-        tokyo.nakanaka.buildvox.core.player.RealPlayer bvPlayer = regi.get(playerId);
-        if(bvPlayer == null) {
-            bvPlayer = new tokyo.nakanaka.buildvox.core.player.RealPlayer(playerEntity);
-            regi.register(bvPlayer);
-        }
+        tokyo.nakanaka.buildvox.core.player.RealPlayer bvPlayer = getRealPlayer(evt.getPlayer());
         Block block = evt.getClickedBlock();
         org.bukkit.World world0 = block.getWorld();
-        World world = convertBukkitWorldToBvWorld(world0);
+        World world = getWorld(world0);
         Vector3i pos = new Vector3i(block.getX(), block.getY(), block.getZ());
         switch (toolType) {
             case POS -> {

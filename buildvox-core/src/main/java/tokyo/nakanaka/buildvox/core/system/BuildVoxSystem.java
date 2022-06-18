@@ -4,8 +4,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import picocli.AutoComplete;
 import picocli.CommandLine;
-import tokyo.nakanaka.buildvox.core.*;
-import tokyo.nakanaka.buildvox.core.blockStateTransformer.BlockStateTransformer;
+import tokyo.nakanaka.buildvox.core.ColorCode;
+import tokyo.nakanaka.buildvox.core.FeedbackMessage;
+import tokyo.nakanaka.buildvox.core.NamespacedId;
+import tokyo.nakanaka.buildvox.core.Scheduler;
+import tokyo.nakanaka.buildvox.core.block.Block;
+import tokyo.nakanaka.buildvox.core.block.BlockStateTransformer;
+import tokyo.nakanaka.buildvox.core.block.BlockValidator;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
 import tokyo.nakanaka.buildvox.core.command.bvdCommand.BvdCommand;
 import tokyo.nakanaka.buildvox.core.commandSender.CommandSender;
@@ -13,7 +18,7 @@ import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.DummyPlayer;
 import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.player.RealPlayer;
-import tokyo.nakanaka.buildvox.core.world.BlockState;
+import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.world.World;
 
 import java.io.PrintWriter;
@@ -34,23 +39,22 @@ public class BuildVoxSystem {
     /** World registry */
     public static final Registry<World, NamespacedId> WORLD_REGISTRY = new Registry<>();
     /** Block registry */
-    public static final BlockRegistry BLOCK_REGISTRY = new BlockRegistry();
+    public static final Registry<Block<?,?>, NamespacedId> BLOCK_REGISTRY = new Registry<>();
     private static final Registry<RealPlayer, UUID> realPlayerRegistry = new Registry<>();
     private static final Registry<DummyPlayer, String> dummyPlayerRegistry = new Registry<>();
 
     private BuildVoxSystem() {
     }
 
-    public static record Environment(BlockValidator blockValidator, BlockStateTransformer blockStateTransformer,
-                                     Scheduler scheduler, BlockParser blockParser) {
+    public static record Environment(BlockValidator blockValidator,
+                                     Scheduler scheduler) {
         public static final Environment DEFAULT = new Environment(
                 (block) -> false,
-                (blockId, stateMap, trans) -> stateMap,
-                (runnable, tick) -> {}, new BlockParserImpl());
+                (runnable, tick) -> {});
     }
 
-    public static record Config(String outColor, String errColor, BlockState backgroundBlock, int posArrayLength) {
-        public static final Config DEFAULT = new Config(ColorCode.GREEN, ColorCode.RED, BlockState.valueOf("minecraft:air"), 2);
+    public static record Config(String outColor, String errColor, String backgroundBlock, int posArrayLength) {
+        public static final Config DEFAULT = new Config(ColorCode.GREEN, ColorCode.RED, "minecraft:air", 2);
     }
 
     /** Get the config */
@@ -63,9 +67,19 @@ public class BuildVoxSystem {
         return environment;
     }
 
+    /** Parses the String to a {@link VoxelBlock} */
+    public static VoxelBlock parseBlock(String s) {
+        return VoxelBlock.valueOf(s);
+    }
+
     /** Get the world registry */
     public static Registry<World, NamespacedId> getWorldRegistry() {
         return WORLD_REGISTRY;
+    }
+
+    /** Gets the block registry */
+    public static Registry<Block<?,?>, NamespacedId> getBlockRegistry() {
+        return BLOCK_REGISTRY;
     }
 
     /** Get the real player registry */

@@ -1,20 +1,20 @@
 package tokyo.nakanaka.buildvox.core.edit;
 
 import tokyo.nakanaka.buildvox.core.NamespacedId;
+import tokyo.nakanaka.buildvox.core.block.BlockTransformation;
+import tokyo.nakanaka.buildvox.core.block.StateImpl;
+import tokyo.nakanaka.buildvox.core.blockSpace.BlockSpace3;
 import tokyo.nakanaka.buildvox.core.blockSpace.BlockStateTransformingBlockSpace3;
 import tokyo.nakanaka.buildvox.core.blockSpace.ClipboardBlockSpace3;
 import tokyo.nakanaka.buildvox.core.blockSpace.IntegrityAdjustableBlockSpace3;
-import tokyo.nakanaka.buildvox.core.blockStateTransformer.BlockTransformation;
 import tokyo.nakanaka.buildvox.core.editWorld.EditWorld;
 import tokyo.nakanaka.buildvox.core.math.region3d.Cuboid;
 import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
-import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
-import tokyo.nakanaka.buildvox.core.world.BlockState;
+import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.world.World;
-import tokyo.nakanaka.buildvox.core.blockSpace.BlockSpace3;
 
 import java.util.Map;
 import java.util.Set;
@@ -87,10 +87,10 @@ public class WorldEdits {
      * @param integrity the integrity of the block-settings.
      */
     public static void paste(Clipboard srcClip, EditWorld dest, Vector3d pos, AffineTransformation3d clipboardTrans, double integrity) {
-        BlockSpace3<BlockState> src = new ClipboardBlockSpace3(srcClip);
+        BlockSpace3<VoxelBlock> src = new ClipboardBlockSpace3(srcClip);
         Set<Vector3i> srcPosSet = srcClip.blockPosSet();
         BlockTransformation blockTrans = BlockTransformApproximator.approximateToBlockTrans(clipboardTrans);
-        BlockSpace3<BlockState> transDest = new BlockStateTransformingBlockSpace3(dest, BuildVoxSystem.environment.blockStateTransformer(), blockTrans);
+        BlockSpace3<VoxelBlock> transDest = new BlockStateTransformingBlockSpace3(dest, blockTrans);
         transDest = new IntegrityAdjustableBlockSpace3<>(transDest, integrity);
         AffineTransformation3d trans = AffineTransformation3d.ofTranslation(pos.x(), pos.y(), pos.z()).compose(clipboardTrans);
         BlockSpaceEdits.copy(src, srcPosSet, transDest, trans);
@@ -103,8 +103,8 @@ public class WorldEdits {
      * @param block the block.
      * @param integrity the integrity of block-setting.
      */
-    public static void fill(EditWorld world, Selection sel, BlockState block, double integrity) {
-        BlockSpace3<BlockState> dest = new IntegrityAdjustableBlockSpace3<>(world, integrity);
+    public static void fill(EditWorld world, Selection sel, VoxelBlock block, double integrity) {
+        BlockSpace3<VoxelBlock> dest = new IntegrityAdjustableBlockSpace3<>(world, integrity);
         BlockSpaceEdits.fill(dest, sel.calculateBlockPosSet(), block);
     }
 
@@ -116,14 +116,14 @@ public class WorldEdits {
      * @param toBlock the block type to be replaced to.
      * @param integrity the integrity of block-setting.
      */
-    public static void replace(EditWorld world, Selection sel, BlockState fromBlock, BlockState toBlock, double integrity) {
-        BlockSpace3<BlockState> space = new IntegrityAdjustableBlockSpace3<>(world, integrity);
-        NamespacedId fromId = fromBlock.getId();
-        Map<String, String> fromStateMap = fromBlock.getStateMap();
+    public static void replace(EditWorld world, Selection sel, VoxelBlock fromBlock, VoxelBlock toBlock, double integrity) {
+        BlockSpace3<VoxelBlock> space = new IntegrityAdjustableBlockSpace3<>(world, integrity);
+        NamespacedId fromId = fromBlock.getBlockId();
+        Map<String, String> fromStateMap = ((StateImpl)fromBlock.getState()).getStateMap();
         BlockSpaceEdits.replace(space, sel.calculateBlockPosSet(),
-            (BlockSpaceEdits.BlockCondition<BlockState>) (block) -> {
-                NamespacedId id = block.getId();
-                Map<String, String> stateMap = block.getStateMap();
+            (BlockSpaceEdits.BlockCondition<VoxelBlock>) (block) -> {
+                NamespacedId id = block.getBlockId();
+                Map<String, String> stateMap = ((StateImpl)block.getState()).getStateMap();
                 if(!fromId.equals(id)) return false;
                 for(Map.Entry<String, String> entry : fromStateMap.entrySet()) {
                     String value = stateMap.get(entry.getKey());

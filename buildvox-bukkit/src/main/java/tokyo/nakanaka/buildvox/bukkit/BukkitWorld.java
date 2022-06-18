@@ -1,31 +1,23 @@
 package tokyo.nakanaka.buildvox.bukkit;
 
-import org.bukkit.Server;
-import org.bukkit.block.data.BlockData;
+import tokyo.nakanaka.buildvox.bukkit.block.BlockUtils;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
-import tokyo.nakanaka.buildvox.core.world.BlockState;
+import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.world.World;
-
-import java.util.Objects;
-import java.util.UUID;
 
 /**
  * The class which implements {@link World} for Bukkit Platform
  */
 public class BukkitWorld implements World {
     private org.bukkit.World original;
-    private UUID uuid;
-    private Server server;
 
     /**
      * Constructs an instance from a Server and the original world of org.bukkit.World
      * @param server a server
      * @param original the original world
      */
-    public BukkitWorld(Server server, org.bukkit.World original) {
+    public BukkitWorld(org.bukkit.World original) {
         this.original = original;
-        this.uuid = original.getUID();
-        this.server = server;
     }
 
     /**
@@ -42,35 +34,15 @@ public class BukkitWorld implements World {
     }
 
     @Override
-    public BlockState getBlock(int x, int y, int z){
+    public VoxelBlock getBlock(int x, int y, int z) {
+        org.bukkit.block.Block block = original.getBlockAt(x, y, z);
+        return BlockUtils.getVoxelBlock(block);
+    }
+
+    @Override
+    public void setBlock(int x, int y, int z, VoxelBlock block, boolean physics){
         org.bukkit.block.Block voxel = original.getBlockAt(x, y, z);
-        return BukkitBlockState.newInstance(voxel.getState());
-    }
-
-    @Override
-    public void setBlock(int x, int y, int z, BlockState block, boolean physics){
-        org.bukkit.block.Block targetBlock = original.getBlockAt(x, y, z);
-        if(block instanceof BukkitBlockState bukkitBlock) {
-            bukkitBlock.setToWorld(server, targetBlock, physics);
-        }else{
-            String blockStr = block.toString();
-            BlockData blockData = server.createBlockData(blockStr);
-            targetBlock.setBlockData(blockData, physics);
-            targetBlock.getState().update();
-        }
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        BukkitWorld world = (BukkitWorld) o;
-        return uuid.equals(world.uuid);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(uuid);
+        BlockUtils.setVoxelBlock(voxel, block, physics);
     }
 
 }

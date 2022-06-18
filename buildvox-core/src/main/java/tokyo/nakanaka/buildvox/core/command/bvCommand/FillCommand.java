@@ -17,7 +17,7 @@ import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
 import tokyo.nakanaka.buildvox.core.selection.SelectionCreations;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
-import tokyo.nakanaka.buildvox.core.world.BlockState;
+import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 
 import java.io.PrintWriter;
 
@@ -101,9 +101,9 @@ public class FillCommand implements Runnable {
             err.println(ex.getMessage());
             return;
         }
-        BlockState b;
+        VoxelBlock b;
         try {
-            b = BlockState.valueOf(block);
+            b = BuildVoxSystem.parseBlock(block);
         }catch (IllegalArgumentException e) {
             err.println(FeedbackMessage.ofBlockParseError(block));
             return;

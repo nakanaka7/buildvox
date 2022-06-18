@@ -1,7 +1,7 @@
 package tokyo.nakanaka.buildvox.core.edit;
 
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
-import tokyo.nakanaka.buildvox.core.world.BlockState;
+import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +9,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Clipboard {
-    private Map<Vector3i, BlockState> blockMap = new HashMap<>();
+    private Map<Vector3i, VoxelBlock> blockMap = new HashMap<>();
     private Integer maxX;
     private Integer maxY;
     private Integer maxZ;
@@ -25,7 +25,7 @@ public class Clipboard {
         this.locked = true;
     }
 
-    public void setBlock(Vector3i pos, BlockState block) {
+    public void setBlock(Vector3i pos, VoxelBlock block) {
         setBlock(pos.x(), pos.y(), pos.z(), block);
     }
 
@@ -37,7 +37,7 @@ public class Clipboard {
      * @param block the block to set
      * @throws IllegalStateException if this clipboard is locked(the read only mode).
      */
-    public void setBlock(int x, int y, int z, BlockState block){
+    public void setBlock(int x, int y, int z, VoxelBlock block){
         if(this.locked){
             throw new IllegalStateException();
         }
@@ -59,11 +59,11 @@ public class Clipboard {
         this.blockMap.put(new Vector3i(x, y, z), block);
     }
 
-    public BlockState getBlock(Vector3i pos) {
+    public VoxelBlock getBlock(Vector3i pos) {
         return this.blockMap.get(pos);
     }
 
-    public BlockState getBlock(int x, int y, int z){
+    public VoxelBlock getBlock(int x, int y, int z){
         return this.blockMap.get(new Vector3i(x, y, z));
     }
 

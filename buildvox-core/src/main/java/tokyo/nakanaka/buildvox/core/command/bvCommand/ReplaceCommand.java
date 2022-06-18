@@ -7,7 +7,8 @@ import tokyo.nakanaka.buildvox.core.command.completionCandidates.BlockCandidates
 import tokyo.nakanaka.buildvox.core.command.mixin.IntegrityMixin;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.player.Player;
-import tokyo.nakanaka.buildvox.core.world.BlockState;
+import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
+import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 
 import java.io.PrintWriter;
 
@@ -33,16 +34,16 @@ public class ReplaceCommand implements Runnable {
         PrintWriter out = commandSpec.commandLine().getOut();
         PrintWriter err = commandSpec.commandLine().getErr();
         Player player = bvCmd.getTargetPlayer();
-        BlockState bFrom;
+        VoxelBlock bFrom;
         try {
-            bFrom = BlockState.valueOf(blockFrom);
+            bFrom = BuildVoxSystem.parseBlock(blockFrom);
         }catch (IllegalArgumentException e) {
             err.println(FeedbackMessage.ofBlockParseError(blockFrom));
             return;
         }
-        BlockState bTo;
+        VoxelBlock bTo;
         try {
-            bTo = BlockState.valueOf(blockTo);
+            bTo = BuildVoxSystem.parseBlock(blockTo);
         }catch (IllegalArgumentException e) {
             err.println(FeedbackMessage.ofBlockParseError(blockTo));
             return;

@@ -70,11 +70,9 @@ public class BuildVoxMod implements ModInitializer {
 
 	private void onServerStarting(MinecraftServer server) {
 		FabricScheduler.initialize();
-		BuildVoxSystem.environment = new BuildVoxSystem.Environment(new FabricBlockValidator(),
-				new FabricBlockStateTransformer(), FabricScheduler.getInstance());
-		for(Identifier blockId0 : Registry.BLOCK.getIds()) {
-			BuildVoxSystem.BLOCK_REGISTRY.register(new NamespacedId(blockId0.getNamespace(), blockId0.getPath()));
-		}
+		BuildVoxSystem.environment = new BuildVoxSystem.Environment(new BlockUtils.FabricBlockValidator()
+				, FabricScheduler.getInstance());
+		BlockUtils.registerBlocks();
 	}
 
 	private void onWorldLoad(MinecraftServer server, ServerWorld world){

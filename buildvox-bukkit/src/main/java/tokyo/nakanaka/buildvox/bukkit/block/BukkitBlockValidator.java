@@ -1,8 +1,8 @@
-package tokyo.nakanaka.buildvox.bukkit;
+package tokyo.nakanaka.buildvox.bukkit.block;
 
 import org.bukkit.Server;
-import tokyo.nakanaka.buildvox.core.BlockValidator;
-import tokyo.nakanaka.buildvox.core.world.BlockState;
+import tokyo.nakanaka.buildvox.core.block.BlockValidator;
+import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 
 /**
  * The class which implements {@link BlockValidator} for Bukkit Platform
@@ -19,9 +19,8 @@ public class BukkitBlockValidator implements BlockValidator {
     }
 
     @Override
-    public boolean validate(BlockState block) {
-        if(block instanceof BukkitBlockState)return true;
-        String blockStr = block.toString();
+    public boolean validate(VoxelBlock block) {
+        String blockStr = block.withoutEntity().toString();
         try{
             server.createBlockData(blockStr);
         }catch (IllegalArgumentException e){

@@ -1,6 +1,6 @@
 package tokyo.nakanaka.buildvox.core.edit;
 
-import tokyo.nakanaka.buildvox.core.blockStateTransformer.BlockTransformation;
+import tokyo.nakanaka.buildvox.core.block.BlockTransformation;
 import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
 import tokyo.nakanaka.buildvox.core.math.transformation.Matrix3x3d;
 import tokyo.nakanaka.buildvox.core.math.transformation.Matrix3x3i;

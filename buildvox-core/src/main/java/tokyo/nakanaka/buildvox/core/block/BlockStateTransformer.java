@@ -1,4 +1,4 @@
-package tokyo.nakanaka.buildvox.core.blockStateTransformer;
+package tokyo.nakanaka.buildvox.core.block;
 
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 
