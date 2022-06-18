@@ -56,7 +56,7 @@ public class BuildVoxSystem {
         public static final Config DEFAULT = new Config(ColorCode.GREEN, ColorCode.RED, "minecraft:air", 2);
     }
 
-    /** Get the config */
+    @Deprecated
     public static Config getConfig() {
         return config;
     }
