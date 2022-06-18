@@ -60,11 +60,6 @@ public class BuildVoxSystem {
         return config;
     }
 
-    /** Get the environment */
-    public static Environment getEnvironment() {
-        return environment;
-    }
-
     /** Parses the String to a {@link VoxelBlock} */
     public static VoxelBlock parseBlock(String s) {
         return VoxelBlock.valueOf(s);
