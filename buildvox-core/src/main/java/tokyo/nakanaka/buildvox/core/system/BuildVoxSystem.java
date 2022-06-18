@@ -219,10 +219,10 @@ public class BuildVoxSystem {
      * @param pos the position of the clicked block.
      */
     public static void onLeftClickBlockByPosMarker(Player player, World world, Vector3i pos) {
-        Vector3i[] posData = new Vector3i[player.getPosArrayClone().length];
-        posData[0] = pos;
-        player.setPosArray(world, posData);
-        player.getPlayerEntity().println(config.outColor() + FeedbackMessage.ofPosExit(0, pos.x(), pos.y(), pos.z()));
+        Vector3i[] posArray = new Vector3i[player.getPosArrayClone().length];
+        posArray[0] = pos;
+        player.setPosArray(world, posArray);
+        player.sendOutMessage(FeedbackMessage.ofPosExit(0, pos.x(), pos.y(), pos.z()));
     }
 
     /**
@@ -231,22 +231,22 @@ public class BuildVoxSystem {
      * @param pos the position of the clicked block.
      */
     public static void onRightClickBlockByPosMarker(Player player, World world, Vector3i pos) {
-        World posOrSelectionWorld = player.getEditTargetWorld();
-        Vector3i[] posData = player.getPosArrayClone();
-        if (world != posOrSelectionWorld) {
-            posData = new Vector3i[player.getPosArrayClone().length];
+        World editWorld = player.getEditTargetWorld();
+        Vector3i[] posArray = player.getPosArrayClone();
+        if (world != editWorld) {
+            posArray = new Vector3i[player.getPosArrayClone().length];
         }
-        int dataSize = posData.length;
-        int index = dataSize - 1;
-        for (int i = 0; i < dataSize; ++i) {
-            if (posData[i] == null) {
+        int l = posArray.length;
+        int index = l - 1;
+        for (int i = 0; i < l; ++i) {
+            if (posArray[i] == null) {
                 index = i;
                 break;
             }
         }
-        posData[index] = pos;
-        player.setPosArray(world, posData);
-        player.getPlayerEntity().println(config.outColor() + FeedbackMessage.ofPosExit(index, pos.x(), pos.y(), pos.z()));
+        posArray[index] = pos;
+        player.setPosArray(world, posArray);
+        player.sendOutMessage(FeedbackMessage.ofPosExit(index, pos.x(), pos.y(), pos.z()));
     }
 
 }
