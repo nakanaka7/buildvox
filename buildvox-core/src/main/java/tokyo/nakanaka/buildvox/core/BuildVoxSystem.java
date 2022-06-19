@@ -191,33 +191,6 @@ public class BuildVoxSystem {
         return getTabCompletionList(spec, args);
     }
 
-    /**
-     * @throws IllegalArgumentException if the player of the id is not registered.
-     */
-    public static void onBvdCommand(String[] args, UUID playerId) {
-        var player = realPlayerRegistry.get(playerId);
-        if(player == null) throw new IllegalArgumentException();
-        onBvdCommand(player, args);
-    }
-
-    public static void onBvdCommand(String[] args, Messenger messenger) {
-        var sender = new CommandSender() {
-            public void sendOutMessage(String msg) {
-                messenger.sendOutMessage(msg);
-            }
-            public void sendErrMessage(String msg) {
-                messenger.sendErrMessage(msg);
-            }
-            public World getWorld() {
-                return null;
-            }
-            public Vector3i getBlockPos() {
-                return null;
-            }
-        };
-        onBvdCommand(sender, args);
-    }
-
     public static void onBvdCommand(CommandSource source, String[] args) {
         onBvdCommand(getCommandSender(source), args);
     }
