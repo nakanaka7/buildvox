@@ -1,4 +1,4 @@
-package tokyo.nakanaka.buildvox.core.system;
+package tokyo.nakanaka.buildvox.core.registry;
 
 /**
  * The object which has an id

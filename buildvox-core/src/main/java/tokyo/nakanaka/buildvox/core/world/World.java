@@ -1,7 +1,7 @@
 package tokyo.nakanaka.buildvox.core.world;
 
 import tokyo.nakanaka.buildvox.core.NamespacedId;
-import tokyo.nakanaka.buildvox.core.system.Entity;
+import tokyo.nakanaka.buildvox.core.registry.Entity;
 
 /**
  * Represents a world. A world is a single space. It does not contain 3 parallel "dimension"

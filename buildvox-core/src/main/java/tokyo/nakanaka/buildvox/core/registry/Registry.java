@@ -1,7 +1,5 @@
 package tokyo.nakanaka.buildvox.core.registry;
 
-import tokyo.nakanaka.buildvox.core.system.Entity;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
