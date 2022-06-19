@@ -218,6 +218,10 @@ public class BuildVoxSystem {
         onBvdCommand(sender, args);
     }
 
+    public static void onBvdCommand(CommandSource source, String[] args) {
+        onBvdCommand(getCommandSender(source), args);
+    }
+
     /** Run "/bvd" command. */
     public static void onBvdCommand(CommandSender sender, String[] args) {
         Writer outWriter = BuildVoxWriter.newOutInstance(sender);
