@@ -118,33 +118,29 @@ public class BuildVoxSystem {
         return dummyPlayerRegistry;
     }
 
-    /**
-     * @throws IllegalArgumentException if the player of the id is not registered.
-     */
-    public static void onBvCommand(String[] args, UUID playerId) {
-        var player = realPlayerRegistry.get(playerId);
-        if(player == null) throw new IllegalArgumentException();
-        onBvCommand(player, args);
-    }
-
-    /**
-     * @throws IllegalArgumentException if the world of the world id is not registered.
-     */
-    public static void onBvCommand(String[] args, NamespacedId worldId, Vector3i pos, Messenger messenger) {
+    public static void onBvCommand(CommandSource source, String[] args) {
+        UUID playerId = source.playerId();
+        if(playerId != null) {
+            var player = realPlayerRegistry.get(playerId);
+            if(player == null) throw new IllegalArgumentException();
+            onBvCommand(player, args);
+            return;
+        }
+        var worldId = source.worldId();
         var world = worldRegistry.get(worldId);
         if(world == null) throw new IllegalArgumentException();
-        var sender = new CommandSender() {
+            CommandSender sender = new CommandSender() {
             public void sendOutMessage(String msg) {
-                messenger.sendOutMessage(msg);
+                source.messenger().sendOutMessage(msg);
             }
             public void sendErrMessage(String msg) {
-                messenger.sendErrMessage(msg);
+                source.messenger().sendErrMessage(msg);
             }
             public World getWorld() {
                 return world;
             }
             public Vector3i getBlockPos() {
-                return pos;
+                return source.pos();
             }
         };
         onBvCommand(sender, args);
