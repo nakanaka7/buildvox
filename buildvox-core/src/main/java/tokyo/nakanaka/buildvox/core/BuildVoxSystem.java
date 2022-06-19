@@ -118,18 +118,16 @@ public class BuildVoxSystem {
         return dummyPlayerRegistry;
     }
 
-    public static void onBvCommand(CommandSource source, String[] args) {
-        UUID playerId = source.playerId();
+    private static CommandSender getCommandSender(CommandSource source) {
+        var playerId = source.playerId();
         if(playerId != null) {
             var player = realPlayerRegistry.get(playerId);
             if(player == null) throw new IllegalArgumentException();
-            onBvCommand(player, args);
-            return;
+            return player;
         }
-        var worldId = source.worldId();
-        var world = worldRegistry.get(worldId);
+        var world = worldRegistry.get(source.worldId());
         if(world == null) throw new IllegalArgumentException();
-            CommandSender sender = new CommandSender() {
+        return new CommandSender() {
             public void sendOutMessage(String msg) {
                 source.messenger().sendOutMessage(msg);
             }
@@ -143,7 +141,10 @@ public class BuildVoxSystem {
                 return source.pos();
             }
         };
-        onBvCommand(sender, args);
+    }
+
+    public static void onBvCommand(CommandSource source, String[] args) {
+        onBvCommand(getCommandSender(source), args);
     }
 
     /**
