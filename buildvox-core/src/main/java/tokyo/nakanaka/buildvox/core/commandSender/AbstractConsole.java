@@ -1,7 +1,7 @@
 package tokyo.nakanaka.buildvox.core.commandSender;
 
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
-import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
+import tokyo.nakanaka.buildvox.core.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.world.World;
 
 /**

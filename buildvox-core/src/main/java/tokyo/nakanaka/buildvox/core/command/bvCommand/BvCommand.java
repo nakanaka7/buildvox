@@ -6,7 +6,7 @@ import tokyo.nakanaka.buildvox.core.command.bvCommand.affineTransformCommand.*;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.posArray.PosArrayCommand;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.Player;
-import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
+import tokyo.nakanaka.buildvox.core.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.world.World;
 
 import java.io.PrintWriter;
