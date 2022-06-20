@@ -128,10 +128,15 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
         UUID id = player.getUniqueId();
         var player1 = BuildVoxSystem.getRealPlayerRegistry().get(id);
         if(player1 != null)return player1;
-        var player2 = new tokyo.nakanaka.buildvox.core.player.RealPlayer(new BukkitPlayerEntity(player));
-        player2.setParticleGuiVisible(true);
+        var player2 = createPlayer(player);
         BuildVoxSystem.getRealPlayerRegistry().register(player2);
-        return BuildVoxSystem.getRealPlayerRegistry().get(id);
+        return player2;
+    }
+
+    private static RealPlayer createPlayer(Player player) {
+        var p = new RealPlayer(new BukkitPlayerEntity(player));
+        p.setParticleGuiVisible(true);
+        return p;
     }
 
     /** Gets the {@link World} of the {@link org.bukkit.World} */
