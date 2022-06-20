@@ -33,7 +33,6 @@ public class BuildVoxSystem {
     public static Environment environment = Environment.DEFAULT;
     @Deprecated
     public static Config config = Config.DEFAULT;
-    /** World registry */
     private static final Registry<World, NamespacedId> worldRegistry = new Registry<>();
     private static final Registry<Block<?,?>, NamespacedId> blockRegistry = new Registry<>();
     private static final Registry<RealPlayer, UUID> realPlayerRegistry = new Registry<>();
@@ -142,16 +141,16 @@ public class BuildVoxSystem {
         };
     }
 
+    /**
+     * Run "/bv" command.
+     * @param source the command source.
+     * @param args the arguments of the command.
+     */
     public static void onBvCommand(CommandSource source, String[] args) {
         onBvCommand(getCommandSender(source), args);
     }
 
-    /**
-     * Run "/bv" command.
-     * @param args the arguments of the command.
-     */
-    @Deprecated
-    public static void onBvCommand(CommandSender sender, String[] args) {
+    private static void onBvCommand(CommandSender sender, String[] args) {
         Writer outWriter = BuildVoxWriter.newOutInstance(sender);
         Writer errWriter = BuildVoxWriter.newErrInstance(sender);
         PrintWriter out = new PrintWriter(outWriter, true);
@@ -195,7 +194,7 @@ public class BuildVoxSystem {
     }
 
     /** Run "/bvd" command. */
-    public static void onBvdCommand(CommandSender sender, String[] args) {
+    private static void onBvdCommand(CommandSender sender, String[] args) {
         Writer outWriter = BuildVoxWriter.newOutInstance(sender);
         Writer errWriter = BuildVoxWriter.newErrInstance(sender);
         PrintWriter out = new PrintWriter(outWriter, true);
@@ -245,6 +244,9 @@ public class BuildVoxSystem {
     }
 
     /**
+     * Handles a left-clicking block event by pos marker.
+     * @param playerId the id of the player who invoked this event.
+     * @param pos the position of the clicked block.
      * @throws IllegalArgumentException if the player of the id is not registered.
      */
     public static void onLeftClickBlockByPosMarker(UUID playerId, Vector3i pos) {
@@ -254,13 +256,7 @@ public class BuildVoxSystem {
         onLeftClickBlockByPosMarker(player, world, pos);
     }
 
-    /**
-     * Handles a left-clicking block event by pos marker.
-     * @param player the player who invoked this event.
-     * @param pos the position of the clicked block.
-     */
-    @Deprecated
-    public static void onLeftClickBlockByPosMarker(Player player, World world, Vector3i pos) {
+    private static void onLeftClickBlockByPosMarker(Player player, World world, Vector3i pos) {
         Vector3i[] posArray = new Vector3i[player.getPosArrayClone().length];
         posArray[0] = pos;
         player.setPosArray(world, posArray);
@@ -268,6 +264,9 @@ public class BuildVoxSystem {
     }
 
     /**
+     * Handles a right-clicking block event by pos marker.
+     * @param playerId the id of the player who invoked this event.
+     * @param pos the position of the clicked block.
      * @throws IllegalArgumentException if the player of the id is not registered.
      */
     public static void onRightClickBlockByPosMarker(UUID playerId, Vector3i pos) {
@@ -277,13 +276,7 @@ public class BuildVoxSystem {
         onRightClickBlockByPosMarker(player, world, pos);
     }
 
-    /**
-     * Handles a right-clicking block event by pos marker.
-     * @param player  a player who invoked this event.
-     * @param pos the position of the clicked block.
-     */
-    @Deprecated
-    public static void onRightClickBlockByPosMarker(Player player, World world, Vector3i pos) {
+    private static void onRightClickBlockByPosMarker(Player player, World world, Vector3i pos) {
         World editWorld = player.getEditTargetWorld();
         Vector3i[] posArray = player.getPosArrayClone();
         if (world != editWorld) {
