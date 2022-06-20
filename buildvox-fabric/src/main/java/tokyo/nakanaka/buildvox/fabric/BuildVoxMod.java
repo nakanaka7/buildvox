@@ -33,13 +33,14 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
+import tokyo.nakanaka.buildvox.core.BuildVoxSystem;
+import tokyo.nakanaka.buildvox.core.CommandSource;
+import tokyo.nakanaka.buildvox.core.Messenger;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
-import tokyo.nakanaka.buildvox.core.player.PlayerEntity;
-import tokyo.nakanaka.buildvox.core.commandSender.CommandSender;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.Player;
+import tokyo.nakanaka.buildvox.core.player.PlayerEntity;
 import tokyo.nakanaka.buildvox.core.player.RealPlayer;
-import tokyo.nakanaka.buildvox.core.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.world.World;
 
 import java.util.*;
@@ -146,49 +147,43 @@ public class BuildVoxMod implements ModInitializer {
 		return BuildVoxSystem.getWorldRegistry().get(worldId);
 	}
 
-	private static CommandSender getCommandSender(ServerCommandSource source) {
+	private CommandSource getCommandSource(ServerCommandSource source) {
 		try {
-			ServerPlayerEntity spe = source.getPlayer();
-			return BuildVoxSystem.getRealPlayerRegistry().get(spe.getUuid());
-		}catch (CommandSyntaxException e) {
-			return new CommandSender() {
+			ServerPlayerEntity player = source.getPlayer();
+			UUID playerId = player.getUuid();
+			return CommandSource.newInstance(playerId);
+		} catch (CommandSyntaxException ex) {
+			net.minecraft.world.World world = source.getWorld();
+			NamespacedId worldId = worldIdMap.get(world);
+			Vec3d p = source.getPosition();
+			Vector3i pos = new Vector3i((int)Math.floor(p.getX()), (int)Math.floor(p.getY()), (int)Math.floor(p.getZ()));
+			Messenger messenger = new Messenger() {
 				@Override
 				public void sendOutMessage(String msg) {
 					source.sendFeedback(Text.of(msg), false);
 				}
-
 				@Override
 				public void sendErrMessage(String msg) {
 					source.sendFeedback(Text.of(msg), false);
 				}
-
-				@Override
-				public World getWorld() {
-					return convertServerWorldToBvWorld(source.getWorld());
-				}
-
-				@Override
-				public Vector3i getBlockPos() {
-					Vec3d p = source.getPosition();
-					return new Vector3i((int)Math.floor(p.getX()), (int)Math.floor(p.getY()), (int)Math.floor(p.getZ()));
-				}
 			};
+			return new CommandSource(worldId, pos, messenger);
 		}
 	}
 
 	private int onBvCommand(CommandContext<ServerCommandSource> context) {
 		String subcommand = StringArgumentType.getString(context, SUBCOMMAND);
 		String[] args = subcommand.split(" ", - 1);
-		CommandSender sender = getCommandSender(context.getSource());
-		BuildVoxSystem.onBvCommand(sender, args);
+		CommandSource source = getCommandSource(context.getSource());
+		BuildVoxSystem.onBvCommand(source, args);
 		return 1;
 	}
 
 	private int onBvdCommand(CommandContext<ServerCommandSource> context) {
 		String subcommand = StringArgumentType.getString(context, SUBCOMMAND);
 		String[] args = subcommand.split(" ", - 1);
-		CommandSender sender = getCommandSender(context.getSource());
-		BuildVoxSystem.onBvdCommand(sender, args);
+		CommandSource source = getCommandSource(context.getSource());
+		BuildVoxSystem.onBvdCommand(source, args);
 		return 1;
 	}
 
