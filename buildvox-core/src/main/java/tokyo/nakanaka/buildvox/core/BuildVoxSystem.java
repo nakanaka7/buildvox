@@ -8,7 +8,6 @@ import tokyo.nakanaka.buildvox.core.block.Block;
 import tokyo.nakanaka.buildvox.core.block.BlockValidator;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
 import tokyo.nakanaka.buildvox.core.command.bvdCommand.BvdCommand;
-import tokyo.nakanaka.buildvox.core.commandSender.CommandSender;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.DummyPlayer;
 import tokyo.nakanaka.buildvox.core.player.Player;
@@ -371,4 +370,32 @@ public class BuildVoxSystem {
 
     }
 
+    /**
+     * Represents a command sender.
+     */
+    public interface CommandSender {
+        /**
+         * Send a (non-error) message.
+         * @param msg the message.
+         */
+        void sendOutMessage(String msg);
+
+        /**
+         * Send an error message.
+         * @param msg the message.
+         */
+        void sendErrMessage(String msg);
+
+        /**
+         * Get the world of the command sender.
+         * @return the world
+         */
+        World getWorld();
+
+        /**
+         * Get the block position of the command sender.
+         * @return the block position
+         */
+        Vector3i getBlockPos();
+    }
 }

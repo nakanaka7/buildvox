@@ -1,6 +1,5 @@
 package tokyo.nakanaka.buildvox.core.player;
 
-import tokyo.nakanaka.buildvox.core.commandSender.CommandSender;
 import tokyo.nakanaka.buildvox.core.edit.Clipboard;
 import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
@@ -22,7 +21,7 @@ import java.util.UUID;
 /**
  * Represents a player.
  */
-public class Player implements CommandSender {
+public class Player implements BuildVoxSystem.CommandSender {
     private UUID id;
     private VoxelBlock backgroundBlock;
     private Clipboard clipboard;
