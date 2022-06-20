@@ -295,12 +295,12 @@ public class BuildVoxSystem {
     }
 
     private static class BuildVoxWriter extends Writer {
-        private MessageReceiver messageReceiver;
+        private final LinePrinter linePrinter;
         private String str = "";
         private boolean closed = false;
 
-        private BuildVoxWriter(MessageReceiver messageReceiver){
-            this.messageReceiver = messageReceiver;
+        private BuildVoxWriter(LinePrinter linePrinter){
+            this.linePrinter = linePrinter;
         }
 
         public static BuildVoxWriter newOutInstance(CommandSender cmdSender) {
@@ -309,6 +309,14 @@ public class BuildVoxSystem {
 
         public static BuildVoxWriter newErrInstance(CommandSender cmdSender) {
             return new BuildVoxWriter(cmdSender::sendErrMessage);
+        }
+
+        public static BuildVoxWriter newOutInstance(Messenger messenger) {
+            return new BuildVoxWriter(messenger::sendOutMessage);
+        }
+
+        public static BuildVoxWriter newErrInstance(Messenger messenger) {
+            return new BuildVoxWriter(messenger::sendErrMessage);
         }
 
         @Override
@@ -343,7 +351,7 @@ public class BuildVoxSystem {
                 this.str = "...";
             }
             for(String msg : msgs) {
-                this.messageReceiver.println(msg);
+                this.linePrinter.println(msg);
             }
         }
 
@@ -353,17 +361,8 @@ public class BuildVoxSystem {
             this.closed = true;
         }
 
-        /**
-         * An entity to receive messages.
-         */
-        @Deprecated
-        private interface MessageReceiver {
-            /**
-             * Prints the message as a line.
-             * @param msg the message.
-             */
+        private interface LinePrinter {
             void println(String msg);
-
         }
 
     }
