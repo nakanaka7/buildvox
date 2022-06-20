@@ -54,9 +54,9 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
     @Override
     public void onEnable(){
         instance = this;
-        Server server = this.getServer();
-        BuildVoxSystem.environment = new BuildVoxSystem.Environment(new BukkitBlockValidator(server)
-                , new BukkitScheduler(this));
+        Server server = getServer();
+        BuildVoxSystem.setScheduler(new BukkitScheduler(this));
+        BuildVoxSystem.setBlockValidator(new BukkitBlockValidator(server));
         BlockUtils.registerBlocks();
         registerWorlds();
         server.getPluginManager().registerEvents(this, this);
