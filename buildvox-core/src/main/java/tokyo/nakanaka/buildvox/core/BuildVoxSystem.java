@@ -115,49 +115,25 @@ public class BuildVoxSystem {
         return dummyPlayerRegistry;
     }
 
-    private static CommandSender getCommandSender(CommandSource source) {
-        var playerId = source.playerId();
-        if(playerId != null) {
-            var player = realPlayerRegistry.get(playerId);
-            if(player == null) throw new IllegalArgumentException();
-            return player;
-        }
-        var world = worldRegistry.get(source.worldId());
-        if(world == null) throw new IllegalArgumentException();
-        return new CommandSender() {
-            public void sendOutMessage(String msg) {
-                source.messenger().sendOutMessage(msg);
-            }
-            public void sendErrMessage(String msg) {
-                source.messenger().sendErrMessage(msg);
-            }
-            public World getWorld() {
-                return world;
-            }
-            public Vector3i getBlockPos() {
-                return source.pos();
-            }
-        };
-    }
-
     /**
      * Run "/bv" command.
      * @param source the command source.
      * @param args the arguments of the command.
      */
     public static void onBvCommand(CommandSource source, String[] args) {
-        onBvCommand(getCommandSender(source), args);
-    }
-
-    private static void onBvCommand(CommandSender sender, String[] args) {
-        Writer outWriter = BuildVoxWriter.newOutInstance(sender);
-        Writer errWriter = BuildVoxWriter.newErrInstance(sender);
+        Writer outWriter = BuildVoxWriter.newOutInstance(source.messenger());
+        Writer errWriter = BuildVoxWriter.newErrInstance(source.messenger());
         PrintWriter out = new PrintWriter(outWriter, true);
         PrintWriter err = new PrintWriter(errWriter, true);
-        World execWorld = sender.getWorld();
-        Vector3i execPos = sender.getBlockPos();
+        NamespacedId worldId = source.worldId();
+        World execWorld = worldRegistry.get(worldId);
+        if(execWorld == null) throw new IllegalArgumentException();
+        Vector3i execPos = source.pos();
         BvCommand bvCmd;
-        if(sender instanceof Player execPlayer) {
+        UUID playerId = source.playerId();
+        if(playerId != null) {
+            var execPlayer = realPlayerRegistry.get(playerId);
+            if(execPlayer == null) throw new IllegalArgumentException();
             bvCmd = new BvCommand(execPlayer, execWorld, execPos);
         }else {
             bvCmd = new BvCommand(null, execWorld, execPos);
@@ -188,14 +164,10 @@ public class BuildVoxSystem {
         return getTabCompletionList(spec, args);
     }
 
-    public static void onBvdCommand(CommandSource source, String[] args) {
-        onBvdCommand(getCommandSender(source), args);
-    }
-
     /** Run "/bvd" command. */
-    private static void onBvdCommand(CommandSender sender, String[] args) {
-        Writer outWriter = BuildVoxWriter.newOutInstance(sender);
-        Writer errWriter = BuildVoxWriter.newErrInstance(sender);
+    public static void onBvdCommand(CommandSource source, String[] args) {
+        Writer outWriter = BuildVoxWriter.newOutInstance(source.messenger());
+        Writer errWriter = BuildVoxWriter.newErrInstance(source.messenger());
         PrintWriter out = new PrintWriter(outWriter, true);
         PrintWriter err = new PrintWriter(errWriter, true);
         new CommandLine(new BvdCommand())
@@ -301,14 +273,6 @@ public class BuildVoxSystem {
 
         private BuildVoxWriter(LinePrinter linePrinter){
             this.linePrinter = linePrinter;
-        }
-
-        public static BuildVoxWriter newOutInstance(CommandSender cmdSender) {
-            return new BuildVoxWriter(cmdSender::sendOutMessage);
-        }
-
-        public static BuildVoxWriter newErrInstance(CommandSender cmdSender) {
-            return new BuildVoxWriter(cmdSender::sendErrMessage);
         }
 
         public static BuildVoxWriter newOutInstance(Messenger messenger) {
