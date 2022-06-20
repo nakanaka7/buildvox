@@ -295,22 +295,20 @@ public class BuildVoxSystem {
     }
 
     private static class BuildVoxWriter extends Writer {
-        private String colorCode;
         private MessageReceiver messageReceiver;
         private String str = "";
         private boolean closed = false;
 
-        private BuildVoxWriter(String colorCode, MessageReceiver messageReceiver){
-            this.colorCode = colorCode;
+        private BuildVoxWriter(MessageReceiver messageReceiver){
             this.messageReceiver = messageReceiver;
         }
 
         public static BuildVoxWriter newOutInstance(CommandSender cmdSender) {
-            return new BuildVoxWriter("", cmdSender::sendOutMessage);
+            return new BuildVoxWriter(cmdSender::sendOutMessage);
         }
 
         public static BuildVoxWriter newErrInstance(CommandSender cmdSender) {
-            return new BuildVoxWriter("", cmdSender::sendErrMessage);
+            return new BuildVoxWriter(cmdSender::sendErrMessage);
         }
 
         @Override
@@ -345,7 +343,7 @@ public class BuildVoxSystem {
                 this.str = "...";
             }
             for(String msg : msgs) {
-                this.messageReceiver.println(colorCode + msg);
+                this.messageReceiver.println(msg);
             }
         }
 
