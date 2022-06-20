@@ -71,8 +71,8 @@ public class BuildVoxMod implements ModInitializer {
 
 	private void onServerStarting(MinecraftServer server) {
 		FabricScheduler.initialize();
-		BuildVoxSystem.environment = new BuildVoxSystem.Environment(new BlockUtils.FabricBlockValidator()
-				, FabricScheduler.getInstance());
+		BuildVoxSystem.setScheduler(FabricScheduler.getInstance());
+		BuildVoxSystem.setBlockValidator(new BlockUtils.FabricBlockValidator());
 		BlockUtils.registerBlocks();
 	}
 
