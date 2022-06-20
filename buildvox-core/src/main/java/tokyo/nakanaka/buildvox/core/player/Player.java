@@ -21,7 +21,7 @@ import java.util.UUID;
 /**
  * Represents a player.
  */
-public class Player implements BuildVoxSystem.CommandSender {
+public class Player {
     private UUID id;
     private VoxelBlock backgroundBlock;
     private Clipboard clipboard;
@@ -190,22 +190,18 @@ public class Player implements BuildVoxSystem.CommandSender {
         return Objects.hash(id);
     }
 
-    @Override
     public void sendOutMessage(String msg) {
         playerEntity.println(BuildVoxSystem.getConfig().outColor() + msg);
     }
 
-    @Override
     public void sendErrMessage(String msg) {
         playerEntity.println(BuildVoxSystem.getConfig().errColor() + msg);
     }
 
-    @Override
     public World getWorld() {
         return playerEntity.getWorld();
     }
 
-    @Override
     public Vector3i getBlockPos() {
         return playerEntity.getBlockPos();
     }
