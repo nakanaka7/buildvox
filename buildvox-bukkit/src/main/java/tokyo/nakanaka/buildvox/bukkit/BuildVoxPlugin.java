@@ -22,6 +22,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tokyo.nakanaka.buildvox.bukkit.block.BlockUtils;
 import tokyo.nakanaka.buildvox.bukkit.block.BukkitBlockValidator;
+import tokyo.nakanaka.buildvox.core.CommandSource;
+import tokyo.nakanaka.buildvox.core.Messenger;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.commandSender.CommandSender;
 import tokyo.nakanaka.buildvox.core.commandSender.PlainCommandSender;
@@ -41,6 +43,7 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
     private static BuildVoxPlugin instance;
     private Map<org.bukkit.World, NamespacedId> worldIdMap = new HashMap<>();
     private static BukkitConsole console = new BukkitConsole(Bukkit.getConsoleSender());
+    private UUID consoleId;
     public static String POS_MARKER_LOCALIZED_NAME = "BuildVoxBukkit";
 
     public static BuildVoxPlugin getInstance() {
@@ -65,6 +68,39 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
     private void registerWorlds() {
         for(var world0 : getServer().getWorlds()) {
             addWorld(world0);
+        }
+    }
+
+    private CommandSource getCommandSource(org.bukkit.command.CommandSender sender) {
+        if(sender instanceof Player player) {
+            return CommandSource.newInstance(player.getUniqueId());
+        }else if(sender instanceof ConsoleCommandSender console) {
+            if(consoleId == null) {
+                ConsolePlayer consolePlayer = ConsolePlayer.newInstance(console);
+                consoleId = consolePlayer.getId();
+                BuildVoxSystem.getRealPlayerRegistry().register(consolePlayer);
+            }
+            return CommandSource.newInstance(consoleId);
+        }else {
+            Messenger messenger = new Messenger() {
+                @Override
+                public void sendOutMessage(String msg) {
+                    sender.sendMessage(msg);
+                }
+                @Override
+                public void sendErrMessage(String msg) {
+                    sender.sendMessage(msg);
+                }
+            };
+            if(sender instanceof BlockCommandSender blockSender) {
+                var block = blockSender.getBlock();
+                org.bukkit.World world = block.getWorld();
+                NamespacedId worldId = NamespacedId.valueOf(world.getName());
+                Vector3i pos = new Vector3i(block.getX(), block.getY(), block.getZ());
+                return new CommandSource(worldId, pos, messenger);
+            }else {
+                return new CommandSource(NamespacedId.valueOf("world"), Vector3i.ZERO, messenger);
+            }
         }
     }
 
