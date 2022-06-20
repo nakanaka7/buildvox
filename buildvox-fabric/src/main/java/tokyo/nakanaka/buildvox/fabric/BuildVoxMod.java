@@ -245,12 +245,10 @@ public class BuildVoxMod implements ModInitializer {
 			return ActionResult.PASS;
 		}
 		UUID playerId = player1.getUuid();
-		Player player = BuildVoxSystem.getRealPlayerRegistry().get(playerId);
-		World world = convertServerWorldToBvWorld(world1);
 		ItemStack is = player0.getMainHandStack();
 		Vector3i pos = new Vector3i(pos0.getX(), pos0.getY(), pos0.getZ());
 		if(is.getItem().equals(POS_MARKER)){
-			BuildVoxSystem.onLeftClickBlockByPosMarker(player, world, pos);
+			BuildVoxSystem.onLeftClickBlockByPosMarker(playerId, pos);
 			return ActionResult.SUCCESS;
 		}else {
 			return ActionResult.PASS;
@@ -273,13 +271,11 @@ public class BuildVoxMod implements ModInitializer {
 			return ActionResult.PASS;
 		}
 		UUID playerId = player1.getUuid();
-		Player player = BuildVoxSystem.getRealPlayerRegistry().get(playerId);
-		World world = convertServerWorldToBvWorld(world1);
 		ItemStack is = player0.getMainHandStack();
 		BlockPos pos0 = hitResult.getBlockPos();
 		Vector3i pos = new Vector3i(pos0.getX(), pos0.getY(), pos0.getZ());
 		if(is.getItem().equals(POS_MARKER)){
-			BuildVoxSystem.onRightClickBlockByPosMarker(player, world, pos);
+			BuildVoxSystem.onRightClickBlockByPosMarker(playerId, pos);
 			return ActionResult.SUCCESS;
 		}else {
 			return ActionResult.PASS;
