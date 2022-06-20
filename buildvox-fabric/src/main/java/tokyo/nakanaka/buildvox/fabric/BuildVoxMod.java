@@ -238,7 +238,7 @@ public class BuildVoxMod implements ModInitializer {
 		if(!(player0 instanceof ServerPlayerEntity player1)) {
 			return ActionResult.PASS;
 		}
-		if(!(world0 instanceof ServerWorld world1)) {
+		if(!(world0 instanceof ServerWorld)) {
 			return ActionResult.PASS;
 		}
 		if(hand != Hand.MAIN_HAND) {
@@ -264,7 +264,7 @@ public class BuildVoxMod implements ModInitializer {
 		if(!(player0 instanceof ServerPlayerEntity player1)) {
 			return ActionResult.PASS;
 		}
-		if(!(world0 instanceof ServerWorld world1)) {
+		if(!(world0 instanceof ServerWorld)) {
 			return ActionResult.PASS;
 		}
 		if(hand != Hand.MAIN_HAND) {
