@@ -1,7 +1,7 @@
 package tokyo.nakanaka.buildvox.core.command.bvCommand;
 
 import picocli.CommandLine;
-import tokyo.nakanaka.buildvox.core.FeedbackMessage;
+import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.command.EditExit;
 import tokyo.nakanaka.buildvox.core.command.mixin.PosMixin;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
@@ -34,10 +34,10 @@ public class CopyCommand implements Runnable {
         try{
             exit = PlayerEdits.copy(player, pos);
         }catch (PlayerEdits.SelectionNotFoundException ex) {
-            err.println(FeedbackMessage.SELECTION_NULL_ERROR);
+            err.println(Messages.SELECTION_NULL_ERROR);
             return;
         }
-        out.println(FeedbackMessage.ofCopyExit(exit));
+        out.println(Messages.ofCopyExit(exit));
     }
 
 }

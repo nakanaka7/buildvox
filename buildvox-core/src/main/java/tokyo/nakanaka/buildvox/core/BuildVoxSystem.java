@@ -231,7 +231,7 @@ public class BuildVoxSystem {
         Vector3i[] posArray = new Vector3i[player.getPosArrayClone().length];
         posArray[0] = pos;
         player.setPosArray(world, posArray);
-        player.sendOutMessage(FeedbackMessage.ofPosExit(0, pos.x(), pos.y(), pos.z()));
+        player.sendOutMessage(Messages.ofPosExit(0, pos.x(), pos.y(), pos.z()));
     }
 
     /**
@@ -263,7 +263,7 @@ public class BuildVoxSystem {
         }
         posArray[index] = pos;
         player.setPosArray(world, posArray);
-        player.sendOutMessage(FeedbackMessage.ofPosExit(index, pos.x(), pos.y(), pos.z()));
+        player.sendOutMessage(Messages.ofPosExit(index, pos.x(), pos.y(), pos.z()));
     }
 
     private static class BuildVoxWriter extends Writer {

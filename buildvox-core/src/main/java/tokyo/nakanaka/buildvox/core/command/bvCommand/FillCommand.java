@@ -3,7 +3,7 @@ package tokyo.nakanaka.buildvox.core.command.bvCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import picocli.CommandLine;
-import tokyo.nakanaka.buildvox.core.FeedbackMessage;
+import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.command.EditExit;
 import tokyo.nakanaka.buildvox.core.command.IllegalPosException;
 import tokyo.nakanaka.buildvox.core.command.MissingPosDataException;
@@ -105,31 +105,31 @@ public class FillCommand implements Runnable {
         try {
             b = BuildVoxSystem.parseBlock(block);
         }catch (IllegalArgumentException e) {
-            err.println(FeedbackMessage.ofBlockParseError(block));
+            err.println(Messages.ofBlockParseError(block));
             return;
         }
         if(!BuildVoxSystem.environment.blockValidator().validate(b)){
-            err.println(FeedbackMessage.ofBlockNotSettableError(b.toString()));
+            err.println(Messages.ofBlockNotSettableError(b.toString()));
             return;
         }
         Selection selection;
         try{
             selection = selectionFactory.create();
         }catch (MissingPosDataException ex) {
-            err.println(FeedbackMessage.INCOMPLETE_POS_DATA_ERROR);
+            err.println(Messages.INCOMPLETE_POS_DATA_ERROR);
             return;
         }catch (PosDataSizeException ex) {
-            err.println(FeedbackMessage.ofPosArrayLengthError(ex.getAcceptableSize()));
+            err.println(Messages.ofPosArrayLengthError(ex.getAcceptableSize()));
             return;
         }catch (IllegalPosException ex) {
-            err.println(FeedbackMessage.POS_DATA_ERROR);
+            err.println(Messages.POS_DATA_ERROR);
             return;
         }catch (IllegalShapeArgumentException ex) {
             err.println("Invalid shape argument(s)");
             return;
         }
         EditExit exit = PlayerEdits.fill(player, selection, b, integrityMixin.integrity());
-        out.println(FeedbackMessage.ofSetExit(exit));
+        out.println(Messages.ofSetExit(exit));
     }
 
     private interface SelectionFactory {

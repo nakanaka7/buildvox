@@ -1,7 +1,7 @@
 package tokyo.nakanaka.buildvox.core.command.bvCommand;
 
 import picocli.CommandLine;
-import tokyo.nakanaka.buildvox.core.FeedbackMessage;
+import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.command.EditExit;
 import tokyo.nakanaka.buildvox.core.command.mixin.IntegrityMixin;
 import tokyo.nakanaka.buildvox.core.command.mixin.PosMixin;
@@ -47,7 +47,7 @@ public class PasteCommand implements Runnable {
             return;
         }
         EditExit exit = PlayerEdits.paste(player, pos, integrityMixin.integrity());
-        out.println(FeedbackMessage.ofSetExit(exit));
+        out.println(Messages.ofSetExit(exit));
     }
 
 }

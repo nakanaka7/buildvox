@@ -1,7 +1,7 @@
 package tokyo.nakanaka.buildvox.core.command.bvCommand;
 
 import picocli.CommandLine;
-import tokyo.nakanaka.buildvox.core.FeedbackMessage;
+import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.command.EditExit;
 import tokyo.nakanaka.buildvox.core.command.completionCandidates.BlockCandidates;
 import tokyo.nakanaka.buildvox.core.command.mixin.IntegrityMixin;
@@ -38,14 +38,14 @@ public class ReplaceCommand implements Runnable {
         try {
             bFrom = BuildVoxSystem.parseBlock(blockFrom);
         }catch (IllegalArgumentException e) {
-            err.println(FeedbackMessage.ofBlockParseError(blockFrom));
+            err.println(Messages.ofBlockParseError(blockFrom));
             return;
         }
         VoxelBlock bTo;
         try {
             bTo = BuildVoxSystem.parseBlock(blockTo);
         }catch (IllegalArgumentException e) {
-            err.println(FeedbackMessage.ofBlockParseError(blockTo));
+            err.println(Messages.ofBlockParseError(blockTo));
             return;
         }
         try{
@@ -58,10 +58,10 @@ public class ReplaceCommand implements Runnable {
         try {
             exit = PlayerEdits.replace(player, bFrom, bTo, integrityMixin.integrity());
         }catch (PlayerEdits.SelectionNotFoundException ex) {
-            err.println(FeedbackMessage.SELECTION_NULL_ERROR);
+            err.println(Messages.SELECTION_NULL_ERROR);
             return;
         }
-        out.println(FeedbackMessage.ofSetExit(exit));
+        out.println(Messages.ofSetExit(exit));
     }
 
 }

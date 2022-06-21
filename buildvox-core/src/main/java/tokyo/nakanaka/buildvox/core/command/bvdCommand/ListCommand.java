@@ -1,7 +1,7 @@
 package tokyo.nakanaka.buildvox.core.command.bvdCommand;
 
 import picocli.CommandLine;
-import tokyo.nakanaka.buildvox.core.FeedbackMessage;
+import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.BuildVoxSystem;
 
 import java.io.PrintWriter;
@@ -18,7 +18,7 @@ public class ListCommand implements Runnable {
     public void run() {
         PrintWriter out = commandSpec.commandLine().getOut();
         List<String> playerNameList = BuildVoxSystem.getDummyPlayerRegistry().idList();
-        out.println(FeedbackMessage.ofDummyPlayerListExit(playerNameList));
+        out.println(Messages.ofDummyPlayerListExit(playerNameList));
     }
 
 }

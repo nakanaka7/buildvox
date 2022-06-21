@@ -5,7 +5,7 @@ import tokyo.nakanaka.buildvox.core.property.Axis;
 
 import java.util.List;
 
-public class FeedbackMessage {
+public class Messages {
     public static final String NOT_FOUND_DUMMY_PLAYER_ERROR = "Cannot find the dummy player.";
     public static final String SESSION_NULL_ERROR = "Player must be specified.";
     public static final String POS_ARRAY_LENGTH_ERROR = "Pos array length must be 2..4.";
