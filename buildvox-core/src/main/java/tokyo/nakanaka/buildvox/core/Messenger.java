@@ -1,5 +1,8 @@
 package tokyo.nakanaka.buildvox.core;
 
+/**
+ * The object which send messages.
+ */
 public interface Messenger {
     /**
      * Send a (non-error) message.
