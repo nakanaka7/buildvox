@@ -1,7 +1,7 @@
 package tokyo.nakanaka.buildvox.core.command.bvCommand;
 
 import picocli.CommandLine;
-import tokyo.nakanaka.buildvox.core.FeedbackMessage;
+import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.command.mixin.PosMixin;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
@@ -34,7 +34,7 @@ public class PosCommand implements Runnable {
         Vector3i[] posArray = player.getPosArrayClone();
         int posDataSize = posArray.length;
         if(index < 0 || posDataSize <= index){
-            err.println(FeedbackMessage.ofPosRangeError(posDataSize));
+            err.println(Messages.ofPosRangeError(posDataSize));
             return;
         }
         Vector3d pos = posMixin.calcAbsPos(bvCmd.getExecPos());
@@ -43,7 +43,7 @@ public class PosCommand implements Runnable {
         int posZ = (int)Math.floor(pos.z());
         posArray[index] = new Vector3i(posX, posY, posZ);
         player.setPosArray(player.getEditTargetWorld(), posArray);
-        out.println(FeedbackMessage.ofPosExit(index, posX, posY, posZ));
+        out.println(Messages.ofPosExit(index, posX, posY, posZ));
     }
 
     private static class posIndexIterable implements Iterable<String> {

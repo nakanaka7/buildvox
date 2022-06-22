@@ -1,7 +1,7 @@
 package tokyo.nakanaka.buildvox.core.command.bvCommand.affineTransformCommand;
 
 import picocli.CommandLine;
-import tokyo.nakanaka.buildvox.core.FeedbackMessage;
+import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.command.EditExit;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
 import tokyo.nakanaka.buildvox.core.command.completionCandidates.DoubleCandidates;
@@ -35,7 +35,7 @@ public class ScaleCommand implements Runnable {
         PrintWriter err = commandSpec.commandLine().getErr();
         Player player = bvCmd.getTargetPlayer();
         if(factorX * factorY * factorZ == 0) {
-            err.println(FeedbackMessage.SCALE_FACTOR_ERROR);
+            err.println(Messages.SCALE_FACTOR_ERROR);
             return;
         }
         Vector3d pos = posMixin.calcAbsPos(bvCmd.getExecPos());
@@ -43,10 +43,10 @@ public class ScaleCommand implements Runnable {
         try {
             editExit = PlayerEdits.scale(player, factorX, factorY, factorZ, pos);
         }catch (PlayerEdits.SelectionNotFoundException ex) {
-            err.println(FeedbackMessage.SELECTION_NULL_ERROR);
+            err.println(Messages.SELECTION_NULL_ERROR);
             return;
         }
-        out.println(FeedbackMessage.ofSetExit(editExit));
+        out.println(Messages.ofSetExit(editExit));
     }
 
 }

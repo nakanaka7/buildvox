@@ -1,7 +1,7 @@
 package tokyo.nakanaka.buildvox.core.command.bvCommand;
 
 import picocli.CommandLine;
-import tokyo.nakanaka.buildvox.core.FeedbackMessage;
+import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.player.Player;
 
@@ -24,7 +24,7 @@ public class ApplyPhysicsCommand implements Runnable {
         try{
             PlayerEdits.applyPhysics(player);
         }catch (PlayerEdits.SelectionNotFoundException ex) {
-            err.println(FeedbackMessage.SELECTION_NULL_ERROR);
+            err.println(Messages.SELECTION_NULL_ERROR);
             return;
         }
         out.println("Applied physics in the selection.");

@@ -1,12 +1,12 @@
 package tokyo.nakanaka.buildvox.core.command.bvCommand;
 
 import picocli.CommandLine;
-import tokyo.nakanaka.buildvox.core.FeedbackMessage;
+import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.affineTransformCommand.*;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.posArray.PosArrayCommand;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.Player;
-import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
+import tokyo.nakanaka.buildvox.core.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.world.World;
 
 import java.io.PrintWriter;
@@ -67,13 +67,13 @@ public class BvCommand implements Runnable {
         if(dummyPlayer != null){
             var dummyPlayerRepo = BuildVoxSystem.getDummyPlayerRegistry();
             if(!dummyPlayerRepo.idList().contains(dummyPlayer)){
-                err.println(FeedbackMessage.NOT_FOUND_DUMMY_PLAYER_ERROR);
+                err.println(Messages.NOT_FOUND_DUMMY_PLAYER_ERROR);
                 return 0;
             }
             targetPlayer = dummyPlayerRepo.get(dummyPlayer);
         }
         if(targetPlayer == null) {
-            err.println(FeedbackMessage.SESSION_NULL_ERROR);
+            err.println(Messages.SESSION_NULL_ERROR);
             return 0;
         }
         if(execWorld != targetPlayer.getEditTargetWorld() ) {

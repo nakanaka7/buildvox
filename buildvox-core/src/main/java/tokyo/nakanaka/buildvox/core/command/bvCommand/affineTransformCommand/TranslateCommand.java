@@ -1,7 +1,7 @@
 package tokyo.nakanaka.buildvox.core.command.bvCommand.affineTransformCommand;
 
 import picocli.CommandLine;
-import tokyo.nakanaka.buildvox.core.FeedbackMessage;
+import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.command.EditExit;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
 import tokyo.nakanaka.buildvox.core.command.completionCandidates.IntegerCandidates;
@@ -34,10 +34,10 @@ public class TranslateCommand implements Runnable {
         try {
             editExit = PlayerEdits.translate(player, dx, dy, dz);
         }catch (PlayerEdits.SelectionNotFoundException ex) {
-            err.println(FeedbackMessage.SELECTION_NULL_ERROR);
+            err.println(Messages.SELECTION_NULL_ERROR);
             return;
         }
-        out.println(FeedbackMessage.ofSetExit(editExit));
+        out.println(Messages.ofSetExit(editExit));
     }
 
 }

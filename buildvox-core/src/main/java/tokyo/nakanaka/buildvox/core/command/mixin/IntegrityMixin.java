@@ -1,7 +1,7 @@
 package tokyo.nakanaka.buildvox.core.command.mixin;
 
 import picocli.CommandLine;
-import tokyo.nakanaka.buildvox.core.FeedbackMessage;
+import tokyo.nakanaka.buildvox.core.Messages;
 
 public class IntegrityMixin {
     @CommandLine.Option(names = {"-i", "--integrity"}, description = "The integrity of block setting.",
@@ -14,7 +14,7 @@ public class IntegrityMixin {
 
     public void checkValue() {
         if(integrity < 0 || 1 < integrity) {
-            throw new IllegalStateException(FeedbackMessage.INTEGRITY_ERROR);
+            throw new IllegalStateException(Messages.INTEGRITY_ERROR);
         }
     }
 

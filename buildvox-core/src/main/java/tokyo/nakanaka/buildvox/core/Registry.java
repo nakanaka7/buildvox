@@ -1,4 +1,6 @@
-package tokyo.nakanaka.buildvox.core.system;
+package tokyo.nakanaka.buildvox.core;
+
+import tokyo.nakanaka.buildvox.core.Entity;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

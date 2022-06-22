@@ -1,7 +1,7 @@
 package tokyo.nakanaka.buildvox.core.command.bvCommand;
 
 import picocli.CommandLine;
-import tokyo.nakanaka.buildvox.core.FeedbackMessage;
+import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.player.Player;
 
@@ -23,11 +23,11 @@ public class UndoCommand implements Runnable {
         PrintWriter err = commandSpec.commandLine().getErr();
         Player player = bvCmd.getTargetPlayer();
         if(count <= 0){
-            err.println(FeedbackMessage.UNDO_REDO_COUNT_ERROR);
+            err.println(Messages.UNDO_REDO_COUNT_ERROR);
             return;
         }
         int undoEditCount = PlayerEdits.undo(player, count);
-        out.println(FeedbackMessage.ofUndoExit(undoEditCount));
+        out.println(Messages.ofUndoExit(undoEditCount));
     }
 
 }

@@ -1,7 +1,7 @@
 package tokyo.nakanaka.buildvox.core.command.bvCommand.posArray;
 
 import picocli.CommandLine;
-import tokyo.nakanaka.buildvox.core.FeedbackMessage;
+import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.Player;
@@ -33,7 +33,7 @@ public class CreateCommand implements Runnable {
         PrintWriter out = commandSpec.commandLine().getOut();
         PrintWriter err = commandSpec.commandLine().getErr();
         if(length < 2 || 4 < length) {
-            err.println(FeedbackMessage.POS_ARRAY_LENGTH_ERROR);
+            err.println(Messages.POS_ARRAY_LENGTH_ERROR);
             return;
         }
         BvCommand bvCmd = posArrayCmd.getParentCommand();

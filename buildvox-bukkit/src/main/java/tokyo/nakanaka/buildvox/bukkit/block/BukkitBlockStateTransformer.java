@@ -14,7 +14,7 @@ import tokyo.nakanaka.buildvox.core.block.BlockTransformation;
 import tokyo.nakanaka.buildvox.core.block.StateImpl;
 import tokyo.nakanaka.buildvox.core.math.transformation.*;
 import tokyo.nakanaka.buildvox.core.math.vector.*;
-import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
+import tokyo.nakanaka.buildvox.core.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 
 import java.util.*;

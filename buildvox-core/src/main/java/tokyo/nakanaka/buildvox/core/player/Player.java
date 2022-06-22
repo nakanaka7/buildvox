@@ -1,6 +1,5 @@
 package tokyo.nakanaka.buildvox.core.player;
 
-import tokyo.nakanaka.buildvox.core.commandSender.CommandSender;
 import tokyo.nakanaka.buildvox.core.edit.Clipboard;
 import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
@@ -10,7 +9,7 @@ import tokyo.nakanaka.buildvox.core.particleGui.ParticleGui;
 import tokyo.nakanaka.buildvox.core.selection.FillSelection;
 import tokyo.nakanaka.buildvox.core.selection.PasteSelection;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
-import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
+import tokyo.nakanaka.buildvox.core.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.world.World;
 
@@ -22,7 +21,7 @@ import java.util.UUID;
 /**
  * Represents a player.
  */
-public class Player implements CommandSender {
+public class Player {
     private UUID id;
     private VoxelBlock backgroundBlock;
     private Clipboard clipboard;
@@ -191,22 +190,18 @@ public class Player implements CommandSender {
         return Objects.hash(id);
     }
 
-    @Override
     public void sendOutMessage(String msg) {
         playerEntity.println(BuildVoxSystem.getConfig().outColor() + msg);
     }
 
-    @Override
     public void sendErrMessage(String msg) {
         playerEntity.println(BuildVoxSystem.getConfig().errColor() + msg);
     }
 
-    @Override
     public World getWorld() {
         return playerEntity.getWorld();
     }
 
-    @Override
     public Vector3i getBlockPos() {
         return playerEntity.getBlockPos();
     }

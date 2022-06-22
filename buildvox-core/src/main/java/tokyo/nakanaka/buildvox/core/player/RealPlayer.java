@@ -1,6 +1,6 @@
 package tokyo.nakanaka.buildvox.core.player;
 
-import tokyo.nakanaka.buildvox.core.system.Entity;
+import tokyo.nakanaka.buildvox.core.Entity;
 
 import java.util.UUID;
 

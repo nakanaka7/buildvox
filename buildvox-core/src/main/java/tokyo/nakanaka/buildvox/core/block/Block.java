@@ -1,7 +1,7 @@
 package tokyo.nakanaka.buildvox.core.block;
 
 import tokyo.nakanaka.buildvox.core.NamespacedId;
-import tokyo.nakanaka.buildvox.core.system.Entity;
+import tokyo.nakanaka.buildvox.core.Entity;
 
 /**
  * Represents a block.
