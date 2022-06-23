@@ -47,4 +47,11 @@ public class RepeatCommand implements Runnable {
         out.println(Messages.ofSetExit(exit));
     }
 
+    public void runNew() {
+        PrintWriter out = commandSpec.commandLine().getOut();
+        Player player = bvCmd.getTargetPlayer();
+        EditExit exit = PlayerEdits.repeat(player, countX, countY, countZ);
+        out.println(Messages.ofSetExit(exit));
+    }
+
 }
