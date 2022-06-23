@@ -9,6 +9,7 @@ import tokyo.nakanaka.buildvox.core.blockSpace.ClipboardBlockSpace3;
 import tokyo.nakanaka.buildvox.core.blockSpace.IntegrityAdjustableBlockSpace3;
 import tokyo.nakanaka.buildvox.core.editWorld.EditWorld;
 import tokyo.nakanaka.buildvox.core.math.region3d.Cuboid;
+import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
 import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
@@ -163,6 +164,36 @@ public class WorldEdits {
                     int offsetY = minY + y * (maxY - minY + 1);
                     int offsetZ = minZ + z * (maxZ - minZ + 1);
                     paste(clipboard, world, new Vector3d(offsetX, offsetY, offsetZ));
+                }
+            }
+        }
+    }
+    /**
+     * Repeats the blocks in the selection.
+     * @param world the world.
+     * @param sel the selection.
+     * @param countX the count along x-axis.
+     * @param countY the count along y-axis.
+     * @param countZ the count along z-axis.
+     */
+    public static void repeat(EditWorld world, Selection sel, int countX, int countY, int countZ) {
+        Parallelepiped bound = sel.getBound();
+        double maxX = bound.maxX();
+        double maxY = bound.maxY();
+        double maxZ = bound.maxZ();
+        double minX = bound.minX();
+        double minY = bound.minY();
+        double minZ = bound.minZ();
+        Clipboard clipboard = new Clipboard();
+        WorldEdits.copy(world, sel, new Vector3d(minX, minY, minZ), clipboard);
+        clipboard.lock();
+        for(int y = Math.min(0, countY); y <= Math.max(0, countY); ++y){
+            for(int x = Math.min(0, countX); x <= Math.max(0, countX); ++x){
+                for(int z = Math.min(0, countZ); z <= Math.max(0, countZ); ++z){
+                    double posX = minX + x * (maxX - minX);
+                    double posY = minY + y * (maxY - minY);
+                    double posZ = minZ + z * (maxZ - minZ);
+                    paste(clipboard, world, new Vector3d(posX, posY, posZ));
                 }
             }
         }

@@ -3,6 +3,7 @@ package tokyo.nakanaka.buildvox.core.edit;
 import tokyo.nakanaka.buildvox.core.command.EditExit;
 import tokyo.nakanaka.buildvox.core.editWorld.EditWorld;
 import tokyo.nakanaka.buildvox.core.editWorld.RecordingEditWorld;
+import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
 import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
@@ -380,6 +381,26 @@ public class PlayerEdits {
         return recordingEdit(player,
                 (editWorld) -> WorldEdits.repeat(editWorld, new Vector3i(maxX, maxY, maxZ), new Vector3i(minX, minY, minZ), countX, countY, countZ)
                 , new Vector3i[]{pos0a, pos1a}
+        );
+    }
+
+    /**
+     * Repeats the blocks in the player selection.
+     * @param player the player.
+     * @param countX the count along x-axis.
+     * @param countY the count along y-axis.
+     * @param countZ the count along z-axis.
+     * @throws SelectionNotFoundException if a selection is not found
+     */
+    public static EditExit repeat(Player player, int countX, int countY, int countZ) {
+        Selection sel = findSelection(player);
+        Parallelepiped bound = sel.getBound();
+        double dx = countX * (bound.maxX() - bound.minX());
+        double dy = countY * (bound.maxY() - bound.minY());
+        double dz = countZ * (bound.maxZ() - bound.minZ());
+        return recordingEdit(player,
+                (editWorld) -> WorldEdits.repeat(editWorld, sel, countX, countY, countZ),
+                sel.translate(dx, dy, dz)
         );
     }
 
