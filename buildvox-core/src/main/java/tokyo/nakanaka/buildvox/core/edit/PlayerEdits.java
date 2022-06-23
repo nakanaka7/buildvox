@@ -385,7 +385,7 @@ public class PlayerEdits {
     }
 
     /**
-     * Repeats the blocks in the player selection.
+     * Repeats the blocks in the player selection. countX, countY, and countZ defines the repeating direction vector.
      * @param player the player.
      * @param countX the count along x-axis.
      * @param countY the count along y-axis.
