@@ -8,6 +8,7 @@ import tokyo.nakanaka.buildvox.core.blockSpace.BlockStateTransformingBlockSpace3
 import tokyo.nakanaka.buildvox.core.blockSpace.ClipboardBlockSpace3;
 import tokyo.nakanaka.buildvox.core.blockSpace.IntegrityAdjustableBlockSpace3;
 import tokyo.nakanaka.buildvox.core.editWorld.EditWorld;
+import tokyo.nakanaka.buildvox.core.math.Drawings;
 import tokyo.nakanaka.buildvox.core.math.region3d.Cuboid;
 import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
 import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
@@ -169,7 +170,7 @@ public class WorldEdits {
         }
     }
     /**
-     * Repeats the blocks in the selection.
+     * Repeats the blocks in the selection. countX, countY, and countZ defines the repeating direction vector.
      * @param world the world.
      * @param sel the selection.
      * @param countX the count along x-axis.
@@ -187,15 +188,13 @@ public class WorldEdits {
         Clipboard clipboard = new Clipboard();
         WorldEdits.copy(world, sel, new Vector3d(minX, minY, minZ), clipboard);
         clipboard.lock();
-        for(int y = Math.min(0, countY); y <= Math.max(0, countY); ++y){
-            for(int x = Math.min(0, countX); x <= Math.max(0, countX); ++x){
-                for(int z = Math.min(0, countZ); z <= Math.max(0, countZ); ++z){
-                    double posX = minX + x * (maxX - minX);
-                    double posY = minY + y * (maxY - minY);
-                    double posZ = minZ + z * (maxZ - minZ);
-                    paste(clipboard, world, new Vector3d(posX, posY, posZ));
-                }
-            }
+
+        Set<Vector3i> positions = Drawings.line(Vector3i.ZERO, new Vector3i(countX, countY, countZ));
+        for(var pos : positions) {
+            double posX = minX + pos.x() * (maxX - minX);
+            double posY = minY + pos.y() * (maxY - minY);
+            double posZ = minZ + pos.z() * (maxZ - minZ);
+            paste(clipboard, world, new Vector3d(posX, posY, posZ));
         }
     }
 
