@@ -1,5 +1,6 @@
 package tokyo.nakanaka.buildvox.core.edit;
 
+import tokyo.nakanaka.buildvox.core.blockSpace.BlockSpace3;
 import tokyo.nakanaka.buildvox.core.blockSpace.Clipboard;
 import tokyo.nakanaka.buildvox.core.command.EditExit;
 import tokyo.nakanaka.buildvox.core.blockSpace.editWorld.EditWorld;
@@ -403,6 +404,55 @@ public class PlayerEdits {
                 (editWorld) -> WorldEdits.repeat(editWorld, sel, countX, countY, countZ),
                 sel.translate(dx, dy, dz)
         );
+    }
+
+    /**
+     * An edit world for a player. Calling end() stores an undoable edit
+     * into the player.
+     */
+    private static class PlayerWorld extends RecordingEditWorld {
+        private Player player;
+        private Selection sel;
+
+        private PlayerWorld(World original, Player player) {
+            super(original);
+            this.player = player;
+            this.sel = player.getSelection();
+        }
+
+        /**
+         * Creates a new instance of the player.
+         * @param player the player.
+         * @return a new instance.
+         */
+        public static PlayerWorld newInstance(Player player) {
+            var world = player.getEditTargetWorld();
+            return new PlayerWorld(world, player);
+        }
+
+        /**
+         * Set the selection.
+         * @param sel the selection.
+         */
+        public void setSelection(Selection sel) {
+            this.sel = sel;
+        }
+
+        /**
+         * Stores the selection change and block changes as one edit into player.
+         * @return the edit exit.
+         */
+        public EditExit end() {
+            UndoableEdit selEdit = createSelectionEdit(player, sel);
+            UndoableEdit blockEdit = createBlockEdit(this);
+            CompoundEdit compoundEdit = new CompoundEdit();
+            compoundEdit.addEdit(selEdit);
+            compoundEdit.addEdit(blockEdit);
+            compoundEdit.end();
+            player.getUndoManager().addEdit(compoundEdit);
+            return new EditExit(this.blockCount(), 0, 0);
+        }
+
     }
 
     /**
