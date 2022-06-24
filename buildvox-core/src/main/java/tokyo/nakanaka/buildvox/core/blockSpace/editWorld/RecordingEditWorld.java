@@ -1,4 +1,4 @@
-package tokyo.nakanaka.buildvox.core.editWorld;
+package tokyo.nakanaka.buildvox.core.blockSpace.editWorld;
 
 import tokyo.nakanaka.buildvox.core.blockSpace.Clipboard;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;

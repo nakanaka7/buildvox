@@ -2,8 +2,8 @@ package tokyo.nakanaka.buildvox.core.edit;
 
 import tokyo.nakanaka.buildvox.core.blockSpace.Clipboard;
 import tokyo.nakanaka.buildvox.core.command.EditExit;
-import tokyo.nakanaka.buildvox.core.editWorld.EditWorld;
-import tokyo.nakanaka.buildvox.core.editWorld.RecordingEditWorld;
+import tokyo.nakanaka.buildvox.core.blockSpace.editWorld.EditWorld;
+import tokyo.nakanaka.buildvox.core.blockSpace.editWorld.RecordingEditWorld;
 import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
 import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
