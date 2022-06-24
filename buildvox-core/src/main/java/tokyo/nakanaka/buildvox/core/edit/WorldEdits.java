@@ -18,6 +18,7 @@ import tokyo.nakanaka.buildvox.core.selection.Selection;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.world.World;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -189,7 +190,7 @@ public class WorldEdits {
         WorldEdits.copy(world, sel, new Vector3d(minX, minY, minZ), clipboard);
         clipboard.lock();
 
-        Set<Vector3i> positions = Drawings.line(Vector3i.ZERO, new Vector3i(countX, countY, countZ));
+        List<Vector3i> positions = Drawings.line(Vector3i.ZERO, new Vector3i(countX, countY, countZ));
         for(var pos : positions) {
             double posX = minX + pos.x() * (maxX - minX);
             double posY = minY + pos.y() * (maxY - minY);
