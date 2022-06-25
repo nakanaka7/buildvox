@@ -30,6 +30,10 @@ public class Player {
     private boolean particleGuiVisible;
     private ParticleGui particleGui;
 
+    /**
+     * Creates a new instance by the player entity.
+     * @param playerEntity the player entity.
+     */
     public Player(PlayerEntity playerEntity) {
         this.playerEntity = playerEntity;
         this.messenger = new PlayerMessenger(playerEntity);
