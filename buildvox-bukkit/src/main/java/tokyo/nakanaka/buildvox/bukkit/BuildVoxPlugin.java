@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 import tokyo.nakanaka.buildvox.bukkit.block.BlockUtils;
 import tokyo.nakanaka.buildvox.bukkit.block.BukkitBlockValidator;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
-import tokyo.nakanaka.buildvox.core.CommandSource;
+import tokyo.nakanaka.buildvox.core.system.CommandSource;
 import tokyo.nakanaka.buildvox.core.Messenger;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
