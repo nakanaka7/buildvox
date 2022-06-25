@@ -36,6 +36,10 @@ public class ConsolePlayer extends RealPlayer {
                 return BuildVoxSystem.getWorldRegistry().get(NamespacedId.valueOf("world"));
             }
             @Override
+            public NamespacedId getWorldId() {
+                return new NamespacedId("world");
+            }
+            @Override
             public void givePosMarker() {
             }
             @Override
