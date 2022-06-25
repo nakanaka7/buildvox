@@ -315,7 +315,7 @@ public class PlayerEdits {
         );
     }
 
-    /**
+    /*
      * Repeats the blocks in the cuboid specified by pos0 and pos1.
      * @param player the player.
      * @param pos0 the position of a corner.
@@ -324,7 +324,7 @@ public class PlayerEdits {
      * @param countY the count along y-axis.
      * @param countZ the count along z-axis.
      */
-    public static EditExit repeat(Player player, Vector3i pos0, Vector3i pos1, int countX, int countY, int countZ) {
+    public static EditExit repeatOld(Player player, Vector3i pos0, Vector3i pos1, int countX, int countY, int countZ) {
         int maxX = Math.max(pos0.x(), pos1.x());
         int maxY = Math.max(pos0.y(), pos1.y());
         int maxZ = Math.max(pos0.z(), pos1.z());

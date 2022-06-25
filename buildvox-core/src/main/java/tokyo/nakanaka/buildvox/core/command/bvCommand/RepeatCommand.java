@@ -55,7 +55,7 @@ public class RepeatCommand implements Runnable {
             err.println(Messages.INCOMPLETE_POS_DATA_ERROR);
             return;
         }
-        EditExit exit = PlayerEdits.repeat(player, pos0, pos1, countX, countY, countZ);
+        EditExit exit = PlayerEdits.repeatOld(player, pos0, pos1, countX, countY, countZ);
         out.println(Messages.ofSetExit(exit));
     }
 
