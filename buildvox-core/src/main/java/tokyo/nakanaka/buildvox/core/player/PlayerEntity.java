@@ -30,6 +30,7 @@ public interface PlayerEntity extends ColoredParticleSpawner {
      * Gets the world which this player exists in
      * @return the world which this player exists in
      */
+    @Deprecated
     World getWorld();
 
     /**
