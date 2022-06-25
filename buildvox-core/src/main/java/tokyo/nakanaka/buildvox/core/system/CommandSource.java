@@ -41,16 +41,7 @@ public class CommandSource {
         World world = player.getPlayerEntity().getWorld();
         NamespacedId worldId = world.getId();
         Vector3i pos = player.getPlayerEntity().getBlockPos();
-        Messenger messenger = new Messenger() {
-            @Override
-            public void sendOutMessage(String msg) {
-                player.sendOutMessage(msg);
-            }
-            @Override
-            public void sendErrMessage(String msg) {
-                player.sendErrMessage(msg);
-            }
-        };
+        Messenger messenger = player.getMessenger();
         return new CommandSource(worldId, pos, messenger, playerId);
     }
 
