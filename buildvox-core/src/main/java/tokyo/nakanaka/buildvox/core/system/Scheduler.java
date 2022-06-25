@@ -1,4 +1,4 @@
-package tokyo.nakanaka.buildvox.core;
+package tokyo.nakanaka.buildvox.core.system;
 
 /**
  * A scheduler. This object can schedule a runnable at specified tick from invoking time.
