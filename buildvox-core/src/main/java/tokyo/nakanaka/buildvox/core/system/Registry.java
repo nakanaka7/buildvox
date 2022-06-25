@@ -1,4 +1,4 @@
-package tokyo.nakanaka.buildvox.core;
+package tokyo.nakanaka.buildvox.core.system;
 
 import tokyo.nakanaka.buildvox.core.Entity;
 
