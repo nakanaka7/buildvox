@@ -514,7 +514,7 @@ public class PlayerEdits {
         UndoableEdit posArrayOrSelectionEdit;
         if(endSelection == null) {
             posArrayOrSelectionEdit = createPosArrayEdit(player, endPosArray);
-            player.setPosArray(player.getEditTargetWorld(), endPosArray);
+            player.setPosArray(endPosArray);
         }else {
             boolean endPosArrayContainsOnlyNull = Arrays.stream(endPosArray).allMatch(Objects::isNull);
             if(!endPosArrayContainsOnlyNull) {
@@ -554,30 +554,28 @@ public class PlayerEdits {
 
     /* Creates an edit to set a new pos array into the player */
     private static UndoableEdit createPosArrayEdit(Player player, Vector3i[] posArray) {
-        World world = player.getEditTargetWorld();
         Vector3i[] initPosArray = player.getPosArrayClone();
         Selection initSelection = player.getSelection();
         return createEdit(
             () -> {
                 if(initSelection == null) {
-                    player.setPosArray(world, initPosArray.clone());
+                    player.setPosArray(initPosArray.clone());
                 }else{
                     player.setSelection(initSelection);
                 }
             },
-            () -> player.setPosArray(world, posArray)
+            () -> player.setPosArray(posArray)
         );
     }
 
     /* Creates an edit to set a new selection into the player */
     private static UndoableEdit createSelectionEdit(Player player, Selection selection) {
-        World world = player.getEditTargetWorld();
         Vector3i[] initPosArray = player.getPosArrayClone();
         Selection initSelection = player.getSelection();
         return createEdit(
             () -> {
                 if(initSelection == null) {
-                    player.setPosArray(world, initPosArray.clone());
+                    player.setPosArray(initPosArray.clone());
                 }else{
                     player.setSelection(initSelection);
                 }

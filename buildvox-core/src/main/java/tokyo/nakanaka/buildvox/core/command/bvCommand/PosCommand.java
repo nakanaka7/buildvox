@@ -42,7 +42,7 @@ public class PosCommand implements Runnable {
         int posY = (int)Math.floor(pos.y());
         int posZ = (int)Math.floor(pos.z());
         posArray[index] = new Vector3i(posX, posY, posZ);
-        player.setPosArray(player.getEditTargetWorld(), posArray);
+        player.setPosArray(posArray);
         out.println(Messages.ofPosExit(index, posX, posY, posZ));
     }
 
