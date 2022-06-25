@@ -19,14 +19,14 @@ import java.util.Arrays;
  * Represents a player.
  */
 public class Player {
-    private VoxelBlock backgroundBlock = VoxelBlock.valueOf(BuildVoxSystem.getBackgroundBlockId().toString());;
+    private final UndoManager undoManager = new UndoManager();
+    private VoxelBlock backgroundBlock = VoxelBlock.valueOf(BuildVoxSystem.getBackgroundBlockId().toString());
     private Clipboard clipboard;
-    private UndoManager undoManager = new UndoManager();
     private World editWorld;
     private Vector3i[] posArray = new Vector3i[2];
     private Selection selection;
-    private PlayerEntity playerEntity;
-    private PlayerMessenger messenger;
+    private final PlayerEntity playerEntity;
+    private final PlayerMessenger messenger;
     private boolean particleGuiVisible;
     private ParticleGui particleGui;
 
