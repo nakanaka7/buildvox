@@ -1,6 +1,6 @@
 package tokyo.nakanaka.buildvox.core.system;
 
-import tokyo.nakanaka.buildvox.core.Entity;
+import tokyo.nakanaka.buildvox.core.Identifiable;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Represents a registry for {@link Entity}
+ * Represents a registry for {@link Identifiable}
  * @param <E> entity type
  * @param <I> id type of the entity
  */
-public class Registry<E extends Entity<I>, I> {
+public class Registry<E extends Identifiable<I>, I> {
     private final Map<I, E> entityMap = new LinkedHashMap<>();
 
     /**

@@ -1,13 +1,13 @@
 package tokyo.nakanaka.buildvox.core.player;
 
-import tokyo.nakanaka.buildvox.core.Entity;
+import tokyo.nakanaka.buildvox.core.Identifiable;
 
 import java.util.UUID;
 
 /**
  * Represents a real player.
  */
-public class RealPlayer extends Player implements Entity<UUID> {
+public class RealPlayer extends Player implements Identifiable<UUID> {
     private UUID id;
 
     /**

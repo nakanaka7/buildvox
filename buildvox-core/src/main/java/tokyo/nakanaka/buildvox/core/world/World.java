@@ -1,13 +1,13 @@
 package tokyo.nakanaka.buildvox.core.world;
 
 import tokyo.nakanaka.buildvox.core.NamespacedId;
-import tokyo.nakanaka.buildvox.core.Entity;
+import tokyo.nakanaka.buildvox.core.Identifiable;
 
 /**
  * Represents a world. A world is a single space. It does not contain 3 parallel "dimension"
  * spaces(over-world, nether, and end). Each dimension is considered as a single world.
  */
-public interface World extends Entity<NamespacedId> {
+public interface World extends Identifiable<NamespacedId> {
     @Override
     NamespacedId getId();
 
