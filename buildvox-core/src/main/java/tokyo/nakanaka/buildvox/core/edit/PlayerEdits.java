@@ -106,7 +106,7 @@ public class PlayerEdits {
         }else {
             selTo = selFrom;
         }
-        player.setSelection(player.getEditTargetWorld(), selTo);
+        player.setSelection(selTo);
     }
 
     /**
@@ -521,7 +521,7 @@ public class PlayerEdits {
                 throw new IllegalArgumentException();
             }
             posArrayOrSelectionEdit = createSelectionEdit(player, endSelection);
-            player.setSelection(player.getEditTargetWorld(), endSelection);
+            player.setSelection(endSelection);
         }
         compoundEdit.addEdit(posArrayOrSelectionEdit);
         compoundEdit.end();
@@ -562,7 +562,7 @@ public class PlayerEdits {
                 if(initSelection == null) {
                     player.setPosArray(world, initPosArray.clone());
                 }else{
-                    player.setSelection(world, initSelection);
+                    player.setSelection(initSelection);
                 }
             },
             () -> player.setPosArray(world, posArray)
@@ -579,10 +579,10 @@ public class PlayerEdits {
                 if(initSelection == null) {
                     player.setPosArray(world, initPosArray.clone());
                 }else{
-                    player.setSelection(world, initSelection);
+                    player.setSelection(initSelection);
                 }
             },
-            () -> player.setSelection(world, selection)
+            () -> player.setSelection(selection)
         );
     }
 
