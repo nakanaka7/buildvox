@@ -382,7 +382,7 @@ public class PlayerEdits {
         Vector3i pos0a = new Vector3i(pos0x, pos0y, pos0z);
         Vector3i pos1a = new Vector3i(pos1x, pos1y, pos1z);
         return recordingEdit(player,
-                (editWorld) -> WorldEdits.repeat(editWorld, new Vector3i(maxX, maxY, maxZ), new Vector3i(minX, minY, minZ), countX, countY, countZ)
+                (editWorld) -> WorldEdits.repeatOld(editWorld, new Vector3i(maxX, maxY, maxZ), new Vector3i(minX, minY, minZ), countX, countY, countZ)
                 , new Vector3i[]{pos0a, pos1a}
         );
     }
