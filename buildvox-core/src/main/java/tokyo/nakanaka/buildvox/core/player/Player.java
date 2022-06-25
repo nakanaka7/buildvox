@@ -35,7 +35,7 @@ public class Player {
 
     public Player(PlayerEntity playerEntity) {
         this.id = playerEntity.getId();
-        this.backgroundBlock = VoxelBlock.valueOf(BuildVoxSystem.config.backgroundBlock());
+        this.backgroundBlock = VoxelBlock.valueOf(BuildVoxSystem.getBackgroundBlockId().toString());
         this.playerEntity = playerEntity;
     }
 
