@@ -82,11 +82,13 @@ public class BuildVoxSystem {
         return environment.blockValidator();
     }
 
-    public String getOutColor() {
+    /** Gets the out color code. */
+    public static String getOutColor() {
         return config.outColor;
     }
 
-    public String getErrColor() {
+    /** Gets the error color code. */
+    public static String getErrColor() {
         return config.errColor;
     }
 
