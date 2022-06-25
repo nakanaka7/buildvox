@@ -91,15 +91,6 @@ public class Player {
     }
 
     /**
-     * Use setSelection without world.
-     */
-    @Deprecated
-    public void setSelection(World world, Selection selection) {
-        this.editTargetWorld = world;
-        setSelection(selection);
-    }
-
-    /**
      * Set a selection. The all elements of pos array will be set null.
      * @param selection the selection
      */
