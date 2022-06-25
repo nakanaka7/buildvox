@@ -103,15 +103,6 @@ public class Player {
     }
 
     /**
-     * Use setPosArray without world
-     */
-    @Deprecated
-    public void setPosArray(World world, Vector3i[] posArray) {
-        this.editTargetWorld = world;
-        setPosArray(posArray);
-    }
-
-    /**
      * Sets a pos array. The selection will be set null.
      * @param posArray the pos array.
      */
