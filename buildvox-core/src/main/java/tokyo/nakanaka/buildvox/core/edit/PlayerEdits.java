@@ -1,15 +1,18 @@
 package tokyo.nakanaka.buildvox.core.edit;
 
+import tokyo.nakanaka.buildvox.core.BuildVoxSystem;
+import tokyo.nakanaka.buildvox.core.blockSpace.Clipboard;
+import tokyo.nakanaka.buildvox.core.blockSpace.editWorld.EditWorld;
+import tokyo.nakanaka.buildvox.core.blockSpace.editWorld.RecordingEditWorld;
 import tokyo.nakanaka.buildvox.core.command.EditExit;
-import tokyo.nakanaka.buildvox.core.editWorld.EditWorld;
-import tokyo.nakanaka.buildvox.core.editWorld.RecordingEditWorld;
+import tokyo.nakanaka.buildvox.core.math.Drawings;
+import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
 import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.property.Axis;
 import tokyo.nakanaka.buildvox.core.selection.*;
-import tokyo.nakanaka.buildvox.core.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.world.World;
 
@@ -17,6 +20,7 @@ import javax.swing.undo.CompoundEdit;
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -311,7 +315,7 @@ public class PlayerEdits {
         );
     }
 
-    /**
+    /*
      * Repeats the blocks in the cuboid specified by pos0 and pos1.
      * @param player the player.
      * @param pos0 the position of a corner.
@@ -320,7 +324,7 @@ public class PlayerEdits {
      * @param countY the count along y-axis.
      * @param countZ the count along z-axis.
      */
-    public static EditExit repeat(Player player, Vector3i pos0, Vector3i pos1, int countX, int countY, int countZ) {
+    public static EditExit repeatOld(Player player, Vector3i pos0, Vector3i pos1, int countX, int countY, int countZ) {
         int maxX = Math.max(pos0.x(), pos1.x());
         int maxY = Math.max(pos0.y(), pos1.y());
         int maxZ = Math.max(pos0.z(), pos1.z());
@@ -378,9 +382,89 @@ public class PlayerEdits {
         Vector3i pos0a = new Vector3i(pos0x, pos0y, pos0z);
         Vector3i pos1a = new Vector3i(pos1x, pos1y, pos1z);
         return recordingEdit(player,
-                (editWorld) -> WorldEdits.repeat(editWorld, new Vector3i(maxX, maxY, maxZ), new Vector3i(minX, minY, minZ), countX, countY, countZ)
+                (editWorld) -> WorldEdits.repeatOld(editWorld, new Vector3i(maxX, maxY, maxZ), new Vector3i(minX, minY, minZ), countX, countY, countZ)
                 , new Vector3i[]{pos0a, pos1a}
         );
+    }
+
+    /**
+     * Repeats the blocks in the player selection. countX, countY, and countZ defines the repeating direction vector.
+     * The end selection will be the paste selection of the last repeating blocks
+     * @param player the player.
+     * @param countX the count along x-axis.
+     * @param countY the count along y-axis.
+     * @param countZ the count along z-axis.
+     * @throws SelectionNotFoundException if a selection is not found
+     */
+    public static EditExit repeat(Player player, int countX, int countY, int countZ) {
+        Selection sel = findSelection(player);
+        Parallelepiped bound = sel.getBound();
+        double dx = bound.maxX() - bound.minX();
+        double dy = bound.maxY() - bound.minY();
+        double dz = bound.maxZ() - bound.minZ();
+        Clipboard clip = new Clipboard();
+        WorldEdits.copy(player.getWorld(), sel, Vector3d.ZERO, clip);
+        List<Vector3i> positions = Drawings.line(Vector3i.ZERO, new Vector3i(countX, countY, countZ));
+        PlayerWorld pw = PlayerWorld.newInstance(player);
+        for(Vector3i pos : positions) {
+            double qx = pos.x() * dx;
+            double qy = pos.y() * dy;
+            double qz = pos.z() * dz;
+            PasteSelection pasteSel = PasteSelection.newInstance(clip, new Vector3d(qx, qy, qz), AffineTransformation3d.IDENTITY);
+            pasteSel.setForwardBlocks(pw);
+            pw.setSelection(pasteSel);
+        }
+        return pw.end();
+    }
+
+    /**
+     * An edit world for a player. Calling end() stores an undoable edit
+     * into the player.
+     */
+    private static class PlayerWorld extends RecordingEditWorld {
+        private Player player;
+        private Selection sel;
+
+        private PlayerWorld(World original, Player player) {
+            super(original);
+            this.player = player;
+            this.sel = player.getSelection();
+        }
+
+        /**
+         * Creates a new instance of the player.
+         * @param player the player.
+         * @return a new instance.
+         */
+        public static PlayerWorld newInstance(Player player) {
+            var world = player.getEditTargetWorld();
+            return new PlayerWorld(world, player);
+        }
+
+        /**
+         * Set the selection.
+         * @param sel the selection.
+         */
+        public void setSelection(Selection sel) {
+            this.sel = sel;
+        }
+
+        /**
+         * Stores the selection change and block changes as one edit into player.
+         * @return the edit exit.
+         */
+        public EditExit end() {
+            UndoableEdit selEdit = createSelectionEdit(player, sel);
+            player.setSelection(sel);
+            UndoableEdit blockEdit = createBlockEdit(this);
+            CompoundEdit compoundEdit = new CompoundEdit();
+            compoundEdit.addEdit(selEdit);
+            compoundEdit.addEdit(blockEdit);
+            compoundEdit.end();
+            player.getUndoManager().addEdit(compoundEdit);
+            return new EditExit(this.blockCount(), 0, 0);
+        }
+
     }
 
     /**

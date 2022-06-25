@@ -3,11 +3,8 @@ package tokyo.nakanaka.buildvox.core.edit;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.block.BlockTransformation;
 import tokyo.nakanaka.buildvox.core.block.StateImpl;
-import tokyo.nakanaka.buildvox.core.blockSpace.BlockSpace3;
-import tokyo.nakanaka.buildvox.core.blockSpace.BlockStateTransformingBlockSpace3;
-import tokyo.nakanaka.buildvox.core.blockSpace.ClipboardBlockSpace3;
-import tokyo.nakanaka.buildvox.core.blockSpace.IntegrityAdjustableBlockSpace3;
-import tokyo.nakanaka.buildvox.core.editWorld.EditWorld;
+import tokyo.nakanaka.buildvox.core.blockSpace.*;
+import tokyo.nakanaka.buildvox.core.blockSpace.editWorld.EditWorld;
 import tokyo.nakanaka.buildvox.core.math.region3d.Cuboid;
 import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
@@ -134,7 +131,7 @@ public class WorldEdits {
             toBlock);
     }
 
-    /**
+    /*
      * Repeats the blocks in the cuboid specified by pos0 and pos1.
      * @param world the world
      * @param pos0 the position of a corner.
@@ -143,8 +140,8 @@ public class WorldEdits {
      * @param countY the count along y-axis.
      * @param countZ the count along z-axis.
      */
-    public static void repeat(EditWorld world, Vector3i pos0, Vector3i pos1,
-                              int countX, int countY, int countZ) {
+    public static void repeatOld(EditWorld world, Vector3i pos0, Vector3i pos1,
+                                 int countX, int countY, int countZ) {
         int maxX = Math.max(pos0.x(), pos1.x());
         int maxY = Math.max(pos0.y(), pos1.y());
         int maxZ = Math.max(pos0.z(), pos1.z());
