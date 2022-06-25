@@ -29,8 +29,7 @@ import java.util.UUID;
 public class BuildVoxSystem {
     public static final Logger CORE_LOGGER = LoggerFactory.getLogger("BuildVoxCore");
     private static Environment environment = Environment.DEFAULT;
-    @Deprecated
-    public static Config config = Config.DEFAULT;
+    private static Config config = Config.DEFAULT;
     private static final Registry<World, NamespacedId> worldRegistry = new Registry<>();
     private static final Registry<Block<?,?>, NamespacedId> blockRegistry = new Registry<>();
     private static final Registry<RealPlayer, UUID> realPlayerRegistry = new Registry<>();
@@ -47,13 +46,9 @@ public class BuildVoxSystem {
                 (runnable, tick) -> {});
     }
 
-    public static record Config(String outColor, String errColor, String backgroundBlock, int posArrayLength) {
-        public static final Config DEFAULT = new Config(ColorCode.GREEN, ColorCode.RED, "minecraft:air", 2);
-    }
-
     @Deprecated
-    public static Config getConfig() {
-        return config;
+    private static record Config(String outColor, String errColor, String backgroundBlock, int posArrayLength) {
+        public static final Config DEFAULT = new Config(ColorCode.GREEN, ColorCode.RED, "minecraft:air", 2);
     }
 
     /** Use VoxelBlock.valueOf() */
