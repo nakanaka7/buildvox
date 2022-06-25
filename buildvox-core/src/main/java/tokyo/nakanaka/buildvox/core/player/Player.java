@@ -166,10 +166,6 @@ public class Player {
         playerEntity.println(BuildVoxSystem.getErrColor() + msg);
     }
 
-    public World getWorld() {
-        return playerEntity.getWorld();
-    }
-
     /**
      * Set whether the particle gui is visible
      * @param b true if the gui is visible, otherwise false.
