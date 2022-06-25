@@ -403,7 +403,7 @@ public class PlayerEdits {
         double dy = bound.maxY() - bound.minY();
         double dz = bound.maxZ() - bound.minZ();
         Clipboard clip = new Clipboard();
-        WorldEdits.copy(player.getWorld(), sel, Vector3d.ZERO, clip);
+        WorldEdits.copy(player.getEditTargetWorld(), sel, Vector3d.ZERO, clip);
         List<Vector3i> positions = Drawings.line(Vector3i.ZERO, new Vector3i(countX, countY, countZ));
         PlayerWorld pw = PlayerWorld.newInstance(player);
         for(Vector3i pos : positions) {
