@@ -31,6 +31,18 @@ public class RepeatCommand implements Runnable {
         PrintWriter out = commandSpec.commandLine().getOut();
         PrintWriter err = commandSpec.commandLine().getErr();
         Player player = bvCmd.getTargetPlayer();
+        try {
+            EditExit exit = PlayerEdits.repeat(player, countX, countY, countZ);
+            out.println(Messages.ofSetExit(exit));
+        } catch (PlayerEdits.SelectionNotFoundException ex) {
+            err.println(Messages.SELECTION_NULL_ERROR);
+        }
+    }
+
+    public void runOld() {
+        PrintWriter out = commandSpec.commandLine().getOut();
+        PrintWriter err = commandSpec.commandLine().getErr();
+        Player player = bvCmd.getTargetPlayer();
         World world = player.getEditTargetWorld();
         Vector3i[] posData = player.getPosArrayClone();
         if(posData.length != 2) {
@@ -44,13 +56,6 @@ public class RepeatCommand implements Runnable {
             return;
         }
         EditExit exit = PlayerEdits.repeat(player, pos0, pos1, countX, countY, countZ);
-        out.println(Messages.ofSetExit(exit));
-    }
-
-    public void runNew() {
-        PrintWriter out = commandSpec.commandLine().getOut();
-        Player player = bvCmd.getTargetPlayer();
-        EditExit exit = PlayerEdits.repeat(player, countX, countY, countZ);
         out.println(Messages.ofSetExit(exit));
     }
 
