@@ -170,10 +170,6 @@ public class Player {
         return playerEntity.getWorld();
     }
 
-    public Vector3i getBlockPos() {
-        return playerEntity.getBlockPos();
-    }
-
     /**
      * Set whether the particle gui is visible
      * @param b true if the gui is visible, otherwise false.
