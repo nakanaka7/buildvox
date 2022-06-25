@@ -27,7 +27,7 @@ public class Player {
     private Clipboard clipboard;
     private UndoManager undoManager = new UndoManager();
     private World editTargetWorld;
-    private Vector3i[] posArray;
+    private Vector3i[] posArray = new Vector3i[2];
     private Selection selection;
     private PlayerEntity playerEntity;
     private boolean particleGuiVisible;
@@ -35,7 +35,6 @@ public class Player {
 
     public Player(PlayerEntity playerEntity) {
         this.id = playerEntity.getId();
-        this.posArray = new Vector3i[BuildVoxSystem.config.posArrayLength()];
         this.backgroundBlock = VoxelBlock.valueOf(BuildVoxSystem.config.backgroundBlock());
         this.playerEntity = playerEntity;
     }
