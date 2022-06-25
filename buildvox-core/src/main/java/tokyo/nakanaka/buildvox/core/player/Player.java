@@ -2,7 +2,6 @@ package tokyo.nakanaka.buildvox.core.player;
 
 import tokyo.nakanaka.buildvox.core.blockSpace.Clipboard;
 import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
-import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.particleGui.Color;
 import tokyo.nakanaka.buildvox.core.particleGui.ParticleGui;
@@ -142,29 +141,8 @@ public class Player {
         this.clipboard = clipboard;
     }
 
-    /**
-     * Use this objects' methods
-     */
-    @Deprecated
     public PlayerEntity getPlayerEntity() {
         return playerEntity;
-    }
-
-    /**
-     * Give her a pos marker.
-     */
-    public void givePosMarker() {
-        playerEntity.givePosMarker();
-    }
-
-    /**
-     * Spawn redstone dust particles to the player. This particle may be seen only to the player.
-     * @param color a color of particle.
-     * @param world a world to spawn particle.
-     * @param pos the position of the particle.
-     */
-    public void spawnDustParticle(Color color, World world, Vector3d pos) {
-        playerEntity.spawnParticle(color, world, pos.x(), pos.y(), pos.z());
     }
 
     @Override
