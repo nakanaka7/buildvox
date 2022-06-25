@@ -27,19 +27,10 @@ public interface PlayerEntity extends ColoredParticleSpawner {
     Vector3i getBlockPos();
 
     /**
-     * Gets the world which this player exists in
-     * @return the world which this player exists in
-     */
-    @Deprecated
-    World getWorld();
-
-    /**
      * Gets the id of the world which this player exists in
      * @return the id of the world which this player exists in
      */
-    default NamespacedId getWorldId() {
-        return getWorld().getId();
-    }
+    NamespacedId getWorldId();
 
     /**
      * Give her a pos marker.

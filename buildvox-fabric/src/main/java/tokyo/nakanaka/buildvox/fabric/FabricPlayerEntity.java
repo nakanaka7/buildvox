@@ -38,8 +38,7 @@ public class FabricPlayerEntity implements PlayerEntity {
         original.sendMessage(Text.of(msg), false);
     }
 
-    @Override
-    public World getWorld() {
+    private World getWorld() {
         return BuildVoxMod.convertServerWorldToBvWorld(original.getWorld());
     }
 

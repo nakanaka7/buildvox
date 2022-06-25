@@ -43,11 +43,6 @@ public class DummyPlayer extends Player implements Identifiable<String> {
         }
 
         @Override
-        public World getWorld() {
-            return null;
-        }
-
-        @Override
         public NamespacedId getWorldId() {
             return new NamespacedId("");
         }
