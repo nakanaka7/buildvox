@@ -5,9 +5,7 @@ import tokyo.nakanaka.buildvox.core.block.BlockTransformation;
 import tokyo.nakanaka.buildvox.core.block.StateImpl;
 import tokyo.nakanaka.buildvox.core.blockSpace.*;
 import tokyo.nakanaka.buildvox.core.blockSpace.editWorld.EditWorld;
-import tokyo.nakanaka.buildvox.core.math.Drawings;
 import tokyo.nakanaka.buildvox.core.math.region3d.Cuboid;
-import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
 import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
@@ -15,7 +13,6 @@ import tokyo.nakanaka.buildvox.core.selection.Selection;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.world.World;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -165,34 +162,6 @@ public class WorldEdits {
                     paste(clipboard, world, new Vector3d(offsetX, offsetY, offsetZ));
                 }
             }
-        }
-    }
-    /**
-     * Repeats the blocks in the selection. countX, countY, and countZ defines the repeating direction vector.
-     * @param world the world.
-     * @param sel the selection.
-     * @param countX the count along x-axis.
-     * @param countY the count along y-axis.
-     * @param countZ the count along z-axis.
-     */
-    public static void repeat(EditWorld world, Selection sel, int countX, int countY, int countZ) {
-        Parallelepiped bound = sel.getBound();
-        double maxX = bound.maxX();
-        double maxY = bound.maxY();
-        double maxZ = bound.maxZ();
-        double minX = bound.minX();
-        double minY = bound.minY();
-        double minZ = bound.minZ();
-        Clipboard clipboard = new Clipboard();
-        WorldEdits.copy(world, sel, new Vector3d(minX, minY, minZ), clipboard);
-        clipboard.lock();
-
-        List<Vector3i> positions = Drawings.line(Vector3i.ZERO, new Vector3i(countX, countY, countZ));
-        for(var pos : positions) {
-            double posX = minX + pos.x() * (maxX - minX);
-            double posY = minY + pos.y() * (maxY - minY);
-            double posZ = minZ + pos.z() * (maxZ - minZ);
-            paste(clipboard, world, new Vector3d(posX, posY, posZ));
         }
     }
 
