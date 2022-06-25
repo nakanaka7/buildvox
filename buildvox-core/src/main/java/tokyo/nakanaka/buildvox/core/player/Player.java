@@ -39,7 +39,7 @@ public class Player {
     }
 
     /**
-     * Get the background block
+     * Gets the background block
      * @return the background block
      */
     public VoxelBlock getBackgroundBlock() {
@@ -47,7 +47,7 @@ public class Player {
     }
 
     /**
-     * Set the background block
+     * Sets the background block
      * @param backgroundBlock a background block
      */
     public void setBackgroundBlock(VoxelBlock backgroundBlock) {
@@ -55,7 +55,7 @@ public class Player {
     }
 
     /**
-     * Get the edit target world.
+     * Gets the edit target world.
      * @return the edit target world.
      */
     public World getEditTargetWorld() {
@@ -63,7 +63,7 @@ public class Player {
     }
 
     /**
-     * Set an edit target world. The all elements of pos array will be set null and the selection will be null.
+     * Sets an edit target world. The all elements of pos array will be set null and the selection will be null.
      * @param editTargetWorld a world to edit
      */
     public void setEditTargetWorld(World editTargetWorld) {
@@ -74,7 +74,7 @@ public class Player {
     }
 
     /**
-     * Get the cloned pos array.
+     * Gets the cloned pos array.
      * @return the cloned pos array.
      */
     public Vector3i[] getPosArrayClone() {
@@ -82,7 +82,7 @@ public class Player {
     }
 
     /**
-     * Get the selection.
+     * Gets the selection.
      * @return the selection.
      */
     public Selection getSelection() {
@@ -90,7 +90,7 @@ public class Player {
     }
 
     /**
-     * Set a selection. The all elements of pos array will be set null.
+     * Sets a selection. The all elements of pos array will be set null.
      * @param selection the selection
      */
     public void setSelection(Selection selection) {
@@ -109,7 +109,7 @@ public class Player {
     }
 
     /**
-     * Set a pos array. The selection will be set null.
+     * Sets a pos array. The selection will be set null.
      * @param posArray the pos array.
      */
     public void setPosArray(Vector3i[] posArray) {
@@ -119,14 +119,14 @@ public class Player {
     }
 
     /**
-     * Get the undo-manager.
+     * Gets the undo-manager.
      */
     public UndoManager getUndoManager() {
         return undoManager;
     }
 
     /**
-     * Get the clipboard.
+     * Gets the clipboard.
      * @return the clipboard.
      */
     public Clipboard getClipboard() {
@@ -134,13 +134,17 @@ public class Player {
     }
 
     /**
-     * Set the clipboard.
+     * Sets the clipboard.
      * @param clipboard the clipboard.
      */
     public void setClipboard(Clipboard clipboard) {
         this.clipboard = clipboard;
     }
 
+    /**
+     * Gets the player entity.
+     * @return the player entity.
+     */
     public PlayerEntity getPlayerEntity() {
         return playerEntity;
     }
@@ -167,7 +171,7 @@ public class Player {
     }
 
     /**
-     * Set whether the particle gui is visible
+     * Sets whether the particle gui is visible
      * @param b true if the gui is visible, otherwise false.
      */
     public void setParticleGuiVisible(boolean b) {
