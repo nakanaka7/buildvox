@@ -2,7 +2,7 @@ package tokyo.nakanaka.buildvox.core.player;
 
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.particleGui.Color;
-import tokyo.nakanaka.buildvox.core.Entity;
+import tokyo.nakanaka.buildvox.core.Identifiable;
 import tokyo.nakanaka.buildvox.core.world.World;
 
 import java.util.UUID;
@@ -10,7 +10,7 @@ import java.util.UUID;
 /**
  * Represents a dummy player. A random uuid will be given to this player.
  */
-public class DummyPlayer extends Player implements Entity<String> {
+public class DummyPlayer extends Player implements Identifiable<String> {
     private String name;
 
     /**

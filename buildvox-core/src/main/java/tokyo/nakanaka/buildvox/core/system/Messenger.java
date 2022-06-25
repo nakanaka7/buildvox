@@ -1,4 +1,4 @@
-package tokyo.nakanaka.buildvox.core;
+package tokyo.nakanaka.buildvox.core.system;
 
 /**
  * The object which send messages.

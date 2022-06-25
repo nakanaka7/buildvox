@@ -1,14 +1,14 @@
 package tokyo.nakanaka.buildvox.core.block;
 
 import tokyo.nakanaka.buildvox.core.NamespacedId;
-import tokyo.nakanaka.buildvox.core.Entity;
+import tokyo.nakanaka.buildvox.core.Identifiable;
 
 /**
  * Represents a block.
  * @param <S> the state object.
  * @param <E> the entity object.
  */
-public interface Block<S extends Block.State, E extends Block.Entity> extends Entity<NamespacedId> {
+public interface Block<S extends Block.State, E extends Block.Entity> extends Identifiable<NamespacedId> {
     /** * Represents a block state. */
     interface State {
     }
