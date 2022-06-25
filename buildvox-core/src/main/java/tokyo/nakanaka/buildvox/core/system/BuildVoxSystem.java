@@ -221,10 +221,6 @@ public class BuildVoxSystem {
         var player = realPlayerRegistry.get(playerId);
         if(player == null) throw new IllegalArgumentException();
         var world = player.getPlayerEntity().getWorld();
-        onLeftClickBlockByPosMarker(player, world, pos);
-    }
-
-    private static void onLeftClickBlockByPosMarker(Player player, World world, Vector3i pos) {
         Vector3i[] posArray = new Vector3i[player.getPosArrayClone().length];
         posArray[0] = pos;
         player.setPosArray(world, posArray);
@@ -241,10 +237,6 @@ public class BuildVoxSystem {
         var player = realPlayerRegistry.get(playerId);
         if(player == null) throw new IllegalArgumentException();
         var world = player.getPlayerEntity().getWorld();
-        onRightClickBlockByPosMarker(player, world, pos);
-    }
-
-    private static void onRightClickBlockByPosMarker(Player player, World world, Vector3i pos) {
         World editWorld = player.getEditTargetWorld();
         Vector3i[] posArray = player.getPosArrayClone();
         if (world != editWorld) {
