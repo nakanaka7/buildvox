@@ -40,7 +40,7 @@ public class CommandSource {
         RealPlayer player = BuildVoxSystem.getRealPlayerRegistry().get(playerId);
         World world = player.getWorld();
         NamespacedId worldId = world.getId();
-        Vector3i pos = player.getBlockPos();
+        Vector3i pos = player.getPlayerEntity().getBlockPos();
         Messenger messenger = new Messenger() {
             @Override
             public void sendOutMessage(String msg) {
