@@ -28,11 +28,8 @@ import java.util.UUID;
  */
 public class BuildVoxSystem {
     public static final Logger CORE_LOGGER = LoggerFactory.getLogger("BuildVoxCore");
-    /** Use getter and setter of BlockValidator or Scheduler */
-    @Deprecated
-    public static Environment environment = Environment.DEFAULT;
-    @Deprecated
-    public static Config config = Config.DEFAULT;
+    private static Environment environment = Environment.DEFAULT;
+    private static Config config = Config.DEFAULT;
     private static final Registry<World, NamespacedId> worldRegistry = new Registry<>();
     private static final Registry<Block<?,?>, NamespacedId> blockRegistry = new Registry<>();
     private static final Registry<RealPlayer, UUID> realPlayerRegistry = new Registry<>();
@@ -41,20 +38,17 @@ public class BuildVoxSystem {
     private BuildVoxSystem() {
     }
 
-    public static record Environment(BlockValidator blockValidator,
+    @Deprecated
+    private static record Environment(BlockValidator blockValidator,
                                      Scheduler scheduler) {
         public static final Environment DEFAULT = new Environment(
                 (block) -> false,
                 (runnable, tick) -> {});
     }
 
-    public static record Config(String outColor, String errColor, String backgroundBlock, int posArrayLength) {
-        public static final Config DEFAULT = new Config(ColorCode.GREEN, ColorCode.RED, "minecraft:air", 2);
-    }
-
     @Deprecated
-    public static Config getConfig() {
-        return config;
+    private static record Config(String outColor, String errColor, String backgroundBlock, int posArrayLength) {
+        public static final Config DEFAULT = new Config(ColorCode.GREEN, ColorCode.RED, "minecraft:air", 2);
     }
 
     /** Use VoxelBlock.valueOf() */
@@ -83,16 +77,18 @@ public class BuildVoxSystem {
         return environment.blockValidator();
     }
 
-    public String getOutColor() {
+    /** Gets the out color code. */
+    public static String getOutColor() {
         return config.outColor;
     }
 
-    public String getErrColor() {
+    /** Gets the error color code. */
+    public static String getErrColor() {
         return config.errColor;
     }
 
     /** Gets the default background block id */
-    public NamespacedId getDefaultBackgroundBlockId() {
+    public static NamespacedId getBackgroundBlockId() {
         return new NamespacedId("air");
     }
 

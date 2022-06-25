@@ -15,7 +15,7 @@ import java.util.Set;
  */
 public class ParticleGui implements AutoCloseable {
     private ColoredParticleSpawner out = (color, world, x, y, z) -> {};
-    private Scheduler scheduler;
+    private Scheduler scheduler = BuildVoxSystem.getScheduler();
     private Set<ParticleSpawnData> spawnDataSet = new HashSet<>();
     private boolean drawing;
 
@@ -25,7 +25,6 @@ public class ParticleGui implements AutoCloseable {
      */
     public ParticleGui(ColoredParticleSpawner out) {
         this.out = out;
-        this.scheduler = BuildVoxSystem.environment.scheduler();
         drawing = true;
         tickTask();
     }

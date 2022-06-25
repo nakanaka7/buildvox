@@ -108,7 +108,7 @@ public class FillCommand implements Runnable {
             err.println(Messages.ofBlockParseError(block));
             return;
         }
-        if(!BuildVoxSystem.environment.blockValidator().validate(b)){
+        if(!BuildVoxSystem.getBlockValidator().validate(b)){
             err.println(Messages.ofBlockNotSettableError(b.toString()));
             return;
         }
