@@ -28,9 +28,7 @@ import java.util.UUID;
  */
 public class BuildVoxSystem {
     public static final Logger CORE_LOGGER = LoggerFactory.getLogger("BuildVoxCore");
-    /** Use getter and setter of BlockValidator or Scheduler */
-    @Deprecated
-    public static Environment environment = Environment.DEFAULT;
+    private static Environment environment = Environment.DEFAULT;
     @Deprecated
     public static Config config = Config.DEFAULT;
     private static final Registry<World, NamespacedId> worldRegistry = new Registry<>();
@@ -41,7 +39,8 @@ public class BuildVoxSystem {
     private BuildVoxSystem() {
     }
 
-    public static record Environment(BlockValidator blockValidator,
+    @Deprecated
+    private static record Environment(BlockValidator blockValidator,
                                      Scheduler scheduler) {
         public static final Environment DEFAULT = new Environment(
                 (block) -> false,
