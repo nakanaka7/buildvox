@@ -164,14 +164,6 @@ public class Player {
         return Objects.hash(id);
     }
 
-    public void sendOutMessage(String msg) {
-        playerEntity.println(BuildVoxSystem.getOutColor() + msg);
-    }
-
-    public void sendErrMessage(String msg) {
-        playerEntity.println(BuildVoxSystem.getErrColor() + msg);
-    }
-
     /**
      * Sets whether the particle gui is visible
      * @param b true if the gui is visible, otherwise false.
