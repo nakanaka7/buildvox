@@ -1,6 +1,5 @@
 package tokyo.nakanaka.buildvox.core.system;
 
-import tokyo.nakanaka.buildvox.core.Messenger;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.RealPlayer;
