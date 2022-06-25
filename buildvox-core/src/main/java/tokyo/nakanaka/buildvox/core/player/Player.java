@@ -22,20 +22,21 @@ import java.util.UUID;
  */
 public class Player {
     private UUID id;
-    private VoxelBlock backgroundBlock;
+    private VoxelBlock backgroundBlock = VoxelBlock.valueOf(BuildVoxSystem.getBackgroundBlockId().toString());;
     private Clipboard clipboard;
     private UndoManager undoManager = new UndoManager();
     private World editTargetWorld;
     private Vector3i[] posArray = new Vector3i[2];
     private Selection selection;
     private PlayerEntity playerEntity;
+    private PlayerMessenger messenger;
     private boolean particleGuiVisible;
     private ParticleGui particleGui;
 
     public Player(PlayerEntity playerEntity) {
         this.id = playerEntity.getId();
-        this.backgroundBlock = VoxelBlock.valueOf(BuildVoxSystem.getBackgroundBlockId().toString());
         this.playerEntity = playerEntity;
+        this.messenger = new PlayerMessenger(playerEntity);
     }
 
     /**
@@ -141,6 +142,13 @@ public class Player {
      */
     public PlayerEntity getPlayerEntity() {
         return playerEntity;
+    }
+
+    /**
+     * Gets the messenger.
+     */
+    public PlayerMessenger getMessenger() {
+        return messenger;
     }
 
     @Override
