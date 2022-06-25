@@ -63,14 +63,17 @@ public class Player {
     }
 
     /**
-     * Sets an edit target world. The all elements of pos array will be set null and the selection will be null.
+     * Sets an edit target world. If the new world is different from the old one, the all elements of pos array will
+     * be set null and the selection will be null.
      * @param editTargetWorld a world to edit
      */
     public void setEditTargetWorld(World editTargetWorld) {
-        this.editTargetWorld = editTargetWorld;
-        Arrays.fill(posArray, null);
-        this.selection = null;
-        updateParticleGui();
+        if(this.editTargetWorld == null || !this.editTargetWorld.getId().equals(editTargetWorld.getId())) {
+            this.editTargetWorld = editTargetWorld;
+            Arrays.fill(posArray, null);
+            this.selection = null;
+            updateParticleGui();
+        }
     }
 
     /**
