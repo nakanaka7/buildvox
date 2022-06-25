@@ -220,7 +220,7 @@ public class BuildVoxSystem {
     public static void onLeftClickBlockByPosMarker(UUID playerId, Vector3i pos) {
         var player = realPlayerRegistry.get(playerId);
         if(player == null) throw new IllegalArgumentException();
-        var world = player.getWorld();
+        var world = player.getPlayerEntity().getWorld();
         onLeftClickBlockByPosMarker(player, world, pos);
     }
 
@@ -240,7 +240,7 @@ public class BuildVoxSystem {
     public static void onRightClickBlockByPosMarker(UUID playerId, Vector3i pos) {
         var player = realPlayerRegistry.get(playerId);
         if(player == null) throw new IllegalArgumentException();
-        var world = player.getWorld();
+        var world = player.getPlayerEntity().getWorld();
         onRightClickBlockByPosMarker(player, world, pos);
     }
 

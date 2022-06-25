@@ -38,7 +38,7 @@ public class CommandSource {
      */
     public static CommandSource newInstance(UUID playerId) {
         RealPlayer player = BuildVoxSystem.getRealPlayerRegistry().get(playerId);
-        World world = player.getWorld();
+        World world = player.getPlayerEntity().getWorld();
         NamespacedId worldId = world.getId();
         Vector3i pos = player.getPlayerEntity().getBlockPos();
         Messenger messenger = new Messenger() {
