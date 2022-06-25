@@ -14,14 +14,11 @@ import tokyo.nakanaka.buildvox.core.world.World;
 
 import javax.swing.undo.UndoManager;
 import java.util.Arrays;
-import java.util.Objects;
-import java.util.UUID;
 
 /**
  * Represents a player.
  */
 public class Player {
-    private UUID id;
     private VoxelBlock backgroundBlock = VoxelBlock.valueOf(BuildVoxSystem.getBackgroundBlockId().toString());;
     private Clipboard clipboard;
     private UndoManager undoManager = new UndoManager();
@@ -34,7 +31,6 @@ public class Player {
     private ParticleGui particleGui;
 
     public Player(PlayerEntity playerEntity) {
-        this.id = playerEntity.getId();
         this.playerEntity = playerEntity;
         this.messenger = new PlayerMessenger(playerEntity);
     }
@@ -149,19 +145,6 @@ public class Player {
      */
     public PlayerMessenger getMessenger() {
         return messenger;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Player player = (Player) o;
-        return id.equals(player.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
     }
 
     /**
