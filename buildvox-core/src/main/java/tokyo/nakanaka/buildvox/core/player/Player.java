@@ -190,11 +190,11 @@ public class Player {
     }
 
     public void sendOutMessage(String msg) {
-        playerEntity.println(BuildVoxSystem.getConfig().outColor() + msg);
+        playerEntity.println(BuildVoxSystem.getOutColor() + msg);
     }
 
     public void sendErrMessage(String msg) {
-        playerEntity.println(BuildVoxSystem.getConfig().errColor() + msg);
+        playerEntity.println(BuildVoxSystem.getErrColor() + msg);
     }
 
     public World getWorld() {
