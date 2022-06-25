@@ -5,13 +5,9 @@ import tokyo.nakanaka.buildvox.core.system.Messenger;
 
 /** The messenger of player entity */
 public class PlayerMessenger implements Messenger {
-    private PlayerEntity playerEntity;
+    private final PlayerEntity playerEntity;
 
-    /**
-     * Creates a new instance.
-     * @param playerEntity the player entity.
-     */
-    public PlayerMessenger(PlayerEntity playerEntity) {
+    PlayerMessenger(PlayerEntity playerEntity) {
         this.playerEntity = playerEntity;
     }
 
