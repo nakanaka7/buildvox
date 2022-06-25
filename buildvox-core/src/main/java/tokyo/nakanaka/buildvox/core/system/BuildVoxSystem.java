@@ -11,7 +11,6 @@ import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
 import tokyo.nakanaka.buildvox.core.command.bvdCommand.BvdCommand;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.DummyPlayer;
-import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.player.RealPlayer;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.world.World;
@@ -221,7 +220,7 @@ public class BuildVoxSystem {
         var player = realPlayerRegistry.get(playerId);
         if(player == null) throw new IllegalArgumentException();
         var world = player.getPlayerEntity().getWorld();
-        player.setEditTargetWorld(world);
+        player.setEditWorld(world);
         Vector3i[] posArray = new Vector3i[player.getPosArrayClone().length];
         posArray[0] = pos;
         player.setPosArray(posArray);
@@ -238,7 +237,7 @@ public class BuildVoxSystem {
         var player = realPlayerRegistry.get(playerId);
         if(player == null) throw new IllegalArgumentException();
         var world = player.getPlayerEntity().getWorld();
-        World editWorld = player.getEditTargetWorld();
+        World editWorld = player.getEditWorld();
         Vector3i[] posArray = player.getPosArrayClone();
         if (world != editWorld) {
             posArray = new Vector3i[player.getPosArrayClone().length];
@@ -252,7 +251,7 @@ public class BuildVoxSystem {
             }
         }
         posArray[index] = pos;
-        player.setEditTargetWorld(world);
+        player.setEditWorld(world);
         player.setPosArray(posArray);
         player.getMessenger().sendOutMessage(Messages.ofPosExit(index, pos.x(), pos.y(), pos.z()));
     }

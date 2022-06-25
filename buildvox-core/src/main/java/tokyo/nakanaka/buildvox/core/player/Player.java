@@ -22,7 +22,7 @@ public class Player {
     private VoxelBlock backgroundBlock = VoxelBlock.valueOf(BuildVoxSystem.getBackgroundBlockId().toString());;
     private Clipboard clipboard;
     private UndoManager undoManager = new UndoManager();
-    private World editTargetWorld;
+    private World editWorld;
     private Vector3i[] posArray = new Vector3i[2];
     private Selection selection;
     private PlayerEntity playerEntity;
@@ -56,21 +56,21 @@ public class Player {
     }
 
     /**
-     * Gets the edit target world.
-     * @return the edit target world.
+     * Gets the edit world.
+     * @return the edit world.
      */
-    public World getEditTargetWorld() {
-        return editTargetWorld;
+    public World getEditWorld() {
+        return editWorld;
     }
 
     /**
-     * Sets an edit target world. If the new world is different from the old one, the all elements of pos array will
+     * Sets an edit world. If the new world is different from the old one, the all elements of pos array will
      * be set null and the selection will be null.
-     * @param editTargetWorld a world to edit
+     * @param editWorld the edit world.
      */
-    public void setEditTargetWorld(World editTargetWorld) {
-        if(this.editTargetWorld == null || !this.editTargetWorld.getId().equals(editTargetWorld.getId())) {
-            this.editTargetWorld = editTargetWorld;
+    public void setEditWorld(World editWorld) {
+        if(this.editWorld == null || !this.editWorld.getId().equals(editWorld.getId())) {
+            this.editWorld = editWorld;
             Arrays.fill(posArray, null);
             this.selection = null;
             updateParticleGui();
@@ -170,7 +170,7 @@ public class Player {
         if(!particleGuiVisible) return;
         if(particleGui == null)return;
         particleGui.clearAllLines();
-        World posOrSelectionWorld = getEditTargetWorld();
+        World posOrSelectionWorld = getEditWorld();
         if(posOrSelectionWorld == null)return;
         Selection selection = getSelection();
         if(selection != null){
