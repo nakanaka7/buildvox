@@ -1,5 +1,6 @@
 package tokyo.nakanaka.buildvox.core.player;
 
+import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.particleGui.Color;
 import tokyo.nakanaka.buildvox.core.particleGui.ColoredParticleSpawner;
@@ -12,7 +13,7 @@ import java.util.UUID;
  */
 public interface PlayerEntity extends ColoredParticleSpawner {
     /**
-     * Get the id of this player entity.
+     * Gets the id of this player entity.
      * @return the id of this player entity.
      */
     UUID getId();
@@ -20,16 +21,24 @@ public interface PlayerEntity extends ColoredParticleSpawner {
     void println(String msg);
 
     /**
-     * Get the block position of this player
+     * Gets the block position of this player
      * @return the block position of this player
      */
     Vector3i getBlockPos();
 
     /**
-     * Get the world which this player exists in
+     * Gets the world which this player exists in
      * @return the world which this player exists in
      */
     World getWorld();
+
+    /**
+     * Gets the id of the world which this player exists in
+     * @return the id of the world which this player exists in
+     */
+    default NamespacedId getWorldId() {
+        return getWorld().getId();
+    }
 
     /**
      * Give her a pos marker.
