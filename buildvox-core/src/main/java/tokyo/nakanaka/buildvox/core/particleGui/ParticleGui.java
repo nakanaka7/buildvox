@@ -4,7 +4,7 @@ import tokyo.nakanaka.buildvox.core.Scheduler;
 import tokyo.nakanaka.buildvox.core.math.LineSegment3d;
 import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
-import tokyo.nakanaka.buildvox.core.BuildVoxSystem;
+import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.world.World;
 
 import java.util.HashSet;

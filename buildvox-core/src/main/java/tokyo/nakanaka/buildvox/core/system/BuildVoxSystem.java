@@ -1,9 +1,10 @@
-package tokyo.nakanaka.buildvox.core;
+package tokyo.nakanaka.buildvox.core.system;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import picocli.AutoComplete;
 import picocli.CommandLine;
+import tokyo.nakanaka.buildvox.core.*;
 import tokyo.nakanaka.buildvox.core.block.Block;
 import tokyo.nakanaka.buildvox.core.block.BlockValidator;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;

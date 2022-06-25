@@ -2,7 +2,7 @@ package tokyo.nakanaka.buildvox.core.command.bvdCommand;
 
 import picocli.CommandLine;
 import tokyo.nakanaka.buildvox.core.Messages;
-import tokyo.nakanaka.buildvox.core.BuildVoxSystem;
+import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 
 import java.io.PrintWriter;
 
