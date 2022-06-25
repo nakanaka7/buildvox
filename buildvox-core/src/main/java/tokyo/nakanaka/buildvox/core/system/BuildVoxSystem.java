@@ -93,7 +93,7 @@ public class BuildVoxSystem {
     }
 
     /** Gets the default background block id */
-    public NamespacedId getDefaultBackgroundBlockId() {
+    public static NamespacedId getBackgroundBlockId() {
         return new NamespacedId("air");
     }
 
