@@ -67,6 +67,10 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
         }
     }
 
+    public Map<org.bukkit.World, NamespacedId> getWorldIdMap() {
+        return worldIdMap;
+    }
+
     private CommandSource getCommandSource(org.bukkit.command.CommandSender sender) {
         if(sender instanceof Player player) {
             UUID playerId = player.getUniqueId();

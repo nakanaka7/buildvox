@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.meta.ItemMeta;
 import tokyo.nakanaka.buildvox.core.ColorCode;
+import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.player.PlayerEntity;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.particleGui.Color;
@@ -39,8 +40,9 @@ public class BukkitPlayerEntity implements PlayerEntity {
     }
 
     @Override
-    public World getWorld() {
-        return BuildVoxPlugin.getWorld(original.getWorld());
+    public NamespacedId getWorldId() {
+        var world = original.getWorld();
+        return BuildVoxPlugin.getInstance().getWorldIdMap().get(world);
     }
 
     @Override

@@ -2,7 +2,6 @@ package tokyo.nakanaka.buildvox.core.player;
 
 import tokyo.nakanaka.buildvox.core.blockSpace.Clipboard;
 import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
-import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.particleGui.Color;
 import tokyo.nakanaka.buildvox.core.particleGui.ParticleGui;
@@ -15,32 +14,33 @@ import tokyo.nakanaka.buildvox.core.world.World;
 
 import javax.swing.undo.UndoManager;
 import java.util.Arrays;
-import java.util.Objects;
-import java.util.UUID;
 
 /**
  * Represents a player.
  */
 public class Player {
-    private UUID id;
-    private VoxelBlock backgroundBlock;
+    private final UndoManager undoManager = new UndoManager();
+    private VoxelBlock backgroundBlock = VoxelBlock.valueOf(BuildVoxSystem.getBackgroundBlockId().toString());
     private Clipboard clipboard;
-    private UndoManager undoManager = new UndoManager();
-    private World editTargetWorld;
+    private World editWorld;
     private Vector3i[] posArray = new Vector3i[2];
     private Selection selection;
-    private PlayerEntity playerEntity;
+    private final PlayerEntity playerEntity;
+    private final PlayerMessenger messenger;
     private boolean particleGuiVisible;
     private ParticleGui particleGui;
 
+    /**
+     * Creates a new instance by the player entity.
+     * @param playerEntity the player entity.
+     */
     public Player(PlayerEntity playerEntity) {
-        this.id = playerEntity.getId();
-        this.backgroundBlock = VoxelBlock.valueOf(BuildVoxSystem.getBackgroundBlockId().toString());
         this.playerEntity = playerEntity;
+        this.messenger = new PlayerMessenger(playerEntity);
     }
 
     /**
-     * Get the background block
+     * Gets the background block
      * @return the background block
      */
     public VoxelBlock getBackgroundBlock() {
@@ -48,7 +48,7 @@ public class Player {
     }
 
     /**
-     * Set the background block
+     * Sets the background block
      * @param backgroundBlock a background block
      */
     public void setBackgroundBlock(VoxelBlock backgroundBlock) {
@@ -56,26 +56,29 @@ public class Player {
     }
 
     /**
-     * Get the edit target world.
-     * @return the edit target world.
+     * Gets the edit world.
+     * @return the edit world.
      */
-    public World getEditTargetWorld() {
-        return editTargetWorld;
+    public World getEditWorld() {
+        return editWorld;
     }
 
     /**
-     * Set an edit target world. The all elements of pos array will be set null and the selection will be null.
-     * @param editTargetWorld a world to edit
+     * Sets an edit world. If the new world is different from the old one, the all elements of pos array will
+     * be set null and the selection will be null.
+     * @param editWorld the edit world.
      */
-    public void setEditTargetWorld(World editTargetWorld) {
-        this.editTargetWorld = editTargetWorld;
-        Arrays.fill(posArray, null);
-        this.selection = null;
-        updateParticleGui();
+    public void setEditWorld(World editWorld) {
+        if(this.editWorld == null || !this.editWorld.getId().equals(editWorld.getId())) {
+            this.editWorld = editWorld;
+            Arrays.fill(posArray, null);
+            this.selection = null;
+            updateParticleGui();
+        }
     }
 
     /**
-     * Get the cloned pos array.
+     * Gets the cloned pos array.
      * @return the cloned pos array.
      */
     public Vector3i[] getPosArrayClone() {
@@ -83,7 +86,7 @@ public class Player {
     }
 
     /**
-     * Get the selection.
+     * Gets the selection.
      * @return the selection.
      */
     public Selection getSelection() {
@@ -91,16 +94,7 @@ public class Player {
     }
 
     /**
-     * Use setSelection without world.
-     */
-    @Deprecated
-    public void setSelection(World world, Selection selection) {
-        this.editTargetWorld = world;
-        setSelection(selection);
-    }
-
-    /**
-     * Set a selection. The all elements of pos array will be set null.
+     * Sets a selection. The all elements of pos array will be set null.
      * @param selection the selection
      */
     public void setSelection(Selection selection) {
@@ -110,16 +104,7 @@ public class Player {
     }
 
     /**
-     * Use setPosArray without world
-     */
-    @Deprecated
-    public void setPosArray(World world, Vector3i[] posArray) {
-        this.editTargetWorld = world;
-        setPosArray(posArray);
-    }
-
-    /**
-     * Set a pos array. The selection will be set null.
+     * Sets a pos array. The selection will be set null.
      * @param posArray the pos array.
      */
     public void setPosArray(Vector3i[] posArray) {
@@ -129,14 +114,14 @@ public class Player {
     }
 
     /**
-     * Get the undo-manager.
+     * Gets the undo-manager.
      */
     public UndoManager getUndoManager() {
         return undoManager;
     }
 
     /**
-     * Get the clipboard.
+     * Gets the clipboard.
      * @return the clipboard.
      */
     public Clipboard getClipboard() {
@@ -144,7 +129,7 @@ public class Player {
     }
 
     /**
-     * Set the clipboard.
+     * Sets the clipboard.
      * @param clipboard the clipboard.
      */
     public void setClipboard(Clipboard clipboard) {
@@ -152,61 +137,22 @@ public class Player {
     }
 
     /**
-     * Use this objects' methods
+     * Gets the player entity.
+     * @return the player entity.
      */
-    @Deprecated
     public PlayerEntity getPlayerEntity() {
         return playerEntity;
     }
 
     /**
-     * Give her a pos marker.
+     * Gets the messenger.
      */
-    public void givePosMarker() {
-        playerEntity.givePosMarker();
+    public PlayerMessenger getMessenger() {
+        return messenger;
     }
 
     /**
-     * Spawn redstone dust particles to the player. This particle may be seen only to the player.
-     * @param color a color of particle.
-     * @param world a world to spawn particle.
-     * @param pos the position of the particle.
-     */
-    public void spawnDustParticle(Color color, World world, Vector3d pos) {
-        playerEntity.spawnParticle(color, world, pos.x(), pos.y(), pos.z());
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Player player = (Player) o;
-        return id.equals(player.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
-    public void sendOutMessage(String msg) {
-        playerEntity.println(BuildVoxSystem.getOutColor() + msg);
-    }
-
-    public void sendErrMessage(String msg) {
-        playerEntity.println(BuildVoxSystem.getErrColor() + msg);
-    }
-
-    public World getWorld() {
-        return playerEntity.getWorld();
-    }
-
-    public Vector3i getBlockPos() {
-        return playerEntity.getBlockPos();
-    }
-
-    /**
-     * Set whether the particle gui is visible
+     * Sets whether the particle gui is visible
      * @param b true if the gui is visible, otherwise false.
      */
     public void setParticleGuiVisible(boolean b) {
@@ -224,7 +170,7 @@ public class Player {
         if(!particleGuiVisible) return;
         if(particleGui == null)return;
         particleGui.clearAllLines();
-        World posOrSelectionWorld = getEditTargetWorld();
+        World posOrSelectionWorld = getEditWorld();
         if(posOrSelectionWorld == null)return;
         Selection selection = getSelection();
         if(selection != null){

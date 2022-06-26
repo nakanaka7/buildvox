@@ -1,5 +1,6 @@
 package tokyo.nakanaka.buildvox.core.player;
 
+import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.particleGui.Color;
 import tokyo.nakanaka.buildvox.core.Identifiable;
@@ -42,8 +43,8 @@ public class DummyPlayer extends Player implements Identifiable<String> {
         }
 
         @Override
-        public World getWorld() {
-            return null;
+        public NamespacedId getWorldId() {
+            return new NamespacedId("");
         }
 
         @Override

@@ -71,7 +71,7 @@ public class SelectCommand {
         PrintWriter out = commandSpec.commandLine().getOut();
         PrintWriter err = commandSpec.commandLine().getErr();
         Player player = bvCmd.getTargetPlayer();
-        World world = player.getEditTargetWorld();
+        World world = player.getEditWorld();
         Selection selection;
         try {
             selection = shapeMixin.createSelection(player.getPosArrayClone());
@@ -88,7 +88,7 @@ public class SelectCommand {
             err.println("Invalid shape argument(s)");
             return;
         }
-        player.setSelection(world, selection);
+        player.setSelection(selection);
         out.println("Selected.");
     }
 

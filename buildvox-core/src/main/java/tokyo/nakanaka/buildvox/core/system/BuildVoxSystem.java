@@ -11,7 +11,6 @@ import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
 import tokyo.nakanaka.buildvox.core.command.bvdCommand.BvdCommand;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.DummyPlayer;
-import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.player.RealPlayer;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.world.World;
@@ -220,15 +219,13 @@ public class BuildVoxSystem {
     public static void onLeftClickBlockByPosMarker(UUID playerId, Vector3i pos) {
         var player = realPlayerRegistry.get(playerId);
         if(player == null) throw new IllegalArgumentException();
-        var world = player.getWorld();
-        onLeftClickBlockByPosMarker(player, world, pos);
-    }
-
-    private static void onLeftClickBlockByPosMarker(Player player, World world, Vector3i pos) {
+        var worldId = player.getPlayerEntity().getWorldId();
+        var world = worldRegistry.get(worldId);
+        player.setEditWorld(world);
         Vector3i[] posArray = new Vector3i[player.getPosArrayClone().length];
         posArray[0] = pos;
-        player.setPosArray(world, posArray);
-        player.sendOutMessage(Messages.ofPosExit(0, pos.x(), pos.y(), pos.z()));
+        player.setPosArray(posArray);
+        player.getMessenger().sendOutMessage(Messages.ofPosExit(0, pos.x(), pos.y(), pos.z()));
     }
 
     /**
@@ -240,12 +237,9 @@ public class BuildVoxSystem {
     public static void onRightClickBlockByPosMarker(UUID playerId, Vector3i pos) {
         var player = realPlayerRegistry.get(playerId);
         if(player == null) throw new IllegalArgumentException();
-        var world = player.getWorld();
-        onRightClickBlockByPosMarker(player, world, pos);
-    }
-
-    private static void onRightClickBlockByPosMarker(Player player, World world, Vector3i pos) {
-        World editWorld = player.getEditTargetWorld();
+        var worldId = player.getPlayerEntity().getWorldId();
+        var world = worldRegistry.get(worldId);
+        World editWorld = player.getEditWorld();
         Vector3i[] posArray = player.getPosArrayClone();
         if (world != editWorld) {
             posArray = new Vector3i[player.getPosArrayClone().length];
@@ -259,8 +253,9 @@ public class BuildVoxSystem {
             }
         }
         posArray[index] = pos;
-        player.setPosArray(world, posArray);
-        player.sendOutMessage(Messages.ofPosExit(index, pos.x(), pos.y(), pos.z()));
+        player.setEditWorld(world);
+        player.setPosArray(posArray);
+        player.getMessenger().sendOutMessage(Messages.ofPosExit(index, pos.x(), pos.y(), pos.z()));
     }
 
     private static class BuildVoxWriter extends Writer {

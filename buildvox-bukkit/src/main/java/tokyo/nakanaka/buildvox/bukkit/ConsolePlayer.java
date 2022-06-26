@@ -1,7 +1,6 @@
 package tokyo.nakanaka.buildvox.bukkit;
 
 import org.bukkit.command.ConsoleCommandSender;
-import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.particleGui.Color;
@@ -32,8 +31,8 @@ public class ConsolePlayer extends RealPlayer {
                 return Vector3i.ZERO;
             }
             @Override
-            public World getWorld() {
-                return BuildVoxSystem.getWorldRegistry().get(NamespacedId.valueOf("world"));
+            public NamespacedId getWorldId() {
+                return new NamespacedId("world");
             }
             @Override
             public void givePosMarker() {

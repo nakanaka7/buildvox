@@ -6,6 +6,7 @@ import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3f;
+import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.player.PlayerEntity;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.particleGui.Color;
@@ -37,9 +38,13 @@ public class FabricPlayerEntity implements PlayerEntity {
         original.sendMessage(Text.of(msg), false);
     }
 
-    @Override
-    public World getWorld() {
+    private World getWorld() {
         return BuildVoxMod.convertServerWorldToBvWorld(original.getWorld());
+    }
+
+    @Override
+    public NamespacedId getWorldId() {
+        return getWorld().getId();
     }
 
     @Override

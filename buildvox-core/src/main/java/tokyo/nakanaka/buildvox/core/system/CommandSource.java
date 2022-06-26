@@ -38,19 +38,9 @@ public class CommandSource {
      */
     public static CommandSource newInstance(UUID playerId) {
         RealPlayer player = BuildVoxSystem.getRealPlayerRegistry().get(playerId);
-        World world = player.getWorld();
-        NamespacedId worldId = world.getId();
-        Vector3i pos = player.getBlockPos();
-        Messenger messenger = new Messenger() {
-            @Override
-            public void sendOutMessage(String msg) {
-                player.sendOutMessage(msg);
-            }
-            @Override
-            public void sendErrMessage(String msg) {
-                player.sendErrMessage(msg);
-            }
-        };
+        NamespacedId worldId = player.getPlayerEntity().getWorldId();
+        Vector3i pos = player.getPlayerEntity().getBlockPos();
+        Messenger messenger = player.getMessenger();
         return new CommandSource(worldId, pos, messenger, playerId);
     }
 

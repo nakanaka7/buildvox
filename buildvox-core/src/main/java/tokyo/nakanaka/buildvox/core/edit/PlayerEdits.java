@@ -96,7 +96,7 @@ public class PlayerEdits {
     public static void applyPhysics(Player player) {
         Selection selFrom = findSelection(player);
         Clipboard clipboard = new Clipboard();
-        EditWorld editWorld = new EditWorld(player.getEditTargetWorld(), true);
+        EditWorld editWorld = new EditWorld(player.getEditWorld(), true);
         WorldEdits.copy(editWorld, selFrom, Vector3d.ZERO, clipboard);
         WorldEdits.fill(editWorld, selFrom, BuildVoxSystem.parseBlock("air"), 1);
         WorldEdits.paste(clipboard, editWorld, Vector3d.ZERO);
@@ -106,7 +106,7 @@ public class PlayerEdits {
         }else {
             selTo = selFrom;
         }
-        player.setSelection(player.getEditTargetWorld(), selTo);
+        player.setSelection(selTo);
     }
 
     /**
@@ -210,7 +210,7 @@ public class PlayerEdits {
         }else {
             Clipboard clipboard = new Clipboard();
             Vector3d copyOffset = Vector3d.ZERO;
-            WorldEdits.copy(new EditWorld(player.getEditTargetWorld()), selectionFrom, copyOffset, clipboard);
+            WorldEdits.copy(new EditWorld(player.getEditWorld()), selectionFrom, copyOffset, clipboard);
             clipboard.lock();
             AffineTransformation3d newClipTrans = trans.linear();
             Vector3d pasteOffset = trans.apply(copyOffset);
@@ -255,7 +255,7 @@ public class PlayerEdits {
     public static EditExit copy(Player player, Vector3d pos) {
         Selection selection = findSelection(player);
         Clipboard clipboard = new Clipboard();
-        WorldEdits.copy(new EditWorld(player.getEditTargetWorld()), selection, pos, clipboard);
+        WorldEdits.copy(new EditWorld(player.getEditWorld()), selection, pos, clipboard);
         clipboard.lock();
         player.setClipboard(clipboard);
         return new EditExit(clipboard.blockCount(), 0, 0);
@@ -403,7 +403,7 @@ public class PlayerEdits {
         double dy = bound.maxY() - bound.minY();
         double dz = bound.maxZ() - bound.minZ();
         Clipboard clip = new Clipboard();
-        WorldEdits.copy(player.getWorld(), sel, Vector3d.ZERO, clip);
+        WorldEdits.copy(player.getEditWorld(), sel, Vector3d.ZERO, clip);
         List<Vector3i> positions = Drawings.line(Vector3i.ZERO, new Vector3i(countX, countY, countZ));
         PlayerWorld pw = PlayerWorld.newInstance(player);
         for(Vector3i pos : positions) {
@@ -437,7 +437,7 @@ public class PlayerEdits {
          * @return a new instance.
          */
         public static PlayerWorld newInstance(Player player) {
-            var world = player.getEditTargetWorld();
+            var world = player.getEditWorld();
             return new PlayerWorld(world, player);
         }
 
@@ -506,7 +506,7 @@ public class PlayerEdits {
      * @throws IllegalArgumentException if endPosArray contains nonNull and selection is not null.
      */
     private static EditExit recordingEdit(Player player, EditWorldEditor editor, Vector3i[] endPosArray, Selection endSelection) {
-        RecordingEditWorld recordingEditWorld = new RecordingEditWorld(player.getEditTargetWorld());
+        RecordingEditWorld recordingEditWorld = new RecordingEditWorld(player.getEditWorld());
         editor.edit(recordingEditWorld);
         CompoundEdit compoundEdit = new CompoundEdit();
         UndoableEdit blockEdit = createBlockEdit(recordingEditWorld);
@@ -514,14 +514,14 @@ public class PlayerEdits {
         UndoableEdit posArrayOrSelectionEdit;
         if(endSelection == null) {
             posArrayOrSelectionEdit = createPosArrayEdit(player, endPosArray);
-            player.setPosArray(player.getEditTargetWorld(), endPosArray);
+            player.setPosArray(endPosArray);
         }else {
             boolean endPosArrayContainsOnlyNull = Arrays.stream(endPosArray).allMatch(Objects::isNull);
             if(!endPosArrayContainsOnlyNull) {
                 throw new IllegalArgumentException();
             }
             posArrayOrSelectionEdit = createSelectionEdit(player, endSelection);
-            player.setSelection(player.getEditTargetWorld(), endSelection);
+            player.setSelection(endSelection);
         }
         compoundEdit.addEdit(posArrayOrSelectionEdit);
         compoundEdit.end();
@@ -554,35 +554,33 @@ public class PlayerEdits {
 
     /* Creates an edit to set a new pos array into the player */
     private static UndoableEdit createPosArrayEdit(Player player, Vector3i[] posArray) {
-        World world = player.getEditTargetWorld();
         Vector3i[] initPosArray = player.getPosArrayClone();
         Selection initSelection = player.getSelection();
         return createEdit(
             () -> {
                 if(initSelection == null) {
-                    player.setPosArray(world, initPosArray.clone());
+                    player.setPosArray(initPosArray.clone());
                 }else{
-                    player.setSelection(world, initSelection);
+                    player.setSelection(initSelection);
                 }
             },
-            () -> player.setPosArray(world, posArray)
+            () -> player.setPosArray(posArray)
         );
     }
 
     /* Creates an edit to set a new selection into the player */
     private static UndoableEdit createSelectionEdit(Player player, Selection selection) {
-        World world = player.getEditTargetWorld();
         Vector3i[] initPosArray = player.getPosArrayClone();
         Selection initSelection = player.getSelection();
         return createEdit(
             () -> {
                 if(initSelection == null) {
-                    player.setPosArray(world, initPosArray.clone());
+                    player.setPosArray(initPosArray.clone());
                 }else{
-                    player.setSelection(world, initSelection);
+                    player.setSelection(initSelection);
                 }
             },
-            () -> player.setSelection(world, selection)
+            () -> player.setSelection(selection)
         );
     }
 

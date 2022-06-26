@@ -23,7 +23,7 @@ public class ClearCommand implements Runnable {
         Player player = bvCmd.getTargetPlayer();
         Vector3i[] posArray = player.getPosArrayClone();
         if(player.getSelection() == null) {
-            player.setPosArray(player.getEditTargetWorld(), new Vector3i[posArray.length]);
+            player.setPosArray(new Vector3i[posArray.length]);
         }
         out.println("Cleared pos array.");
     }
