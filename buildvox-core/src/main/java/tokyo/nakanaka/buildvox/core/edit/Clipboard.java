@@ -1,5 +1,6 @@
-package tokyo.nakanaka.buildvox.core.blockSpace;
+package tokyo.nakanaka.buildvox.core.edit;
 
+import tokyo.nakanaka.buildvox.core.voxelSpace.VoxelSpace;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 
@@ -8,8 +9,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class Clipboard {
-    private Map<Vector3i, VoxelBlock> blockMap = new HashMap<>();
+public class Clipboard implements VoxelSpace<VoxelBlock> {
+    private final Map<Vector3i, VoxelBlock> blockMap = new HashMap<>();
     private Integer maxX;
     private Integer maxY;
     private Integer maxZ;

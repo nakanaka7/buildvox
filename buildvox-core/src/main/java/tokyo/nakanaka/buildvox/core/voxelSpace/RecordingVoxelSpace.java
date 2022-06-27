@@ -1,12 +1,12 @@
-package tokyo.nakanaka.buildvox.core.blockSpace;
+package tokyo.nakanaka.buildvox.core.voxelSpace;
 
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 
-public class RecordingBlockSpace3<B> implements BlockSpace3<B> {
-    private BlockSpace3<B> subjectSpace;
-    private BlockSpace3<B> backupSpace;
+public class RecordingVoxelSpace<B> implements VoxelSpace<B> {
+    private VoxelSpace<B> subjectSpace;
+    private VoxelSpace<B> backupSpace;
 
-    public RecordingBlockSpace3(BlockSpace3<B> subjectSpace, BlockSpace3<B> backupSpace) {
+    public RecordingVoxelSpace(VoxelSpace<B> subjectSpace, VoxelSpace<B> backupSpace) {
         this.subjectSpace = subjectSpace;
         this.backupSpace = backupSpace;
     }

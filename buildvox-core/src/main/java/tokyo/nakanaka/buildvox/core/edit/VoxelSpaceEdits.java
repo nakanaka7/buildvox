@@ -1,6 +1,6 @@
 package tokyo.nakanaka.buildvox.core.edit;
 
-import tokyo.nakanaka.buildvox.core.blockSpace.BlockSpace3;
+import tokyo.nakanaka.buildvox.core.voxelSpace.VoxelSpace;
 import tokyo.nakanaka.buildvox.core.math.region3d.Cuboid;
 import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
@@ -13,8 +13,8 @@ import java.util.function.Predicate;
 /**
  * The utility class of block space edits.
  */
-public class BlockSpaceEdits {
-    private BlockSpaceEdits() {
+public class VoxelSpaceEdits {
+    private VoxelSpaceEdits() {
     }
 
     /**
@@ -25,7 +25,7 @@ public class BlockSpaceEdits {
      * @param trans the affine transformation.
      * @param <B> the block type.
      */
-    public static <B> void copy(BlockSpace3<B> src, Set<Vector3i> srcPosSet, BlockSpace3<B> dest, AffineTransformation3d trans) {
+    public static <B> void copy(VoxelSpace<B> src, Set<Vector3i> srcPosSet, VoxelSpace<B> dest, AffineTransformation3d trans) {
         for(Vector3i pos : srcPosSet) {
             B block = src.getBlock(pos);
             Vector3d posMin = pos.toVector3d();
@@ -47,7 +47,7 @@ public class BlockSpaceEdits {
      * @param block the block.
      * @param <B> the block type.
      */
-    public static <B> void fill(BlockSpace3<B> dest, Set<Vector3i> destPosSet, B block) {
+    public static <B> void fill(VoxelSpace<B> dest, Set<Vector3i> destPosSet, B block) {
         for(Vector3i e : destPosSet){
             dest.setBlock(e, block);
         }
@@ -61,7 +61,7 @@ public class BlockSpaceEdits {
      * @param toBlock the block type after replacing.
      * @param <B> the block type.
      */
-    public static <B> void replace(BlockSpace3<B> space, Set<Vector3i> posSet, Predicate<B> blockCondition, B toBlock) {
+    public static <B> void replace(VoxelSpace<B> space, Set<Vector3i> posSet, Predicate<B> blockCondition, B toBlock) {
         for(Vector3i pos : posSet) {
             B a = space.getBlock(pos);
             if(blockCondition.test(a)) {
@@ -74,7 +74,7 @@ public class BlockSpaceEdits {
      * Use replace() with Predicate.
      */
     @Deprecated
-    public static <B> void replace(BlockSpace3<B> space, Set<Vector3i> posSet, BlockCondition<B> condition, B toBlock) {
+    public static <B> void replace(VoxelSpace<B> space, Set<Vector3i> posSet, BlockCondition<B> condition, B toBlock) {
         for(Vector3i pos : posSet) {
             B a = space.getBlock(pos);
             if(condition.match(a)) {

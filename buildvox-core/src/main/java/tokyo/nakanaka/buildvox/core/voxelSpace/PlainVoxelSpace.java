@@ -1,4 +1,4 @@
-package tokyo.nakanaka.buildvox.core.blockSpace;
+package tokyo.nakanaka.buildvox.core.voxelSpace;
 
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 
@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class PlainBlockSpace3<B> implements BlockSpace3<B> {
+public class PlainVoxelSpace<B> implements VoxelSpace<B> {
     private Map<Vector3i, B> blockMap = new HashMap<>();
 
     @Override

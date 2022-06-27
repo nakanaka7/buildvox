@@ -4,14 +4,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import picocli.CommandLine;
 import tokyo.nakanaka.buildvox.core.Messages;
+import tokyo.nakanaka.buildvox.core.command.BlockParameter;
 import tokyo.nakanaka.buildvox.core.edit.EditExit;
 import tokyo.nakanaka.buildvox.core.command.IllegalPosException;
 import tokyo.nakanaka.buildvox.core.command.MissingPosDataException;
 import tokyo.nakanaka.buildvox.core.command.PosDataSizeException;
-import tokyo.nakanaka.buildvox.core.command.completionCandidates.BlockCandidates;
 import tokyo.nakanaka.buildvox.core.command.mixin.IntegrityMixin;
 import tokyo.nakanaka.buildvox.core.command.mixin.shapeMixin.*;
-import tokyo.nakanaka.buildvox.core.command.typeConverter.VoxelBlockConverter;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.Player;
@@ -34,7 +33,7 @@ public class FillCommand implements Runnable {
     private BvCommand bvCmd;
     @CommandLine.Mixin
     private IntegrityMixin integrityMixin;
-    @CommandLine.Parameters(description = "The block.", completionCandidates = BlockCandidates.class, converter = VoxelBlockConverter.class)
+    @CommandLine.Parameters(description = "The block.", completionCandidates = BlockParameter.BlockCandidates.class, converter = BlockParameter.BlockConverter.class)
     private VoxelBlock block;
     @CommandLine.Command(description = DESC_HEAD + ConeMixin.DESCRIPTION + ".", mixinStandardHelpOptions = true)
     private void cone(@CommandLine.Mixin ConeMixin coneMixin) {
@@ -80,7 +79,7 @@ public class FillCommand implements Runnable {
     private void triangle(@CommandLine.Mixin TriangleMixin triangleMixin) {
         runSubcommand(triangleMixin);
     }
-    @CommandLine.Option(names = {"-r", "--replace"}, description = "The block to replace", completionCandidates = BlockCandidates.class, converter = VoxelBlockConverter.class)
+    @CommandLine.Option(names = {"-r", "--replace"}, description = "The block to replace", completionCandidates = BlockParameter.BlockCandidates.class, converter = BlockParameter.BlockConverter.class)
     private VoxelBlock filter;
 
     @Override

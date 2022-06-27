@@ -1,16 +1,16 @@
-package tokyo.nakanaka.buildvox.core.blockSpace;
+package tokyo.nakanaka.buildvox.core.voxelSpace;
 
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 
 //integrity: https://www.computerhope.com/jargon/i/integrit.htm
-public class IntegrityAdjustableBlockSpace3<B> implements BlockSpace3<B> {
-    private BlockSpace3<B> subjectSpace;
+public class IntegrityAdjustableVoxelSpace<B> implements VoxelSpace<B> {
+    private VoxelSpace<B> subjectSpace;
     private double integrity;
 
     /**
      * @throws IllegalArgumentException if integrity is less than 0 or larger than 1
      */
-    public IntegrityAdjustableBlockSpace3(BlockSpace3<B> subjectSpace, double integrity) {
+    public IntegrityAdjustableVoxelSpace(VoxelSpace<B> subjectSpace, double integrity) {
         this.subjectSpace = subjectSpace;
         if(integrity < 0 || 1 < integrity)throw new IllegalArgumentException();
         this.integrity = integrity;
