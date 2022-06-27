@@ -8,8 +8,8 @@ import java.util.function.Predicate;
  * The block space which filters the original block when getting it.
  * @param <B> block type
  */
-public class GettingFilteringBlockSpace3<B> implements BlockSpace3<B> {
-    private BlockSpace3<B> original;
+public class GettingFilteringVoxelSpace<B> implements VoxelSpace<B> {
+    private VoxelSpace<B> original;
     private Predicate<B> predicate;
 
     /**
@@ -17,7 +17,7 @@ public class GettingFilteringBlockSpace3<B> implements BlockSpace3<B> {
      * @param original the original world
      * @param predicate the predicate function for the get blocks in the original space.
      */
-    public GettingFilteringBlockSpace3(BlockSpace3<B> original, Predicate<B> predicate) {
+    public GettingFilteringVoxelSpace(VoxelSpace<B> original, Predicate<B> predicate) {
         this.original = original;
         this.predicate = predicate;
     }

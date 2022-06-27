@@ -1,6 +1,6 @@
 package tokyo.nakanaka.buildvox.core.edit.editWorld;
 
-import tokyo.nakanaka.buildvox.core.voxelSpace.BlockSpace3;
+import tokyo.nakanaka.buildvox.core.voxelSpace.VoxelSpace;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.world.World;
@@ -10,7 +10,7 @@ import tokyo.nakanaka.buildvox.core.edit.WorldEdits;
  * A wrapped class of World used by {@link WorldEdits}. This class's instance fixes
  * physics of block settings.
  */
-public class EditWorld implements BlockSpace3<VoxelBlock> {
+public class EditWorld implements VoxelSpace<VoxelBlock> {
     private World original;
     private boolean physics;
 

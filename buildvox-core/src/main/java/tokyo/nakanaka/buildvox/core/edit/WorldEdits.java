@@ -35,7 +35,7 @@ public class WorldEdits {
      * @param dest the destination clipboard.
      */
     public static void copy(EditWorld srcWorld, Selection srcSel, Vector3d pos, Clipboard dest) {
-        var clipDest = new ClipboardBlockSpace3(dest);
+        var clipDest = new ClipboardVoxelSpace(dest);
         var trans = AffineTransformation3d.ofTranslation(-pos.x(), -pos.y(), -pos.z());
         BlockSpaceEdits.copy(srcWorld, srcSel.calculateBlockPosSet(), clipDest, trans);
     }
@@ -49,7 +49,7 @@ public class WorldEdits {
      * @param dest the destination clipboard.
      */
     public static void copy(World srcWorld, Selection srcSel, Vector3d pos, Clipboard dest) {
-        var destBs = new ClipboardBlockSpace3(dest);
+        var destBs = new ClipboardVoxelSpace(dest);
         var trans = AffineTransformation3d.ofTranslation(-pos.x(), -pos.y(), -pos.z());
         BlockSpaceEdits.copy(new EditWorld(srcWorld), srcSel.calculateBlockPosSet(), destBs, trans);
     }
@@ -84,11 +84,11 @@ public class WorldEdits {
      * @param integrity the integrity of the block-settings.
      */
     public static void paste(Clipboard srcClip, EditWorld dest, Vector3d pos, AffineTransformation3d clipboardTrans, double integrity) {
-        BlockSpace3<VoxelBlock> src = new ClipboardBlockSpace3(srcClip);
+        VoxelSpace<VoxelBlock> src = new ClipboardVoxelSpace(srcClip);
         Set<Vector3i> srcPosSet = srcClip.blockPosSet();
         BlockTransformation blockTrans = BlockTransformApproximator.approximateToBlockTrans(clipboardTrans);
-        BlockSpace3<VoxelBlock> transDest = new BlockStateTransformingBlockSpace3(dest, blockTrans);
-        transDest = new IntegrityAdjustableBlockSpace3<>(transDest, integrity);
+        VoxelSpace<VoxelBlock> transDest = new BlockStateTransformingBlockSpace3(dest, blockTrans);
+        transDest = new IntegrityAdjustableVoxelSpace<>(transDest, integrity);
         AffineTransformation3d trans = AffineTransformation3d.ofTranslation(pos.x(), pos.y(), pos.z()).compose(clipboardTrans);
         BlockSpaceEdits.copy(src, srcPosSet, transDest, trans);
     }
@@ -101,7 +101,7 @@ public class WorldEdits {
      * @param integrity the integrity of block-setting.
      */
     public static void fill(EditWorld world, Selection sel, VoxelBlock block, double integrity) {
-        BlockSpace3<VoxelBlock> dest = new IntegrityAdjustableBlockSpace3<>(world, integrity);
+        VoxelSpace<VoxelBlock> dest = new IntegrityAdjustableVoxelSpace<>(world, integrity);
         BlockSpaceEdits.fill(dest, sel.calculateBlockPosSet(), block);
     }
 
@@ -114,7 +114,7 @@ public class WorldEdits {
      * @param integrity the integrity of block-setting.
      */
     public static void replace(EditWorld world, Selection sel, VoxelBlock fromBlock, VoxelBlock toBlock, double integrity) {
-        BlockSpace3<VoxelBlock> space = new IntegrityAdjustableBlockSpace3<>(world, integrity);
+        VoxelSpace<VoxelBlock> space = new IntegrityAdjustableVoxelSpace<>(world, integrity);
         NamespacedId fromId = fromBlock.getBlockId();
         Map<String, String> fromStateMap = ((StateImpl)fromBlock.getState()).getStateMap();
         BlockSpaceEdits.replace(space, sel.calculateBlockPosSet(),
