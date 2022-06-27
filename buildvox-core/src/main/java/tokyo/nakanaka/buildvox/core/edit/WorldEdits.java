@@ -15,6 +15,7 @@ import tokyo.nakanaka.buildvox.core.world.World;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 
 /**
  * The utility class of world edits.
@@ -82,10 +83,22 @@ public class WorldEdits {
      * @param integrity the integrity of the block-settings.
      */
     public static void paste(Clipboard srcClip, EditWorld dest, Vector3d pos, AffineTransformation3d clipboardTrans, double integrity) {
+        paste(srcClip, dest, pos, clipboardTrans, new IntegrityPredicate<>(integrity));
+    }
+
+    /**
+     * Pastes the clipboard contents into the destination world.
+     * @param srcClip the source clipboard.
+     * @param dest the destination world.
+     * @param pos the position of the world which corresponds to the origin of the clipboard.
+     * @param clipboardTrans the clipboard transformation
+     * @param set the predicate function whether setting the block, actually.
+     */
+    public static void paste(Clipboard srcClip, EditWorld dest, Vector3d pos, AffineTransformation3d clipboardTrans, Predicate<VoxelBlock> set) {
         Set<Vector3i> srcPosSet = srcClip.blockPosSet();
         BlockTransformation blockTrans = BlockTransformApproximator.approximateToBlockTrans(clipboardTrans);
         VoxelSpace<VoxelBlock> transDest = new BlockStateTransformingBlockSpace3(dest, blockTrans);
-        transDest = new IntegrityAdjustableVoxelSpace<>(transDest, integrity);
+        transDest = new SettingFilteringVoxelSpace<>(transDest, set);
         AffineTransformation3d trans = AffineTransformation3d.ofTranslation(pos.x(), pos.y(), pos.z()).compose(clipboardTrans);
         VoxelSpaceEdits.copy(srcClip, srcPosSet, transDest, trans);
     }
