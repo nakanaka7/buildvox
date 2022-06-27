@@ -80,6 +80,8 @@ public class FillCommand implements Runnable {
     private void triangle(@CommandLine.Mixin TriangleMixin triangleMixin) {
         runSubcommand(triangleMixin);
     }
+    @CommandLine.Option(names = {"-r", "--replace"}, description = "The block to replace", completionCandidates = BlockCandidates.class, converter = VoxelBlockConverter.class)
+    private VoxelBlock filter;
 
     @Override
     public void run() {
@@ -116,7 +118,13 @@ public class FillCommand implements Runnable {
             err.println("Invalid shape argument(s)");
             return;
         }
-        EditExit exit = PlayerEdits.fill(player, selection, block, integrityMixin.integrity());
+        double integrity = integrityMixin.integrity();
+        EditExit exit;
+        if(filter == null) {
+            exit = PlayerEdits.fill(player, selection, block, integrity);
+        }else {
+            exit = PlayerEdits.replace(player, selection, filter, block, integrity);
+        }
         out.println(Messages.ofSetExit(exit));
     }
 
