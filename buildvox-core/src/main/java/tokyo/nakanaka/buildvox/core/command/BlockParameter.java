@@ -22,7 +22,7 @@ public class BlockParameter {
     }
 
 
-    public static class VoxelBlockConverter implements CommandLine.ITypeConverter<VoxelBlock> {
+    public static class BlockConverter implements CommandLine.ITypeConverter<VoxelBlock> {
         @Override
         public VoxelBlock convert(String value) throws Exception {
             VoxelBlock block;
