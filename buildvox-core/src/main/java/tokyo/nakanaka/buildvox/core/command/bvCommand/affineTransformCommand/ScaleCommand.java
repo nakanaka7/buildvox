@@ -2,7 +2,7 @@ package tokyo.nakanaka.buildvox.core.command.bvCommand.affineTransformCommand;
 
 import picocli.CommandLine;
 import tokyo.nakanaka.buildvox.core.Messages;
-import tokyo.nakanaka.buildvox.core.command.EditExit;
+import tokyo.nakanaka.buildvox.core.edit.EditExit;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
 import tokyo.nakanaka.buildvox.core.command.completionCandidates.DoubleCandidates;
 import tokyo.nakanaka.buildvox.core.command.mixin.PosMixin;

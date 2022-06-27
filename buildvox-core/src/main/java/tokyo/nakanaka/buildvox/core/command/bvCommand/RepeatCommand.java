@@ -2,7 +2,7 @@ package tokyo.nakanaka.buildvox.core.command.bvCommand;
 
 import picocli.CommandLine;
 import tokyo.nakanaka.buildvox.core.Messages;
-import tokyo.nakanaka.buildvox.core.command.EditExit;
+import tokyo.nakanaka.buildvox.core.edit.EditExit;
 import tokyo.nakanaka.buildvox.core.command.completionCandidates.IntegerCandidates;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
