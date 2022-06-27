@@ -5,6 +5,7 @@ import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 
 import java.util.Set;
 
+@Deprecated
 public class ClipboardBlockSpace3 implements BlockSpace3<VoxelBlock> {
     private Clipboard clipboard;
 
