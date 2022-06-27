@@ -13,8 +13,8 @@ import java.util.function.Predicate;
 /**
  * The utility class of block space edits.
  */
-public class BlockSpaceEdits {
-    private BlockSpaceEdits() {
+public class VoxelSpaceEdits {
+    private VoxelSpaceEdits() {
     }
 
     /**

@@ -37,7 +37,7 @@ public class WorldEdits {
     public static void copy(EditWorld srcWorld, Selection srcSel, Vector3d pos, Clipboard dest) {
         var clipDest = new ClipboardVoxelSpace(dest);
         var trans = AffineTransformation3d.ofTranslation(-pos.x(), -pos.y(), -pos.z());
-        BlockSpaceEdits.copy(srcWorld, srcSel.calculateBlockPosSet(), clipDest, trans);
+        VoxelSpaceEdits.copy(srcWorld, srcSel.calculateBlockPosSet(), clipDest, trans);
     }
 
     /**
@@ -51,7 +51,7 @@ public class WorldEdits {
     public static void copy(World srcWorld, Selection srcSel, Vector3d pos, Clipboard dest) {
         var destBs = new ClipboardVoxelSpace(dest);
         var trans = AffineTransformation3d.ofTranslation(-pos.x(), -pos.y(), -pos.z());
-        BlockSpaceEdits.copy(new EditWorld(srcWorld), srcSel.calculateBlockPosSet(), destBs, trans);
+        VoxelSpaceEdits.copy(new EditWorld(srcWorld), srcSel.calculateBlockPosSet(), destBs, trans);
     }
 
     /**
@@ -90,7 +90,7 @@ public class WorldEdits {
         VoxelSpace<VoxelBlock> transDest = new BlockStateTransformingBlockSpace3(dest, blockTrans);
         transDest = new IntegrityAdjustableVoxelSpace<>(transDest, integrity);
         AffineTransformation3d trans = AffineTransformation3d.ofTranslation(pos.x(), pos.y(), pos.z()).compose(clipboardTrans);
-        BlockSpaceEdits.copy(src, srcPosSet, transDest, trans);
+        VoxelSpaceEdits.copy(src, srcPosSet, transDest, trans);
     }
 
     /**
@@ -102,7 +102,7 @@ public class WorldEdits {
      */
     public static void fill(EditWorld world, Selection sel, VoxelBlock block, double integrity) {
         VoxelSpace<VoxelBlock> dest = new IntegrityAdjustableVoxelSpace<>(world, integrity);
-        BlockSpaceEdits.fill(dest, sel.calculateBlockPosSet(), block);
+        VoxelSpaceEdits.fill(dest, sel.calculateBlockPosSet(), block);
     }
 
     /**
@@ -117,8 +117,8 @@ public class WorldEdits {
         VoxelSpace<VoxelBlock> space = new IntegrityAdjustableVoxelSpace<>(world, integrity);
         NamespacedId fromId = fromBlock.getBlockId();
         Map<String, String> fromStateMap = ((StateImpl)fromBlock.getState()).getStateMap();
-        BlockSpaceEdits.replace(space, sel.calculateBlockPosSet(),
-            (BlockSpaceEdits.BlockCondition<VoxelBlock>) (block) -> {
+        VoxelSpaceEdits.replace(space, sel.calculateBlockPosSet(),
+            (VoxelSpaceEdits.BlockCondition<VoxelBlock>) (block) -> {
                 NamespacedId id = block.getBlockId();
                 Map<String, String> stateMap = ((StateImpl)block.getState()).getStateMap();
                 if(!fromId.equals(id)) return false;
