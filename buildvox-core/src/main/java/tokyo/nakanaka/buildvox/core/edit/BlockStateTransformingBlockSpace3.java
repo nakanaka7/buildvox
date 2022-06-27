@@ -1,10 +1,11 @@
-package tokyo.nakanaka.buildvox.core.blockSpace;
+package tokyo.nakanaka.buildvox.core.edit;
 
 import tokyo.nakanaka.buildvox.core.block.BlockTransformation;
+import tokyo.nakanaka.buildvox.core.blockSpace.BlockSpace3;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 
-public class BlockStateTransformingBlockSpace3 implements BlockSpace3<VoxelBlock>{
+public class BlockStateTransformingBlockSpace3 implements BlockSpace3<VoxelBlock> {
     private BlockSpace3<VoxelBlock> original;
     private BlockTransformation blockTrans;
 
