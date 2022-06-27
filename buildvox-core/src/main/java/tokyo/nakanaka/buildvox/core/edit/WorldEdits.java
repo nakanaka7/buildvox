@@ -35,9 +35,8 @@ public class WorldEdits {
      * @param dest the destination clipboard.
      */
     public static void copy(EditWorld srcWorld, Selection srcSel, Vector3d pos, Clipboard dest) {
-        var clipDest = new ClipboardVoxelSpace(dest);
         var trans = AffineTransformation3d.ofTranslation(-pos.x(), -pos.y(), -pos.z());
-        VoxelSpaceEdits.copy(srcWorld, srcSel.calculateBlockPosSet(), clipDest, trans);
+        VoxelSpaceEdits.copy(srcWorld, srcSel.calculateBlockPosSet(), dest, trans);
     }
 
     /**
@@ -49,9 +48,8 @@ public class WorldEdits {
      * @param dest the destination clipboard.
      */
     public static void copy(World srcWorld, Selection srcSel, Vector3d pos, Clipboard dest) {
-        var destBs = new ClipboardVoxelSpace(dest);
         var trans = AffineTransformation3d.ofTranslation(-pos.x(), -pos.y(), -pos.z());
-        VoxelSpaceEdits.copy(new EditWorld(srcWorld), srcSel.calculateBlockPosSet(), destBs, trans);
+        VoxelSpaceEdits.copy(new EditWorld(srcWorld), srcSel.calculateBlockPosSet(), dest, trans);
     }
 
     /**
@@ -84,13 +82,12 @@ public class WorldEdits {
      * @param integrity the integrity of the block-settings.
      */
     public static void paste(Clipboard srcClip, EditWorld dest, Vector3d pos, AffineTransformation3d clipboardTrans, double integrity) {
-        VoxelSpace<VoxelBlock> src = new ClipboardVoxelSpace(srcClip);
         Set<Vector3i> srcPosSet = srcClip.blockPosSet();
         BlockTransformation blockTrans = BlockTransformApproximator.approximateToBlockTrans(clipboardTrans);
         VoxelSpace<VoxelBlock> transDest = new BlockStateTransformingBlockSpace3(dest, blockTrans);
         transDest = new IntegrityAdjustableVoxelSpace<>(transDest, integrity);
         AffineTransformation3d trans = AffineTransformation3d.ofTranslation(pos.x(), pos.y(), pos.z()).compose(clipboardTrans);
-        VoxelSpaceEdits.copy(src, srcPosSet, transDest, trans);
+        VoxelSpaceEdits.copy(srcClip, srcPosSet, transDest, trans);
     }
 
     /**
