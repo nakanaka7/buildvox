@@ -8,8 +8,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class Clipboard {
-    private Map<Vector3i, VoxelBlock> blockMap = new HashMap<>();
+public class Clipboard implements BlockSpace3<VoxelBlock> {
+    private final Map<Vector3i, VoxelBlock> blockMap = new HashMap<>();
     private Integer maxX;
     private Integer maxY;
     private Integer maxZ;
