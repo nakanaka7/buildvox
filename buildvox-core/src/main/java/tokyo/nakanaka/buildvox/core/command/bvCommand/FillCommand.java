@@ -11,12 +11,12 @@ import tokyo.nakanaka.buildvox.core.command.PosDataSizeException;
 import tokyo.nakanaka.buildvox.core.command.completionCandidates.BlockCandidates;
 import tokyo.nakanaka.buildvox.core.command.mixin.IntegrityMixin;
 import tokyo.nakanaka.buildvox.core.command.mixin.shapeMixin.*;
+import tokyo.nakanaka.buildvox.core.command.typeConverter.VoxelBlockConverter;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
 import tokyo.nakanaka.buildvox.core.selection.SelectionCreations;
-import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 
 import java.io.PrintWriter;
@@ -34,9 +34,8 @@ public class FillCommand implements Runnable {
     private BvCommand bvCmd;
     @CommandLine.Mixin
     private IntegrityMixin integrityMixin;
-    @CommandLine.Parameters(
-            description = "The block.", completionCandidates = BlockCandidates.class)
-    private String block;
+    @CommandLine.Parameters(description = "The block.", completionCandidates = BlockCandidates.class, converter = VoxelBlockConverter.class)
+    private VoxelBlock block;
     @CommandLine.Command(description = DESC_HEAD + ConeMixin.DESCRIPTION + ".", mixinStandardHelpOptions = true)
     private void cone(@CommandLine.Mixin ConeMixin coneMixin) {
         runSubcommand(coneMixin);
@@ -101,17 +100,6 @@ public class FillCommand implements Runnable {
             err.println(ex.getMessage());
             return;
         }
-        VoxelBlock b;
-        try {
-            b = BuildVoxSystem.parseBlock(block);
-        }catch (IllegalArgumentException e) {
-            err.println(Messages.ofBlockParseError(block));
-            return;
-        }
-        if(!BuildVoxSystem.getBlockValidator().validate(b)){
-            err.println(Messages.ofBlockNotSettableError(b.toString()));
-            return;
-        }
         Selection selection;
         try{
             selection = selectionFactory.create();
@@ -128,7 +116,7 @@ public class FillCommand implements Runnable {
             err.println("Invalid shape argument(s)");
             return;
         }
-        EditExit exit = PlayerEdits.fill(player, selection, b, integrityMixin.integrity());
+        EditExit exit = PlayerEdits.fill(player, selection, block, integrityMixin.integrity());
         out.println(Messages.ofSetExit(exit));
     }
 
