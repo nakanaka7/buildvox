@@ -24,6 +24,22 @@ public class WorldEdits {
     private WorldEdits() {
     }
 
+    /** The predicate to test whether the block equals to the given block. */
+    public static class IsGivenBlock implements Predicate<VoxelBlock> {
+        private final VoxelBlock given;
+
+        /** Creates a new instance. */
+        public IsGivenBlock(VoxelBlock given) {
+            this.given = given;
+        }
+
+        @Override
+        public boolean test(VoxelBlock voxelBlock) {
+            return given.equals(voxelBlock);
+        }
+
+    }
+
     /**
      * Copies the blocks in selection. A coordinate system is made which origin is the pos.
      * Each coordinate axis is divided by length 1, and the space is full by 1x1x1 cubes as a result. If the center of
