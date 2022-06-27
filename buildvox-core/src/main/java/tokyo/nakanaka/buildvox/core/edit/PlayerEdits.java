@@ -266,22 +266,6 @@ public class PlayerEdits {
      * @throws IllegalStateException if clipboard is null
      * @throws IllegalArgumentException if integrity is less than 0 or more than 1.
      */
-    public static EditExit paste(Player player, Vector3d pos, double integrity) {
-        Clipboard clipboard = player.getClipboard();
-        if(clipboard == null){
-            throw new IllegalStateException();
-        }
-        PasteSelection pasteSelection = PasteSelection.newInstance(clipboard, pos, AffineTransformation3d.IDENTITY, integrity);
-        return recordingEdit(player, pasteSelection::setForwardBlocks, pasteSelection);
-    }
-
-    /**
-     * Pastes the blocks of the clipboard.
-     * @param player the player.
-     * @param pos the position which corresponds to the origin of the clipboard.
-     * @throws IllegalStateException if clipboard is null
-     * @throws IllegalArgumentException if integrity is less than 0 or more than 1.
-     */
     public static EditExit paste(Player player, Vector3d pos, double integrity, boolean masked) {
         Clipboard clipboard = player.getClipboard();
         if(clipboard == null){
