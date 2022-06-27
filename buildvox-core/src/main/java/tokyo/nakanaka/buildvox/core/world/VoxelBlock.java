@@ -5,6 +5,8 @@ import tokyo.nakanaka.buildvox.core.block.Block;
 import tokyo.nakanaka.buildvox.core.block.BlockTransformation;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 
+import java.util.Objects;
+
 /**
  * Represents block.
  */
@@ -128,6 +130,19 @@ public class VoxelBlock {
             s = s + "{" + entity + "}";
         }
         return s;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        VoxelBlock that = (VoxelBlock) o;
+        return blockId.equals(that.blockId) && state.equals(that.state) && Objects.equals(entity, that.entity);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(blockId, state, entity);
     }
 
 }
