@@ -4,7 +4,6 @@ import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.blockSpace.Clipboard;
 import tokyo.nakanaka.buildvox.core.blockSpace.editWorld.EditWorld;
 import tokyo.nakanaka.buildvox.core.blockSpace.editWorld.RecordingEditWorld;
-import tokyo.nakanaka.buildvox.core.command.EditExit;
 import tokyo.nakanaka.buildvox.core.math.Drawings;
 import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
 import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
@@ -299,20 +298,33 @@ public class PlayerEdits {
      * @param integrity the integrity of replacing.
      * @return the edit-exit.
      * @throws IllegalArgumentException if integrity is less than 0 or larger than 1.
+     */
+    public static EditExit replace(Player player, Selection sel, VoxelBlock blockFrom, VoxelBlock blockTo, double integrity) {
+        if(integrity < 0 || 1 < integrity) throw new IllegalArgumentException();
+        Selection selTo;
+        if(sel instanceof BlockSelection bs) {
+            selTo = bs.toNonBlock();
+        }else {
+            selTo = sel;
+        }
+        return recordingEdit(
+                player, (editWorld) -> WorldEdits.replace(editWorld, sel, blockFrom, blockTo, integrity), selTo
+        );
+    }
+
+    /**
+     * Replaces blocks.
+     * @param player the player.
+     * @param blockFrom the block to be replaced from
+     * @param blockTo the block to be replaced to
+     * @param integrity the integrity of replacing.
+     * @return the edit-exit.
+     * @throws IllegalArgumentException if integrity is less than 0 or larger than 1.
      * @throws SelectionNotFoundException if a selection is not found
      */
     public static EditExit replace(Player player, VoxelBlock blockFrom, VoxelBlock blockTo, double integrity) {
-        if(integrity < 0 || 1 < integrity) throw new IllegalArgumentException();
-        Selection selFrom = findSelection(player);
-        Selection selTo;
-        if(selFrom instanceof BlockSelection bs) {
-            selTo = bs.toNonBlock();
-        }else {
-            selTo = selFrom;
-        }
-        return recordingEdit(
-            player, (editWorld) -> WorldEdits.replace(editWorld, selFrom, blockFrom, blockTo, integrity), selTo
-        );
+        Selection sel = findSelection(player);
+        return replace(player, sel, blockFrom, blockTo, integrity);
     }
 
     /*
