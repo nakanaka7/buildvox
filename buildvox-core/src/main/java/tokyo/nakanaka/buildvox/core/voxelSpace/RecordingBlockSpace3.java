@@ -1,4 +1,4 @@
-package tokyo.nakanaka.buildvox.core.blockSpace;
+package tokyo.nakanaka.buildvox.core.voxelSpace;
 
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 
