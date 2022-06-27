@@ -273,7 +273,10 @@ public class PlayerEdits {
         }
         PasteSelection pasteSelection = PasteSelection.newInstance(clipboard, pos, AffineTransformation3d.IDENTITY,
                 integrity, masked, player.getBackgroundBlock());
-        return recordingEdit(player, pasteSelection::setForwardBlocks, pasteSelection);
+        PlayerWorld pw = PlayerWorld.newInstance(player);
+        pasteSelection.setForwardBlocks(pw);
+        pw.setSelection(pasteSelection);
+        return pw.end();
     }
 
     /**
