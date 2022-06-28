@@ -65,7 +65,7 @@ public class PlayerWorld extends RecordingEditWorld {
             posArrayOrSelEdit = createSelectionEdit(player, endSel);
             player.setSelection(endSel);
         }
-        UndoableEdit blockEdit = createBlockEdit(this);
+        UndoableEdit blockEdit = createBlockEdit();
         CompoundEdit compoundEdit = new CompoundEdit();
         compoundEdit.addEdit(posArrayOrSelEdit);
         compoundEdit.addEdit(blockEdit);
@@ -75,25 +75,23 @@ public class PlayerWorld extends RecordingEditWorld {
     }
 
     /* Creates an undoable edit for edit world that is target of recordingEditWorld */
-    private static UndoableEdit createBlockEdit(RecordingEditWorld recordingEditWorld) {
-        Clipboard undoClipboard = recordingEditWorld.getUndoClipboard();
-        Clipboard redoClipboard = recordingEditWorld.getRedoClipboard();
-        EditWorld editWorld = new EditWorld(recordingEditWorld.getOriginal());
+    private UndoableEdit createBlockEdit() {
+        EditWorld editWorld = new EditWorld(getOriginal());
         return createEdit(
-                () -> {
-                    Set<Vector3i> blockPosSet = undoClipboard.blockPosSet();
+            () -> {
+                    Set<Vector3i> blockPosSet = undoClip.blockPosSet();
                     for(Vector3i pos : blockPosSet) {
-                        VoxelBlock block = undoClipboard.getBlock(pos.x(), pos.y(), pos.z());
+                        VoxelBlock block = undoClip.getBlock(pos.x(), pos.y(), pos.z());
                         editWorld.setBlock(pos, block);
                     }
                 },
-                () -> {
-                    Set<Vector3i> blockPosSet = redoClipboard.blockPosSet();
+            () -> {
+                    Set<Vector3i> blockPosSet = redoClip.blockPosSet();
                     for(Vector3i pos : blockPosSet) {
-                        VoxelBlock block = redoClipboard.getBlock(pos.x(), pos.y(), pos.z());
+                        VoxelBlock block = redoClip.getBlock(pos.x(), pos.y(), pos.z());
                         editWorld.setBlock(pos, block);
-                    }
                 }
+            }
         );
     }
 
