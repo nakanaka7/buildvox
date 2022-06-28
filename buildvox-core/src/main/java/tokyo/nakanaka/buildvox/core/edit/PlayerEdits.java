@@ -440,24 +440,10 @@ public class PlayerEdits {
     }
 
     /**
-     * Recording edit end with all null pos array and null selection.
-     */
-    private static EditExit recordingEdit(Player player, EditWorldEditor editor) {
-        return recordingEdit(player, editor, new Vector3i[player.getPosArrayClone().length], null);
-    }
-
-    /**
      * Recording edit end with pos array and null selection.
      */
     private static EditExit recordingEdit(Player player, EditWorldEditor editor, Vector3i[] endPosArray) {
         return recordingEdit(player, editor, endPosArray, null);
-    }
-
-    /**
-     * Recording edit end with all null pos array and (nonNull assumed) selection.
-     */
-    private static EditExit recordingEdit(Player player, EditWorldEditor editor, Selection endSelection) {
-        return recordingEdit(player, editor, new Vector3i[player.getPosArrayClone().length], endSelection);
     }
 
     /**
