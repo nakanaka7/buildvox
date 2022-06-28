@@ -1,6 +1,5 @@
 package tokyo.nakanaka.buildvox.core.edit;
 
-import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.edit.editWorld.EditWorld;
 import tokyo.nakanaka.buildvox.core.edit.editWorld.RecordingEditWorld;
 import tokyo.nakanaka.buildvox.core.math.Drawings;
@@ -11,9 +10,9 @@ import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.property.Axis;
 import tokyo.nakanaka.buildvox.core.selection.*;
+import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 
-import javax.swing.undo.CompoundEdit;
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
 import java.util.Arrays;
@@ -430,54 +429,6 @@ public class PlayerEdits {
             pw.setSelection(pasteSel);
         }
         return pw.end();
-    }
-
-    /**
-     * A functional interface for recordingEdit() which defines editing for the world.
-     */
-    private interface EditWorldEditor {
-        void edit(EditWorld editWorld);
-    }
-
-    /**
-     * Recording edit end with pos array and null selection.
-     */
-    private static EditExit recordingEdit(Player player, EditWorldEditor editor, Vector3i[] endPosArray) {
-        return recordingEdit(player, editor, endPosArray, null);
-    }
-
-    /**
-     * Edits world, sets a new pos array or selection into the player, and stores the undoable edit of the above procedures
-     * as one edit into the player's UndoManager.
-     * @param player a player.
-     * @param editor an editor which defines the world editing.
-     * @param endPosArray the pos array in the end.
-     * @param endSelection the selection in the end.
-     * @return the edit exit of the world editing.
-     * @throws IllegalArgumentException if endPosArray contains nonNull and selection is not null.
-     */
-    private static EditExit recordingEdit(Player player, EditWorldEditor editor, Vector3i[] endPosArray, Selection endSelection) {
-        RecordingEditWorld recordingEditWorld = new RecordingEditWorld(player.getEditWorld());
-        editor.edit(recordingEditWorld);
-        CompoundEdit compoundEdit = new CompoundEdit();
-        UndoableEdit blockEdit = createBlockEdit(recordingEditWorld);
-        compoundEdit.addEdit(blockEdit);
-        UndoableEdit posArrayOrSelectionEdit;
-        if(endSelection == null) {
-            posArrayOrSelectionEdit = createPosArrayEdit(player, endPosArray);
-            player.setPosArray(endPosArray);
-        }else {
-            boolean endPosArrayContainsOnlyNull = Arrays.stream(endPosArray).allMatch(Objects::isNull);
-            if(!endPosArrayContainsOnlyNull) {
-                throw new IllegalArgumentException();
-            }
-            posArrayOrSelectionEdit = createSelectionEdit(player, endSelection);
-            player.setSelection(endSelection);
-        }
-        compoundEdit.addEdit(posArrayOrSelectionEdit);
-        compoundEdit.end();
-        player.getUndoManager().addEdit(compoundEdit);
-        return new EditExit(recordingEditWorld.blockCount(), 0, 0);
     }
 
     /* Creates an undoable edit for edit world that is target of recordingEditWorld */
