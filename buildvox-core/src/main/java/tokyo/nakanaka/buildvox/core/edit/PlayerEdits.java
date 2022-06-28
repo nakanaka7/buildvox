@@ -213,16 +213,15 @@ public class PlayerEdits {
             Vector3d pasteOffset = trans.apply(copyOffset);
             selectionTo = PasteSelection.newInstance(clipboard, pasteOffset, newClipTrans);
         }
-        return recordingEdit(player,
-            (editWorld) -> {
-                if (selectionFrom instanceof BlockSelection blockSelection) {
-                    blockSelection.setBackwardBlocks(editWorld);
-                } else {
-                    WorldEdits.fill(editWorld, selectionFrom, player.getBackgroundBlock(), 1);
-                }
-                selectionTo.setForwardBlocks(editWorld);
-            }, selectionTo
-        );
+        PlayerWorld pw = new PlayerWorld(player);
+        if (selectionFrom instanceof BlockSelection blockSelection) {
+            blockSelection.setBackwardBlocks(pw);
+        } else {
+            WorldEdits.fill(pw, selectionFrom, player.getBackgroundBlock(), 1);
+        }
+        selectionTo.setForwardBlocks(pw);
+        pw.setSelection(selectionTo);
+        return pw.end();
     }
 
     /**
