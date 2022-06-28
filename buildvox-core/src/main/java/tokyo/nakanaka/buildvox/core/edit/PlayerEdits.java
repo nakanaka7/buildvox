@@ -273,7 +273,7 @@ public class PlayerEdits {
         }
         PasteSelection pasteSelection = PasteSelection.newInstance(clipboard, pos, AffineTransformation3d.IDENTITY,
                 integrity, masked, player.getBackgroundBlock());
-        PlayerWorld pw = PlayerWorld.newInstance(player);
+        PlayerWorld pw = new PlayerWorld(player);
         pasteSelection.setForwardBlocks(pw);
         pw.setSelection(pasteSelection);
         return pw.end();
@@ -420,7 +420,7 @@ public class PlayerEdits {
         Clipboard clip = new Clipboard();
         WorldEdits.copy(player.getEditWorld(), sel, Vector3d.ZERO, clip);
         List<Vector3i> positions = Drawings.line(Vector3i.ZERO, new Vector3i(countX, countY, countZ));
-        PlayerWorld pw = PlayerWorld.newInstance(player);
+        PlayerWorld pw = new PlayerWorld(player);
         for(Vector3i pos : positions) {
             double qx = pos.x() * dx;
             double qy = pos.y() * dy;
@@ -437,23 +437,17 @@ public class PlayerEdits {
      * into the player.
      */
     private static class PlayerWorld extends RecordingEditWorld {
-        private Player player;
+        private final Player player;
         private Selection sel;
 
-        private PlayerWorld(World original, Player player) {
-            super(original);
+        /***
+         * Creates a new instance.
+         * @param player the player.
+         */
+        public PlayerWorld(Player player) {
+            super(player.getEditWorld());
             this.player = player;
             this.sel = player.getSelection();
-        }
-
-        /**
-         * Creates a new instance of the player.
-         * @param player the player.
-         * @return a new instance.
-         */
-        public static PlayerWorld newInstance(Player player) {
-            var world = player.getEditWorld();
-            return new PlayerWorld(world, player);
         }
 
         /**
