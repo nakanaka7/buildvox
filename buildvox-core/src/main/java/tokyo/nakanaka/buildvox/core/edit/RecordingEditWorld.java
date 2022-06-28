@@ -1,6 +1,6 @@
-package tokyo.nakanaka.buildvox.core.edit.editWorld;
+package tokyo.nakanaka.buildvox.core.edit;
 
-import tokyo.nakanaka.buildvox.core.edit.Clipboard;
+import tokyo.nakanaka.buildvox.core.edit.editWorld.EditWorld;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.world.World;
@@ -8,7 +8,7 @@ import tokyo.nakanaka.buildvox.core.world.World;
 /**
    The edit world which records block settings. This object has undo-clipboard and redo-clipboard.
  */
-public class RecordingEditWorld extends EditWorld {
+class RecordingEditWorld extends EditWorld {
     private Clipboard undoClip = new Clipboard();
     private Clipboard redoClip = new Clipboard();
     private int blockCount;
