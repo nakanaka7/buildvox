@@ -1,4 +1,4 @@
-package tokyo.nakanaka.buildvox.core.edit.editWorld;
+package tokyo.nakanaka.buildvox.core.edit;
 
 import tokyo.nakanaka.buildvox.core.voxelSpace.VoxelSpace;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;

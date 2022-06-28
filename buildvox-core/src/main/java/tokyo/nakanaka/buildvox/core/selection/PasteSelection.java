@@ -2,7 +2,7 @@ package tokyo.nakanaka.buildvox.core.selection;
 
 import tokyo.nakanaka.buildvox.core.edit.Clipboard;
 import tokyo.nakanaka.buildvox.core.edit.WorldEdits;
-import tokyo.nakanaka.buildvox.core.edit.editWorld.EditWorld;
+import tokyo.nakanaka.buildvox.core.edit.EditWorld;
 import tokyo.nakanaka.buildvox.core.math.region3d.Cuboid;
 import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
 import tokyo.nakanaka.buildvox.core.math.region3d.Region3d;
