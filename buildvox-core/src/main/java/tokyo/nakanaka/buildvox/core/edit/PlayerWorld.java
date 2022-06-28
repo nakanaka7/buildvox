@@ -13,7 +13,7 @@ import java.util.Set;
  * An edit world for a player. Calling end() stores an undoable edit
  * into the player.
  */
-public class PlayerWorld extends EditWorld {
+public class PlayerWorld extends ClientWorld {
     private final Player player;
     private final Vector3i[] initPosArray;
     private final Selection initSel;
@@ -107,20 +107,20 @@ public class PlayerWorld extends EditWorld {
 
     /* Creates an undoable edit for edit world that is target of recordingEditWorld */
     private UndoableEdit createBlockEdit() {
-        EditWorld editWorld = new EditWorld(getOriginal());
+        ClientWorld clientWorld = new ClientWorld(getOriginal());
         return createEdit(
             () -> {
                     Set<Vector3i> blockPosSet = undoClip.blockPosSet();
                     for(Vector3i pos : blockPosSet) {
                         VoxelBlock block = undoClip.getBlock(pos.x(), pos.y(), pos.z());
-                        editWorld.setBlock(pos, block);
+                        clientWorld.setBlock(pos, block);
                     }
                 },
             () -> {
                     Set<Vector3i> blockPosSet = redoClip.blockPosSet();
                     for(Vector3i pos : blockPosSet) {
                         VoxelBlock block = redoClip.getBlock(pos.x(), pos.y(), pos.z());
-                        editWorld.setBlock(pos, block);
+                        clientWorld.setBlock(pos, block);
                 }
             }
         );

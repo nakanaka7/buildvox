@@ -88,10 +88,10 @@ public class PlayerEdits {
     public static void applyPhysics(Player player) {
         Selection selFrom = findSelection(player);
         Clipboard clipboard = new Clipboard();
-        EditWorld editWorld = new EditWorld(player.getEditWorld(), true);
-        WorldEdits.copy(editWorld, selFrom, Vector3d.ZERO, clipboard);
-        WorldEdits.fill(editWorld, selFrom, BuildVoxSystem.parseBlock("air"), 1);
-        WorldEdits.paste(clipboard, editWorld, Vector3d.ZERO);
+        ClientWorld clientWorld = new ClientWorld(player.getEditWorld(), true);
+        WorldEdits.copy(clientWorld, selFrom, Vector3d.ZERO, clipboard);
+        WorldEdits.fill(clientWorld, selFrom, BuildVoxSystem.parseBlock("air"), 1);
+        WorldEdits.paste(clipboard, clientWorld, Vector3d.ZERO);
         Selection selTo;
         if(selFrom instanceof BlockSelection bs) {
             selTo = bs.toNonBlock();
@@ -202,7 +202,7 @@ public class PlayerEdits {
         }else {
             Clipboard clipboard = new Clipboard();
             Vector3d copyOffset = Vector3d.ZERO;
-            WorldEdits.copy(new EditWorld(player.getEditWorld()), selectionFrom, copyOffset, clipboard);
+            WorldEdits.copy(new ClientWorld(player.getEditWorld()), selectionFrom, copyOffset, clipboard);
             clipboard.lock();
             AffineTransformation3d newClipTrans = trans.linear();
             Vector3d pasteOffset = trans.apply(copyOffset);
@@ -245,7 +245,7 @@ public class PlayerEdits {
     public static EditExit copy(Player player, Vector3d pos) {
         Selection selection = findSelection(player);
         Clipboard clipboard = new Clipboard();
-        WorldEdits.copy(new EditWorld(player.getEditWorld()), selection, pos, clipboard);
+        WorldEdits.copy(new ClientWorld(player.getEditWorld()), selection, pos, clipboard);
         clipboard.lock();
         player.setClipboard(clipboard);
         return new EditExit(clipboard.blockCount(), 0, 0);

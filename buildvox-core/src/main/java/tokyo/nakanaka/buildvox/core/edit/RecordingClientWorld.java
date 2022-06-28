@@ -8,7 +8,7 @@ import tokyo.nakanaka.buildvox.core.world.World;
    The edit world which records block settings. This object has undo-clipboard and redo-clipboard.
  */
 @Deprecated
-class RecordingEditWorld extends EditWorld {
+class RecordingClientWorld extends ClientWorld {
     protected Clipboard undoClip = new Clipboard();
     protected Clipboard redoClip = new Clipboard();
     protected int blockCount;
@@ -16,7 +16,7 @@ class RecordingEditWorld extends EditWorld {
     /**
      * @param original the original world. The block setting physics will be set "false".
      */
-    public RecordingEditWorld(World original) {
+    public RecordingClientWorld(World original) {
         super(original);
     }
 

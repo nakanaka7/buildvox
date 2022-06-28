@@ -2,7 +2,7 @@ package tokyo.nakanaka.buildvox.core.selection;
 
 import tokyo.nakanaka.buildvox.core.edit.Clipboard;
 import tokyo.nakanaka.buildvox.core.edit.WorldEdits;
-import tokyo.nakanaka.buildvox.core.edit.EditWorld;
+import tokyo.nakanaka.buildvox.core.edit.ClientWorld;
 import tokyo.nakanaka.buildvox.core.math.region3d.Cuboid;
 import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
 import tokyo.nakanaka.buildvox.core.math.region3d.Region3d;
@@ -74,17 +74,17 @@ public class PasteSelection extends BlockSelection {
     }
 
     @Override
-    public void setForwardBlocks(EditWorld editWorld) {
+    public void setForwardBlocks(ClientWorld clientWorld) {
         Clipboard newBackwardClip = new Clipboard();
-        WorldEdits.copy(editWorld, this, Vector3d.ZERO, newBackwardClip);
+        WorldEdits.copy(clientWorld, this, Vector3d.ZERO, newBackwardClip);
         Predicate<VoxelBlock> set = (block) -> Math.random() < integrity && (!masked || !block.equals(background));
-        WorldEdits.paste(clipboard, editWorld, pos, clipTrans, set);
+        WorldEdits.paste(clipboard, clientWorld, pos, clipTrans, set);
         backwardClip = newBackwardClip;
     }
 
     @Override
-    public void setBackwardBlocks(EditWorld editWorld) {
-        WorldEdits.paste(backwardClip, editWorld, Vector3d.ZERO);
+    public void setBackwardBlocks(ClientWorld clientWorld) {
+        WorldEdits.paste(backwardClip, clientWorld, Vector3d.ZERO);
     }
 
     @Override

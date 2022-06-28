@@ -10,7 +10,7 @@ import tokyo.nakanaka.buildvox.core.edit.WorldEdits;
  * A wrapped class of World used by {@link WorldEdits}. This class's instance fixes
  * physics of block settings.
  */
-public class EditWorld implements VoxelSpace<VoxelBlock> {
+public class ClientWorld implements VoxelSpace<VoxelBlock> {
     private World original;
     private boolean physics;
 
@@ -18,7 +18,7 @@ public class EditWorld implements VoxelSpace<VoxelBlock> {
      * Constructs a new instance with an original World. The block setting physics will be set "false".
      * @param original the original world.
      */
-    public EditWorld(World original) {
+    public ClientWorld(World original) {
         this.original = original;
     }
 
@@ -26,7 +26,7 @@ public class EditWorld implements VoxelSpace<VoxelBlock> {
      * Constructs a new instance with an original World.
      * @param original the original world.
      */
-    public EditWorld(World original, boolean physics) {
+    public ClientWorld(World original, boolean physics) {
         this.original = original;
         this.physics = physics;
     }

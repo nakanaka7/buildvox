@@ -50,7 +50,7 @@ public class WorldEdits {
      * @param pos the position of the source which corresponds to the origin of the clipboard.
      * @param dest the destination clipboard.
      */
-    public static void copy(EditWorld srcWorld, Selection srcSel, Vector3d pos, Clipboard dest) {
+    public static void copy(ClientWorld srcWorld, Selection srcSel, Vector3d pos, Clipboard dest) {
         var trans = AffineTransformation3d.ofTranslation(-pos.x(), -pos.y(), -pos.z());
         VoxelSpaceEdits.copy(srcWorld, srcSel.calculateBlockPosSet(), dest, trans);
     }
@@ -65,7 +65,7 @@ public class WorldEdits {
      */
     public static void copy(World srcWorld, Selection srcSel, Vector3d pos, Clipboard dest) {
         var trans = AffineTransformation3d.ofTranslation(-pos.x(), -pos.y(), -pos.z());
-        VoxelSpaceEdits.copy(new EditWorld(srcWorld), srcSel.calculateBlockPosSet(), dest, trans);
+        VoxelSpaceEdits.copy(new ClientWorld(srcWorld), srcSel.calculateBlockPosSet(), dest, trans);
     }
 
     /**
@@ -74,7 +74,7 @@ public class WorldEdits {
      * @param dest the destination world.
      * @param pos the position of the world which corresponds to the origin of the clipboard.
      */
-    public static void paste(Clipboard srcClip, EditWorld dest, Vector3d pos) {
+    public static void paste(Clipboard srcClip, ClientWorld dest, Vector3d pos) {
         paste(srcClip, dest, pos, AffineTransformation3d.IDENTITY);
     }
 
@@ -85,7 +85,7 @@ public class WorldEdits {
      * @param pos the position of the world which corresponds to the origin of the clipboard.
      * @param clipboardTrans the clipboard transformation
      */
-    public static void paste(Clipboard srcClip, EditWorld dest, Vector3d pos, AffineTransformation3d clipboardTrans) {
+    public static void paste(Clipboard srcClip, ClientWorld dest, Vector3d pos, AffineTransformation3d clipboardTrans) {
         paste(srcClip, dest, pos, clipboardTrans, 1);
     }
 
@@ -97,7 +97,7 @@ public class WorldEdits {
      * @param clipboardTrans the clipboard transformation
      * @param integrity the integrity of the block-settings.
      */
-    public static void paste(Clipboard srcClip, EditWorld dest, Vector3d pos, AffineTransformation3d clipboardTrans, double integrity) {
+    public static void paste(Clipboard srcClip, ClientWorld dest, Vector3d pos, AffineTransformation3d clipboardTrans, double integrity) {
         paste(srcClip, dest, pos, clipboardTrans, new IntegrityPredicate<>(integrity));
     }
 
@@ -109,7 +109,7 @@ public class WorldEdits {
      * @param clipboardTrans the clipboard transformation
      * @param set the predicate function whether setting the block, actually.
      */
-    public static void paste(Clipboard srcClip, EditWorld dest, Vector3d pos, AffineTransformation3d clipboardTrans, Predicate<VoxelBlock> set) {
+    public static void paste(Clipboard srcClip, ClientWorld dest, Vector3d pos, AffineTransformation3d clipboardTrans, Predicate<VoxelBlock> set) {
         Set<Vector3i> srcPosSet = srcClip.blockPosSet();
         BlockTransformation blockTrans = BlockTransformApproximator.approximateToBlockTrans(clipboardTrans);
         VoxelSpace<VoxelBlock> transDest = new BlockStateTransformingBlockSpace3(dest, blockTrans);
@@ -125,7 +125,7 @@ public class WorldEdits {
      * @param block the block.
      * @param integrity the integrity of block-setting.
      */
-    public static void fill(EditWorld world, Selection sel, VoxelBlock block, double integrity) {
+    public static void fill(ClientWorld world, Selection sel, VoxelBlock block, double integrity) {
         VoxelSpace<VoxelBlock> dest = new IntegrityAdjustableVoxelSpace<>(world, integrity);
         VoxelSpaceEdits.fill(dest, sel.calculateBlockPosSet(), block);
     }
@@ -138,7 +138,7 @@ public class WorldEdits {
      * @param toBlock the block type to be replaced to.
      * @param integrity the integrity of block-setting.
      */
-    public static void replace(EditWorld world, Selection sel, VoxelBlock fromBlock, VoxelBlock toBlock, double integrity) {
+    public static void replace(ClientWorld world, Selection sel, VoxelBlock fromBlock, VoxelBlock toBlock, double integrity) {
         VoxelSpace<VoxelBlock> space = new IntegrityAdjustableVoxelSpace<>(world, integrity);
         NamespacedId fromId = fromBlock.getBlockId();
         Map<String, String> fromStateMap = ((StateImpl)fromBlock.getState()).getStateMap();
@@ -165,7 +165,7 @@ public class WorldEdits {
      * @param countY the count along y-axis.
      * @param countZ the count along z-axis.
      */
-    public static void repeatOld(EditWorld world, Vector3i pos0, Vector3i pos1,
+    public static void repeatOld(ClientWorld world, Vector3i pos0, Vector3i pos1,
                                  int countX, int countY, int countZ) {
         int maxX = Math.max(pos0.x(), pos1.x());
         int maxY = Math.max(pos0.y(), pos1.y());
