@@ -70,22 +70,4 @@ public class VoxelSpaceEdits {
         }
     }
 
-    /**
-     * Use replace() with Predicate.
-     */
-    @Deprecated
-    public static <B> void replace(VoxelSpace<B> space, Set<Vector3i> posSet, BlockCondition<B> condition, B toBlock) {
-        for(Vector3i pos : posSet) {
-            B a = space.getBlock(pos);
-            if(condition.match(a)) {
-                space.setBlock(pos, toBlock);
-            }
-        }
-    }
-
-    @Deprecated
-    public static interface BlockCondition<B> {
-        boolean match(B block);
-    }
-
 }
