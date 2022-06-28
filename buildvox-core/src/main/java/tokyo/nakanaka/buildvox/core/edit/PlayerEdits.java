@@ -1,7 +1,6 @@
 package tokyo.nakanaka.buildvox.core.edit;
 
 import tokyo.nakanaka.buildvox.core.edit.editWorld.EditWorld;
-import tokyo.nakanaka.buildvox.core.edit.editWorld.RecordingEditWorld;
 import tokyo.nakanaka.buildvox.core.math.Drawings;
 import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
 import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
@@ -14,11 +13,9 @@ import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 
 import javax.swing.undo.UndoManager;
-import javax.swing.undo.UndoableEdit;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 /**
  * The utility class of player edits.
@@ -429,126 +426,6 @@ public class PlayerEdits {
             pw.setSelection(pasteSel);
         }
         return pw.end();
-    }
-
-    /* Creates an undoable edit for edit world that is target of recordingEditWorld */
-    static UndoableEdit createBlockEdit(RecordingEditWorld recordingEditWorld) {
-        Clipboard undoClipboard = recordingEditWorld.getUndoClipboard();
-        Clipboard redoClipboard = recordingEditWorld.getRedoClipboard();
-        EditWorld editWorld = new EditWorld(recordingEditWorld.getOriginal());
-        return createEdit(
-            () -> {
-                Set<Vector3i> blockPosSet = undoClipboard.blockPosSet();
-                for(Vector3i pos : blockPosSet) {
-                    VoxelBlock block = undoClipboard.getBlock(pos.x(), pos.y(), pos.z());
-                    editWorld.setBlock(pos, block);
-                }
-            },
-            () -> {
-                Set<Vector3i> blockPosSet = redoClipboard.blockPosSet();
-                for(Vector3i pos : blockPosSet) {
-                    VoxelBlock block = redoClipboard.getBlock(pos.x(), pos.y(), pos.z());
-                    editWorld.setBlock(pos, block);
-                }
-            }
-        );
-    }
-
-    /* Creates an edit to set a new pos array into the player */
-    static UndoableEdit createPosArrayEdit(Player player, Vector3i[] posArray) {
-        Vector3i[] initPosArray = player.getPosArrayClone();
-        Selection initSelection = player.getSelection();
-        return createEdit(
-            () -> {
-                if(initSelection == null) {
-                    player.setPosArray(initPosArray.clone());
-                }else{
-                    player.setSelection(initSelection);
-                }
-            },
-            () -> player.setPosArray(posArray)
-        );
-    }
-
-    /* Creates an edit to set a new selection into the player */
-    static UndoableEdit createSelectionEdit(Player player, Selection selection) {
-        Vector3i[] initPosArray = player.getPosArrayClone();
-        Selection initSelection = player.getSelection();
-        return createEdit(
-            () -> {
-                if(initSelection == null) {
-                    player.setPosArray(initPosArray.clone());
-                }else{
-                    player.setSelection(initSelection);
-                }
-            },
-            () -> player.setSelection(selection)
-        );
-    }
-
-    /**
-     * Creates an UndoableEdit from undoRunnable and redoRunnable.
-     * @param undoRunnable a runnable for undo.
-     * @param redoRunnable a runnable for redo.
-     * @return an instance
-     */
-    private static UndoableEdit createEdit(Runnable undoRunnable, Runnable redoRunnable) {
-        return new UndoableEdit() {
-            @Override
-            public void undo() {
-                undoRunnable.run();
-            }
-
-            @Override
-            public boolean canUndo() {
-                return true;
-            }
-
-            @Override
-            public void redo() {
-                redoRunnable.run();
-            }
-
-            @Override
-            public boolean canRedo() {
-                return true;
-            }
-
-            @Override
-            public void die() {
-
-            }
-
-            @Override
-            public boolean addEdit(UndoableEdit anEdit) {
-                return false;
-            }
-
-            @Override
-            public boolean replaceEdit(UndoableEdit anEdit) {
-                return false;
-            }
-
-            @Override
-            public boolean isSignificant() {
-                return true;
-            }
-
-            @Override
-            public String getPresentationName() {
-                return "";
-            }
-
-            @Override
-            public String getUndoPresentationName() {
-                return "";
-            }
-
-            @Override
-            public String getRedoPresentationName() {
-                return "";
-            }
-        };
     }
 
 }
