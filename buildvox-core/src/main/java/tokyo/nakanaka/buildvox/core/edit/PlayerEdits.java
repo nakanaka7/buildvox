@@ -286,8 +286,10 @@ public class PlayerEdits {
      */
     public static EditExit fill(Player player, Selection selection, VoxelBlock block, double integrity) {
         FillSelection fillSelection = new FillSelection(selection.getRegion3d(), selection.getBound(), block, integrity);
-        return recordingEdit(player, fillSelection::setForwardBlocks, fillSelection
-        );
+        PlayerWorld pw = new PlayerWorld(player);
+        fillSelection.setForwardBlocks(pw);
+        pw.setSelection(fillSelection);
+        return pw.end();
     }
 
     /**
@@ -307,9 +309,10 @@ public class PlayerEdits {
         }else {
             selTo = sel;
         }
-        return recordingEdit(
-                player, (editWorld) -> WorldEdits.replace(editWorld, sel, blockFrom, blockTo, integrity), selTo
-        );
+        PlayerWorld pw = new PlayerWorld(player);
+        WorldEdits.replace(pw, sel, blockFrom, blockTo, integrity);
+        pw.setSelection(selTo);
+        return pw.end();
     }
 
     /**
