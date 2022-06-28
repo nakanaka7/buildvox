@@ -504,7 +504,7 @@ public class PlayerEdits {
     }
 
     /* Creates an edit to set a new pos array into the player */
-    private static UndoableEdit createPosArrayEdit(Player player, Vector3i[] posArray) {
+    static UndoableEdit createPosArrayEdit(Player player, Vector3i[] posArray) {
         Vector3i[] initPosArray = player.getPosArrayClone();
         Selection initSelection = player.getSelection();
         return createEdit(
