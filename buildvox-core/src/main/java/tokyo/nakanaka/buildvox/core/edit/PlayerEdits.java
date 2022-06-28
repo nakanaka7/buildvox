@@ -12,7 +12,6 @@ import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.property.Axis;
 import tokyo.nakanaka.buildvox.core.selection.*;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
-import tokyo.nakanaka.buildvox.core.world.World;
 
 import javax.swing.undo.CompoundEdit;
 import javax.swing.undo.UndoManager;
@@ -433,50 +432,6 @@ public class PlayerEdits {
     }
 
     /**
-     * An edit world for a player. Calling end() stores an undoable edit
-     * into the player.
-     */
-    private static class PlayerWorld extends RecordingEditWorld {
-        private final Player player;
-        private Selection sel;
-
-        /***
-         * Creates a new instance.
-         * @param player the player.
-         */
-        public PlayerWorld(Player player) {
-            super(player.getEditWorld());
-            this.player = player;
-            this.sel = player.getSelection();
-        }
-
-        /**
-         * Set the selection.
-         * @param sel the selection.
-         */
-        public void setSelection(Selection sel) {
-            this.sel = sel;
-        }
-
-        /**
-         * Stores the selection change and block changes as one edit into player.
-         * @return the edit exit.
-         */
-        public EditExit end() {
-            UndoableEdit selEdit = createSelectionEdit(player, sel);
-            player.setSelection(sel);
-            UndoableEdit blockEdit = createBlockEdit(this);
-            CompoundEdit compoundEdit = new CompoundEdit();
-            compoundEdit.addEdit(selEdit);
-            compoundEdit.addEdit(blockEdit);
-            compoundEdit.end();
-            player.getUndoManager().addEdit(compoundEdit);
-            return new EditExit(this.blockCount(), 0, 0);
-        }
-
-    }
-
-    /**
      * A functional interface for recordingEdit() which defines editing for the world.
      */
     private interface EditWorldEditor {
@@ -539,7 +494,7 @@ public class PlayerEdits {
     }
 
     /* Creates an undoable edit for edit world that is target of recordingEditWorld */
-    private static UndoableEdit createBlockEdit(RecordingEditWorld recordingEditWorld) {
+    static UndoableEdit createBlockEdit(RecordingEditWorld recordingEditWorld) {
         Clipboard undoClipboard = recordingEditWorld.getUndoClipboard();
         Clipboard redoClipboard = recordingEditWorld.getRedoClipboard();
         EditWorld editWorld = new EditWorld(recordingEditWorld.getOriginal());
@@ -578,7 +533,7 @@ public class PlayerEdits {
     }
 
     /* Creates an edit to set a new selection into the player */
-    private static UndoableEdit createSelectionEdit(Player player, Selection selection) {
+    static UndoableEdit createSelectionEdit(Player player, Selection selection) {
         Vector3i[] initPosArray = player.getPosArrayClone();
         Selection initSelection = player.getSelection();
         return createEdit(
