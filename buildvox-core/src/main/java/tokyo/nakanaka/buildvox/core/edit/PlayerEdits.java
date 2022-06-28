@@ -228,19 +228,18 @@ public class PlayerEdits {
      * @throws SelectionNotFoundException if a selection is not found
      */
     public static EditExit cut(Player player, Vector3d pos) {
-        return recordingEdit(player,
-            (editWorld) -> {
-                Selection selection = findSelection(player);
-                Clipboard clipboard = new Clipboard();
-                WorldEdits.copy(editWorld, selection, pos, clipboard);
-                if (selection instanceof BlockSelection blockSelection) {
-                    blockSelection.setBackwardBlocks(editWorld);
-                } else {
-                    WorldEdits.fill(editWorld, selection, player.getBackgroundBlock(), 1);
-                }
-                player.setClipboard(clipboard);
-            }
-        );
+        PlayerWorld pw = new PlayerWorld(player);
+        Selection selection = findSelection(player);
+        Clipboard clipboard = new Clipboard();
+        WorldEdits.copy(pw, selection, pos, clipboard);
+        if (selection instanceof BlockSelection blockSelection) {
+            blockSelection.setBackwardBlocks(pw);
+        } else {
+            WorldEdits.fill(pw, selection, player.getBackgroundBlock(), 1);
+        }
+        player.setClipboard(clipboard);
+        pw.setSelection(null);
+        return pw.end();
     }
 
     /**
