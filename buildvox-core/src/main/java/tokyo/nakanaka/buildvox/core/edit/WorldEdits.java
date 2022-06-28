@@ -146,7 +146,7 @@ public class WorldEdits {
         NamespacedId fromId = fromBlock.getBlockId();
         Map<String, String> fromStateMap = ((StateImpl)fromBlock.getState()).getStateMap();
         VoxelSpaceEdits.replace(space, sel.calculateBlockPosSet(),
-            (VoxelSpaceEdits.BlockCondition<VoxelBlock>) (block) -> {
+            (block) -> {
                 NamespacedId id = block.getBlockId();
                 Map<String, String> stateMap = ((StateImpl)block.getState()).getStateMap();
                 if(!fromId.equals(id)) return false;
