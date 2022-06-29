@@ -5,7 +5,6 @@ import tokyo.nakanaka.buildvox.core.block.BlockTransformation;
 import tokyo.nakanaka.buildvox.core.block.StateImpl;
 import tokyo.nakanaka.buildvox.core.edit.clientWorld.BlockTransformingClientWorld;
 import tokyo.nakanaka.buildvox.core.edit.clientWorld.ClientWorld;
-import tokyo.nakanaka.buildvox.core.edit.voxelSpace.IntegrityAdjustableVoxelSpace;
 import tokyo.nakanaka.buildvox.core.edit.voxelSpace.VoxelSpace;
 import tokyo.nakanaka.buildvox.core.math.region3d.Cuboid;
 import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
@@ -99,10 +98,9 @@ public class WorldEdits {
      * @param toBlock the block type to be replaced to.
      */
     public static void replace(ClientWorld world, Selection sel, VoxelBlock fromBlock, VoxelBlock toBlock) {
-        VoxelSpace<VoxelBlock> space = new IntegrityAdjustableVoxelSpace<>(world, 1);
         NamespacedId fromId = fromBlock.getBlockId();
         Map<String, String> fromStateMap = ((StateImpl) fromBlock.getState()).getStateMap();
-        VoxelSpaceEdits.replace(space, sel.calculateBlockPosSet(),
+        VoxelSpaceEdits.replace(world, sel.calculateBlockPosSet(),
                 (block) -> {
                     NamespacedId id = block.getBlockId();
                     Map<String, String> stateMap = ((StateImpl) block.getState()).getStateMap();
