@@ -3,6 +3,7 @@ package tokyo.nakanaka.buildvox.core.selection;
 import tokyo.nakanaka.buildvox.core.edit.Clipboard;
 import tokyo.nakanaka.buildvox.core.edit.WorldEdits;
 import tokyo.nakanaka.buildvox.core.edit.clientWorld.ClientWorld;
+import tokyo.nakanaka.buildvox.core.edit.clientWorld.IntegrityClientWorld;
 import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
 import tokyo.nakanaka.buildvox.core.math.region3d.Region3d;
 import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
@@ -24,7 +25,8 @@ public class FillSelection extends BlockSelection {
     public void setForwardBlocks(ClientWorld clientWorld) {
         Clipboard newBackwardClip = new Clipboard();
         WorldEdits.copy(clientWorld, this, Vector3d.ZERO, newBackwardClip);
-        WorldEdits.fill(clientWorld, this, block, integrity);
+        clientWorld = new IntegrityClientWorld(integrity, clientWorld);
+        WorldEdits.fill(clientWorld, this, block);
         backwardClip = newBackwardClip;
     }
 
