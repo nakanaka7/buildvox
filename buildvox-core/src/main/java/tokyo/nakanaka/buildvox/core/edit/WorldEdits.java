@@ -117,7 +117,7 @@ public class WorldEdits {
     public static void paste(Clipboard srcClip, ClientWorld dest, Vector3d pos, AffineTransformation3d clipboardTrans, Predicate<VoxelBlock> set) {
         Set<Vector3i> srcPosSet = srcClip.blockPosSet();
         BlockTransformation blockTrans = BlockTransformApproximator.approximateToBlockTrans(clipboardTrans);
-        VoxelSpace<VoxelBlock> transDest = new BlockTransformingClientWorld(dest, blockTrans);
+        VoxelSpace<VoxelBlock> transDest = new BlockTransformingClientWorld(blockTrans, dest);
         transDest = new SettingFilteringVoxelSpace<>(transDest, set);
         AffineTransformation3d trans = AffineTransformation3d.ofTranslation(pos.x(), pos.y(), pos.z()).compose(clipboardTrans);
         VoxelSpaceEdits.copy(srcClip, srcPosSet, transDest, trans);
