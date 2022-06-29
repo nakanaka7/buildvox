@@ -10,6 +10,7 @@ import tokyo.nakanaka.buildvox.core.world.World;
  */
 public class IntegrityClientWorld extends ClientWorld {
     private final double integrity;
+    private final ClientWorld clientWorld;
 
     /**
      * Creates a new instance.
@@ -32,12 +33,13 @@ public class IntegrityClientWorld extends ClientWorld {
         super(clientWorld.original, clientWorld.physics);
         if(integrity < 0 || 1 < integrity)throw new IllegalArgumentException();
         this.integrity = integrity;
+        this.clientWorld = clientWorld;
     }
 
     @Override
     public void setBlock(Vector3i pos, VoxelBlock block) {
         if(Math.random() < integrity) {
-            super.setBlock(pos, block);
+            clientWorld.setBlock(pos, block);
         }
     }
 
