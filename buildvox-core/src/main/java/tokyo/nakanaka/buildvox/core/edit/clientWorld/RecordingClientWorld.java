@@ -1,5 +1,7 @@
-package tokyo.nakanaka.buildvox.core.edit;
+package tokyo.nakanaka.buildvox.core.edit.clientWorld;
 
+import tokyo.nakanaka.buildvox.core.edit.Clipboard;
+import tokyo.nakanaka.buildvox.core.edit.UndoableEdits;
 import tokyo.nakanaka.buildvox.core.edit.clientWorld.ClientWorld;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
