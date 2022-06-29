@@ -152,36 +152,23 @@ public class WorldEdits {
      * @param sel the selection
      * @param fromBlock the block type to be replaced from.
      * @param toBlock the block type to be replaced to.
-     * @param integrity the integrity of block-setting.
-     */
-    @Deprecated
-    public static void replace(ClientWorld world, Selection sel, VoxelBlock fromBlock, VoxelBlock toBlock, double integrity) {
-        VoxelSpace<VoxelBlock> space = new IntegrityAdjustableVoxelSpace<>(world, integrity);
-        NamespacedId fromId = fromBlock.getBlockId();
-        Map<String, String> fromStateMap = ((StateImpl)fromBlock.getState()).getStateMap();
-        VoxelSpaceEdits.replace(space, sel.calculateBlockPosSet(),
-            (block) -> {
-                NamespacedId id = block.getBlockId();
-                Map<String, String> stateMap = ((StateImpl)block.getState()).getStateMap();
-                if(!fromId.equals(id)) return false;
-                for(Map.Entry<String, String> entry : fromStateMap.entrySet()) {
-                    String value = stateMap.get(entry.getKey());
-                    if(!value.equals(entry.getValue())) return false;
-                }
-                return true;
-            },
-            toBlock);
-    }
-
-    /**
-     * Replaces the blocks in the selection.
-     * @param world the world
-     * @param sel the selection
-     * @param fromBlock the block type to be replaced from.
-     * @param toBlock the block type to be replaced to.
      */
     public static void replace(ClientWorld world, Selection sel, VoxelBlock fromBlock, VoxelBlock toBlock) {
-        replace(world, sel, fromBlock, toBlock, 1);
+        VoxelSpace<VoxelBlock> space = new IntegrityAdjustableVoxelSpace<>(world, 1);
+        NamespacedId fromId = fromBlock.getBlockId();
+        Map<String, String> fromStateMap = ((StateImpl) fromBlock.getState()).getStateMap();
+        VoxelSpaceEdits.replace(space, sel.calculateBlockPosSet(),
+                (block) -> {
+                    NamespacedId id = block.getBlockId();
+                    Map<String, String> stateMap = ((StateImpl) block.getState()).getStateMap();
+                    if (!fromId.equals(id)) return false;
+                    for (Map.Entry<String, String> entry : fromStateMap.entrySet()) {
+                        String value = stateMap.get(entry.getKey());
+                        if (!value.equals(entry.getValue())) return false;
+                    }
+                    return true;
+                },
+                toBlock);
     }
 
     /*
