@@ -3,7 +3,7 @@ package tokyo.nakanaka.buildvox.core.edit;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.block.BlockTransformation;
 import tokyo.nakanaka.buildvox.core.block.StateImpl;
-import tokyo.nakanaka.buildvox.core.edit.clientWorld.BlockStateTransformingBlockSpace3;
+import tokyo.nakanaka.buildvox.core.edit.clientWorld.BlockTransformingClientWorld;
 import tokyo.nakanaka.buildvox.core.edit.clientWorld.ClientWorld;
 import tokyo.nakanaka.buildvox.core.math.transformation.Matrix3x3d;
 import tokyo.nakanaka.buildvox.core.math.transformation.Matrix3x3i;
@@ -117,7 +117,7 @@ public class WorldEdits {
     public static void paste(Clipboard srcClip, ClientWorld dest, Vector3d pos, AffineTransformation3d clipboardTrans, Predicate<VoxelBlock> set) {
         Set<Vector3i> srcPosSet = srcClip.blockPosSet();
         BlockTransformation blockTrans = BlockTransformApproximator.approximateToBlockTrans(clipboardTrans);
-        VoxelSpace<VoxelBlock> transDest = new BlockStateTransformingBlockSpace3(dest, blockTrans);
+        VoxelSpace<VoxelBlock> transDest = new BlockTransformingClientWorld(dest, blockTrans);
         transDest = new SettingFilteringVoxelSpace<>(transDest, set);
         AffineTransformation3d trans = AffineTransformation3d.ofTranslation(pos.x(), pos.y(), pos.z()).compose(clipboardTrans);
         VoxelSpaceEdits.copy(srcClip, srcPosSet, transDest, trans);

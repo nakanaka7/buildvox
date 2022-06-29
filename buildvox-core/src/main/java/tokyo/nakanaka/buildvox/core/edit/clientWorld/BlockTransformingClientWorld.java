@@ -5,11 +5,11 @@ import tokyo.nakanaka.buildvox.core.edit.voxelSpace.VoxelSpace;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 
-public class BlockStateTransformingBlockSpace3 implements VoxelSpace<VoxelBlock> {
+public class BlockTransformingClientWorld implements VoxelSpace<VoxelBlock> {
     private VoxelSpace<VoxelBlock> original;
     private BlockTransformation blockTrans;
 
-    public BlockStateTransformingBlockSpace3(VoxelSpace<VoxelBlock> original, BlockTransformation blockTrans) {
+    public BlockTransformingClientWorld(VoxelSpace<VoxelBlock> original, BlockTransformation blockTrans) {
         this.original = original;
         this.blockTrans = blockTrans;
     }
