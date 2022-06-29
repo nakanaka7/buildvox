@@ -15,12 +15,12 @@ import java.util.Set;
  * physics of block settings.
  */
 public class ClientWorld implements VoxelSpace<VoxelBlock> {
-    private final World original;
-    private Clipboard undoClip = new Clipboard();
-    private Clipboard redoClip = new Clipboard();
-    private Map<Vector3i, Boolean> redoPhysics = new HashMap<>();
-    private boolean recording;
-    private boolean physics;
+    protected final World original;
+    protected Clipboard undoClip = new Clipboard();
+    protected Clipboard redoClip = new Clipboard();
+    protected Map<Vector3i, Boolean> redoPhysics = new HashMap<>();
+    protected boolean recording;
+    protected boolean physics;
 
     /**
      * Constructs a new instance with an original World. The block setting physics will be set "false".
