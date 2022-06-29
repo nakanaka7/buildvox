@@ -143,6 +143,7 @@ public class WorldEdits {
      * @param toBlock the block type to be replaced to.
      * @param integrity the integrity of block-setting.
      */
+    @Deprecated
     public static void replace(ClientWorld world, Selection sel, VoxelBlock fromBlock, VoxelBlock toBlock, double integrity) {
         VoxelSpace<VoxelBlock> space = new IntegrityAdjustableVoxelSpace<>(world, integrity);
         NamespacedId fromId = fromBlock.getBlockId();
@@ -159,6 +160,17 @@ public class WorldEdits {
                 return true;
             },
             toBlock);
+    }
+
+    /**
+     * Replaces the blocks in the selection.
+     * @param world the world
+     * @param sel the selection
+     * @param fromBlock the block type to be replaced from.
+     * @param toBlock the block type to be replaced to.
+     */
+    public static void replace(ClientWorld world, Selection sel, VoxelBlock fromBlock, VoxelBlock toBlock) {
+        replace(world, sel, fromBlock, toBlock, 1);
     }
 
     /*
