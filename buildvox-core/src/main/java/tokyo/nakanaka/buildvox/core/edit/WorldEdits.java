@@ -5,11 +5,13 @@ import tokyo.nakanaka.buildvox.core.block.BlockTransformation;
 import tokyo.nakanaka.buildvox.core.block.StateImpl;
 import tokyo.nakanaka.buildvox.core.edit.clientWorld.BlockTransformingClientWorld;
 import tokyo.nakanaka.buildvox.core.edit.clientWorld.ClientWorld;
-import tokyo.nakanaka.buildvox.core.math.transformation.Matrix3x3d;
-import tokyo.nakanaka.buildvox.core.math.transformation.Matrix3x3i;
-import tokyo.nakanaka.buildvox.core.edit.voxelSpace.*;
+import tokyo.nakanaka.buildvox.core.edit.voxelSpace.IntegrityAdjustableVoxelSpace;
+import tokyo.nakanaka.buildvox.core.edit.voxelSpace.IntegrityPredicate;
+import tokyo.nakanaka.buildvox.core.edit.voxelSpace.SettingFilteringVoxelSpace;
+import tokyo.nakanaka.buildvox.core.edit.voxelSpace.VoxelSpace;
 import tokyo.nakanaka.buildvox.core.math.region3d.Cuboid;
 import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
+import tokyo.nakanaka.buildvox.core.math.transformation.Matrix3x3i;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
@@ -26,22 +28,6 @@ import java.util.function.Predicate;
  */
 public class WorldEdits {
     private WorldEdits() {
-    }
-
-    /** The predicate to test whether the block equals to the given block. */
-    public static class IsGivenBlock implements Predicate<VoxelBlock> {
-        private final VoxelBlock given;
-
-        /** Creates a new instance. */
-        public IsGivenBlock(VoxelBlock given) {
-            this.given = given;
-        }
-
-        @Override
-        public boolean test(VoxelBlock voxelBlock) {
-            return given.equals(voxelBlock);
-        }
-
     }
 
     /**
@@ -220,14 +206,6 @@ public class WorldEdits {
             int[] e = approximate(trans);
             Matrix3x3i matrix = new Matrix3x3i(e[0], e[1], e[2], e[3], e[4], e[5], e[6], e[7], e[8]);
             return new BlockTransformation(matrix);
-        }
-
-        private static AffineTransformation3d approximateToTrans(AffineTransformation3d trans){
-            int[] a = approximate(trans);
-            Matrix3x3d matrix = new Matrix3x3d(a[0], a[1], a[2],
-                    a[3], a[4], a[5],
-                    a[6], a[7], a[8]);
-            return new AffineTransformation3d(matrix, Vector3d.ZERO);
         }
 
         private static Vector3d getNearestVector(Vector3d v, Vector3d... candidates){
