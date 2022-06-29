@@ -1,6 +1,7 @@
 package tokyo.nakanaka.buildvox.core.edit;
 
 import tokyo.nakanaka.buildvox.core.edit.clientWorld.ClientWorld;
+import tokyo.nakanaka.buildvox.core.edit.clientWorld.PlayerWorld;
 import tokyo.nakanaka.buildvox.core.math.Drawings;
 import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
 import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
