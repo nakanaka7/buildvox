@@ -1,4 +1,4 @@
-package tokyo.nakanaka.buildvox.core.voxelSpace;
+package tokyo.nakanaka.buildvox.core.edit.voxelSpace;
 
 import java.util.function.Predicate;
 

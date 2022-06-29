@@ -1,6 +1,6 @@
 package tokyo.nakanaka.buildvox.core.edit;
 
-import tokyo.nakanaka.buildvox.core.voxelSpace.VoxelSpace;
+import tokyo.nakanaka.buildvox.core.edit.voxelSpace.VoxelSpace;
 import tokyo.nakanaka.buildvox.core.math.region3d.Cuboid;
 import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
