@@ -93,7 +93,7 @@ public class PlayerEdits {
         Clipboard clipboard = new Clipboard();
         ClientWorld clientWorld = new ClientWorld(player.getEditWorld(), true);
         WorldEdits.copy(clientWorld, selFrom, Vector3d.ZERO, clipboard);
-        WorldEdits.fill(clientWorld, selFrom, BuildVoxSystem.parseBlock("air"), 1);
+        WorldEdits.fill(clientWorld, selFrom, BuildVoxSystem.parseBlock("air"));
         WorldEdits.paste(clipboard, clientWorld, Vector3d.ZERO);
         Selection selTo;
         if(selFrom instanceof BlockSelection bs) {
@@ -215,7 +215,7 @@ public class PlayerEdits {
         if (selectionFrom instanceof BlockSelection blockSelection) {
             blockSelection.setBackwardBlocks(pw);
         } else {
-            WorldEdits.fill(pw, selectionFrom, player.getBackgroundBlock(), 1);
+            WorldEdits.fill(pw, selectionFrom, player.getBackgroundBlock());
         }
         selectionTo.setForwardBlocks(pw);
         pw.setSelection(selectionTo);
@@ -233,7 +233,7 @@ public class PlayerEdits {
         if (selection instanceof BlockSelection blockSelection) {
             blockSelection.setBackwardBlocks(pw);
         } else {
-            WorldEdits.fill(pw, selection, player.getBackgroundBlock(), 1);
+            WorldEdits.fill(pw, selection, player.getBackgroundBlock());
         }
         player.setClipboard(clipboard);
         pw.setSelection(null);
