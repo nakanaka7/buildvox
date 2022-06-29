@@ -1,0 +1,41 @@
+package tokyo.nakanaka.buildvox.core.edit.clientWorld;
+
+import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
+import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
+import tokyo.nakanaka.buildvox.core.world.World;
+
+/**
+ * The client world which changes the integrity of block settings.
+ * {@link <a href="https://www.computerhope.com/jargon/i/integrit.htm">integrity</a>}
+ */
+public class IntegrityClientWorld extends ClientWorld {
+    private final double integrity;
+
+    /**
+     * Creates a new instance.
+     * @param integrity the integrity of block settings.
+     * @param world the original world.
+     * @param physics the block setting physics.
+     */
+    public IntegrityClientWorld(double integrity, World world, boolean physics) {
+        this(integrity, new ClientWorld(world, physics));
+    }
+
+    /**
+     * Creates a new instance.
+     * @param integrity integrity the integrity of block settings.
+     * @param clientWorld the original client world.
+     */
+    public IntegrityClientWorld(double integrity, ClientWorld clientWorld) {
+        super(clientWorld.original, clientWorld.physics);
+        this.integrity = integrity;
+    }
+
+    @Override
+    public void setBlock(Vector3i pos, VoxelBlock block) {
+        if(Math.random() < integrity) {
+            super.setBlock(pos, block);
+        }
+    }
+
+}
