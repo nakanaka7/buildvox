@@ -3,14 +3,14 @@ package tokyo.nakanaka.buildvox.core.selection;
 import tokyo.nakanaka.buildvox.core.edit.Clipboard;
 import tokyo.nakanaka.buildvox.core.edit.WorldEdits;
 import tokyo.nakanaka.buildvox.core.edit.clientWorld.ClientWorld;
+import tokyo.nakanaka.buildvox.core.edit.clientWorld.IntegrityClientWorld;
+import tokyo.nakanaka.buildvox.core.edit.clientWorld.MaskedClientWorld;
 import tokyo.nakanaka.buildvox.core.math.region3d.Cuboid;
 import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
 import tokyo.nakanaka.buildvox.core.math.region3d.Region3d;
 import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
-
-import java.util.function.Predicate;
 
 public class PasteSelection extends BlockSelection {
     private final Clipboard clipboard;
@@ -77,8 +77,11 @@ public class PasteSelection extends BlockSelection {
     public void setForwardBlocks(ClientWorld clientWorld) {
         Clipboard newBackwardClip = new Clipboard();
         WorldEdits.copy(clientWorld, this, Vector3d.ZERO, newBackwardClip);
-        Predicate<VoxelBlock> set = (block) -> Math.random() < integrity && (!masked || !block.equals(background));
-        WorldEdits.paste(clipboard, clientWorld, pos, clipTrans, set);
+        clientWorld = new IntegrityClientWorld(integrity, clientWorld);
+        if(masked) {
+            clientWorld = new MaskedClientWorld(background, clientWorld);
+        }
+        WorldEdits.paste(clipboard, clientWorld, pos, clipTrans);
         backwardClip = newBackwardClip;
     }
 
