@@ -130,9 +130,20 @@ public class WorldEdits {
      * @param block the block.
      * @param integrity the integrity of block-setting.
      */
+    @Deprecated
     public static void fill(ClientWorld world, Selection sel, VoxelBlock block, double integrity) {
         VoxelSpace<VoxelBlock> dest = new IntegrityAdjustableVoxelSpace<>(world, integrity);
         VoxelSpaceEdits.fill(dest, sel.calculateBlockPosSet(), block);
+    }
+
+    /**
+     * Fill the block in the selection.
+     * @param world the world.
+     * @param sel the selection.
+     * @param block the block.
+     */
+    public static void fill(ClientWorld world, Selection sel, VoxelBlock block) {
+        fill(world, sel, block, 1);
     }
 
     /**
