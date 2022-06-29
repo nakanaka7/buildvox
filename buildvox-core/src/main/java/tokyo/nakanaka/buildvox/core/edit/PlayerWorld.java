@@ -85,7 +85,7 @@ public class PlayerWorld extends ClientWorld {
         Selection endSel = player.getSelection();
         UndoableEdit posArrayOrSelEdit;
         if(endSel == null) {
-            posArrayOrSelEdit = createEdit(
+            posArrayOrSelEdit = UndoableEdits.create(
                 () -> {
                     if(initSel == null) {
                         player.setPosArray(initPosArray.clone());
@@ -96,7 +96,7 @@ public class PlayerWorld extends ClientWorld {
                 () -> player.setPosArray(endPosArray)
             );
         }else {
-            posArrayOrSelEdit = createEdit(
+            posArrayOrSelEdit = UndoableEdits.create(
                 () -> {
                     if(initSel == null) {
                         player.setPosArray(initPosArray.clone());
@@ -119,7 +119,7 @@ public class PlayerWorld extends ClientWorld {
     /* Creates an undoable edit for edit world that is target of recordingEditWorld */
     private UndoableEdit createBlockEdit() {
         ClientWorld clientWorld = new ClientWorld(getOriginal());
-        return createEdit(
+        return UndoableEdits.create(
             () -> {
                     Set<Vector3i> blockPosSet = undoClip.blockPosSet();
                     for(Vector3i pos : blockPosSet) {
@@ -135,71 +135,6 @@ public class PlayerWorld extends ClientWorld {
                 }
             }
         );
-    }
-
-    /**
-     * Creates an UndoableEdit from undoRunnable and redoRunnable.
-     * @param undoRunnable a runnable for undo.
-     * @param redoRunnable a runnable for redo.
-     * @return an instance
-     */
-    private static UndoableEdit createEdit(Runnable undoRunnable, Runnable redoRunnable) {
-        return new UndoableEdit() {
-            @Override
-            public void undo() {
-                undoRunnable.run();
-            }
-
-            @Override
-            public boolean canUndo() {
-                return true;
-            }
-
-            @Override
-            public void redo() {
-                redoRunnable.run();
-            }
-
-            @Override
-            public boolean canRedo() {
-                return true;
-            }
-
-            @Override
-            public void die() {
-
-            }
-
-            @Override
-            public boolean addEdit(UndoableEdit anEdit) {
-                return false;
-            }
-
-            @Override
-            public boolean replaceEdit(UndoableEdit anEdit) {
-                return false;
-            }
-
-            @Override
-            public boolean isSignificant() {
-                return true;
-            }
-
-            @Override
-            public String getPresentationName() {
-                return "";
-            }
-
-            @Override
-            public String getUndoPresentationName() {
-                return "";
-            }
-
-            @Override
-            public String getRedoPresentationName() {
-                return "";
-            }
-        };
     }
 
 }
