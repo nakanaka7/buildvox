@@ -1,6 +1,7 @@
 package tokyo.nakanaka.buildvox.core.edit;
 
 import tokyo.nakanaka.buildvox.core.edit.clientWorld.ClientWorld;
+import tokyo.nakanaka.buildvox.core.edit.clientWorld.IntegrityClientWorld;
 import tokyo.nakanaka.buildvox.core.edit.clientWorld.PlayerWorld;
 import tokyo.nakanaka.buildvox.core.math.Drawings;
 import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
@@ -299,7 +300,6 @@ public class PlayerEdits {
      * @throws IllegalArgumentException if integrity is less than 0 or larger than 1.
      */
     public static EditExit replace(Player player, Selection sel, VoxelBlock blockFrom, VoxelBlock blockTo, double integrity) {
-        if(integrity < 0 || 1 < integrity) throw new IllegalArgumentException();
         Selection selTo;
         if(sel instanceof BlockSelection bs) {
             selTo = bs.toNonBlock();
@@ -307,7 +307,8 @@ public class PlayerEdits {
             selTo = sel;
         }
         PlayerWorld pw = new PlayerWorld(player);
-        WorldEdits.replace(pw, sel, blockFrom, blockTo, integrity);
+        IntegrityClientWorld icw = new IntegrityClientWorld(integrity, pw);
+        WorldEdits.replace(icw, sel, blockFrom, blockTo);
         pw.setSelection(selTo);
         return pw.end();
     }
