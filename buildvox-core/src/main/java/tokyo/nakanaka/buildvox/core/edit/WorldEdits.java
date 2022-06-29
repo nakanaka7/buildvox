@@ -5,7 +5,6 @@ import tokyo.nakanaka.buildvox.core.block.BlockTransformation;
 import tokyo.nakanaka.buildvox.core.block.StateImpl;
 import tokyo.nakanaka.buildvox.core.edit.clientWorld.BlockTransformingClientWorld;
 import tokyo.nakanaka.buildvox.core.edit.clientWorld.ClientWorld;
-import tokyo.nakanaka.buildvox.core.edit.voxelSpace.VoxelSpace;
 import tokyo.nakanaka.buildvox.core.math.region3d.Cuboid;
 import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
 import tokyo.nakanaka.buildvox.core.math.transformation.Matrix3x3i;

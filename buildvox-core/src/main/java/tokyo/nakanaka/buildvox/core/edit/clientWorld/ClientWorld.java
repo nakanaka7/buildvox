@@ -1,7 +1,7 @@
 package tokyo.nakanaka.buildvox.core.edit.clientWorld;
 
 import tokyo.nakanaka.buildvox.core.edit.WorldEdits;
-import tokyo.nakanaka.buildvox.core.edit.voxelSpace.VoxelSpace;
+import tokyo.nakanaka.buildvox.core.edit.VoxelSpace;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.world.World;
