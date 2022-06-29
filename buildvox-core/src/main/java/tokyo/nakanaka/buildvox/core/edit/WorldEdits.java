@@ -3,6 +3,7 @@ package tokyo.nakanaka.buildvox.core.edit;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.block.BlockTransformation;
 import tokyo.nakanaka.buildvox.core.block.StateImpl;
+import tokyo.nakanaka.buildvox.core.edit.clientWorld.BlockStateTransformingBlockSpace3;
 import tokyo.nakanaka.buildvox.core.edit.clientWorld.ClientWorld;
 import tokyo.nakanaka.buildvox.core.math.transformation.Matrix3x3d;
 import tokyo.nakanaka.buildvox.core.math.transformation.Matrix3x3i;
@@ -248,24 +249,4 @@ public class WorldEdits {
 
     }
 
-    public static class BlockStateTransformingBlockSpace3 implements VoxelSpace<VoxelBlock> {
-        private VoxelSpace<VoxelBlock> original;
-        private BlockTransformation blockTrans;
-
-        public BlockStateTransformingBlockSpace3(VoxelSpace<VoxelBlock> original, BlockTransformation blockTrans) {
-            this.original = original;
-            this.blockTrans = blockTrans;
-        }
-
-        @Override
-        public VoxelBlock getBlock(Vector3i pos) {
-            return original.getBlock(pos);
-        }
-
-        @Override
-        public void setBlock(Vector3i pos, VoxelBlock block) {
-            original.setBlock(pos, block.transform(blockTrans));
-        }
-
-    }
 }
