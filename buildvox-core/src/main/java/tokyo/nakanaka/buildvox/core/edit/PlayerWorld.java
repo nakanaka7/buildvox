@@ -3,11 +3,9 @@ package tokyo.nakanaka.buildvox.core.edit;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
-import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 
 import javax.swing.undo.CompoundEdit;
 import javax.swing.undo.UndoableEdit;
-import java.util.Set;
 
 /**
  * An edit world for a player. Calling end() stores an undoable edit
@@ -17,9 +15,6 @@ public class PlayerWorld extends ClientWorld {
     private final Player player;
     private final Vector3i[] initPosArray;
     private final Selection initSel;
-    private final Clipboard undoClip = new Clipboard();
-    private final Clipboard redoClip = new Clipboard();
-    private int blockCount;
 
     /***
      * Creates a new instance.
@@ -30,6 +25,7 @@ public class PlayerWorld extends ClientWorld {
         this.player = player;
         this.initPosArray = player.getPosArrayClone();
         this.initSel = player.getSelection();
+        this.setRecording(true);
     }
 
     /**
@@ -54,26 +50,14 @@ public class PlayerWorld extends ClientWorld {
      * @param pos the position to set a block.
      * @param block the block to set.
      */
-    @Override
-    public void setBlock(Vector3i pos, VoxelBlock block) {
-        int x = pos.x();
-        int y = pos.y();
-        int z = pos.z();
-        if(undoClip.getBlock(x, y, z) == null) {
-            VoxelBlock originalBlock = getBlock(pos);
-            undoClip.setBlock(x, y, z, originalBlock);
-        }
-        super.setBlock(pos, block);
-        redoClip.setBlock(x, y, z, block);
-        ++blockCount;
-    }
+
 
     /**
      * Get the block count of block-settings.
      * @return the block count of block-settings.
      */
     public int blockCount(){
-        return this.blockCount;
+        return undoClip.blockCount();
     }
 
     /**
@@ -107,34 +91,13 @@ public class PlayerWorld extends ClientWorld {
                 () -> player.setSelection(endSel)
             );
         }
-        UndoableEdit blockEdit = createBlockEdit();
+        int blockCount = this.blockCount();
+        UndoableEdit blockEdit = pullEdit();
         CompoundEdit compoundEdit = new CompoundEdit();
         compoundEdit.addEdit(posArrayOrSelEdit);
         compoundEdit.addEdit(blockEdit);
         compoundEdit.end();
         player.getUndoManager().addEdit(compoundEdit);
-        return new EditExit(this.blockCount(), 0, 0);
+        return new EditExit(blockCount, 0, 0);
     }
-
-    /* Creates an undoable edit for edit world that is target of recordingEditWorld */
-    private UndoableEdit createBlockEdit() {
-        ClientWorld clientWorld = new ClientWorld(getOriginal());
-        return UndoableEdits.create(
-            () -> {
-                    Set<Vector3i> blockPosSet = undoClip.blockPosSet();
-                    for(Vector3i pos : blockPosSet) {
-                        VoxelBlock block = undoClip.getBlock(pos.x(), pos.y(), pos.z());
-                        clientWorld.setBlock(pos, block);
-                    }
-                },
-            () -> {
-                    Set<Vector3i> blockPosSet = redoClip.blockPosSet();
-                    for(Vector3i pos : blockPosSet) {
-                        VoxelBlock block = redoClip.getBlock(pos.x(), pos.y(), pos.z());
-                        clientWorld.setBlock(pos, block);
-                }
-            }
-        );
-    }
-
 }
