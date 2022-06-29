@@ -83,18 +83,29 @@ public class PlayerWorld extends ClientWorld {
     public EditExit end() {
         Vector3i[] endPosArray = player.getPosArrayClone();
         Selection endSel = player.getSelection();
-        if(initSel != null) {
-            player.setSelection(initSel);
-        }else{
-            player.setPosArray(initPosArray);
-        }
         UndoableEdit posArrayOrSelEdit;
         if(endSel == null) {
-            posArrayOrSelEdit = createPosArrayEdit(player, endPosArray);
-            player.setPosArray(endPosArray);
+            posArrayOrSelEdit = createEdit(
+                () -> {
+                    if(initSel == null) {
+                        player.setPosArray(initPosArray.clone());
+                    }else{
+                        player.setSelection(initSel);
+                    }
+                },
+                () -> player.setPosArray(endPosArray)
+            );
         }else {
-            posArrayOrSelEdit = createSelectionEdit(player, endSel);
-            player.setSelection(endSel);
+            posArrayOrSelEdit = createEdit(
+                () -> {
+                    if(initSel == null) {
+                        player.setPosArray(initPosArray.clone());
+                    }else{
+                        player.setSelection(initSel);
+                    }
+                },
+                () -> player.setSelection(endSel)
+            );
         }
         UndoableEdit blockEdit = createBlockEdit();
         CompoundEdit compoundEdit = new CompoundEdit();
@@ -123,38 +134,6 @@ public class PlayerWorld extends ClientWorld {
                         clientWorld.setBlock(pos, block);
                 }
             }
-        );
-    }
-
-    /* Creates an edit to set a new pos array into the player */
-    private UndoableEdit createPosArrayEdit(Player player, Vector3i[] posArray) {
-        Vector3i[] initPosArray = player.getPosArrayClone();
-        Selection initSelection = player.getSelection();
-        return createEdit(
-            () -> {
-                    if(initSelection == null) {
-                        player.setPosArray(initPosArray.clone());
-                    }else{
-                        player.setSelection(initSelection);
-                    }
-                },
-            () -> player.setPosArray(posArray)
-        );
-    }
-
-    /* Creates an edit to set a new selection into the player */
-    private UndoableEdit createSelectionEdit(Player player, Selection selection) {
-        Vector3i[] initPosArray = player.getPosArrayClone();
-        Selection initSelection = player.getSelection();
-        return createEdit(
-            () -> {
-                    if(initSelection == null) {
-                        player.setPosArray(initPosArray.clone());
-                    }else{
-                        player.setSelection(initSelection);
-                    }
-                },
-            () -> player.setSelection(selection)
         );
     }
 
