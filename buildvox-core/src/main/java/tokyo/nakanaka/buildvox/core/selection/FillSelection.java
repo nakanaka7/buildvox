@@ -14,10 +14,40 @@ import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 public class FillSelection extends BlockSelection {
     private VoxelBlock block;
 
-    public FillSelection(Region3d region3d, Parallelepiped bound, VoxelBlock block, double integrity) {
+    private FillSelection(Region3d region3d, Parallelepiped bound, VoxelBlock block, double integrity) {
         super(region3d, bound);
         this.block = block;
         this.integrity = integrity;
+    }
+
+    public static class Builder {
+        private final VoxelBlock block;
+        private final Selection sel;
+        private double integrity = 1;
+        private boolean masked;
+
+        public Builder(VoxelBlock block, Selection sel) {
+            this.block = block;
+            this.sel = sel;
+        }
+
+        public Builder integrity(double integrity) {
+            this.integrity = integrity;
+            return this;
+        }
+
+        public Builder masked(boolean masked) {
+            this.masked = masked;
+            return this;
+        }
+
+        public FillSelection build() {
+            var i = new FillSelection(sel.getRegion3d(), sel.getBound(), block, 1);
+            i.integrity = this.integrity;
+            i.masked = this.masked;
+            return i;
+        }
+
     }
 
     @Override
@@ -39,7 +69,9 @@ public class FillSelection extends BlockSelection {
         Parallelepiped bound = super.getBound();
         Selection selection = new Selection(region3d, bound);
         Selection transSelection = selection.affineTransform(trans);
-        return new FillSelection(transSelection.getRegion3d(), transSelection.getBound(), block, integrity);
+        return new Builder(block, transSelection)
+                .integrity(this.integrity)
+                .masked(this.masked).build();
     }
 
 }
