@@ -2,6 +2,7 @@ package tokyo.nakanaka.buildvox.core.selection;
 
 import tokyo.nakanaka.buildvox.core.Clipboard;
 import tokyo.nakanaka.buildvox.core.clientWorld.ClientWorld;
+import tokyo.nakanaka.buildvox.core.clientWorld.PlayerWorld;
 import tokyo.nakanaka.buildvox.core.edit.WorldEdits;
 import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
 import tokyo.nakanaka.buildvox.core.math.region3d.Region3d;
@@ -38,10 +39,10 @@ public abstract class BlockSelection extends Selection {
 
     /**
      * Set backward blocks.
-     * @param clientWorld a world to set blocks.
+     * @param playerWorld a world to set blocks.
      */
-    public void setBackwardBlocks(ClientWorld clientWorld) {
-        WorldEdits.paste(backwardClip, clientWorld, Vector3d.ZERO);
+    public void setBackwardBlocks(PlayerWorld playerWorld) {
+        WorldEdits.paste(backwardClip, playerWorld, Vector3d.ZERO);
     }
 
     @Override
