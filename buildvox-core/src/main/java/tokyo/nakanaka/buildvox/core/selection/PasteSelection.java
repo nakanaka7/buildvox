@@ -67,6 +67,42 @@ public class PasteSelection extends BlockSelection {
                 masked, background);
     }
 
+    public static class Builder {
+        private final Clipboard clipboard;
+        private final Vector3d pos;
+        private AffineTransformation3d clipTrans = AffineTransformation3d.IDENTITY;
+        private double integrity;
+        private boolean masked;
+
+        public Builder(Clipboard clipboard, Vector3d pos) {
+            this.clipboard = clipboard;
+            this.pos = pos;
+        }
+
+        public Builder clipTrans(AffineTransformation3d clipTrans) {
+            this.clipTrans = clipTrans;
+            return this;
+        }
+
+        public Builder integrity(double integrity) {
+            this.integrity = integrity;
+            return this;
+        }
+
+        public Builder masked(boolean masked) {
+            this.masked = masked;
+            return this;
+        }
+
+        public PasteSelection build() {
+            var i = newInstance(clipboard, pos, clipTrans);
+            i.integrity = this.integrity;
+            i.masked = this.masked;
+            return i;
+        }
+
+    }
+
     void setRawForwardBlocks(ClientWorld clientWorld) {
         WorldEdits.paste(clipboard, clientWorld, pos, clipTrans);
     }
