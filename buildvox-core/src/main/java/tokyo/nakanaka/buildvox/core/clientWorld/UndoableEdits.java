@@ -1,4 +1,4 @@
-package tokyo.nakanaka.buildvox.core.edit.clientWorld;
+package tokyo.nakanaka.buildvox.core.clientWorld;
 
 import javax.swing.undo.UndoableEdit;
 

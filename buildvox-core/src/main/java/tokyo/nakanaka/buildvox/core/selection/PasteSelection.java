@@ -2,9 +2,9 @@ package tokyo.nakanaka.buildvox.core.selection;
 
 import tokyo.nakanaka.buildvox.core.edit.Clipboard;
 import tokyo.nakanaka.buildvox.core.edit.WorldEdits;
-import tokyo.nakanaka.buildvox.core.edit.clientWorld.ClientWorld;
-import tokyo.nakanaka.buildvox.core.edit.clientWorld.IntegrityClientWorld;
-import tokyo.nakanaka.buildvox.core.edit.clientWorld.MaskedClientWorld;
+import tokyo.nakanaka.buildvox.core.clientWorld.ClientWorld;
+import tokyo.nakanaka.buildvox.core.clientWorld.IntegrityClientWorld;
+import tokyo.nakanaka.buildvox.core.clientWorld.MaskedClientWorld;
 import tokyo.nakanaka.buildvox.core.math.region3d.Cuboid;
 import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
 import tokyo.nakanaka.buildvox.core.math.region3d.Region3d;

@@ -1,4 +1,4 @@
-package tokyo.nakanaka.buildvox.core.edit.clientWorld;
+package tokyo.nakanaka.buildvox.core.clientWorld;
 
 import tokyo.nakanaka.buildvox.core.block.BlockTransformation;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
