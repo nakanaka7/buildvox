@@ -2,7 +2,6 @@ package tokyo.nakanaka.buildvox.core.clientWorld;
 
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
-import tokyo.nakanaka.buildvox.core.world.World;
 
 /**
  * The client world which changes the integrity of block settings.
@@ -11,17 +10,6 @@ import tokyo.nakanaka.buildvox.core.world.World;
 public class IntegrityClientWorld extends ClientWorld {
     private final double integrity;
     private final ClientWorld clientWorld;
-
-    /**
-     * Creates a new instance.
-     * @param integrity the integrity of block settings.
-     * @param world the original world.
-     * @param physics the block setting physics.
-     * @throws IllegalArgumentException if the integrity is less than 0 or larger than 1.
-     */
-    public IntegrityClientWorld(double integrity, World world, boolean physics) {
-        this(integrity, new ClientWorld(world, physics));
-    }
 
     /**
      * Creates a new instance.

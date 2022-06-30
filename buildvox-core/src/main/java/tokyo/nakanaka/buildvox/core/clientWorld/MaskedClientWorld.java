@@ -14,16 +14,6 @@ public class MaskedClientWorld extends ClientWorld {
     /**
      * Creates a new instance.
      * @param background the background block.
-     * @param original the original world.
-     * @param physics the block setting physics.
-     */
-    public MaskedClientWorld(VoxelBlock background, World original, boolean physics) {
-        this(background, new ClientWorld(original, physics));
-    }
-
-    /**
-     * Creates a new instance.
-     * @param background the background block.
      * @param original the original client world.
      */
     public MaskedClientWorld(VoxelBlock background, ClientWorld original) {
