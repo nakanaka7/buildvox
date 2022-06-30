@@ -9,6 +9,9 @@ import tokyo.nakanaka.buildvox.core.math.region3d.Region3d;
 import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
 
+/**
+ * Represents the selection when pasting.
+ */
 public class PasteSelection extends BlockSelection {
     private final Clipboard clipboard;
     private final Vector3d pos;
@@ -37,6 +40,9 @@ public class PasteSelection extends BlockSelection {
         return new PasteSelection(selection.getRegion3d(), selection.getBound(), clipboard, pos, clipTrans);
     }
 
+    /**
+     * The builder class of PasteSelection.
+     */
     public static class Builder {
         private final Clipboard clipboard;
         private final Vector3d pos;
@@ -44,26 +50,44 @@ public class PasteSelection extends BlockSelection {
         private double integrity = 1;
         private boolean masked;
 
+        /**
+         * Creates a new instance.
+         * @param clipboard the clipboard.
+         * @param pos the position to paste.
+         */
         public Builder(Clipboard clipboard, Vector3d pos) {
             this.clipboard = clipboard;
             this.pos = pos;
         }
 
+        /**
+         * Sets the clipboard transformation.
+         */
         public Builder clipTrans(AffineTransformation3d clipTrans) {
             this.clipTrans = clipTrans;
             return this;
         }
 
+        /**
+         * Sets the integrity.
+         */
         public Builder integrity(double integrity) {
             this.integrity = integrity;
             return this;
         }
 
+        /**
+         * Sets masked.
+         */
         public Builder masked(boolean masked) {
             this.masked = masked;
             return this;
         }
 
+        /**
+         * Builds a new instance.
+         * @return a new instance.
+         */
         public PasteSelection build() {
             var i = newInstance(clipboard, pos, clipTrans);
             i.integrity = this.integrity;
@@ -80,11 +104,12 @@ public class PasteSelection extends BlockSelection {
     @Override
     public PasteSelection affineTransform(AffineTransformation3d trans) {
         AffineTransformation3d newClipTrans = trans.linear().compose(this.clipTrans);
-        Vector3d newOffset = trans.apply(pos);
-        var i = newInstance(clipboard, newOffset, newClipTrans);
-        i.integrity = this.integrity;
-        i.masked = this.masked;
-        return i;
+        Vector3d transPos = trans.apply(pos);
+        return new Builder(clipboard, transPos)
+                .clipTrans(newClipTrans)
+                .integrity(this.integrity)
+                .masked(this.masked)
+                .build();
     }
 
 }

@@ -11,38 +11,58 @@ import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 
+/**
+ * Represents the selection when filling.
+ */
 public class FillSelection extends BlockSelection {
-    private VoxelBlock block;
+    private final VoxelBlock block;
 
-    private FillSelection(Region3d region3d, Parallelepiped bound, VoxelBlock block, double integrity) {
+    private FillSelection(Region3d region3d, Parallelepiped bound, VoxelBlock block) {
         super(region3d, bound);
         this.block = block;
-        this.integrity = integrity;
     }
 
+    /**
+     * The builder class of FillSelection.
+     */
     public static class Builder {
         private final VoxelBlock block;
         private final Selection sel;
         private double integrity = 1;
         private boolean masked;
 
+        /**
+         * Creates a new instance.
+         * @param block the block to set.
+         * @param sel the original selection.
+         */
         public Builder(VoxelBlock block, Selection sel) {
             this.block = block;
             this.sel = sel;
         }
 
+        /**
+         * Sets the integrity.
+         */
         public Builder integrity(double integrity) {
             this.integrity = integrity;
             return this;
         }
 
+        /**
+         * Sets masked.
+         */
         public Builder masked(boolean masked) {
             this.masked = masked;
             return this;
         }
 
+        /**
+         * Builds a new instance.
+         * @return a new instance.
+         */
         public FillSelection build() {
-            var i = new FillSelection(sel.getRegion3d(), sel.getBound(), block, 1);
+            var i = new FillSelection(sel.getRegion3d(), sel.getBound(), block);
             i.integrity = this.integrity;
             i.masked = this.masked;
             return i;
@@ -71,7 +91,8 @@ public class FillSelection extends BlockSelection {
         Selection transSelection = selection.affineTransform(trans);
         return new Builder(block, transSelection)
                 .integrity(this.integrity)
-                .masked(this.masked).build();
+                .masked(this.masked)
+                .build();
     }
 
 }
