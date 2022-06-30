@@ -8,6 +8,7 @@ import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
 import tokyo.nakanaka.buildvox.core.math.region3d.Region3d;
 import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
+import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 
 /**
  * Represents block accompanied selection. Forward blocks are the blocks which are created at the same time when
@@ -19,6 +20,8 @@ import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
 public abstract class BlockSelection extends Selection {
     protected Clipboard backwardClip = new Clipboard();
     protected double integrity;
+    protected boolean masked;
+    protected VoxelBlock background;
 
     public BlockSelection(Region3d region3d, Parallelepiped bound) {
         super(region3d, bound);

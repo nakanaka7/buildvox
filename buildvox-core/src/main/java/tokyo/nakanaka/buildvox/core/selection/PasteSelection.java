@@ -17,8 +17,6 @@ public class PasteSelection extends BlockSelection {
     private final Clipboard clipboard;
     private final Vector3d pos;
     private final AffineTransformation3d clipTrans;
-    private boolean masked;
-    private VoxelBlock background;
 
     private PasteSelection(Region3d region3d, Parallelepiped bound, Clipboard clipboard, Vector3d pos,
                            AffineTransformation3d clipTrans, double integrity) {
