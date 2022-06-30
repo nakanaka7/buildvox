@@ -1,6 +1,6 @@
 package tokyo.nakanaka.buildvox.core.selection;
 
-import tokyo.nakanaka.buildvox.core.edit.editWorld.EditWorld;
+import tokyo.nakanaka.buildvox.core.clientWorld.ClientWorld;
 import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
 import tokyo.nakanaka.buildvox.core.math.region3d.Region3d;
 import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
@@ -27,15 +27,15 @@ public abstract class BlockSelection extends Selection {
 
     /**
      * Set forward blocks.
-     * @param editWorld a world to set blocks.
+     * @param clientWorld a world to set blocks.
      */
-    public abstract void setForwardBlocks(EditWorld editWorld);
+    public abstract void setForwardBlocks(ClientWorld clientWorld);
 
     /**
      * Set backward blocks.
-     * @param editWorld a world to set blocks.
+     * @param clientWorld a world to set blocks.
      */
-    public abstract void setBackwardBlocks(EditWorld editWorld);
+    public abstract void setBackwardBlocks(ClientWorld clientWorld);
     @Override
     public abstract BlockSelection affineTransform(AffineTransformation3d trans);
 

@@ -1,8 +1,10 @@
 package tokyo.nakanaka.buildvox.core.edit;
 
-import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
-import tokyo.nakanaka.buildvox.core.edit.editWorld.EditWorld;
-import tokyo.nakanaka.buildvox.core.edit.editWorld.RecordingEditWorld;
+import tokyo.nakanaka.buildvox.core.Clipboard;
+import tokyo.nakanaka.buildvox.core.EditExit;
+import tokyo.nakanaka.buildvox.core.clientWorld.ClientWorld;
+import tokyo.nakanaka.buildvox.core.clientWorld.IntegrityClientWorld;
+import tokyo.nakanaka.buildvox.core.clientWorld.PlayerWorld;
 import tokyo.nakanaka.buildvox.core.math.Drawings;
 import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
 import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
@@ -11,16 +13,13 @@ import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.property.Axis;
 import tokyo.nakanaka.buildvox.core.selection.*;
+import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
-import tokyo.nakanaka.buildvox.core.world.World;
 
-import javax.swing.undo.CompoundEdit;
 import javax.swing.undo.UndoManager;
-import javax.swing.undo.UndoableEdit;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 /**
  * The utility class of player edits.
@@ -94,10 +93,10 @@ public class PlayerEdits {
     public static void applyPhysics(Player player) {
         Selection selFrom = findSelection(player);
         Clipboard clipboard = new Clipboard();
-        EditWorld editWorld = new EditWorld(player.getEditWorld(), true);
-        WorldEdits.copy(editWorld, selFrom, Vector3d.ZERO, clipboard);
-        WorldEdits.fill(editWorld, selFrom, BuildVoxSystem.parseBlock("air"), 1);
-        WorldEdits.paste(clipboard, editWorld, Vector3d.ZERO);
+        ClientWorld clientWorld = new ClientWorld(player.getEditWorld(), true);
+        WorldEdits.copy(clientWorld, selFrom, Vector3d.ZERO, clipboard);
+        WorldEdits.fill(clientWorld, selFrom, BuildVoxSystem.parseBlock("air"));
+        WorldEdits.paste(clipboard, clientWorld, Vector3d.ZERO);
         Selection selTo;
         if(selFrom instanceof BlockSelection bs) {
             selTo = bs.toNonBlock();
@@ -208,41 +207,39 @@ public class PlayerEdits {
         }else {
             Clipboard clipboard = new Clipboard();
             Vector3d copyOffset = Vector3d.ZERO;
-            WorldEdits.copy(new EditWorld(player.getEditWorld()), selectionFrom, copyOffset, clipboard);
+            WorldEdits.copy(new ClientWorld(player.getEditWorld()), selectionFrom, copyOffset, clipboard);
             clipboard.lock();
             AffineTransformation3d newClipTrans = trans.linear();
             Vector3d pasteOffset = trans.apply(copyOffset);
             selectionTo = PasteSelection.newInstance(clipboard, pasteOffset, newClipTrans);
         }
-        return recordingEdit(player,
-            (editWorld) -> {
-                if (selectionFrom instanceof BlockSelection blockSelection) {
-                    blockSelection.setBackwardBlocks(editWorld);
-                } else {
-                    WorldEdits.fill(editWorld, selectionFrom, player.getBackgroundBlock(), 1);
-                }
-                selectionTo.setForwardBlocks(editWorld);
-            }, selectionTo
-        );
+        PlayerWorld pw = new PlayerWorld(player);
+        if (selectionFrom instanceof BlockSelection blockSelection) {
+            blockSelection.setBackwardBlocks(pw);
+        } else {
+            WorldEdits.fill(pw, selectionFrom, player.getBackgroundBlock());
+        }
+        selectionTo.setForwardBlocks(pw);
+        pw.setSelection(selectionTo);
+        return pw.end();
     }
 
     /**
      * @throws SelectionNotFoundException if a selection is not found
      */
     public static EditExit cut(Player player, Vector3d pos) {
-        return recordingEdit(player,
-            (editWorld) -> {
-                Selection selection = findSelection(player);
-                Clipboard clipboard = new Clipboard();
-                WorldEdits.copy(editWorld, selection, pos, clipboard);
-                if (selection instanceof BlockSelection blockSelection) {
-                    blockSelection.setBackwardBlocks(editWorld);
-                } else {
-                    WorldEdits.fill(editWorld, selection, player.getBackgroundBlock(), 1);
-                }
-                player.setClipboard(clipboard);
-            }
-        );
+        PlayerWorld pw = new PlayerWorld(player);
+        Selection selection = findSelection(player);
+        Clipboard clipboard = new Clipboard();
+        WorldEdits.copy(pw, selection, pos, clipboard);
+        if (selection instanceof BlockSelection blockSelection) {
+            blockSelection.setBackwardBlocks(pw);
+        } else {
+            WorldEdits.fill(pw, selection, player.getBackgroundBlock());
+        }
+        player.setClipboard(clipboard);
+        pw.setSelection(null);
+        return pw.end();
     }
 
     /**
@@ -253,7 +250,7 @@ public class PlayerEdits {
     public static EditExit copy(Player player, Vector3d pos) {
         Selection selection = findSelection(player);
         Clipboard clipboard = new Clipboard();
-        WorldEdits.copy(new EditWorld(player.getEditWorld()), selection, pos, clipboard);
+        WorldEdits.copy(new ClientWorld(player.getEditWorld()), selection, pos, clipboard);
         clipboard.lock();
         player.setClipboard(clipboard);
         return new EditExit(clipboard.blockCount(), 0, 0);
@@ -266,13 +263,17 @@ public class PlayerEdits {
      * @throws IllegalStateException if clipboard is null
      * @throws IllegalArgumentException if integrity is less than 0 or more than 1.
      */
-    public static EditExit paste(Player player, Vector3d pos, double integrity) {
+    public static EditExit paste(Player player, Vector3d pos, double integrity, boolean masked) {
         Clipboard clipboard = player.getClipboard();
         if(clipboard == null){
             throw new IllegalStateException();
         }
-        PasteSelection pasteSelection = PasteSelection.newInstance(clipboard, pos, AffineTransformation3d.IDENTITY, integrity);
-        return recordingEdit(player, pasteSelection::setForwardBlocks, pasteSelection);
+        PasteSelection pasteSelection = PasteSelection.newInstance(clipboard, pos, AffineTransformation3d.IDENTITY,
+                integrity, masked, player.getBackgroundBlock());
+        PlayerWorld pw = new PlayerWorld(player);
+        pasteSelection.setForwardBlocks(pw);
+        pw.setSelection(pasteSelection);
+        return pw.end();
     }
 
     /**
@@ -285,8 +286,10 @@ public class PlayerEdits {
      */
     public static EditExit fill(Player player, Selection selection, VoxelBlock block, double integrity) {
         FillSelection fillSelection = new FillSelection(selection.getRegion3d(), selection.getBound(), block, integrity);
-        return recordingEdit(player, fillSelection::setForwardBlocks, fillSelection
-        );
+        PlayerWorld pw = new PlayerWorld(player);
+        fillSelection.setForwardBlocks(pw);
+        pw.setSelection(fillSelection);
+        return pw.end();
     }
 
     /**
@@ -299,16 +302,17 @@ public class PlayerEdits {
      * @throws IllegalArgumentException if integrity is less than 0 or larger than 1.
      */
     public static EditExit replace(Player player, Selection sel, VoxelBlock blockFrom, VoxelBlock blockTo, double integrity) {
-        if(integrity < 0 || 1 < integrity) throw new IllegalArgumentException();
         Selection selTo;
         if(sel instanceof BlockSelection bs) {
             selTo = bs.toNonBlock();
         }else {
             selTo = sel;
         }
-        return recordingEdit(
-                player, (editWorld) -> WorldEdits.replace(editWorld, sel, blockFrom, blockTo, integrity), selTo
-        );
+        PlayerWorld pw = new PlayerWorld(player);
+        IntegrityClientWorld icw = new IntegrityClientWorld(integrity, pw);
+        WorldEdits.replace(icw, sel, blockFrom, blockTo);
+        pw.setSelection(selTo);
+        return pw.end();
     }
 
     /**
@@ -392,10 +396,10 @@ public class PlayerEdits {
         }
         Vector3i pos0a = new Vector3i(pos0x, pos0y, pos0z);
         Vector3i pos1a = new Vector3i(pos1x, pos1y, pos1z);
-        return recordingEdit(player,
-                (editWorld) -> WorldEdits.repeatOld(editWorld, new Vector3i(maxX, maxY, maxZ), new Vector3i(minX, minY, minZ), countX, countY, countZ)
-                , new Vector3i[]{pos0a, pos1a}
-        );
+        PlayerWorld pw = new PlayerWorld(player);
+        WorldEdits.repeatOld(pw, new Vector3i(maxX, maxY, maxZ), new Vector3i(minX, minY, minZ), countX, countY, countZ);
+        pw.setPosArray(new Vector3i[]{pos0a, pos1a});
+        return pw.end();
     }
 
     /**
@@ -416,7 +420,7 @@ public class PlayerEdits {
         Clipboard clip = new Clipboard();
         WorldEdits.copy(player.getEditWorld(), sel, Vector3d.ZERO, clip);
         List<Vector3i> positions = Drawings.line(Vector3i.ZERO, new Vector3i(countX, countY, countZ));
-        PlayerWorld pw = PlayerWorld.newInstance(player);
+        PlayerWorld pw = new PlayerWorld(player);
         for(Vector3i pos : positions) {
             double qx = pos.x() * dx;
             double qy = pos.y() * dy;
@@ -426,238 +430,6 @@ public class PlayerEdits {
             pw.setSelection(pasteSel);
         }
         return pw.end();
-    }
-
-    /**
-     * An edit world for a player. Calling end() stores an undoable edit
-     * into the player.
-     */
-    private static class PlayerWorld extends RecordingEditWorld {
-        private Player player;
-        private Selection sel;
-
-        private PlayerWorld(World original, Player player) {
-            super(original);
-            this.player = player;
-            this.sel = player.getSelection();
-        }
-
-        /**
-         * Creates a new instance of the player.
-         * @param player the player.
-         * @return a new instance.
-         */
-        public static PlayerWorld newInstance(Player player) {
-            var world = player.getEditWorld();
-            return new PlayerWorld(world, player);
-        }
-
-        /**
-         * Set the selection.
-         * @param sel the selection.
-         */
-        public void setSelection(Selection sel) {
-            this.sel = sel;
-        }
-
-        /**
-         * Stores the selection change and block changes as one edit into player.
-         * @return the edit exit.
-         */
-        public EditExit end() {
-            UndoableEdit selEdit = createSelectionEdit(player, sel);
-            player.setSelection(sel);
-            UndoableEdit blockEdit = createBlockEdit(this);
-            CompoundEdit compoundEdit = new CompoundEdit();
-            compoundEdit.addEdit(selEdit);
-            compoundEdit.addEdit(blockEdit);
-            compoundEdit.end();
-            player.getUndoManager().addEdit(compoundEdit);
-            return new EditExit(this.blockCount(), 0, 0);
-        }
-
-    }
-
-    /**
-     * A functional interface for recordingEdit() which defines editing for the world.
-     */
-    private interface EditWorldEditor {
-        void edit(EditWorld editWorld);
-    }
-
-    /**
-     * Recording edit end with all null pos array and null selection.
-     */
-    private static EditExit recordingEdit(Player player, EditWorldEditor editor) {
-        return recordingEdit(player, editor, new Vector3i[player.getPosArrayClone().length], null);
-    }
-
-    /**
-     * Recording edit end with pos array and null selection.
-     */
-    private static EditExit recordingEdit(Player player, EditWorldEditor editor, Vector3i[] endPosArray) {
-        return recordingEdit(player, editor, endPosArray, null);
-    }
-
-    /**
-     * Recording edit end with all null pos array and (nonNull assumed) selection.
-     */
-    private static EditExit recordingEdit(Player player, EditWorldEditor editor, Selection endSelection) {
-        return recordingEdit(player, editor, new Vector3i[player.getPosArrayClone().length], endSelection);
-    }
-
-    /**
-     * Edits world, sets a new pos array or selection into the player, and stores the undoable edit of the above procedures
-     * as one edit into the player's UndoManager.
-     * @param player a player.
-     * @param editor an editor which defines the world editing.
-     * @param endPosArray the pos array in the end.
-     * @param endSelection the selection in the end.
-     * @return the edit exit of the world editing.
-     * @throws IllegalArgumentException if endPosArray contains nonNull and selection is not null.
-     */
-    private static EditExit recordingEdit(Player player, EditWorldEditor editor, Vector3i[] endPosArray, Selection endSelection) {
-        RecordingEditWorld recordingEditWorld = new RecordingEditWorld(player.getEditWorld());
-        editor.edit(recordingEditWorld);
-        CompoundEdit compoundEdit = new CompoundEdit();
-        UndoableEdit blockEdit = createBlockEdit(recordingEditWorld);
-        compoundEdit.addEdit(blockEdit);
-        UndoableEdit posArrayOrSelectionEdit;
-        if(endSelection == null) {
-            posArrayOrSelectionEdit = createPosArrayEdit(player, endPosArray);
-            player.setPosArray(endPosArray);
-        }else {
-            boolean endPosArrayContainsOnlyNull = Arrays.stream(endPosArray).allMatch(Objects::isNull);
-            if(!endPosArrayContainsOnlyNull) {
-                throw new IllegalArgumentException();
-            }
-            posArrayOrSelectionEdit = createSelectionEdit(player, endSelection);
-            player.setSelection(endSelection);
-        }
-        compoundEdit.addEdit(posArrayOrSelectionEdit);
-        compoundEdit.end();
-        player.getUndoManager().addEdit(compoundEdit);
-        return new EditExit(recordingEditWorld.blockCount(), 0, 0);
-    }
-
-    /* Creates an undoable edit for edit world that is target of recordingEditWorld */
-    private static UndoableEdit createBlockEdit(RecordingEditWorld recordingEditWorld) {
-        Clipboard undoClipboard = recordingEditWorld.getUndoClipboard();
-        Clipboard redoClipboard = recordingEditWorld.getRedoClipboard();
-        EditWorld editWorld = new EditWorld(recordingEditWorld.getOriginal());
-        return createEdit(
-            () -> {
-                Set<Vector3i> blockPosSet = undoClipboard.blockPosSet();
-                for(Vector3i pos : blockPosSet) {
-                    VoxelBlock block = undoClipboard.getBlock(pos.x(), pos.y(), pos.z());
-                    editWorld.setBlock(pos, block);
-                }
-            },
-            () -> {
-                Set<Vector3i> blockPosSet = redoClipboard.blockPosSet();
-                for(Vector3i pos : blockPosSet) {
-                    VoxelBlock block = redoClipboard.getBlock(pos.x(), pos.y(), pos.z());
-                    editWorld.setBlock(pos, block);
-                }
-            }
-        );
-    }
-
-    /* Creates an edit to set a new pos array into the player */
-    private static UndoableEdit createPosArrayEdit(Player player, Vector3i[] posArray) {
-        Vector3i[] initPosArray = player.getPosArrayClone();
-        Selection initSelection = player.getSelection();
-        return createEdit(
-            () -> {
-                if(initSelection == null) {
-                    player.setPosArray(initPosArray.clone());
-                }else{
-                    player.setSelection(initSelection);
-                }
-            },
-            () -> player.setPosArray(posArray)
-        );
-    }
-
-    /* Creates an edit to set a new selection into the player */
-    private static UndoableEdit createSelectionEdit(Player player, Selection selection) {
-        Vector3i[] initPosArray = player.getPosArrayClone();
-        Selection initSelection = player.getSelection();
-        return createEdit(
-            () -> {
-                if(initSelection == null) {
-                    player.setPosArray(initPosArray.clone());
-                }else{
-                    player.setSelection(initSelection);
-                }
-            },
-            () -> player.setSelection(selection)
-        );
-    }
-
-    /**
-     * Creates an UndoableEdit from undoRunnable and redoRunnable.
-     * @param undoRunnable a runnable for undo.
-     * @param redoRunnable a runnable for redo.
-     * @return an instance
-     */
-    private static UndoableEdit createEdit(Runnable undoRunnable, Runnable redoRunnable) {
-        return new UndoableEdit() {
-            @Override
-            public void undo() {
-                undoRunnable.run();
-            }
-
-            @Override
-            public boolean canUndo() {
-                return true;
-            }
-
-            @Override
-            public void redo() {
-                redoRunnable.run();
-            }
-
-            @Override
-            public boolean canRedo() {
-                return true;
-            }
-
-            @Override
-            public void die() {
-
-            }
-
-            @Override
-            public boolean addEdit(UndoableEdit anEdit) {
-                return false;
-            }
-
-            @Override
-            public boolean replaceEdit(UndoableEdit anEdit) {
-                return false;
-            }
-
-            @Override
-            public boolean isSignificant() {
-                return true;
-            }
-
-            @Override
-            public String getPresentationName() {
-                return "";
-            }
-
-            @Override
-            public String getUndoPresentationName() {
-                return "";
-            }
-
-            @Override
-            public String getRedoPresentationName() {
-                return "";
-            }
-        };
     }
 
 }

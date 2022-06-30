@@ -2,10 +2,10 @@ package tokyo.nakanaka.buildvox.core.command.bvCommand;
 
 import picocli.CommandLine;
 import tokyo.nakanaka.buildvox.core.Messages;
-import tokyo.nakanaka.buildvox.core.edit.EditExit;
+import tokyo.nakanaka.buildvox.core.EditExit;
 import tokyo.nakanaka.buildvox.core.command.mixin.IntegrityMixin;
 import tokyo.nakanaka.buildvox.core.command.mixin.PosMixin;
-import tokyo.nakanaka.buildvox.core.edit.Clipboard;
+import tokyo.nakanaka.buildvox.core.Clipboard;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
 import tokyo.nakanaka.buildvox.core.player.Player;
@@ -24,6 +24,8 @@ public class PasteCommand implements Runnable {
     private IntegrityMixin integrityMixin;
     @CommandLine.Mixin
     private PosMixin posMixin;
+    @CommandLine.Option(names = {"-m", "--masked"})
+    private boolean masked;
 
     /**
      * Paste blocks of the clipboard into the world. The origin of the clipboard matches the offset point.
@@ -46,7 +48,7 @@ public class PasteCommand implements Runnable {
             err.println("Copy first");
             return;
         }
-        EditExit exit = PlayerEdits.paste(player, pos, integrityMixin.integrity());
+        EditExit exit = PlayerEdits.paste(player, pos, integrityMixin.integrity(), masked);
         out.println(Messages.ofSetExit(exit));
     }
 

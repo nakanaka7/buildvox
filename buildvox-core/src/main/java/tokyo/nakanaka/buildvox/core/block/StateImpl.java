@@ -1,9 +1,6 @@
 package tokyo.nakanaka.buildvox.core.block;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /* temporary
    The state object of BlockState
@@ -41,6 +38,19 @@ public class StateImpl implements Block.State {
             keyValueSet.add(e.getKey() + "=" + e.getValue());
         }
         return String.join(",", keyValueSet);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        StateImpl state = (StateImpl) o;
+        return stateMap.equals(state.stateMap);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(stateMap);
     }
 
 }

@@ -1,4 +1,4 @@
-package tokyo.nakanaka.buildvox.core.edit;
+package tokyo.nakanaka.buildvox.core;
 
 /**
  * Stores an edit exit information.

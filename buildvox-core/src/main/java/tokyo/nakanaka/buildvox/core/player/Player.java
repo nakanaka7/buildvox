@@ -1,6 +1,6 @@
 package tokyo.nakanaka.buildvox.core.player;
 
-import tokyo.nakanaka.buildvox.core.edit.Clipboard;
+import tokyo.nakanaka.buildvox.core.Clipboard;
 import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.particleGui.Color;

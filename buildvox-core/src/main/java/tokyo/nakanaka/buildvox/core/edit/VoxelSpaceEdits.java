@@ -1,6 +1,6 @@
 package tokyo.nakanaka.buildvox.core.edit;
 
-import tokyo.nakanaka.buildvox.core.voxelSpace.VoxelSpace;
+import tokyo.nakanaka.buildvox.core.VoxelSpace;
 import tokyo.nakanaka.buildvox.core.math.region3d.Cuboid;
 import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
@@ -68,24 +68,6 @@ public class VoxelSpaceEdits {
                 space.setBlock(pos, toBlock);
             }
         }
-    }
-
-    /**
-     * Use replace() with Predicate.
-     */
-    @Deprecated
-    public static <B> void replace(VoxelSpace<B> space, Set<Vector3i> posSet, BlockCondition<B> condition, B toBlock) {
-        for(Vector3i pos : posSet) {
-            B a = space.getBlock(pos);
-            if(condition.match(a)) {
-                space.setBlock(pos, toBlock);
-            }
-        }
-    }
-
-    @Deprecated
-    public static interface BlockCondition<B> {
-        boolean match(B block);
     }
 
 }
