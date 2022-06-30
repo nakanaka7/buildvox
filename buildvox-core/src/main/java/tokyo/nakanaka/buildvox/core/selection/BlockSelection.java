@@ -2,6 +2,8 @@ package tokyo.nakanaka.buildvox.core.selection;
 
 import tokyo.nakanaka.buildvox.core.Clipboard;
 import tokyo.nakanaka.buildvox.core.clientWorld.ClientWorld;
+import tokyo.nakanaka.buildvox.core.clientWorld.IntegrityClientWorld;
+import tokyo.nakanaka.buildvox.core.clientWorld.MaskedClientWorld;
 import tokyo.nakanaka.buildvox.core.clientWorld.PlayerWorld;
 import tokyo.nakanaka.buildvox.core.edit.WorldEdits;
 import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
@@ -37,9 +39,25 @@ public abstract class BlockSelection extends Selection {
 
     /**
      * Set forward blocks.
-     * @param clientWorld a world to set blocks.
+     * @param playerWorld a world to set blocks.
      */
-    public abstract void setForwardBlocks(PlayerWorld playerWorld);
+    public void setForwardBlocks(PlayerWorld playerWorld) {
+        Clipboard newBackwardClip = new Clipboard();
+        WorldEdits.copy(playerWorld, this, Vector3d.ZERO, newBackwardClip);
+        ClientWorld clientWorld = new IntegrityClientWorld(integrity, playerWorld);
+        if(masked) {
+            clientWorld = new MaskedClientWorld(background, playerWorld);
+        }
+        setRawForwardBlocks(clientWorld);
+        backwardClip = newBackwardClip;
+    }
+
+    /**
+     * Set forward blocks with integrity = 1 and masked = false.
+     */
+    void setRawForwardBlocks(ClientWorld clientWorld) {
+
+    }
 
     /**
      * Set backward blocks.

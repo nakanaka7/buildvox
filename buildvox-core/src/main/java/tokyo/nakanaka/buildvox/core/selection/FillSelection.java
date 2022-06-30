@@ -29,6 +29,10 @@ public class FillSelection extends BlockSelection {
         backwardClip = newBackwardClip;
     }
 
+    void setRawForwardBlocks(ClientWorld clientWorld) {
+        WorldEdits.fill(clientWorld, this, block);
+    }
+
     @Override
     public BlockSelection affineTransform(AffineTransformation3d trans) {
         Region3d region3d = super.getRegion3d();
