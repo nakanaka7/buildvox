@@ -13,12 +13,12 @@ public class MaskedClientWorld extends ClientWorld {
     /**
      * Creates a new instance.
      * @param background the background block.
-     * @param original the original client world.
+     * @param clientWorld the original client world.
      */
-    public MaskedClientWorld(VoxelBlock background, ClientWorld original) {
-        super(original.getWorld(), original.getPhysics());
+    public MaskedClientWorld(VoxelBlock background, ClientWorld clientWorld) {
+        super(clientWorld.getWorld(), clientWorld.getPhysics());
         this.background = background;
-        this.cw = original;
+        this.cw = clientWorld;
     }
 
     @Override
