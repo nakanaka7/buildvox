@@ -1,8 +1,8 @@
-package tokyo.nakanaka.buildvox.core.edit;
+package tokyo.nakanaka.buildvox.core.edit.clientWorld;
 
 import javax.swing.undo.UndoableEdit;
 
-public class UndoableEdits {
+class UndoableEdits {
     /**
      * Creates an UndoableEdit from undoRunnable and redoRunnable.
      * @param undoRunnable a runnable for undo.

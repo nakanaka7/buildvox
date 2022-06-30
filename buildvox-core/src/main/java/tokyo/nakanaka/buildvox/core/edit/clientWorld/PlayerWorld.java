@@ -1,7 +1,6 @@
 package tokyo.nakanaka.buildvox.core.edit.clientWorld;
 
 import tokyo.nakanaka.buildvox.core.edit.EditExit;
-import tokyo.nakanaka.buildvox.core.edit.UndoableEdits;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
