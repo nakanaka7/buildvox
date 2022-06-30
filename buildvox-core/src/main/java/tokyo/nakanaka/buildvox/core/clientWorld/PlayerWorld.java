@@ -59,30 +59,22 @@ public class PlayerWorld extends ClientWorld {
     public EditExit end() {
         Vector3i[] endPosArray = player.getPosArrayClone();
         Selection endSel = player.getSelection();
-        UndoableEdit posArrayOrSelEdit;
-        if(endSel == null) {
-            posArrayOrSelEdit = UndoableEdits.create(
-                () -> {
-                    if(initSel == null) {
-                        player.setPosArray(initPosArray.clone());
-                    }else{
-                        player.setSelection(initSel);
-                    }
-                },
-                () -> player.setPosArray(endPosArray)
-            );
-        }else {
-            posArrayOrSelEdit = UndoableEdits.create(
-                () -> {
-                    if(initSel == null) {
-                        player.setPosArray(initPosArray.clone());
-                    }else{
-                        player.setSelection(initSel);
-                    }
-                },
-                () -> player.setSelection(endSel)
-            );
-        }
+        UndoableEdit posArrayOrSelEdit = UndoableEdits.create(
+            () -> {
+                if(initSel == null) {
+                    player.setPosArray(initPosArray);
+                }else{
+                    player.setSelection(initSel);
+                }
+            },
+            () -> {
+                if(endSel == null) {
+                    player.setPosArray(endPosArray);
+                }else {
+                    player.setSelection(endSel);
+                }
+            }
+        );
         UndoableEdit blockEdit = recordingWorld.createEdit();
         CompoundEdit compoundEdit = new CompoundEdit();
         compoundEdit.addEdit(posArrayOrSelEdit);
