@@ -43,9 +43,10 @@ public abstract class BlockSelection extends Selection {
     public void setForwardBlocks(PlayerWorld playerWorld) {
         Clipboard newBackwardClip = new Clipboard();
         WorldEdits.copy(playerWorld, this, Vector3d.ZERO, newBackwardClip);
-        ClientWorld clientWorld = new IntegrityClientWorld(integrity, playerWorld);
+        VoxelBlock background = playerWorld.getPlayer().getBackgroundBlock();
+        ClientWorld clientWorld = new IntegrityClientWorld(integrity, background, playerWorld);
         if(masked) {
-            clientWorld = new MaskedClientWorld(playerWorld.getPlayer().getBackgroundBlock(), playerWorld);
+            clientWorld = new MaskedClientWorld(background, playerWorld);
         }
         setRawForwardBlocks(clientWorld);
         backwardClip = newBackwardClip;
