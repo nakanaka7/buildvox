@@ -13,7 +13,6 @@ import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 
 public class FillSelection extends BlockSelection {
     private VoxelBlock block;
-    private double integrity;
 
     public FillSelection(Region3d region3d, Parallelepiped bound, VoxelBlock block, double integrity) {
         super(region3d, bound);

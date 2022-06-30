@@ -18,6 +18,7 @@ import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
  */
 public abstract class BlockSelection extends Selection {
     protected Clipboard backwardClip = new Clipboard();
+    protected double integrity;
 
     public BlockSelection(Region3d region3d, Parallelepiped bound) {
         super(region3d, bound);
