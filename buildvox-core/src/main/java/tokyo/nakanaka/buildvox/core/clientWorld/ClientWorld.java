@@ -10,15 +10,15 @@ import tokyo.nakanaka.buildvox.core.world.World;
  * The relation between World and ClientWorld is similar to File and Writer.
  */
 public class ClientWorld implements VoxelSpace<VoxelBlock> {
-    protected final World world;
-    protected boolean physics;
+    private final World world;
+    private final boolean physics;
 
     /**
      * Constructs a new instance with an original World. The block setting physics will be set "false".
      * @param world the original world.
      */
     public ClientWorld(World world) {
-        this.world = world;
+        this(world, false);
     }
 
     /**
