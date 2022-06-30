@@ -285,9 +285,10 @@ public class PlayerEdits {
      * @param integrity the integrity of block-setting.
      * @return the edit-exit.
      */
-    public static EditExit fill(Player player, Selection selection, VoxelBlock block, double integrity) {
+    public static EditExit fill(Player player, Selection selection, VoxelBlock block, double integrity, boolean masked) {
         FillSelection fillSelection = new FillSelection.Builder(block, selection)
                 .integrity(integrity)
+                .masked(masked)
                 .build();
         PlayerWorld pw = new PlayerWorld(player);
         fillSelection.setForwardBlocks(pw);
