@@ -9,7 +9,7 @@ public class BlockTransformingClientWorld extends ClientWorld {
     private final ClientWorld clientWorld;
 
     public BlockTransformingClientWorld(BlockTransformation blockTrans, ClientWorld clientWorld) {
-        super(clientWorld.world, clientWorld.physics);
+        super(clientWorld.getWorld(), clientWorld.getPhysics());
         this.blockTrans = blockTrans;
         this.clientWorld = clientWorld;
     }

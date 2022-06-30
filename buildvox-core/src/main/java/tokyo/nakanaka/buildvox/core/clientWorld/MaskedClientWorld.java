@@ -16,7 +16,7 @@ public class MaskedClientWorld extends ClientWorld {
      * @param original the original client world.
      */
     public MaskedClientWorld(VoxelBlock background, ClientWorld original) {
-        super(original.world, original.physics);
+        super(original.getWorld(), original.getPhysics());
         this.background = background;
         this.cw = original;
     }
