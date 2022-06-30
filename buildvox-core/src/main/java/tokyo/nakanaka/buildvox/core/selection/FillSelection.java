@@ -13,7 +13,6 @@ import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 public class FillSelection extends BlockSelection {
     private VoxelBlock block;
     private double integrity;
-    private Clipboard backwardClip = new Clipboard();
 
     public FillSelection(Region3d region3d, Parallelepiped bound, VoxelBlock block, double integrity) {
         super(region3d, bound);
@@ -28,11 +27,6 @@ public class FillSelection extends BlockSelection {
         clientWorld = new IntegrityClientWorld(integrity, clientWorld);
         WorldEdits.fill(clientWorld, this, block);
         backwardClip = newBackwardClip;
-    }
-
-    @Override
-    public void setBackwardBlocks(ClientWorld clientWorld) {
-        WorldEdits.paste(backwardClip, clientWorld, Vector3d.ZERO);
     }
 
     @Override

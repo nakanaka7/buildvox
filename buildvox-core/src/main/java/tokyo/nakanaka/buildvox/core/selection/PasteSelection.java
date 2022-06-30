@@ -17,7 +17,6 @@ public class PasteSelection extends BlockSelection {
     private final Vector3d pos;
     private final AffineTransformation3d clipTrans;
     private final double integrity;
-    private Clipboard backwardClip = new Clipboard();
     private boolean masked;
     private VoxelBlock background;
 
@@ -83,11 +82,6 @@ public class PasteSelection extends BlockSelection {
         }
         WorldEdits.paste(clipboard, clientWorld, pos, clipTrans);
         backwardClip = newBackwardClip;
-    }
-
-    @Override
-    public void setBackwardBlocks(ClientWorld clientWorld) {
-        WorldEdits.paste(backwardClip, clientWorld, Vector3d.ZERO);
     }
 
     @Override
