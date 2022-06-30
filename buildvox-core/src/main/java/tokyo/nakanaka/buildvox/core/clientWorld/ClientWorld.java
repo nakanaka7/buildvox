@@ -10,23 +10,23 @@ import tokyo.nakanaka.buildvox.core.world.World;
  * The relation between World and ClientWorld is similar to File and Writer.
  */
 public class ClientWorld implements VoxelSpace<VoxelBlock> {
-    protected final World original;
+    protected final World world;
     protected boolean physics;
 
     /**
      * Constructs a new instance with an original World. The block setting physics will be set "false".
-     * @param original the original world.
+     * @param world the original world.
      */
-    public ClientWorld(World original) {
-        this.original = original;
+    public ClientWorld(World world) {
+        this.world = world;
     }
 
     /**
      * Constructs a new instance with an original World.
-     * @param original the original world.
+     * @param world the original world.
      */
-    public ClientWorld(World original, boolean physics) {
-        this.original = original;
+    public ClientWorld(World world, boolean physics) {
+        this.world = world;
         this.physics = physics;
     }
 
@@ -36,7 +36,7 @@ public class ClientWorld implements VoxelSpace<VoxelBlock> {
      * @return a block
      */
     public VoxelBlock getBlock(Vector3i pos) {
-        return original.getBlock(pos.x(), pos.y(), pos.z());
+        return world.getBlock(pos.x(), pos.y(), pos.z());
     }
 
     /**
@@ -45,7 +45,7 @@ public class ClientWorld implements VoxelSpace<VoxelBlock> {
      * @param block the block to set.
      */
     public void setBlock(Vector3i pos, VoxelBlock block) {
-        original.setBlock(pos.x(), pos.y(), pos.z(), block, physics);
+        world.setBlock(pos.x(), pos.y(), pos.z(), block, physics);
     }
 
 }

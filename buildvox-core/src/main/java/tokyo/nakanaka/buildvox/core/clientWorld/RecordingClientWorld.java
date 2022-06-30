@@ -14,7 +14,7 @@ public class RecordingClientWorld extends ClientWorld {
     private final Clipboard redoClip = new Clipboard();
 
     public RecordingClientWorld(ClientWorld clientWorld) {
-        super(clientWorld.original, clientWorld.physics);
+        super(clientWorld.world, clientWorld.physics);
         this.clientWorld = clientWorld;
     }
 

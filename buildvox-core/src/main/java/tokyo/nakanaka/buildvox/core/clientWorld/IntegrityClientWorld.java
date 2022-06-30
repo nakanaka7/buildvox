@@ -18,7 +18,7 @@ public class IntegrityClientWorld extends ClientWorld {
      * @throws IllegalArgumentException if the integrity is less than 0 or larger than 1.
      */
     public IntegrityClientWorld(double integrity, ClientWorld clientWorld) {
-        super(clientWorld.original, clientWorld.physics);
+        super(clientWorld.world, clientWorld.physics);
         if(integrity < 0 || 1 < integrity)throw new IllegalArgumentException();
         this.integrity = integrity;
         this.clientWorld = clientWorld;

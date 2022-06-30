@@ -2,7 +2,6 @@ package tokyo.nakanaka.buildvox.core.clientWorld;
 
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
-import tokyo.nakanaka.buildvox.core.world.World;
 
 /**
  * The client world which skips background block settings.
@@ -17,7 +16,7 @@ public class MaskedClientWorld extends ClientWorld {
      * @param original the original client world.
      */
     public MaskedClientWorld(VoxelBlock background, ClientWorld original) {
-        super(original.original, original.physics);
+        super(original.world, original.physics);
         this.background = background;
         this.cw = original;
     }
