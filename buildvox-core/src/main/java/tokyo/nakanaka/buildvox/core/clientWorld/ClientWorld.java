@@ -30,10 +30,6 @@ public class ClientWorld implements VoxelSpace<VoxelBlock> {
         this.physics = physics;
     }
 
-    public World getOriginal() {
-        return original;
-    }
-
     /**
      * Get a block at the specified position
      * @param pos the position of the block
