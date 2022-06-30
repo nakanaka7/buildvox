@@ -13,6 +13,10 @@ public class RecordingClientWorld extends ClientWorld {
     private final Clipboard undoClip = new Clipboard();
     private final Clipboard redoClip = new Clipboard();
 
+    /**
+     * Creates a new instance.
+     * @param clientWorld the original client world.
+     */
     public RecordingClientWorld(ClientWorld clientWorld) {
         super(clientWorld.getWorld(), clientWorld.getPhysics());
         this.clientWorld = clientWorld;
