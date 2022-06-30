@@ -23,7 +23,6 @@ public abstract class BlockSelection extends Selection {
     protected Clipboard backwardClip = new Clipboard();
     protected double integrity;
     protected boolean masked;
-    protected VoxelBlock background;
 
     public BlockSelection(Region3d region3d, Parallelepiped bound) {
         super(region3d, bound);
@@ -46,7 +45,7 @@ public abstract class BlockSelection extends Selection {
         WorldEdits.copy(playerWorld, this, Vector3d.ZERO, newBackwardClip);
         ClientWorld clientWorld = new IntegrityClientWorld(integrity, playerWorld);
         if(masked) {
-            clientWorld = new MaskedClientWorld(background, playerWorld);
+            clientWorld = new MaskedClientWorld(playerWorld.getPlayer().getBackgroundBlock(), playerWorld);
         }
         setRawForwardBlocks(clientWorld);
         backwardClip = newBackwardClip;
