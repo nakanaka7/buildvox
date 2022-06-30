@@ -1,6 +1,6 @@
 package tokyo.nakanaka.buildvox.core.selection;
 
-import tokyo.nakanaka.buildvox.core.edit.Clipboard;
+import tokyo.nakanaka.buildvox.core.Clipboard;
 import tokyo.nakanaka.buildvox.core.edit.WorldEdits;
 import tokyo.nakanaka.buildvox.core.clientWorld.ClientWorld;
 import tokyo.nakanaka.buildvox.core.clientWorld.IntegrityClientWorld;

@@ -1,6 +1,6 @@
 package tokyo.nakanaka.buildvox.core.clientWorld;
 
-import tokyo.nakanaka.buildvox.core.edit.Clipboard;
+import tokyo.nakanaka.buildvox.core.Clipboard;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.world.World;
