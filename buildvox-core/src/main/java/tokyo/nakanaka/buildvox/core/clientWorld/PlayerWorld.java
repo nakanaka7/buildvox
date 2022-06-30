@@ -19,7 +19,7 @@ public class PlayerWorld extends ClientWorld {
     private final Selection initSel;
     private final RecordingClientWorld recordingWorld;
 
-    /***
+    /**
      * Creates a new instance.
      * @param player the player.
      */
@@ -29,6 +29,14 @@ public class PlayerWorld extends ClientWorld {
         this.initPosArray = player.getPosArrayClone();
         this.initSel = player.getSelection();
         this.recordingWorld = new RecordingClientWorld(new ClientWorld(player.getEditWorld()));
+    }
+
+    /**
+     * Gets the player.
+     * @return the player.
+     */
+    public Player getPlayer() {
+        return player;
     }
 
     /**
