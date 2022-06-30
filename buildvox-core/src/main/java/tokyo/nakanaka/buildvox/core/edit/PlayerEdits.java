@@ -286,7 +286,9 @@ public class PlayerEdits {
      * @return the edit-exit.
      */
     public static EditExit fill(Player player, Selection selection, VoxelBlock block, double integrity) {
-        FillSelection fillSelection = new FillSelection(selection.getRegion3d(), selection.getBound(), block, integrity);
+        FillSelection fillSelection = new FillSelection.Builder(block, selection)
+                .integrity(integrity)
+                .build();
         PlayerWorld pw = new PlayerWorld(player);
         fillSelection.setForwardBlocks(pw);
         pw.setSelection(fillSelection);
