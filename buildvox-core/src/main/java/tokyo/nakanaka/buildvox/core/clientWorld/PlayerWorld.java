@@ -28,7 +28,7 @@ public class PlayerWorld extends ClientWorld {
         this.player = player;
         this.initPosArray = player.getPosArrayClone();
         this.initSel = player.getSelection();
-        this.recordingWorld = new RecordingClientWorld(player.getEditWorld());
+        this.recordingWorld = new RecordingClientWorld(new ClientWorld(player.getEditWorld()));
     }
 
     /**
