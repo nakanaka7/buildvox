@@ -7,7 +7,7 @@ import tokyo.nakanaka.buildvox.core.world.World;
 
 /**
  * A wrapped class of World. World is unique object (it has getId() method), whereas ClientWorld is not unique one.
- * The relation between World and ClientWorld is as same as File and stream object.
+ * The relation between World and ClientWorld is similar to File and stream object(FileWriter, BufferedWriter...).
  */
 public class ClientWorld implements VoxelSpace<VoxelBlock> {
     protected final World original;
