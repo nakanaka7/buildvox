@@ -211,7 +211,7 @@ public class PlayerEdits {
             clipboard.lock();
             AffineTransformation3d newClipTrans = trans.linear();
             Vector3d pasteOffset = trans.apply(copyOffset);
-            selectionTo = PasteSelection.newInstance(clipboard, pasteOffset, newClipTrans);
+            selectionTo = new PasteSelection.Builder(clipboard, pasteOffset).clipTrans(newClipTrans).build();
         }
         PlayerWorld pw = new PlayerWorld(player);
         if (selectionFrom instanceof BlockSelection blockSelection) {
@@ -268,8 +268,9 @@ public class PlayerEdits {
         if(clipboard == null){
             throw new IllegalStateException();
         }
-        PasteSelection pasteSelection = PasteSelection.newInstance(clipboard, pos, AffineTransformation3d.IDENTITY,
-                integrity, masked, player.getBackgroundBlock());
+        PasteSelection pasteSelection = new PasteSelection.Builder(clipboard, pos)
+                .integrity(integrity)
+                .masked(masked).build();
         PlayerWorld pw = new PlayerWorld(player);
         pasteSelection.setForwardBlocks(pw);
         pw.setSelection(pasteSelection);
@@ -425,7 +426,7 @@ public class PlayerEdits {
             double qx = pos.x() * dx;
             double qy = pos.y() * dy;
             double qz = pos.z() * dz;
-            PasteSelection pasteSel = PasteSelection.newInstance(clip, new Vector3d(qx, qy, qz), AffineTransformation3d.IDENTITY);
+            PasteSelection pasteSel = new PasteSelection.Builder(clip, new Vector3d(qx, qy, qz)).build();
             pasteSel.setForwardBlocks(pw);
             pw.setSelection(pasteSel);
         }
