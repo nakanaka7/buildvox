@@ -1,6 +1,7 @@
 package tokyo.nakanaka.buildvox.core.selection;
 
 import tokyo.nakanaka.buildvox.core.Clipboard;
+import tokyo.nakanaka.buildvox.core.clientWorld.PlayerWorld;
 import tokyo.nakanaka.buildvox.core.edit.WorldEdits;
 import tokyo.nakanaka.buildvox.core.clientWorld.ClientWorld;
 import tokyo.nakanaka.buildvox.core.clientWorld.IntegrityClientWorld;
@@ -73,12 +74,12 @@ public class PasteSelection extends BlockSelection {
     }
 
     @Override
-    public void setForwardBlocks(ClientWorld clientWorld) {
+    public void setForwardBlocks(PlayerWorld playerWorld) {
         Clipboard newBackwardClip = new Clipboard();
-        WorldEdits.copy(clientWorld, this, Vector3d.ZERO, newBackwardClip);
-        clientWorld = new IntegrityClientWorld(integrity, clientWorld);
+        WorldEdits.copy(playerWorld, this, Vector3d.ZERO, newBackwardClip);
+        ClientWorld clientWorld = new IntegrityClientWorld(integrity, playerWorld);
         if(masked) {
-            clientWorld = new MaskedClientWorld(background, clientWorld);
+            clientWorld = new MaskedClientWorld(background, playerWorld);
         }
         WorldEdits.paste(clipboard, clientWorld, pos, clipTrans);
         backwardClip = newBackwardClip;

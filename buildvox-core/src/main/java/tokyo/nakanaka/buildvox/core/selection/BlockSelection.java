@@ -35,7 +35,7 @@ public abstract class BlockSelection extends Selection {
      * Set forward blocks.
      * @param clientWorld a world to set blocks.
      */
-    public abstract void setForwardBlocks(ClientWorld clientWorld);
+    public abstract void setForwardBlocks(PlayerWorld playerWorld);
 
     /**
      * Set backward blocks.
