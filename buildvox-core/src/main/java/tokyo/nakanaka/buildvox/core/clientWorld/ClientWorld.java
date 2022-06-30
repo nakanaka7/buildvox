@@ -1,14 +1,13 @@
 package tokyo.nakanaka.buildvox.core.clientWorld;
 
-import tokyo.nakanaka.buildvox.core.edit.WorldEdits;
 import tokyo.nakanaka.buildvox.core.VoxelSpace;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.world.World;
 
 /**
- * A wrapped class of World used by {@link WorldEdits}. This class's instance fixes
- * physics of block settings.
+ * A wrapped class of World. World is unique object (it has getId() method), whereas ClientWorld is not unique one.
+ * The relation between World and ClientWorld is as same as File and stream object.
  */
 public class ClientWorld implements VoxelSpace<VoxelBlock> {
     protected final World original;
