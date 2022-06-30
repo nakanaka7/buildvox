@@ -81,7 +81,7 @@ public class PlayerWorld extends ClientWorld {
         compoundEdit.addEdit(blockEdit);
         compoundEdit.end();
         player.getUndoManager().addEdit(compoundEdit);
-        return new EditExit(recordingWorld.changingBlockCount(), 0, 0);
+        return new EditExit(recordingWorld.blockCount(), 0, 0);
     }
 
 }

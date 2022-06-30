@@ -32,7 +32,11 @@ public class RecordingClientWorld extends ClientWorld {
         clientWorld.setBlock(pos, block);
     }
 
-    public int changingBlockCount() {
+    /**
+     * Gets the changing block count.
+     * @return the changing block count.
+     */
+    public int blockCount() {
         return undoClip.blockCount();
     }
 
