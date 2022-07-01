@@ -24,7 +24,6 @@ import java.util.Iterator;
                 FillCommand.class, ReplaceCommand.class,
                 CopyCommand.class, CutCommand.class, PasteCommand.class,
                 RepeatCommand.class,
-                SelectCommand.class
         })
 public class BvCommand implements Runnable {
     @CommandLine.Spec
