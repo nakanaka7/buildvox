@@ -1,6 +1,6 @@
 package tokyo.nakanaka.buildvox.core.particleGui;
 
-import tokyo.nakanaka.buildvox.core.world.World;
+import tokyo.nakanaka.buildvox.core.World;
 
 /**
  * An object which spawn particles.

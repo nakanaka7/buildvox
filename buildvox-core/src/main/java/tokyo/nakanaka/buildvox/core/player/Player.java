@@ -10,7 +10,7 @@ import tokyo.nakanaka.buildvox.core.selection.PasteSelection;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
-import tokyo.nakanaka.buildvox.core.world.World;
+import tokyo.nakanaka.buildvox.core.World;
 
 import javax.swing.undo.UndoManager;
 import java.util.Arrays;

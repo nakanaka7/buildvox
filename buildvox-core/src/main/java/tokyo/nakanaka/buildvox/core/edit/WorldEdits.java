@@ -14,7 +14,7 @@ import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
-import tokyo.nakanaka.buildvox.core.world.World;
+import tokyo.nakanaka.buildvox.core.World;
 
 import java.util.HashSet;
 import java.util.Map;

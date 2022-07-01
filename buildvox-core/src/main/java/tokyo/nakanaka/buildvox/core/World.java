@@ -1,7 +1,5 @@
-package tokyo.nakanaka.buildvox.core.world;
+package tokyo.nakanaka.buildvox.core;
 
-import tokyo.nakanaka.buildvox.core.NamespacedId;
-import tokyo.nakanaka.buildvox.core.Identifiable;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 
 /**

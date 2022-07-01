@@ -6,7 +6,7 @@ import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.particleGui.Color;
 import tokyo.nakanaka.buildvox.core.player.PlayerEntity;
 import tokyo.nakanaka.buildvox.core.player.RealPlayer;
-import tokyo.nakanaka.buildvox.core.world.World;
+import tokyo.nakanaka.buildvox.core.World;
 
 import java.util.UUID;
 
