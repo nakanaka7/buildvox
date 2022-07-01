@@ -6,7 +6,7 @@ import tokyo.nakanaka.buildvox.core.EditExit;
 import tokyo.nakanaka.buildvox.core.selectionShape.MissingPosException;
 import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
 import tokyo.nakanaka.buildvox.core.command.SelectionShapeParameter;
-import tokyo.nakanaka.buildvox.core.command.mixin.PosMixin;
+import tokyo.nakanaka.buildvox.core.command.PosMixin;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
 import tokyo.nakanaka.buildvox.core.player.Player;
