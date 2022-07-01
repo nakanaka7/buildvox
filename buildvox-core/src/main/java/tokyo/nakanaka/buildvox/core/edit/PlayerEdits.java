@@ -161,22 +161,6 @@ public class PlayerEdits {
     }
 
     /**
-     * Reflects the blocks in the player's selection.
-     * @param player the player.
-     * @param axis the direction of reflection.
-     * @param pos the block position which the reflection plane goes throw.
-     * @return the edit exit.
-     */
-    public static EditExit reflect(Player player, Axis axis, Vector3d pos) {
-        AffineTransformation3d relativeTrans = switch (axis){
-            case X -> AffineTransformation3d.ofScale(- 1, 1, 1);
-            case Y -> AffineTransformation3d.ofScale(1, - 1, 1);
-            case Z -> AffineTransformation3d.ofScale(1, 1, - 1);
-        };
-        return affineTransform(player, pos, relativeTrans);
-    }
-
-    /**
      * Rotates the blocks in the player's selection.
      * @param player the player
      * @param axis the axis which parallels to the rotating-axis.
@@ -198,41 +182,6 @@ public class PlayerEdits {
     }
 
     /**
-     * Rotates the blocks in the player's selection.
-     * @param player the player
-     * @param axis the axis which parallels to the rotating-axis.
-     * @param angle the rotation angle.
-     * @param pos the block position which the rotating-axis goes throw.
-     * @return the edit exit.
-     * @throws SelectionNotFoundException if a selection is not found
-     */
-    public static EditExit rotate(Player player, Axis axis, double angle, Vector3d pos) {
-        double angleRad = angle * Math.PI / 180;
-        AffineTransformation3d relativeTrans = switch (axis){
-            case X -> AffineTransformation3d.ofRotationX(angleRad);
-            case Y -> AffineTransformation3d.ofRotationY(angleRad);
-            case Z -> AffineTransformation3d.ofRotationZ(angleRad);
-        };
-        return affineTransform(player, pos, relativeTrans);
-    }
-
-    /**
-     * Scales the blocks in the player's selection.
-     * @param player the player
-     * @param factorX the scale factor about x-axis.
-     * @param factorY the scale factor about y-axis.
-     * @param factorZ the scale factor about z-axis.
-     * @param pos the center position of scaling.
-     * @return the edit exit.
-     * @throws SelectionNotFoundException if a selection is not found
-     */
-    public static EditExit scale(Player player, double factorX, double factorY, double factorZ, Vector3d pos) {
-        if(factorX * factorY * factorZ == 0) throw new IllegalArgumentException();
-        AffineTransformation3d relativeTrans = AffineTransformation3d.ofScale(factorX, factorY, factorZ);
-        return affineTransform(player, pos, relativeTrans);
-    }
-
-    /**
      * Scales the blocks in the player's selection.
      * @param player the player
      * @param factorX the scale factor about x-axis.
@@ -248,25 +197,6 @@ public class PlayerEdits {
         if(factorX * factorY * factorZ == 0) throw new IllegalArgumentException();
         AffineTransformation3d relativeTrans = AffineTransformation3d.ofScale(factorX, factorY, factorZ);
         return affineTransform(player, pos, relativeTrans, options);
-    }
-
-    /**
-     * Shears the blocks in the player's selection.
-     * @param player the player.
-     * @param axis the axis.
-     * @param factorI the 1st factor.
-     * @param factorJ the 2nd factor.
-     * @param pos the center position of shearing.
-     * @return the edit-exit
-     * @throws SelectionNotFoundException if a selection is not found
-     */
-    public static EditExit shear(Player player, Axis axis, double factorI, double factorJ, Vector3d pos) {
-        AffineTransformation3d relativeTrans = switch (axis) {
-            case X -> AffineTransformation3d.ofShearX(factorI, factorJ);
-            case Y -> AffineTransformation3d.ofShearY(factorI, factorJ);
-            case Z -> AffineTransformation3d.ofShearZ(factorI, factorJ);
-        };
-        return affineTransform(player, pos, relativeTrans);
     }
 
     /**
@@ -297,20 +227,6 @@ public class PlayerEdits {
      * @param dy the displacement along y-axis.
      * @param dz the displacement along z-axis.
      * @return the edit exit.
-     * @throws SelectionNotFoundException if a selection is not found
-     */
-    public static EditExit translate(Player player, double dx, double dy, double dz) {
-        AffineTransformation3d relativeTrans = AffineTransformation3d.ofTranslation(dx, dy, dz);
-        return affineTransform(player, Vector3d.ZERO, relativeTrans);
-    }
-
-    /**
-     * Translates the blocks in the player's selection.
-     * @param player the player.
-     * @param dx the displacement along x-axis.
-     * @param dy the displacement along y-axis.
-     * @param dz the displacement along z-axis.
-     * @return the edit exit.
      * @throws MissingPosException if player does not have a selection and some pos are missing.
      * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
      * the shape.
@@ -318,40 +234,6 @@ public class PlayerEdits {
     public static EditExit translate(Player player, double dx, double dy, double dz, Options options) {
         AffineTransformation3d relativeTrans = AffineTransformation3d.ofTranslation(dx, dy, dz);
         return affineTransform(player, Vector3d.ZERO, relativeTrans, options);
-    }
-
-    /**
-     * Affine transform the player's selection.
-     * @param player the player.
-     * @param pos the block position of the center of affine transformation
-     * @param relativeTrans the affine transformation.
-     * @return the edit exit.
-     * @throws SelectionNotFoundException if a selection is not found
-     */
-    private static EditExit affineTransform(Player player, Vector3d pos, AffineTransformation3d relativeTrans) {
-        Selection selectionFrom = findSelection(player);
-        AffineTransformation3d trans = AffineTransformation3d.withOffset(relativeTrans, pos.x() + 0.5, pos.y() + 0.5, pos.z() + 0.5);
-        BlockSelection selectionTo;
-        if(selectionFrom instanceof BlockSelection blockSelection) {
-            selectionTo = blockSelection.affineTransform(trans);
-        }else {
-            Clipboard clipboard = new Clipboard();
-            Vector3d copyOffset = Vector3d.ZERO;
-            WorldEdits.copy(new ClientWorld(player.getEditWorld()), selectionFrom, copyOffset, clipboard);
-            clipboard.lock();
-            AffineTransformation3d newClipTrans = trans.linear();
-            Vector3d pasteOffset = trans.apply(copyOffset);
-            selectionTo = new PasteSelection.Builder(clipboard, pasteOffset).clipTrans(newClipTrans).build();
-        }
-        PlayerClientWorld pw = new PlayerClientWorld(player);
-        if (selectionFrom instanceof BlockSelection blockSelection) {
-            blockSelection.setBackwardBlocks(pw);
-        } else {
-            WorldEdits.fill(pw, selectionFrom, player.getBackgroundBlock());
-        }
-        selectionTo.setForwardBlocks(pw);
-        pw.setSelection(selectionTo);
-        return pw.end();
     }
 
     /**
