@@ -278,20 +278,13 @@ public class PlayerEdits {
     }
 
     /**
-     * Copy options.
-     * @param shape nullable.
-     */
-    public static record CopyOptions(SelectionShape shape) {
-    }
-
-    /**
      * Copies the blocks in the selection.
      * @param pos the position which corresponds to the origin of the clipboard.
      * @throws MissingPosException if player does not have a selection and some pos are missing.
      * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
      * the shape.
      */
-    public static EditExit copy(Player player, Vector3d pos, CopyOptions options) {
+    public static EditExit copy(Player player, Vector3d pos, Options options) {
         Selection selection = findSelection(player, options.shape);
         Clipboard clipboard = new Clipboard();
         WorldEdits.copy(new ClientWorld(player.getEditWorld()), selection, pos, clipboard);
