@@ -3,8 +3,8 @@ package tokyo.nakanaka.buildvox.core.command.bvCommand.affineTransformCommand;
 import picocli.CommandLine;
 import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.EditExit;
+import tokyo.nakanaka.buildvox.core.command.NumberCompletionCandidates;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
-import tokyo.nakanaka.buildvox.core.command.completionCandidates.DoubleCandidates;
 import tokyo.nakanaka.buildvox.core.command.PosMixin;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
@@ -20,11 +20,11 @@ public class ScaleCommand implements Runnable {
     private CommandLine.Model.CommandSpec commandSpec;
     @CommandLine.ParentCommand
     private BvCommand bvCmd;
-    @CommandLine.Parameters(description = "The scale factor along x-axis.", completionCandidates = DoubleCandidates.class)
+    @CommandLine.Parameters(description = "The scale factor along x-axis.", completionCandidates = NumberCompletionCandidates.DoubleCandidates.class)
     private Double factorX;
-    @CommandLine.Parameters(description = "The scale factor along y-axis.", completionCandidates = DoubleCandidates.class)
+    @CommandLine.Parameters(description = "The scale factor along y-axis.", completionCandidates = NumberCompletionCandidates.DoubleCandidates.class)
     private Double factorY;
-    @CommandLine.Parameters(description = "The scale factor along z-axis.", completionCandidates = DoubleCandidates.class)
+    @CommandLine.Parameters(description = "The scale factor along z-axis.", completionCandidates = NumberCompletionCandidates.DoubleCandidates.class)
     private Double factorZ;
     @CommandLine.Mixin
     private PosMixin posMixin;
