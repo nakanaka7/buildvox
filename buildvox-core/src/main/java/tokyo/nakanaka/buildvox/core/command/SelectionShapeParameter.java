@@ -4,7 +4,7 @@ import static picocli.CommandLine.*;
 
 import picocli.CommandLine;
 import tokyo.nakanaka.buildvox.core.ParseUtils;
-import tokyo.nakanaka.buildvox.core.command.mixin.shapeMixin.*;
+import tokyo.nakanaka.buildvox.core.selectionShape.shapeMixin.*;
 import tokyo.nakanaka.buildvox.core.selectionShape.SelectionShape;
 import tokyo.nakanaka.buildvox.core.selectionShape.SelectionShapeImpl;
 

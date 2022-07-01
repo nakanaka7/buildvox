@@ -1,4 +1,4 @@
-package tokyo.nakanaka.buildvox.core.command.mixin.shapeMixin;
+package tokyo.nakanaka.buildvox.core.selectionShape.shapeMixin;
 
 import static picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.command.MissingPosException;

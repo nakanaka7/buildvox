@@ -1,16 +1,19 @@
-package tokyo.nakanaka.buildvox.core.command.mixin.shapeMixin;
+package tokyo.nakanaka.buildvox.core.selectionShape.shapeMixin;
 
-import picocli.CommandLine.*;
+import static picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.command.MissingPosException;
 import tokyo.nakanaka.buildvox.core.command.PosArrayLengthException;
+import tokyo.nakanaka.buildvox.core.command.completionCandidates.PositiveIntegerCandidates;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
 import tokyo.nakanaka.buildvox.core.selection.SelectionCreations;
 
 @Command
-public class TorusMixin implements ShapeMixin {
+public class FrameMixin implements ShapeMixin {
+    @Option(names = {"-t", "--thickness"}, defaultValue = "1", completionCandidates = PositiveIntegerCandidates.class)
+    private int thickness;
 
-    public static final String DESCRIPTION = "a torus region in the cuboid by pos0 and pos1";
+    public static final String DESCRIPTION = "a frame region of the cuboid by pos0 and pos1";
 
     @Override
     public Selection createSelection(Vector3i[] posArray) {
@@ -22,7 +25,11 @@ public class TorusMixin implements ShapeMixin {
         if (pos0 == null || pos1 == null) {
             throw new MissingPosException();
         }
-        return SelectionCreations.createTorus(pos0, pos1);
+        try {
+            return SelectionCreations.createFrame(pos0, pos1, thickness);
+        }catch (IllegalArgumentException ex) {
+            throw new IllegalStateException();
+        }
     }
 
 }
