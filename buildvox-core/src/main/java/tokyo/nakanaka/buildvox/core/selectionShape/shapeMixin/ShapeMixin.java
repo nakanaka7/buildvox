@@ -1,7 +1,7 @@
 package tokyo.nakanaka.buildvox.core.selectionShape.shapeMixin;
 
-import tokyo.nakanaka.buildvox.core.command.MissingPosException;
-import tokyo.nakanaka.buildvox.core.command.PosArrayLengthException;
+import tokyo.nakanaka.buildvox.core.selectionShape.MissingPosException;
+import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
 

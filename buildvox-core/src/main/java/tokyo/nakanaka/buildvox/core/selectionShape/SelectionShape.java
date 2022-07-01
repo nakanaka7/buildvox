@@ -1,6 +1,5 @@
 package tokyo.nakanaka.buildvox.core.selectionShape;
 
-import tokyo.nakanaka.buildvox.core.command.PosArrayLengthException;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
 
