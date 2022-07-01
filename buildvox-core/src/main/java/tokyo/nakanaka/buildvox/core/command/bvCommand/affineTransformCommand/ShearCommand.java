@@ -3,9 +3,9 @@ package tokyo.nakanaka.buildvox.core.command.bvCommand.affineTransformCommand;
 import picocli.CommandLine;
 import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.EditExit;
+import tokyo.nakanaka.buildvox.core.command.NumberCompletionCandidates;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
-import tokyo.nakanaka.buildvox.core.command.completionCandidates.DoubleCandidates;
-import tokyo.nakanaka.buildvox.core.command.mixin.PosMixin;
+import tokyo.nakanaka.buildvox.core.command.PosMixin;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
 import tokyo.nakanaka.buildvox.core.player.Player;
@@ -24,10 +24,10 @@ public class ShearCommand implements Runnable {
     @CommandLine.Parameters(description = "i-axis. i, j, and k are the cyclic set of {x, y, z}")
     private Axis axisI;
     @CommandLine.Parameters(description = "The displacement along j-axis per +1 block along i-axis."
-            , completionCandidates = DoubleCandidates.class)
+            , completionCandidates = NumberCompletionCandidates.Double.class)
     private Double factorJ;
     @CommandLine.Parameters(description = "The displacement along k-axis per +1 block along i-axis"
-            , completionCandidates = DoubleCandidates.class)
+            , completionCandidates = NumberCompletionCandidates.Double.class)
     private Double factorK;
     @CommandLine.Mixin
     private PosMixin posMixin;
