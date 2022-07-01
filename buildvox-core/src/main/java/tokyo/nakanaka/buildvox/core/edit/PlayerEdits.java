@@ -73,6 +73,15 @@ public class PlayerEdits {
     }
 
     /**
+     * General options.
+     */
+    public static class Options {
+        public boolean masked = false;
+        public double integrity = 1.0;
+        public SelectionShape shape = null;
+    }
+
+    /**
      * The exception which represents a selection was not found.
      */
     public static class SelectionNotFoundException extends RuntimeException {
