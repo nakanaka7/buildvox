@@ -5,6 +5,8 @@ import tokyo.nakanaka.buildvox.core.EditExit;
 import tokyo.nakanaka.buildvox.core.clientWorld.ClientWorld;
 import tokyo.nakanaka.buildvox.core.clientWorld.IntegrityClientWorld;
 import tokyo.nakanaka.buildvox.core.clientWorld.PlayerClientWorld;
+import tokyo.nakanaka.buildvox.core.selectionShape.MissingPosException;
+import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
 import tokyo.nakanaka.buildvox.core.math.Drawings;
 import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
 import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
@@ -13,6 +15,8 @@ import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.property.Axis;
 import tokyo.nakanaka.buildvox.core.selection.*;
+import tokyo.nakanaka.buildvox.core.selectionShape.SelectionCreations;
+import tokyo.nakanaka.buildvox.core.selectionShape.SelectionShape;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 
@@ -83,6 +87,28 @@ public class PlayerEdits {
             return SelectionCreations.createDefault(player.getPosArrayClone());
         }else{
             throw new SelectionNotFoundException();
+        }
+    }
+
+    /**
+     * Finds a selection if possible.
+     * @param player the player.
+     * @param shape the selection shape. Nullable.
+     * @return a selection if possible.
+     * @throws MissingPosException if player does not have a selection and some pos are missing.
+     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
+     * the shape.
+     */
+    private static Selection findSelection(Player player, SelectionShape shape) {
+        Selection selection = player.getSelection();
+        if(selection != null && shape == null) return selection;
+        Vector3i[] posArray = player.getPosArrayClone();
+        boolean posArrayIsFull = Arrays.stream(posArray).allMatch(Objects::nonNull);
+        if(!posArrayIsFull) throw new MissingPosException();
+        if(shape != null) {
+            return shape.createSelection(posArray);
+        }else {
+            return SelectionCreations.createDefault(posArray);
         }
     }
 
@@ -243,12 +269,21 @@ public class PlayerEdits {
     }
 
     /**
+     * Copy options.
+     * @param shape nullable.
+     */
+    public static record CopyOptions(SelectionShape shape) {
+    }
+
+    /**
      * Copies the blocks in the selection.
      * @param pos the position which corresponds to the origin of the clipboard.
-     * @throws SelectionNotFoundException if a selection is not found
+     * @throws MissingPosException if player does not have a selection and some pos are missing.
+     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
+     * the shape.
      */
-    public static EditExit copy(Player player, Vector3d pos) {
-        Selection selection = findSelection(player);
+    public static EditExit copy(Player player, Vector3d pos, CopyOptions options) {
+        Selection selection = findSelection(player, options.shape);
         Clipboard clipboard = new Clipboard();
         WorldEdits.copy(new ClientWorld(player.getEditWorld()), selection, pos, clipboard);
         clipboard.lock();
@@ -278,22 +313,33 @@ public class PlayerEdits {
     }
 
     /**
+     * Fill options.
+     * @param shape Nullable.
+     */
+    public static record FillOptions(double integrity, boolean masked, SelectionShape shape) {
+
+    }
+
+    /**
      * Fills the block into the selection
      * @param player the player.
-     * @param selection the selection.
      * @param block the block
-     * @param integrity the integrity of block-setting.
+     * @param options the fill options.
      * @return the edit-exit.
+     * @throws MissingPosException if player does not have a selection and some pos are missing.
+     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
+     * the shape.
      */
-    public static EditExit fill(Player player, Selection selection, VoxelBlock block, double integrity, boolean masked) {
+    public static EditExit fill(Player player, VoxelBlock block, FillOptions options) {
+        Selection selection = findSelection(player, options.shape);
         FillSelection fillSelection = new FillSelection.Builder(block, selection)
-                .integrity(integrity)
-                .masked(masked)
+                .integrity(options.integrity())
+                .masked(options.masked())
                 .build();
-        PlayerClientWorld pw = new PlayerClientWorld(player);
-        fillSelection.setForwardBlocks(pw);
-        pw.setSelection(fillSelection);
-        return pw.end();
+        PlayerClientWorld pcw = new PlayerClientWorld(player);
+        fillSelection.setForwardBlocks(pcw);
+        pcw.setSelection(fillSelection);
+        return pcw.end();
     }
 
     /**
@@ -317,6 +363,34 @@ public class PlayerEdits {
         WorldEdits.replace(icw, sel, blockFrom, blockTo);
         pw.setSelection(selTo);
         return pw.end();
+    }
+
+    public static record ReplaceOptions(double integrity, boolean masked, SelectionShape shape) {
+
+    }
+
+    /**
+     * Replaces blocks.
+     * @param player the player.
+     * @param blockFrom the block to be replaced from
+     * @param blockTo the block to be replaced to
+     * @param options the options.
+     * @return the edit-exit.
+     * @throws IllegalArgumentException if integrity is less than 0 or larger than 1.
+     */
+    public static EditExit replace(Player player, VoxelBlock blockFrom, VoxelBlock blockTo, ReplaceOptions options) {
+        Selection selTo;
+        var sel = findSelection(player, options.shape());
+        if(sel instanceof BlockSelection bs) {
+            selTo = bs.toNonBlock();
+        }else {
+            selTo = sel;
+        }
+        PlayerClientWorld pcw = new PlayerClientWorld(player);
+        IntegrityClientWorld icw = new IntegrityClientWorld(options.integrity(), pcw);
+        WorldEdits.replace(icw, sel, blockFrom, blockTo);
+        pcw.setSelection(selTo);
+        return pcw.end();
     }
 
     /**

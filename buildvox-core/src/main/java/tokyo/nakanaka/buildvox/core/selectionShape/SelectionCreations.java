@@ -1,4 +1,4 @@
-package tokyo.nakanaka.buildvox.core.selection;
+package tokyo.nakanaka.buildvox.core.selectionShape;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +10,7 @@ import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.property.Axis;
 import tokyo.nakanaka.buildvox.core.property.Direction;
 import tokyo.nakanaka.buildvox.core.math.region3d.*;
+import tokyo.nakanaka.buildvox.core.selection.Selection;
 
 public class SelectionCreations {
     private SelectionCreations(){

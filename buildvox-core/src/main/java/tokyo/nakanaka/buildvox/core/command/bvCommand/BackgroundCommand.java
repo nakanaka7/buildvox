@@ -17,7 +17,7 @@ public class BackgroundCommand implements Runnable {
     @CommandLine.ParentCommand
     private BvCommand bvCmd;
     @CommandLine.Parameters(arity = "1",
-            description = "The block.", completionCandidates = BlockParameter.BlockCandidates.class)
+            description = "The block.", completionCandidates = BlockParameter.Candidates.class)
     private String block;
 
     @Override

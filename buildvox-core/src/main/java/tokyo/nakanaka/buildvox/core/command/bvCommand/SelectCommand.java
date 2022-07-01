@@ -2,13 +2,12 @@ package tokyo.nakanaka.buildvox.core.command.bvCommand;
 
 import picocli.CommandLine;
 import tokyo.nakanaka.buildvox.core.Messages;
-import tokyo.nakanaka.buildvox.core.command.IllegalPosException;
-import tokyo.nakanaka.buildvox.core.command.MissingPosDataException;
-import tokyo.nakanaka.buildvox.core.command.PosDataSizeException;
-import tokyo.nakanaka.buildvox.core.command.mixin.shapeMixin.*;
+import tokyo.nakanaka.buildvox.core.World;
+import tokyo.nakanaka.buildvox.core.selectionShape.MissingPosException;
+import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
+import tokyo.nakanaka.buildvox.core.selectionShape.shapeMixin.*;
 import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
-import tokyo.nakanaka.buildvox.core.World;
 
 import java.io.PrintWriter;
 
@@ -75,14 +74,11 @@ public class SelectCommand {
         Selection selection;
         try {
             selection = shapeMixin.createSelection(player.getPosArrayClone());
-        }catch (PosDataSizeException ex) {
+        }catch (PosArrayLengthException ex) {
             err.println(Messages.ofPosArrayLengthError(ex.getAcceptableSize()));
             return;
-        }catch (MissingPosDataException ex) {
+        }catch (MissingPosException ex) {
             err.println(Messages.INCOMPLETE_POS_DATA_ERROR);
-            return;
-        }catch (IllegalPosException ex) {
-            err.println(Messages.POS_DATA_ERROR);
             return;
         }catch (IllegalStateException ex) {
             err.println("Invalid shape argument(s)");
