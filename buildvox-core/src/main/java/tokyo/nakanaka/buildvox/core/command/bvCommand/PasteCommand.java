@@ -3,7 +3,7 @@ package tokyo.nakanaka.buildvox.core.command.bvCommand;
 import picocli.CommandLine;
 import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.EditExit;
-import tokyo.nakanaka.buildvox.core.command.mixin.IntegrityMixin;
+import tokyo.nakanaka.buildvox.core.command.IntegrityMixin;
 import tokyo.nakanaka.buildvox.core.command.PosMixin;
 import tokyo.nakanaka.buildvox.core.Clipboard;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;

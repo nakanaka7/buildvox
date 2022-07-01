@@ -8,7 +8,7 @@ import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.command.BlockParameter;
 import tokyo.nakanaka.buildvox.core.command.SelectionShapeParameter;
-import tokyo.nakanaka.buildvox.core.command.mixin.IntegrityMixin;
+import tokyo.nakanaka.buildvox.core.command.IntegrityMixin;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.selectionShape.SelectionShape;
