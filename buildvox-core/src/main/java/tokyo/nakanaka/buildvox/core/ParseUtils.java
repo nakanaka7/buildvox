@@ -13,7 +13,7 @@ public class ParseUtils {
     /**
      * Decompose "name[state]{entity}". "[state]" or "{entity}" may be skipped.
      * @return the name-state-entity.
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException if the format is invalid.
      */
     public static NameStateEntity parseNameStateEntity(String s) {
         String name;
@@ -55,7 +55,7 @@ public class ParseUtils {
      * Parses state map. "key=value1,key=value2,..." will be converted to a map.
      * @param state the state.
      * @return the state map.
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException if the format is invalid.
      */
     public static Map<String, String> parseStateMap(String state) {
         Map<String, String> stateMap = new HashMap<>();
