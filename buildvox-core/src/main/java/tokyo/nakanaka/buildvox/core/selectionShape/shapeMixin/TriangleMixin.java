@@ -6,7 +6,7 @@ import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
 import tokyo.nakanaka.buildvox.core.command.completionCandidates.PositiveIntegerCandidates;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
-import tokyo.nakanaka.buildvox.core.selection.SelectionCreations;
+import tokyo.nakanaka.buildvox.core.selectionShape.SelectionCreations;
 
 @Command
 public class TriangleMixin implements ShapeMixin {
