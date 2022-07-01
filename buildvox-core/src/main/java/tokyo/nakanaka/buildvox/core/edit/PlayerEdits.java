@@ -226,6 +226,22 @@ public class PlayerEdits {
     }
 
     /**
+     * Translates the blocks in the player's selection.
+     * @param player the player.
+     * @param dx the displacement along x-axis.
+     * @param dy the displacement along y-axis.
+     * @param dz the displacement along z-axis.
+     * @return the edit exit.
+     * @throws MissingPosException if player does not have a selection and some pos are missing.
+     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
+     * the shape.
+     */
+    public static EditExit translate(Player player, double dx, double dy, double dz, Options options) {
+        AffineTransformation3d relativeTrans = AffineTransformation3d.ofTranslation(dx, dy, dz);
+        return affineTransform(player, Vector3d.ZERO, relativeTrans, options);
+    }
+
+    /**
      * Affine transform the player's selection.
      * @param player the player.
      * @param pos the block position of the center of affine transformation
@@ -235,6 +251,42 @@ public class PlayerEdits {
      */
     private static EditExit affineTransform(Player player, Vector3d pos, AffineTransformation3d relativeTrans) {
         Selection selectionFrom = findSelection(player);
+        AffineTransformation3d trans = AffineTransformation3d.withOffset(relativeTrans, pos.x() + 0.5, pos.y() + 0.5, pos.z() + 0.5);
+        BlockSelection selectionTo;
+        if(selectionFrom instanceof BlockSelection blockSelection) {
+            selectionTo = blockSelection.affineTransform(trans);
+        }else {
+            Clipboard clipboard = new Clipboard();
+            Vector3d copyOffset = Vector3d.ZERO;
+            WorldEdits.copy(new ClientWorld(player.getEditWorld()), selectionFrom, copyOffset, clipboard);
+            clipboard.lock();
+            AffineTransformation3d newClipTrans = trans.linear();
+            Vector3d pasteOffset = trans.apply(copyOffset);
+            selectionTo = new PasteSelection.Builder(clipboard, pasteOffset).clipTrans(newClipTrans).build();
+        }
+        PlayerClientWorld pw = new PlayerClientWorld(player);
+        if (selectionFrom instanceof BlockSelection blockSelection) {
+            blockSelection.setBackwardBlocks(pw);
+        } else {
+            WorldEdits.fill(pw, selectionFrom, player.getBackgroundBlock());
+        }
+        selectionTo.setForwardBlocks(pw);
+        pw.setSelection(selectionTo);
+        return pw.end();
+    }
+
+    /**
+     * Affine transform the player's selection.
+     * @param player the player.
+     * @param pos the block position of the center of affine transformation
+     * @param relativeTrans the affine transformation.
+     * @return the edit exit.
+     * @throws MissingPosException if player does not have a selection and some pos are missing.
+     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
+     * the shape.
+     */
+    private static EditExit affineTransform(Player player, Vector3d pos, AffineTransformation3d relativeTrans, Options options) {
+        Selection selectionFrom = findSelection(player, options.shape);
         AffineTransformation3d trans = AffineTransformation3d.withOffset(relativeTrans, pos.x() + 0.5, pos.y() + 0.5, pos.z() + 0.5);
         BlockSelection selectionTo;
         if(selectionFrom instanceof BlockSelection blockSelection) {
