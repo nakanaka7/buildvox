@@ -147,6 +147,25 @@ public class PlayerEdits {
      * @param axis the direction of reflection.
      * @param pos the block position which the reflection plane goes throw.
      * @return the edit exit.
+     * @throws MissingPosException if player does not have a selection and some pos are missing.
+     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
+     * the shape.
+     */
+    public static EditExit reflect(Player player, Axis axis, Vector3d pos, Options options) {
+        AffineTransformation3d relativeTrans = switch (axis){
+            case X -> AffineTransformation3d.ofScale(- 1, 1, 1);
+            case Y -> AffineTransformation3d.ofScale(1, - 1, 1);
+            case Z -> AffineTransformation3d.ofScale(1, 1, - 1);
+        };
+        return affineTransform(player, pos, relativeTrans, options);
+    }
+
+    /**
+     * Reflects the blocks in the player's selection.
+     * @param player the player.
+     * @param axis the direction of reflection.
+     * @param pos the block position which the reflection plane goes throw.
+     * @return the edit exit.
      */
     public static EditExit reflect(Player player, Axis axis, Vector3d pos) {
         AffineTransformation3d relativeTrans = switch (axis){
@@ -155,6 +174,27 @@ public class PlayerEdits {
             case Z -> AffineTransformation3d.ofScale(1, 1, - 1);
         };
         return affineTransform(player, pos, relativeTrans);
+    }
+
+    /**
+     * Rotates the blocks in the player's selection.
+     * @param player the player
+     * @param axis the axis which parallels to the rotating-axis.
+     * @param angle the rotation angle.
+     * @param pos the block position which the rotating-axis goes throw.
+     * @return the edit exit.
+     * @throws MissingPosException if player does not have a selection and some pos are missing.
+     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
+     * the shape.
+     */
+    public static EditExit rotate(Player player, Axis axis, double angle, Vector3d pos, Options options) {
+        double angleRad = angle * Math.PI / 180;
+        AffineTransformation3d relativeTrans = switch (axis){
+            case X -> AffineTransformation3d.ofRotationX(angleRad);
+            case Y -> AffineTransformation3d.ofRotationY(angleRad);
+            case Z -> AffineTransformation3d.ofRotationZ(angleRad);
+        };
+        return affineTransform(player, pos, relativeTrans, options);
     }
 
     /**
@@ -193,6 +233,24 @@ public class PlayerEdits {
     }
 
     /**
+     * Scales the blocks in the player's selection.
+     * @param player the player
+     * @param factorX the scale factor about x-axis.
+     * @param factorY the scale factor about y-axis.
+     * @param factorZ the scale factor about z-axis.
+     * @param pos the center position of scaling.
+     * @return the edit exit.
+     * @throws MissingPosException if player does not have a selection and some pos are missing.
+     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
+     * the shape.
+     */
+    public static EditExit scale(Player player, double factorX, double factorY, double factorZ, Vector3d pos, Options options) {
+        if(factorX * factorY * factorZ == 0) throw new IllegalArgumentException();
+        AffineTransformation3d relativeTrans = AffineTransformation3d.ofScale(factorX, factorY, factorZ);
+        return affineTransform(player, pos, relativeTrans, options);
+    }
+
+    /**
      * Shears the blocks in the player's selection.
      * @param player the player.
      * @param axis the axis.
@@ -209,6 +267,27 @@ public class PlayerEdits {
             case Z -> AffineTransformation3d.ofShearZ(factorI, factorJ);
         };
         return affineTransform(player, pos, relativeTrans);
+    }
+
+    /**
+     * Shears the blocks in the player's selection.
+     * @param player the player.
+     * @param axis the axis.
+     * @param factorI the 1st factor.
+     * @param factorJ the 2nd factor.
+     * @param pos the center position of shearing.
+     * @return the edit-exit
+     * @throws MissingPosException if player does not have a selection and some pos are missing.
+     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
+     * the shape.
+     */
+    public static EditExit shear(Player player, Axis axis, double factorI, double factorJ, Vector3d pos, Options options) {
+        AffineTransformation3d relativeTrans = switch (axis) {
+            case X -> AffineTransformation3d.ofShearX(factorI, factorJ);
+            case Y -> AffineTransformation3d.ofShearY(factorI, factorJ);
+            case Z -> AffineTransformation3d.ofShearZ(factorI, factorJ);
+        };
+        return affineTransform(player, pos, relativeTrans, options);
     }
 
     /**
