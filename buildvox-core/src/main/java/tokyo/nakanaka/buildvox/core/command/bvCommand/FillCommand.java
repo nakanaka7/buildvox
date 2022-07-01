@@ -52,7 +52,10 @@ public class FillCommand implements Runnable {
         double integrity = integrityMixin.integrity();
         EditExit exit;
         if(filter == null) {
-            PlayerEdits.FillOptions options = new PlayerEdits.FillOptions(integrity, masked, shape);
+            var options = new PlayerEdits.Options();
+            options.integrity = integrity;
+            options.masked = masked;
+            options.shape = shape;
             try {
                 exit = PlayerEdits.fill(player, block, options);
             }catch (Exception ex) {

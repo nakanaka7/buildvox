@@ -315,14 +315,6 @@ public class PlayerEdits {
     }
 
     /**
-     * Fill options.
-     * @param shape Nullable.
-     */
-    public static record FillOptions(double integrity, boolean masked, SelectionShape shape) {
-
-    }
-
-    /**
      * Fills the block into the selection
      * @param player the player.
      * @param block the block
@@ -332,11 +324,11 @@ public class PlayerEdits {
      * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
      * the shape.
      */
-    public static EditExit fill(Player player, VoxelBlock block, FillOptions options) {
+    public static EditExit fill(Player player, VoxelBlock block, Options options) {
         Selection selection = findSelection(player, options.shape);
         FillSelection fillSelection = new FillSelection.Builder(block, selection)
-                .integrity(options.integrity())
-                .masked(options.masked())
+                .integrity(options.integrity)
+                .masked(options.masked)
                 .build();
         PlayerClientWorld pcw = new PlayerClientWorld(player);
         fillSelection.setForwardBlocks(pcw);
