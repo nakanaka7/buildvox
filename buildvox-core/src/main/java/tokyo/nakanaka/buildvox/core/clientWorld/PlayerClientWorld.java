@@ -13,7 +13,7 @@ import javax.swing.undo.UndoableEdit;
  * A client world for a player. Calling end() stores an undoable edit
  * into the player.
  */
-public class PlayerWorld extends ClientWorld {
+public class PlayerClientWorld extends ClientWorld {
     private final Player player;
     private final Vector3i[] initPosArray;
     private final Selection initSel;
@@ -23,7 +23,7 @@ public class PlayerWorld extends ClientWorld {
      * Creates a new instance.
      * @param player the player.
      */
-    public PlayerWorld(Player player) {
+    public PlayerClientWorld(Player player) {
         super(player.getEditWorld());
         this.player = player;
         this.initPosArray = player.getPosArrayClone();
