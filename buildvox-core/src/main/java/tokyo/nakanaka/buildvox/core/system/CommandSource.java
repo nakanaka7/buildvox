@@ -3,7 +3,6 @@ package tokyo.nakanaka.buildvox.core.system;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.RealPlayer;
-import tokyo.nakanaka.buildvox.core.world.World;
 
 import java.util.UUID;
 

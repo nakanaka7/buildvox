@@ -7,7 +7,7 @@ import tokyo.nakanaka.buildvox.core.command.completionCandidates.IntegerCandidat
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.Player;
-import tokyo.nakanaka.buildvox.core.world.World;
+import tokyo.nakanaka.buildvox.core.World;
 
 import java.io.PrintWriter;
 

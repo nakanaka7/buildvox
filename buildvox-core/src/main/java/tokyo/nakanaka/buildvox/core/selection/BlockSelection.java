@@ -4,13 +4,13 @@ import tokyo.nakanaka.buildvox.core.Clipboard;
 import tokyo.nakanaka.buildvox.core.clientWorld.ClientWorld;
 import tokyo.nakanaka.buildvox.core.clientWorld.IntegrityClientWorld;
 import tokyo.nakanaka.buildvox.core.clientWorld.MaskedClientWorld;
-import tokyo.nakanaka.buildvox.core.clientWorld.PlayerWorld;
+import tokyo.nakanaka.buildvox.core.clientWorld.PlayerClientWorld;
 import tokyo.nakanaka.buildvox.core.edit.WorldEdits;
 import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
 import tokyo.nakanaka.buildvox.core.math.region3d.Region3d;
 import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
-import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
+import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 
 /**
  * Represents block accompanied selection. Forward blocks are the blocks which are created at the same time when
@@ -38,13 +38,13 @@ public abstract class BlockSelection extends Selection {
 
     /**
      * Set forward blocks.
-     * @param playerWorld a world to set blocks.
+     * @param playerClientWorld a world to set blocks.
      */
-    public void setForwardBlocks(PlayerWorld playerWorld) {
+    public void setForwardBlocks(PlayerClientWorld playerClientWorld) {
         Clipboard newBackwardClip = new Clipboard();
-        WorldEdits.copy(playerWorld, this, Vector3d.ZERO, newBackwardClip);
-        VoxelBlock background = playerWorld.getPlayer().getBackgroundBlock();
-        ClientWorld clientWorld = playerWorld;
+        WorldEdits.copy(playerClientWorld, this, Vector3d.ZERO, newBackwardClip);
+        VoxelBlock background = playerClientWorld.getPlayer().getBackgroundBlock();
+        ClientWorld clientWorld = playerClientWorld;
         if(masked) {
             clientWorld = new MaskedClientWorld(background, clientWorld);
         }
@@ -62,10 +62,10 @@ public abstract class BlockSelection extends Selection {
 
     /**
      * Set backward blocks.
-     * @param playerWorld a world to set blocks.
+     * @param playerClientWorld a world to set blocks.
      */
-    public void setBackwardBlocks(PlayerWorld playerWorld) {
-        WorldEdits.paste(backwardClip, playerWorld, Vector3d.ZERO);
+    public void setBackwardBlocks(PlayerClientWorld playerClientWorld) {
+        WorldEdits.paste(backwardClip, playerClientWorld, Vector3d.ZERO);
     }
 
     @Override

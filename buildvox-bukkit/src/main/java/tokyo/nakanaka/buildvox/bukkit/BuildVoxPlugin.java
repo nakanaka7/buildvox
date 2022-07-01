@@ -27,7 +27,7 @@ import tokyo.nakanaka.buildvox.core.system.Messenger;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.RealPlayer;
-import tokyo.nakanaka.buildvox.core.world.World;
+import tokyo.nakanaka.buildvox.core.World;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;

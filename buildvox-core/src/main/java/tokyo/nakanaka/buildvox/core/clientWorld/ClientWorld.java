@@ -2,8 +2,8 @@ package tokyo.nakanaka.buildvox.core.clientWorld;
 
 import tokyo.nakanaka.buildvox.core.VoxelSpace;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
-import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
-import tokyo.nakanaka.buildvox.core.world.World;
+import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
+import tokyo.nakanaka.buildvox.core.World;
 
 /**
  * A wrapped class of World. World is unique object (it has getId() method), whereas ClientWorld is not unique one.

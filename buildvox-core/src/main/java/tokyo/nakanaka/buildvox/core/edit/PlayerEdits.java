@@ -4,7 +4,7 @@ import tokyo.nakanaka.buildvox.core.Clipboard;
 import tokyo.nakanaka.buildvox.core.EditExit;
 import tokyo.nakanaka.buildvox.core.clientWorld.ClientWorld;
 import tokyo.nakanaka.buildvox.core.clientWorld.IntegrityClientWorld;
-import tokyo.nakanaka.buildvox.core.clientWorld.PlayerWorld;
+import tokyo.nakanaka.buildvox.core.clientWorld.PlayerClientWorld;
 import tokyo.nakanaka.buildvox.core.math.Drawings;
 import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
 import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
@@ -14,7 +14,7 @@ import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.property.Axis;
 import tokyo.nakanaka.buildvox.core.selection.*;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
-import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
+import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 
 import javax.swing.undo.UndoManager;
 import java.util.Arrays;
@@ -213,7 +213,7 @@ public class PlayerEdits {
             Vector3d pasteOffset = trans.apply(copyOffset);
             selectionTo = new PasteSelection.Builder(clipboard, pasteOffset).clipTrans(newClipTrans).build();
         }
-        PlayerWorld pw = new PlayerWorld(player);
+        PlayerClientWorld pw = new PlayerClientWorld(player);
         if (selectionFrom instanceof BlockSelection blockSelection) {
             blockSelection.setBackwardBlocks(pw);
         } else {
@@ -228,7 +228,7 @@ public class PlayerEdits {
      * @throws SelectionNotFoundException if a selection is not found
      */
     public static EditExit cut(Player player, Vector3d pos) {
-        PlayerWorld pw = new PlayerWorld(player);
+        PlayerClientWorld pw = new PlayerClientWorld(player);
         Selection selection = findSelection(player);
         Clipboard clipboard = new Clipboard();
         WorldEdits.copy(pw, selection, pos, clipboard);
@@ -271,7 +271,7 @@ public class PlayerEdits {
         PasteSelection pasteSelection = new PasteSelection.Builder(clipboard, pos)
                 .integrity(integrity)
                 .masked(masked).build();
-        PlayerWorld pw = new PlayerWorld(player);
+        PlayerClientWorld pw = new PlayerClientWorld(player);
         pasteSelection.setForwardBlocks(pw);
         pw.setSelection(pasteSelection);
         return pw.end();
@@ -290,7 +290,7 @@ public class PlayerEdits {
                 .integrity(integrity)
                 .masked(masked)
                 .build();
-        PlayerWorld pw = new PlayerWorld(player);
+        PlayerClientWorld pw = new PlayerClientWorld(player);
         fillSelection.setForwardBlocks(pw);
         pw.setSelection(fillSelection);
         return pw.end();
@@ -312,7 +312,7 @@ public class PlayerEdits {
         }else {
             selTo = sel;
         }
-        PlayerWorld pw = new PlayerWorld(player);
+        PlayerClientWorld pw = new PlayerClientWorld(player);
         IntegrityClientWorld icw = new IntegrityClientWorld(integrity, pw);
         WorldEdits.replace(icw, sel, blockFrom, blockTo);
         pw.setSelection(selTo);
@@ -400,7 +400,7 @@ public class PlayerEdits {
         }
         Vector3i pos0a = new Vector3i(pos0x, pos0y, pos0z);
         Vector3i pos1a = new Vector3i(pos1x, pos1y, pos1z);
-        PlayerWorld pw = new PlayerWorld(player);
+        PlayerClientWorld pw = new PlayerClientWorld(player);
         WorldEdits.repeatOld(pw, new Vector3i(maxX, maxY, maxZ), new Vector3i(minX, minY, minZ), countX, countY, countZ);
         pw.setPosArray(new Vector3i[]{pos0a, pos1a});
         return pw.end();
@@ -424,7 +424,7 @@ public class PlayerEdits {
         Clipboard clip = new Clipboard();
         WorldEdits.copy(player.getEditWorld(), sel, Vector3d.ZERO, clip);
         List<Vector3i> positions = Drawings.line(Vector3i.ZERO, new Vector3i(countX, countY, countZ));
-        PlayerWorld pw = new PlayerWorld(player);
+        PlayerClientWorld pw = new PlayerClientWorld(player);
         for(Vector3i pos : positions) {
             double qx = pos.x() * dx;
             double qy = pos.y() * dy;
