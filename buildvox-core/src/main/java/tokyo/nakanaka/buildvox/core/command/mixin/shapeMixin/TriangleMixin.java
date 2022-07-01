@@ -1,7 +1,7 @@
 package tokyo.nakanaka.buildvox.core.command.mixin.shapeMixin;
 
 import picocli.CommandLine;
-import tokyo.nakanaka.buildvox.core.command.MissingPosDataException;
+import tokyo.nakanaka.buildvox.core.command.MissingPosException;
 import tokyo.nakanaka.buildvox.core.command.PosArrayLengthException;
 import tokyo.nakanaka.buildvox.core.command.completionCandidates.PositiveIntegerCandidates;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
@@ -23,7 +23,7 @@ public class TriangleMixin implements ShapeMixin {
         Vector3i pos1 = posArray[1];
         Vector3i pos2 = posArray[2];
         if (pos0 == null || pos1 == null || pos2 == null) {
-            throw new MissingPosDataException();
+            throw new MissingPosException();
         }
         try{
             return SelectionCreations.createTriangle(pos0, pos1, pos2, thickness);

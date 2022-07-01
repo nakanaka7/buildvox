@@ -3,7 +3,7 @@ package tokyo.nakanaka.buildvox.core.command.bvCommand;
 import picocli.CommandLine;
 import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.command.IllegalPosException;
-import tokyo.nakanaka.buildvox.core.command.MissingPosDataException;
+import tokyo.nakanaka.buildvox.core.command.MissingPosException;
 import tokyo.nakanaka.buildvox.core.command.PosArrayLengthException;
 import tokyo.nakanaka.buildvox.core.command.mixin.shapeMixin.*;
 import tokyo.nakanaka.buildvox.core.player.Player;
@@ -78,7 +78,7 @@ public class SelectCommand {
         }catch (PosArrayLengthException ex) {
             err.println(Messages.ofPosArrayLengthError(ex.getAcceptableSize()));
             return;
-        }catch (MissingPosDataException ex) {
+        }catch (MissingPosException ex) {
             err.println(Messages.INCOMPLETE_POS_DATA_ERROR);
             return;
         }catch (IllegalPosException ex) {

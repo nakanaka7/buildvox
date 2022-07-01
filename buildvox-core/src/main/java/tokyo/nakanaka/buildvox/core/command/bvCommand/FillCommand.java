@@ -7,7 +7,7 @@ import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.command.BlockParameter;
 import tokyo.nakanaka.buildvox.core.EditExit;
 import tokyo.nakanaka.buildvox.core.command.IllegalPosException;
-import tokyo.nakanaka.buildvox.core.command.MissingPosDataException;
+import tokyo.nakanaka.buildvox.core.command.MissingPosException;
 import tokyo.nakanaka.buildvox.core.command.PosArrayLengthException;
 import tokyo.nakanaka.buildvox.core.command.mixin.IntegrityMixin;
 import tokyo.nakanaka.buildvox.core.command.mixin.shapeMixin.*;
@@ -106,7 +106,7 @@ public class FillCommand implements Runnable {
         Selection selection;
         try{
             selection = selectionFactory.create();
-        }catch (MissingPosDataException ex) {
+        }catch (MissingPosException ex) {
             err.println(Messages.INCOMPLETE_POS_DATA_ERROR);
             return;
         }catch (PosArrayLengthException ex) {
@@ -131,7 +131,7 @@ public class FillCommand implements Runnable {
 
     private interface SelectionFactory {
         /** @throws PosArrayLengthException
-         * @throws MissingPosDataException
+         * @throws MissingPosException
          * @throws IllegalShapeArgumentException
          */
         Selection create();
@@ -142,7 +142,7 @@ public class FillCommand implements Runnable {
     }
 
     /**
-     * @throws MissingPosDataException
+     * @throws MissingPosException
      */
     private Selection createSelection() {
         Player player = bvCmd.getTargetPlayer();
@@ -154,14 +154,14 @@ public class FillCommand implements Runnable {
         try{
             return SelectionCreations.createDefault(posArray);
         }catch (IllegalArgumentException ex) {
-            throw new MissingPosDataException();
+            throw new MissingPosException();
         }
     }
 
     /**
      *
      * @throws PosArrayLengthException
-     * @throws MissingPosDataException
+     * @throws MissingPosException
      * @throws IllegalShapeArgumentException
      */
     private Selection createSubcommandSelection(ShapeMixin shapeMixin) {

@@ -1,7 +1,7 @@
 package tokyo.nakanaka.buildvox.core.command.mixin.shapeMixin;
 
 import picocli.CommandLine;
-import tokyo.nakanaka.buildvox.core.command.MissingPosDataException;
+import tokyo.nakanaka.buildvox.core.command.MissingPosException;
 import tokyo.nakanaka.buildvox.core.command.PosArrayLengthException;
 import tokyo.nakanaka.buildvox.core.command.completionCandidates.PositiveIntegerCandidates;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
@@ -22,7 +22,7 @@ public class FrameMixin implements ShapeMixin {
         Vector3i pos0 = posArray[0];
         Vector3i pos1 = posArray[1];
         if (pos0 == null || pos1 == null) {
-            throw new MissingPosDataException();
+            throw new MissingPosException();
         }
         try {
             return SelectionCreations.createFrame(pos0, pos1, thickness);
