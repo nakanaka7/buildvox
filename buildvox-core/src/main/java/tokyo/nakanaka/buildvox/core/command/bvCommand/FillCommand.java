@@ -3,10 +3,10 @@ package tokyo.nakanaka.buildvox.core.command.bvCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import picocli.CommandLine;
-import tokyo.nakanaka.buildvox.core.Messages;
-import tokyo.nakanaka.buildvox.core.command.BlockParameter;
 import tokyo.nakanaka.buildvox.core.EditExit;
-import tokyo.nakanaka.buildvox.core.command.IllegalPosException;
+import tokyo.nakanaka.buildvox.core.Messages;
+import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
+import tokyo.nakanaka.buildvox.core.command.BlockParameter;
 import tokyo.nakanaka.buildvox.core.command.MissingPosException;
 import tokyo.nakanaka.buildvox.core.command.PosArrayLengthException;
 import tokyo.nakanaka.buildvox.core.command.mixin.IntegrityMixin;
@@ -16,7 +16,6 @@ import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
 import tokyo.nakanaka.buildvox.core.selection.SelectionCreations;
-import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 
 import java.io.PrintWriter;
 
@@ -111,9 +110,6 @@ public class FillCommand implements Runnable {
             return;
         }catch (PosArrayLengthException ex) {
             err.println(Messages.ofPosArrayLengthError(ex.getAcceptableSize()));
-            return;
-        }catch (IllegalPosException ex) {
-            err.println(Messages.POS_DATA_ERROR);
             return;
         }catch (IllegalShapeArgumentException ex) {
             err.println("Invalid shape argument(s)");
