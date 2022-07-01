@@ -3,8 +3,8 @@ package tokyo.nakanaka.buildvox.core.command.bvCommand.affineTransformCommand;
 import picocli.CommandLine;
 import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.EditExit;
+import tokyo.nakanaka.buildvox.core.command.NumberCompletionCandidates;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
-import tokyo.nakanaka.buildvox.core.command.completionCandidates.IntegerCandidates;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.player.Player;
 
@@ -18,11 +18,11 @@ public class TranslateCommand implements Runnable {
     private CommandLine.Model.CommandSpec commandSpec;
     @CommandLine.ParentCommand
     private BvCommand bvCmd;
-    @CommandLine.Parameters(description = "The displacement along x-axis.", completionCandidates = IntegerCandidates.class)
+    @CommandLine.Parameters(description = "The displacement along x-axis.", completionCandidates = NumberCompletionCandidates.IntegerCandidates.class)
     private double dx;
-    @CommandLine.Parameters(description = "The displacement along y-axis.", completionCandidates = IntegerCandidates.class)
+    @CommandLine.Parameters(description = "The displacement along y-axis.", completionCandidates = NumberCompletionCandidates.IntegerCandidates.class)
     private double dy;
-    @CommandLine.Parameters(description = "The displacement along z-axis.", completionCandidates = IntegerCandidates.class)
+    @CommandLine.Parameters(description = "The displacement along z-axis.", completionCandidates = NumberCompletionCandidates.IntegerCandidates.class)
     private double dz;
 
     @Override
