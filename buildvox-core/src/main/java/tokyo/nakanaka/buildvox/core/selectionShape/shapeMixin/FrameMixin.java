@@ -1,16 +1,17 @@
 package tokyo.nakanaka.buildvox.core.selectionShape.shapeMixin;
 
 import static picocli.CommandLine.*;
+
+import tokyo.nakanaka.buildvox.core.command.NumberCompletionCandidates;
 import tokyo.nakanaka.buildvox.core.selectionShape.MissingPosException;
 import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
-import tokyo.nakanaka.buildvox.core.command.completionCandidates.PositiveIntegerCandidates;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
 import tokyo.nakanaka.buildvox.core.selectionShape.SelectionCreations;
 
 @Command
 public class FrameMixin implements ShapeMixin {
-    @Option(names = {"-t", "--thickness"}, defaultValue = "1", completionCandidates = PositiveIntegerCandidates.class)
+    @Option(names = {"-t", "--thickness"}, defaultValue = "1", completionCandidates = NumberCompletionCandidates.PositiveIntegerCandidates.class)
     private int thickness;
 
     public static final String DESCRIPTION = "a frame region of the cuboid by pos0 and pos1";

@@ -16,6 +16,15 @@ public class NumberCompletionCandidates {
         }
     }
 
+    public static class PositiveIntegerCandidates implements Iterable<String> {
+
+        @Override
+        public Iterator<String> iterator() {
+            return List.of("1", "2", "3", "4", "5", "6", "7", "8", "9").iterator();
+        }
+
+    }
+
     public static class DoubleCandidates implements Iterable<String>{
         @Override
         public Iterator<String> iterator() {
