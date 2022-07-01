@@ -33,6 +33,8 @@ public class FillCommand implements Runnable {
     private BvCommand bvCmd;
     @CommandLine.Mixin
     private IntegrityMixin integrityMixin;
+    @CommandLine.Option(names = {"-m", "--masked"})
+    private boolean masked;
     @CommandLine.Parameters(description = "The block.", completionCandidates = BlockParameter.BlockCandidates.class, converter = BlockParameter.BlockConverter.class)
     private VoxelBlock block;
     @CommandLine.Command(description = DESC_HEAD + ConeMixin.DESCRIPTION + ".", mixinStandardHelpOptions = true)
@@ -120,7 +122,7 @@ public class FillCommand implements Runnable {
         double integrity = integrityMixin.integrity();
         EditExit exit;
         if(filter == null) {
-            exit = PlayerEdits.fill(player, selection, block, integrity);
+            exit = PlayerEdits.fill(player, selection, block, integrity, masked);
         }else {
             exit = PlayerEdits.replace(player, selection, filter, block, integrity);
         }

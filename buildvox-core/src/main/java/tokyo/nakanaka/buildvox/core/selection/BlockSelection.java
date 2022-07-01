@@ -1,9 +1,16 @@
 package tokyo.nakanaka.buildvox.core.selection;
 
+import tokyo.nakanaka.buildvox.core.Clipboard;
 import tokyo.nakanaka.buildvox.core.clientWorld.ClientWorld;
+import tokyo.nakanaka.buildvox.core.clientWorld.IntegrityClientWorld;
+import tokyo.nakanaka.buildvox.core.clientWorld.MaskedClientWorld;
+import tokyo.nakanaka.buildvox.core.clientWorld.PlayerWorld;
+import tokyo.nakanaka.buildvox.core.edit.WorldEdits;
 import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
 import tokyo.nakanaka.buildvox.core.math.region3d.Region3d;
 import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
+import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
+import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
 
 /**
  * Represents block accompanied selection. Forward blocks are the blocks which are created at the same time when
@@ -13,6 +20,10 @@ import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
  * setForwardBlocks() of the transformed selection.
  */
 public abstract class BlockSelection extends Selection {
+    protected Clipboard backwardClip = new Clipboard();
+    protected double integrity;
+    protected boolean masked;
+
     public BlockSelection(Region3d region3d, Parallelepiped bound) {
         super(region3d, bound);
     }
@@ -27,15 +38,36 @@ public abstract class BlockSelection extends Selection {
 
     /**
      * Set forward blocks.
-     * @param clientWorld a world to set blocks.
+     * @param playerWorld a world to set blocks.
      */
-    public abstract void setForwardBlocks(ClientWorld clientWorld);
+    public void setForwardBlocks(PlayerWorld playerWorld) {
+        Clipboard newBackwardClip = new Clipboard();
+        WorldEdits.copy(playerWorld, this, Vector3d.ZERO, newBackwardClip);
+        VoxelBlock background = playerWorld.getPlayer().getBackgroundBlock();
+        ClientWorld clientWorld = playerWorld;
+        if(masked) {
+            clientWorld = new MaskedClientWorld(background, clientWorld);
+        }
+        clientWorld = new IntegrityClientWorld(integrity, background, clientWorld);
+        setRawForwardBlocks(clientWorld);
+        backwardClip = newBackwardClip;
+    }
+
+    /**
+     * Set forward blocks with integrity = 1 and masked = false.
+     */
+    void setRawForwardBlocks(ClientWorld clientWorld) {
+
+    }
 
     /**
      * Set backward blocks.
-     * @param clientWorld a world to set blocks.
+     * @param playerWorld a world to set blocks.
      */
-    public abstract void setBackwardBlocks(ClientWorld clientWorld);
+    public void setBackwardBlocks(PlayerWorld playerWorld) {
+        WorldEdits.paste(backwardClip, playerWorld, Vector3d.ZERO);
+    }
+
     @Override
     public abstract BlockSelection affineTransform(AffineTransformation3d trans);
 
