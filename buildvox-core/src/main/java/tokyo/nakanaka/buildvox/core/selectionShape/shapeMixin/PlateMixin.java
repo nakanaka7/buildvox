@@ -13,7 +13,7 @@ import tokyo.nakanaka.buildvox.core.selectionShape.SelectionCreations;
 public class PlateMixin implements ShapeMixin {
     @Option(names = {"-a", "--axis"})
     private Axis axis = Axis.Y;
-    @Option(names = {"-t", "--thickness"}, defaultValue = "1", completionCandidates = NumberCompletionCandidates.PositiveIntegerCandidates.class)
+    @Option(names = {"-t", "--thickness"}, defaultValue = "1", completionCandidates = NumberCompletionCandidates.PositiveInteger.class)
     private int thickness;
 
     public static final String DESCRIPTION = "a plate region which corners are pos0 and pos1";

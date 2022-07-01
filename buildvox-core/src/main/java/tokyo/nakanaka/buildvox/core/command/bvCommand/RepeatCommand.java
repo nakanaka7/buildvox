@@ -19,11 +19,11 @@ public class RepeatCommand implements Runnable {
     private CommandLine.Model.CommandSpec commandSpec;
     @CommandLine.ParentCommand
     private BvCommand bvCmd;
-    @CommandLine.Parameters(description = "The count along x-axis.", completionCandidates = NumberCompletionCandidates.IntegerCandidates.class)
+    @CommandLine.Parameters(description = "The count along x-axis.", completionCandidates = NumberCompletionCandidates.Integer.class)
     private int countX;
-    @CommandLine.Parameters(description = "The count along y-axis.", completionCandidates = NumberCompletionCandidates.IntegerCandidates.class)
+    @CommandLine.Parameters(description = "The count along y-axis.", completionCandidates = NumberCompletionCandidates.Integer.class)
     private int countY;
-    @CommandLine.Parameters(description = "The count along z-axis.", completionCandidates = NumberCompletionCandidates.IntegerCandidates.class)
+    @CommandLine.Parameters(description = "The count along z-axis.", completionCandidates = NumberCompletionCandidates.Integer.class)
     private int countZ;
 
     @Override

@@ -24,10 +24,10 @@ public class ShearCommand implements Runnable {
     @CommandLine.Parameters(description = "i-axis. i, j, and k are the cyclic set of {x, y, z}")
     private Axis axisI;
     @CommandLine.Parameters(description = "The displacement along j-axis per +1 block along i-axis."
-            , completionCandidates = NumberCompletionCandidates.DoubleCandidates.class)
+            , completionCandidates = NumberCompletionCandidates.Double.class)
     private Double factorJ;
     @CommandLine.Parameters(description = "The displacement along k-axis per +1 block along i-axis"
-            , completionCandidates = NumberCompletionCandidates.DoubleCandidates.class)
+            , completionCandidates = NumberCompletionCandidates.Double.class)
     private Double factorK;
     @CommandLine.Mixin
     private PosMixin posMixin;

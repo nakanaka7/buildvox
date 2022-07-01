@@ -11,7 +11,7 @@ import tokyo.nakanaka.buildvox.core.selectionShape.SelectionCreations;
 
 @Command
 public class FrameMixin implements ShapeMixin {
-    @Option(names = {"-t", "--thickness"}, defaultValue = "1", completionCandidates = NumberCompletionCandidates.PositiveIntegerCandidates.class)
+    @Option(names = {"-t", "--thickness"}, defaultValue = "1", completionCandidates = NumberCompletionCandidates.PositiveInteger.class)
     private int thickness;
 
     public static final String DESCRIPTION = "a frame region of the cuboid by pos0 and pos1";

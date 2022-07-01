@@ -20,11 +20,11 @@ public class ScaleCommand implements Runnable {
     private CommandLine.Model.CommandSpec commandSpec;
     @CommandLine.ParentCommand
     private BvCommand bvCmd;
-    @CommandLine.Parameters(description = "The scale factor along x-axis.", completionCandidates = NumberCompletionCandidates.DoubleCandidates.class)
+    @CommandLine.Parameters(description = "The scale factor along x-axis.", completionCandidates = NumberCompletionCandidates.Double.class)
     private Double factorX;
-    @CommandLine.Parameters(description = "The scale factor along y-axis.", completionCandidates = NumberCompletionCandidates.DoubleCandidates.class)
+    @CommandLine.Parameters(description = "The scale factor along y-axis.", completionCandidates = NumberCompletionCandidates.Double.class)
     private Double factorY;
-    @CommandLine.Parameters(description = "The scale factor along z-axis.", completionCandidates = NumberCompletionCandidates.DoubleCandidates.class)
+    @CommandLine.Parameters(description = "The scale factor along z-axis.", completionCandidates = NumberCompletionCandidates.Double.class)
     private Double factorZ;
     @CommandLine.Mixin
     private PosMixin posMixin;

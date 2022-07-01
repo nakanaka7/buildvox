@@ -10,7 +10,7 @@ import tokyo.nakanaka.buildvox.core.selectionShape.SelectionCreations;
 
 @Command
 public class TriangleMixin implements ShapeMixin {
-    @Option(names = {"-t", "--thickness"}, defaultValue = "1", completionCandidates = NumberCompletionCandidates.PositiveIntegerCandidates.class)
+    @Option(names = {"-t", "--thickness"}, defaultValue = "1", completionCandidates = NumberCompletionCandidates.PositiveInteger.class)
     private int thickness;
 
     public static final String DESCRIPTION = "a triangle region which vertexes are pos0, pos1, and pos2";

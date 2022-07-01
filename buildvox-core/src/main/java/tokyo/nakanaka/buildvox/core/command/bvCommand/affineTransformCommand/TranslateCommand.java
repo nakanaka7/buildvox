@@ -18,11 +18,11 @@ public class TranslateCommand implements Runnable {
     private CommandLine.Model.CommandSpec commandSpec;
     @CommandLine.ParentCommand
     private BvCommand bvCmd;
-    @CommandLine.Parameters(description = "The displacement along x-axis.", completionCandidates = NumberCompletionCandidates.IntegerCandidates.class)
+    @CommandLine.Parameters(description = "The displacement along x-axis.", completionCandidates = NumberCompletionCandidates.Integer.class)
     private double dx;
-    @CommandLine.Parameters(description = "The displacement along y-axis.", completionCandidates = NumberCompletionCandidates.IntegerCandidates.class)
+    @CommandLine.Parameters(description = "The displacement along y-axis.", completionCandidates = NumberCompletionCandidates.Integer.class)
     private double dy;
-    @CommandLine.Parameters(description = "The displacement along z-axis.", completionCandidates = NumberCompletionCandidates.IntegerCandidates.class)
+    @CommandLine.Parameters(description = "The displacement along z-axis.", completionCandidates = NumberCompletionCandidates.Integer.class)
     private double dz;
 
     @Override
