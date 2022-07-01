@@ -4,7 +4,7 @@ import picocli.CommandLine;
 import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.command.IllegalPosException;
 import tokyo.nakanaka.buildvox.core.command.MissingPosDataException;
-import tokyo.nakanaka.buildvox.core.command.PosDataSizeException;
+import tokyo.nakanaka.buildvox.core.command.PosArrayLengthException;
 import tokyo.nakanaka.buildvox.core.command.mixin.shapeMixin.*;
 import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
@@ -75,7 +75,7 @@ public class SelectCommand {
         Selection selection;
         try {
             selection = shapeMixin.createSelection(player.getPosArrayClone());
-        }catch (PosDataSizeException ex) {
+        }catch (PosArrayLengthException ex) {
             err.println(Messages.ofPosArrayLengthError(ex.getAcceptableSize()));
             return;
         }catch (MissingPosDataException ex) {

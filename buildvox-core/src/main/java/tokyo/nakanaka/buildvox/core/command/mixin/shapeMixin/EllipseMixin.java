@@ -1,7 +1,7 @@
 package tokyo.nakanaka.buildvox.core.command.mixin.shapeMixin;
 
 import tokyo.nakanaka.buildvox.core.command.MissingPosDataException;
-import tokyo.nakanaka.buildvox.core.command.PosDataSizeException;
+import tokyo.nakanaka.buildvox.core.command.PosArrayLengthException;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
 import tokyo.nakanaka.buildvox.core.selection.SelectionCreations;
@@ -13,7 +13,7 @@ public class EllipseMixin implements ShapeMixin {
     @Override
     public Selection createSelection(Vector3i[] posArray) {
         if (posArray.length != 2) {
-            throw new PosDataSizeException(2);
+            throw new PosArrayLengthException(2);
         }
         Vector3i pos0 = posArray[0];
         Vector3i pos1 = posArray[1];

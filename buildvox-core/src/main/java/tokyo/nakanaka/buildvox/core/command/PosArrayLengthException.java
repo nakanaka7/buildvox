@@ -1,9 +1,9 @@
 package tokyo.nakanaka.buildvox.core.command;
 
-public class PosDataSizeException extends RuntimeException {
+public class PosArrayLengthException extends RuntimeException {
     private int acceptableSize;
 
-    public PosDataSizeException(int acceptableSize) {
+    public PosArrayLengthException(int acceptableSize) {
         this.acceptableSize = acceptableSize;
     }
 

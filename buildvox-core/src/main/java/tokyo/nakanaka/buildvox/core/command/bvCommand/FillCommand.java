@@ -8,7 +8,7 @@ import tokyo.nakanaka.buildvox.core.command.BlockParameter;
 import tokyo.nakanaka.buildvox.core.EditExit;
 import tokyo.nakanaka.buildvox.core.command.IllegalPosException;
 import tokyo.nakanaka.buildvox.core.command.MissingPosDataException;
-import tokyo.nakanaka.buildvox.core.command.PosDataSizeException;
+import tokyo.nakanaka.buildvox.core.command.PosArrayLengthException;
 import tokyo.nakanaka.buildvox.core.command.mixin.IntegrityMixin;
 import tokyo.nakanaka.buildvox.core.command.mixin.shapeMixin.*;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
@@ -109,7 +109,7 @@ public class FillCommand implements Runnable {
         }catch (MissingPosDataException ex) {
             err.println(Messages.INCOMPLETE_POS_DATA_ERROR);
             return;
-        }catch (PosDataSizeException ex) {
+        }catch (PosArrayLengthException ex) {
             err.println(Messages.ofPosArrayLengthError(ex.getAcceptableSize()));
             return;
         }catch (IllegalPosException ex) {
@@ -130,7 +130,7 @@ public class FillCommand implements Runnable {
     }
 
     private interface SelectionFactory {
-        /** @throws PosDataSizeException
+        /** @throws PosArrayLengthException
          * @throws MissingPosDataException
          * @throws IllegalShapeArgumentException
          */
@@ -160,7 +160,7 @@ public class FillCommand implements Runnable {
 
     /**
      *
-     * @throws PosDataSizeException
+     * @throws PosArrayLengthException
      * @throws MissingPosDataException
      * @throws IllegalShapeArgumentException
      */
