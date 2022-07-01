@@ -1,5 +1,8 @@
 package tokyo.nakanaka.buildvox.core;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ParseUtils {
     private ParseUtils() {
     }
@@ -46,6 +49,26 @@ public class ParseUtils {
         }
         if(!s.isEmpty()) throw new IllegalArgumentException();
         return new NameStateEntity(name, state, entity);
+    }
+
+    /**
+     * Parses state map. "key=value1,key=value2,..." will be converted to a map.
+     * @param state the state.
+     * @return the state map.
+     * @throws IllegalArgumentException
+     */
+    public static Map<String, String> parseStateMap(String state) {
+        Map<String, String> stateMap = new HashMap<>();
+        if(state.isEmpty()) return stateMap;
+        String[] stateArray = state.split(",");
+        for(String keyEqualValue : stateArray){
+            String[] keyValue = keyEqualValue.split("=", -1);
+            if(keyValue.length != 2){
+                throw new IllegalArgumentException();
+            }
+            stateMap.put(keyValue[0], keyValue[1]);
+        }
+        return stateMap;
     }
 
 }
