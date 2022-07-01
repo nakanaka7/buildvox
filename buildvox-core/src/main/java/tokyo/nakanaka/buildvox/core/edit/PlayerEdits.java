@@ -14,7 +14,7 @@ import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.property.Axis;
 import tokyo.nakanaka.buildvox.core.selection.*;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
-import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
+import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 
 import javax.swing.undo.UndoManager;
 import java.util.Arrays;

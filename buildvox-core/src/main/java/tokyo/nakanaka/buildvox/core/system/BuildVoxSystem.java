@@ -12,7 +12,7 @@ import tokyo.nakanaka.buildvox.core.command.bvdCommand.BvdCommand;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.DummyPlayer;
 import tokyo.nakanaka.buildvox.core.player.RealPlayer;
-import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
+import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.world.World;
 
 import java.io.IOException;

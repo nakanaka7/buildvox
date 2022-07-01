@@ -2,7 +2,7 @@ package tokyo.nakanaka.buildvox.core.clientWorld;
 
 import tokyo.nakanaka.buildvox.core.block.BlockTransformation;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
-import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
+import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 
 /** The client world which applies block transformation when setting blocks */
 public class BlockTransformingClientWorld extends ClientWorld {

@@ -2,7 +2,7 @@ package tokyo.nakanaka.buildvox.bukkit;
 
 import tokyo.nakanaka.buildvox.bukkit.block.BlockUtils;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
-import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
+import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.world.World;
 
 /**

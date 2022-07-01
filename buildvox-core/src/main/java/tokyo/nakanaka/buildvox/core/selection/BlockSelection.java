@@ -10,7 +10,7 @@ import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
 import tokyo.nakanaka.buildvox.core.math.region3d.Region3d;
 import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
-import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
+import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 
 /**
  * Represents block accompanied selection. Forward blocks are the blocks which are created at the same time when

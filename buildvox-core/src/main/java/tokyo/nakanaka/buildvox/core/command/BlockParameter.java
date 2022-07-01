@@ -3,7 +3,7 @@ package tokyo.nakanaka.buildvox.core.command;
 import picocli.CommandLine;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
-import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
+import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 
 import java.util.Iterator;
 

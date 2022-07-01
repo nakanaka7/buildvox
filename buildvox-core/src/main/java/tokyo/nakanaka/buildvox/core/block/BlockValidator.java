@@ -1,7 +1,5 @@
 package tokyo.nakanaka.buildvox.core.block;
 
-import tokyo.nakanaka.buildvox.core.world.VoxelBlock;
-
 /**
  * A functional interface to validate the given block is settable into the world of the platform.
  */
