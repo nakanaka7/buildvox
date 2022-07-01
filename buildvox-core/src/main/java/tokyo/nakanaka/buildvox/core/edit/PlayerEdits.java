@@ -260,21 +260,23 @@ public class PlayerEdits {
     }
 
     /**
-     * @throws SelectionNotFoundException if a selection is not found
+     * @throws MissingPosException if player does not have a selection and some pos are missing.
+     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
+     * the shape.
      */
-    public static EditExit cut(Player player, Vector3d pos) {
-        PlayerClientWorld pw = new PlayerClientWorld(player);
-        Selection selection = findSelection(player);
+    public static EditExit cut(Player player, Vector3d pos, Options options) {
+        PlayerClientWorld pcw = new PlayerClientWorld(player);
+        Selection selection = findSelection(player, options.shape);
         Clipboard clipboard = new Clipboard();
-        WorldEdits.copy(pw, selection, pos, clipboard);
+        WorldEdits.copy(pcw, selection, pos, clipboard);
         if (selection instanceof BlockSelection blockSelection) {
-            blockSelection.setBackwardBlocks(pw);
+            blockSelection.setBackwardBlocks(pcw);
         } else {
-            WorldEdits.fill(pw, selection, player.getBackgroundBlock());
+            WorldEdits.fill(pcw, selection, player.getBackgroundBlock());
         }
         player.setClipboard(clipboard);
-        pw.setSelection(null);
-        return pw.end();
+        pcw.setSelection(null);
+        return pcw.end();
     }
 
     /**
