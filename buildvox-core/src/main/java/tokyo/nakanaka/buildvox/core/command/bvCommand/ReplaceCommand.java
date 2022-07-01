@@ -21,10 +21,10 @@ public class ReplaceCommand implements Runnable {
     @CommandLine.ParentCommand
     private BvCommand bvCmd;
     @CommandLine.Parameters(arity = "1",
-            description = "The block type to replace from.", completionCandidates = BlockParameter.BlockCandidates.class)
+            description = "The block type to replace from.", completionCandidates = BlockParameter.Candidates.class)
     private String blockFrom;
     @CommandLine.Parameters(arity = "1",
-            description = "The block type to replace to.", completionCandidates = BlockParameter.BlockCandidates.class)
+            description = "The block type to replace to.", completionCandidates = BlockParameter.Candidates.class)
     private String blockTo;
     @CommandLine.Mixin
     private IntegrityMixin integrityMixin;

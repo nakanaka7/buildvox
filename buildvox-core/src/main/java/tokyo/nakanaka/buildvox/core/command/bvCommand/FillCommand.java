@@ -34,7 +34,7 @@ public class FillCommand implements Runnable {
     private IntegrityMixin integrityMixin;
     @CommandLine.Option(names = {"-m", "--masked"})
     private boolean masked;
-    @CommandLine.Parameters(description = "The block.", completionCandidates = BlockParameter.BlockCandidates.class, converter = BlockParameter.BlockConverter.class)
+    @CommandLine.Parameters(description = "The block.", completionCandidates = BlockParameter.Candidates.class, converter = BlockParameter.Converter.class)
     private VoxelBlock block;
     @CommandLine.Command(description = DESC_HEAD + ConeMixin.DESCRIPTION + ".", mixinStandardHelpOptions = true)
     private void cone(@CommandLine.Mixin ConeMixin coneMixin) {
@@ -80,7 +80,7 @@ public class FillCommand implements Runnable {
     private void triangle(@CommandLine.Mixin TriangleMixin triangleMixin) {
         runSubcommand(triangleMixin);
     }
-    @CommandLine.Option(names = {"-r", "--replace"}, description = "The block to replace", completionCandidates = BlockParameter.BlockCandidates.class, converter = BlockParameter.BlockConverter.class)
+    @CommandLine.Option(names = {"-r", "--replace"}, description = "The block to replace", completionCandidates = BlockParameter.Candidates.class, converter = BlockParameter.Converter.class)
     private VoxelBlock filter;
 
     @Override

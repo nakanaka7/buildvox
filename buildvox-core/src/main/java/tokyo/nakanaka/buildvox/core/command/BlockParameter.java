@@ -1,6 +1,6 @@
 package tokyo.nakanaka.buildvox.core.command;
 
-import picocli.CommandLine;
+import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
@@ -11,18 +11,16 @@ public class BlockParameter {
     private BlockParameter() {
     }
 
-    public static class BlockCandidates implements Iterable<String> {
+    public static class Candidates implements Iterable<String> {
         @Override
         public Iterator<String> iterator() {
             return BuildVoxSystem.getBlockRegistry().idList().stream()
                     .map(NamespacedId::toString)
                     .iterator();
         }
-
     }
 
-
-    public static class BlockConverter implements CommandLine.ITypeConverter<VoxelBlock> {
+    public static class Converter implements ITypeConverter<VoxelBlock> {
         @Override
         public VoxelBlock convert(String value) throws Exception {
             VoxelBlock block;
