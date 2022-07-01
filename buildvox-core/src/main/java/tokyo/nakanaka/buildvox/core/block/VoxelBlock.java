@@ -1,6 +1,7 @@
 package tokyo.nakanaka.buildvox.core.block;
 
 import tokyo.nakanaka.buildvox.core.NamespacedId;
+import tokyo.nakanaka.buildvox.core.ParseUtils;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 
 import java.util.Objects;
@@ -29,38 +30,10 @@ public class VoxelBlock {
      * @throws IllegalArgumentException if the specified String is not the form stated above.
      */
     public static VoxelBlock valueOf(String s) {
-        String idStr;
-        String stateStr;
-        String entityStr;
-        if(s.contains("[") || s.contains("{")) {
-            int a = s.indexOf("[");
-            int b = s.indexOf("{");
-            int c;
-            if(a == -1) c = b;
-            else if(b == -1) c = a;
-            else c = Math.min(a, b);
-            idStr = s.substring(0, c);
-        } else {
-            idStr = s;
-        }
-        s = s.substring(idStr.length());
-        if(s.startsWith("[")) {
-            int e = s.indexOf("]");
-            if(e == -1) throw new IllegalArgumentException();
-            stateStr = s.substring(1, e);
-            s = s.substring(e + 1);
-        }else{
-            stateStr = "";
-        }
-        if(s.startsWith("{")) {
-            int e = s.indexOf("}");
-            if(e == -1) throw new IllegalArgumentException();
-            entityStr = s.substring(1, e);
-            s = s.substring(e + 1);
-        } else {
-            entityStr = "";
-        }
-        if(!s.isEmpty()) throw new IllegalArgumentException();
+        ParseUtils.NameStateEntity nse = ParseUtils.parseNameStateEntity(s);
+        String idStr = nse.name();
+        String stateStr = nse.state();
+        String entityStr = nse.entity();
         NamespacedId blockId = NamespacedId.valueOf(idStr);
         Block<?,?> block = BuildVoxSystem.getBlockRegistry().get(blockId);
         if(block == null) throw new IllegalArgumentException();
