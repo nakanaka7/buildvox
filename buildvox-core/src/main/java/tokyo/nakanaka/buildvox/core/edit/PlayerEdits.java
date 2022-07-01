@@ -5,6 +5,8 @@ import tokyo.nakanaka.buildvox.core.EditExit;
 import tokyo.nakanaka.buildvox.core.clientWorld.ClientWorld;
 import tokyo.nakanaka.buildvox.core.clientWorld.IntegrityClientWorld;
 import tokyo.nakanaka.buildvox.core.clientWorld.PlayerClientWorld;
+import tokyo.nakanaka.buildvox.core.command.MissingPosException;
+import tokyo.nakanaka.buildvox.core.command.PosArrayLengthException;
 import tokyo.nakanaka.buildvox.core.math.Drawings;
 import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
 import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
@@ -13,6 +15,7 @@ import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.property.Axis;
 import tokyo.nakanaka.buildvox.core.selection.*;
+import tokyo.nakanaka.buildvox.core.selectionShape.SelectionShape;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 
@@ -83,6 +86,28 @@ public class PlayerEdits {
             return SelectionCreations.createDefault(player.getPosArrayClone());
         }else{
             throw new SelectionNotFoundException();
+        }
+    }
+
+    /**
+     * Finds a selection if possible.
+     * @param player the player.
+     * @param shape the selection shape. Nullable.
+     * @return a selection if possible.
+     * @throws MissingPosException if player does not have a selection and some pos are missing.
+     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
+     * the shape.
+     */
+    private static Selection findSelection(Player player, SelectionShape shape) {
+        Selection selection = player.getSelection();
+        if(selection != null && shape == null) return selection;
+        Vector3i[] posArray = player.getPosArrayClone();
+        boolean posArrayIsFull = Arrays.stream(posArray).allMatch(Objects::nonNull);
+        if(!posArrayIsFull) throw new MissingPosException();
+        if(shape != null) {
+            return shape.createSelection(posArray);
+        }else {
+            return SelectionCreations.createDefault(posArray);
         }
     }
 
@@ -243,12 +268,21 @@ public class PlayerEdits {
     }
 
     /**
+     * Copy options.
+     * @param shape nullable.
+     */
+    public static record CopyOptions(SelectionShape shape) {
+    }
+
+    /**
      * Copies the blocks in the selection.
      * @param pos the position which corresponds to the origin of the clipboard.
-     * @throws SelectionNotFoundException if a selection is not found
+     * @throws MissingPosException if player does not have a selection and some pos are missing.
+     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
+     * the shape.
      */
-    public static EditExit copy(Player player, Vector3d pos) {
-        Selection selection = findSelection(player);
+    public static EditExit copy(Player player, Vector3d pos, CopyOptions options) {
+        Selection selection = findSelection(player, options.shape);
         Clipboard clipboard = new Clipboard();
         WorldEdits.copy(new ClientWorld(player.getEditWorld()), selection, pos, clipboard);
         clipboard.lock();
