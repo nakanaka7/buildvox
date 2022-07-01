@@ -1,14 +1,15 @@
 package tokyo.nakanaka.buildvox.core.command.mixin.shapeMixin;
 
-import picocli.CommandLine;
+import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.command.MissingPosException;
 import tokyo.nakanaka.buildvox.core.command.PosArrayLengthException;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
 import tokyo.nakanaka.buildvox.core.selection.SelectionCreations;
 
+@Command
 public class LineMixin implements ShapeMixin {
-    @CommandLine.Option(names = {"-t", "--thickness"}, defaultValue = "1")
+    @Option(names = {"-t", "--thickness"}, defaultValue = "1")
     private double thickness;
 
     public static final String DESCRIPTION = "a line region which vertexes are pos0 and pos1";

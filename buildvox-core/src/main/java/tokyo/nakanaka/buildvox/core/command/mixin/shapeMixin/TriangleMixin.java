@@ -1,6 +1,6 @@
 package tokyo.nakanaka.buildvox.core.command.mixin.shapeMixin;
 
-import picocli.CommandLine;
+import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.command.MissingPosException;
 import tokyo.nakanaka.buildvox.core.command.PosArrayLengthException;
 import tokyo.nakanaka.buildvox.core.command.completionCandidates.PositiveIntegerCandidates;
@@ -8,8 +8,9 @@ import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
 import tokyo.nakanaka.buildvox.core.selection.SelectionCreations;
 
+@Command
 public class TriangleMixin implements ShapeMixin {
-    @CommandLine.Option(names = {"-t", "--thickness"}, defaultValue = "1", completionCandidates = PositiveIntegerCandidates.class)
+    @Option(names = {"-t", "--thickness"}, defaultValue = "1", completionCandidates = PositiveIntegerCandidates.class)
     private int thickness;
 
     public static final String DESCRIPTION = "a triangle region which vertexes are pos0, pos1, and pos2";

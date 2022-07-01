@@ -1,6 +1,6 @@
 package tokyo.nakanaka.buildvox.core.command.mixin.shapeMixin;
 
-import picocli.CommandLine;
+import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.command.MissingPosException;
 import tokyo.nakanaka.buildvox.core.command.PosArrayLengthException;
 import tokyo.nakanaka.buildvox.core.command.completionCandidates.PositiveIntegerCandidates;
@@ -9,10 +9,11 @@ import tokyo.nakanaka.buildvox.core.property.Axis;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
 import tokyo.nakanaka.buildvox.core.selection.SelectionCreations;
 
+@Command
 public class PlateMixin implements ShapeMixin {
-    @CommandLine.Option(names = {"-a", "--axis"})
+    @Option(names = {"-a", "--axis"})
     private Axis axis = Axis.Y;
-    @CommandLine.Option(names = {"-t", "--thickness"}, defaultValue = "1", completionCandidates = PositiveIntegerCandidates.class)
+    @Option(names = {"-t", "--thickness"}, defaultValue = "1", completionCandidates = PositiveIntegerCandidates.class)
     private int thickness;
 
     public static final String DESCRIPTION = "a plate region which corners are pos0 and pos1";

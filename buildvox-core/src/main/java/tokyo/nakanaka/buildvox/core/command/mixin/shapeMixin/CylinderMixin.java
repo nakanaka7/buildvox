@@ -1,6 +1,6 @@
 package tokyo.nakanaka.buildvox.core.command.mixin.shapeMixin;
 
-import picocli.CommandLine;
+import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.command.MissingPosException;
 import tokyo.nakanaka.buildvox.core.command.PosArrayLengthException;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
@@ -8,8 +8,9 @@ import tokyo.nakanaka.buildvox.core.property.Axis;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
 import tokyo.nakanaka.buildvox.core.selection.SelectionCreations;
 
+@Command
 public class CylinderMixin implements ShapeMixin {
-    @CommandLine.Option(names = {"-a", "--axis"})
+    @Option(names = {"-a", "--axis"})
     private Axis axis = Axis.Y;
 
     public static final String DESCRIPTION = "a cylinder region in the cuboid by pos0 and pos1";
