@@ -14,6 +14,10 @@ public class Shape {
             converter = Converter.class)
     private SelectionShape shape;
 
+    public SelectionShape shape() {
+        return shape;
+    }
+
     public static class Candidates implements Iterable<String> {
         @Override
         public Iterator<String> iterator() {
