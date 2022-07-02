@@ -5,8 +5,12 @@ import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.command.BlockParameter;
 import tokyo.nakanaka.buildvox.core.EditExit;
 import tokyo.nakanaka.buildvox.core.command.IntegrityMixin;
+import tokyo.nakanaka.buildvox.core.command.SelectionShapeParameter;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.player.Player;
+import tokyo.nakanaka.buildvox.core.selectionShape.MissingPosException;
+import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
+import tokyo.nakanaka.buildvox.core.selectionShape.SelectionShape;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 
@@ -28,6 +32,9 @@ public class ReplaceCommand implements Runnable {
     private String blockTo;
     @CommandLine.Mixin
     private IntegrityMixin integrityMixin;
+    @CommandLine.Option(names = {"-s", "--shape"}, completionCandidates = SelectionShapeParameter.Candidates.class,
+            converter = SelectionShapeParameter.Converter.class)
+    private SelectionShape shape;
 
     @Override
     public void run() {
@@ -54,10 +61,13 @@ public class ReplaceCommand implements Runnable {
             err.println(ex.getMessage());
             return;
         }
+        var options = new PlayerEdits.Options();
+        options.integrity = integrityMixin.integrity();
+        options.shape = shape;
         EditExit exit;
         try {
-            exit = PlayerEdits.replace(player, bFrom, bTo, integrityMixin.integrity());
-        }catch (PlayerEdits.SelectionNotFoundException ex) {
+            exit = PlayerEdits.replace(player, bFrom, bTo, options);
+        }catch (MissingPosException | PosArrayLengthException ex) {
             err.println(Messages.SELECTION_NULL_ERROR);
             return;
         }

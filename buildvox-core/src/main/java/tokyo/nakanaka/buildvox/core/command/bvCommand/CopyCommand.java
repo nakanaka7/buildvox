@@ -37,7 +37,8 @@ public class CopyCommand implements Runnable {
         PrintWriter err = commandSpec.commandLine().getErr();
         Player player = bvCmd.getTargetPlayer();
         Vector3d pos = posMixin.calcAbsPos(bvCmd.getExecPos());
-        var options = new PlayerEdits.CopyOptions(shape);
+        var options = new PlayerEdits.Options();
+        options.shape = shape;
         try{
             EditExit exit = PlayerEdits.copy(player, pos, options);
             out.println(Messages.ofCopyExit(exit));

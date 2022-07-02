@@ -11,6 +11,8 @@ import tokyo.nakanaka.buildvox.core.command.SelectionShapeParameter;
 import tokyo.nakanaka.buildvox.core.command.IntegrityMixin;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.player.Player;
+import tokyo.nakanaka.buildvox.core.selectionShape.MissingPosException;
+import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
 import tokyo.nakanaka.buildvox.core.selectionShape.SelectionShape;
 
 import java.io.PrintWriter;
@@ -50,25 +52,22 @@ public class FillCommand implements Runnable {
             return;
         }
         double integrity = integrityMixin.integrity();
+        var options = new PlayerEdits.Options();
+        options.integrity = integrity;
+        options.masked = masked;
+        options.shape = shape;
         EditExit exit;
-        if(filter == null) {
-            PlayerEdits.FillOptions options = new PlayerEdits.FillOptions(integrity, masked, shape);
-            try {
+        try {
+            if(filter == null) {
                 exit = PlayerEdits.fill(player, block, options);
-            }catch (Exception ex) {
-                err.println(Messages.SELECTION_NULL_ERROR);
-                return;
-            }
-        }else {
-            PlayerEdits.ReplaceOptions options = new PlayerEdits.ReplaceOptions(integrity, masked, shape);
-            try {
+            }else {
                 exit = PlayerEdits.replace(player, filter, block, options);
-            }catch (Exception ex) {
-                err.println(Messages.SELECTION_NULL_ERROR);
-                return;
             }
+            out.println(Messages.ofSetExit(exit));
+        }catch (MissingPosException | PosArrayLengthException ex) {
+            err.println(Messages.SELECTION_NULL_ERROR);
         }
-        out.println(Messages.ofSetExit(exit));
+
     }
 
 }

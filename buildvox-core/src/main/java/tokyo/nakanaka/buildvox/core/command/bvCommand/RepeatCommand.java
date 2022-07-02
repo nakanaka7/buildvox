@@ -4,10 +4,14 @@ import picocli.CommandLine;
 import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.EditExit;
 import tokyo.nakanaka.buildvox.core.command.NumberCompletionCandidates;
+import tokyo.nakanaka.buildvox.core.command.SelectionShapeParameter;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.World;
+import tokyo.nakanaka.buildvox.core.selectionShape.MissingPosException;
+import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
+import tokyo.nakanaka.buildvox.core.selectionShape.SelectionShape;
 
 import java.io.PrintWriter;
 
@@ -25,16 +29,21 @@ public class RepeatCommand implements Runnable {
     private int countY;
     @CommandLine.Parameters(description = "The count along z-axis.", completionCandidates = NumberCompletionCandidates.Integer.class)
     private int countZ;
+    @CommandLine.Option(names = {"-s", "--shape"}, completionCandidates = SelectionShapeParameter.Candidates.class,
+            converter = SelectionShapeParameter.Converter.class)
+    private SelectionShape shape;
 
     @Override
     public void run() {
         PrintWriter out = commandSpec.commandLine().getOut();
         PrintWriter err = commandSpec.commandLine().getErr();
         Player player = bvCmd.getTargetPlayer();
+        PlayerEdits.Options options = new PlayerEdits.Options();
+        options.shape = shape;
         try {
-            EditExit exit = PlayerEdits.repeat(player, countX, countY, countZ);
+            EditExit exit = PlayerEdits.repeat(player, countX, countY, countZ, options);
             out.println(Messages.ofSetExit(exit));
-        } catch (PlayerEdits.SelectionNotFoundException ex) {
+        } catch (MissingPosException | PosArrayLengthException ex) {
             err.println(Messages.SELECTION_NULL_ERROR);
         }
     }

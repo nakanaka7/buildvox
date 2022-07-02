@@ -73,21 +73,12 @@ public class PlayerEdits {
     }
 
     /**
-     * The exception which represents a selection was not found.
+     * General options.
      */
-    public static class SelectionNotFoundException extends RuntimeException {
-    }
-
-    private static Selection findSelection(Player player) {
-        Selection selection = player.getSelection();
-        if(selection != null) return selection;
-        Vector3i[] posArray = player.getPosArrayClone();
-        boolean posArrayIsFull = Arrays.stream(posArray).allMatch(Objects::nonNull);
-        if(posArrayIsFull) {
-            return SelectionCreations.createDefault(player.getPosArrayClone());
-        }else{
-            throw new SelectionNotFoundException();
-        }
+    public static class Options {
+        public boolean masked = false;
+        public double integrity = 1.0;
+        public SelectionShape shape = null;
     }
 
     /**
@@ -114,10 +105,11 @@ public class PlayerEdits {
 
     /**
      * Applies physics in the selection.
-     * @throws SelectionNotFoundException if a selection is not found
+     * @throws MissingPosException if player does not have a selection and some pos are missing.
+     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
      */
-    public static void applyPhysics(Player player) {
-        Selection selFrom = findSelection(player);
+    public static void applyPhysics(Player player, Options options) {
+        Selection selFrom = findSelection(player, options.shape);
         Clipboard clipboard = new Clipboard();
         ClientWorld clientWorld = new ClientWorld(player.getEditWorld(), true);
         WorldEdits.copy(clientWorld, selFrom, Vector3d.ZERO, clipboard);
@@ -138,14 +130,17 @@ public class PlayerEdits {
      * @param axis the direction of reflection.
      * @param pos the block position which the reflection plane goes throw.
      * @return the edit exit.
+     * @throws MissingPosException if player does not have a selection and some pos are missing.
+     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
+     * the shape.
      */
-    public static EditExit reflect(Player player, Axis axis, Vector3d pos) {
+    public static EditExit reflect(Player player, Axis axis, Vector3d pos, Options options) {
         AffineTransformation3d relativeTrans = switch (axis){
             case X -> AffineTransformation3d.ofScale(- 1, 1, 1);
             case Y -> AffineTransformation3d.ofScale(1, - 1, 1);
             case Z -> AffineTransformation3d.ofScale(1, 1, - 1);
         };
-        return affineTransform(player, pos, relativeTrans);
+        return affineTransform(player, pos, relativeTrans, options);
     }
 
     /**
@@ -155,16 +150,18 @@ public class PlayerEdits {
      * @param angle the rotation angle.
      * @param pos the block position which the rotating-axis goes throw.
      * @return the edit exit.
-     * @throws SelectionNotFoundException if a selection is not found
+     * @throws MissingPosException if player does not have a selection and some pos are missing.
+     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
+     * the shape.
      */
-    public static EditExit rotate(Player player, Axis axis, double angle, Vector3d pos) {
+    public static EditExit rotate(Player player, Axis axis, double angle, Vector3d pos, Options options) {
         double angleRad = angle * Math.PI / 180;
         AffineTransformation3d relativeTrans = switch (axis){
             case X -> AffineTransformation3d.ofRotationX(angleRad);
             case Y -> AffineTransformation3d.ofRotationY(angleRad);
             case Z -> AffineTransformation3d.ofRotationZ(angleRad);
         };
-        return affineTransform(player, pos, relativeTrans);
+        return affineTransform(player, pos, relativeTrans, options);
     }
 
     /**
@@ -175,12 +172,14 @@ public class PlayerEdits {
      * @param factorZ the scale factor about z-axis.
      * @param pos the center position of scaling.
      * @return the edit exit.
-     * @throws SelectionNotFoundException if a selection is not found
+     * @throws MissingPosException if player does not have a selection and some pos are missing.
+     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
+     * the shape.
      */
-    public static EditExit scale(Player player, double factorX, double factorY, double factorZ, Vector3d pos) {
+    public static EditExit scale(Player player, double factorX, double factorY, double factorZ, Vector3d pos, Options options) {
         if(factorX * factorY * factorZ == 0) throw new IllegalArgumentException();
         AffineTransformation3d relativeTrans = AffineTransformation3d.ofScale(factorX, factorY, factorZ);
-        return affineTransform(player, pos, relativeTrans);
+        return affineTransform(player, pos, relativeTrans, options);
     }
 
     /**
@@ -191,15 +190,17 @@ public class PlayerEdits {
      * @param factorJ the 2nd factor.
      * @param pos the center position of shearing.
      * @return the edit-exit
-     * @throws SelectionNotFoundException if a selection is not found
+     * @throws MissingPosException if player does not have a selection and some pos are missing.
+     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
+     * the shape.
      */
-    public static EditExit shear(Player player, Axis axis, double factorI, double factorJ, Vector3d pos) {
+    public static EditExit shear(Player player, Axis axis, double factorI, double factorJ, Vector3d pos, Options options) {
         AffineTransformation3d relativeTrans = switch (axis) {
             case X -> AffineTransformation3d.ofShearX(factorI, factorJ);
             case Y -> AffineTransformation3d.ofShearY(factorI, factorJ);
             case Z -> AffineTransformation3d.ofShearZ(factorI, factorJ);
         };
-        return affineTransform(player, pos, relativeTrans);
+        return affineTransform(player, pos, relativeTrans, options);
     }
 
     /**
@@ -209,11 +210,13 @@ public class PlayerEdits {
      * @param dy the displacement along y-axis.
      * @param dz the displacement along z-axis.
      * @return the edit exit.
-     * @throws SelectionNotFoundException if a selection is not found
+     * @throws MissingPosException if player does not have a selection and some pos are missing.
+     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
+     * the shape.
      */
-    public static EditExit translate(Player player, double dx, double dy, double dz) {
+    public static EditExit translate(Player player, double dx, double dy, double dz, Options options) {
         AffineTransformation3d relativeTrans = AffineTransformation3d.ofTranslation(dx, dy, dz);
-        return affineTransform(player, Vector3d.ZERO, relativeTrans);
+        return affineTransform(player, Vector3d.ZERO, relativeTrans, options);
     }
 
     /**
@@ -222,10 +225,12 @@ public class PlayerEdits {
      * @param pos the block position of the center of affine transformation
      * @param relativeTrans the affine transformation.
      * @return the edit exit.
-     * @throws SelectionNotFoundException if a selection is not found
+     * @throws MissingPosException if player does not have a selection and some pos are missing.
+     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
+     * the shape.
      */
-    private static EditExit affineTransform(Player player, Vector3d pos, AffineTransformation3d relativeTrans) {
-        Selection selectionFrom = findSelection(player);
+    private static EditExit affineTransform(Player player, Vector3d pos, AffineTransformation3d relativeTrans, Options options) {
+        Selection selectionFrom = findSelection(player, options.shape);
         AffineTransformation3d trans = AffineTransformation3d.withOffset(relativeTrans, pos.x() + 0.5, pos.y() + 0.5, pos.z() + 0.5);
         BlockSelection selectionTo;
         if(selectionFrom instanceof BlockSelection blockSelection) {
@@ -251,28 +256,23 @@ public class PlayerEdits {
     }
 
     /**
-     * @throws SelectionNotFoundException if a selection is not found
+     * @throws MissingPosException if player does not have a selection and some pos are missing.
+     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
+     * the shape.
      */
-    public static EditExit cut(Player player, Vector3d pos) {
-        PlayerClientWorld pw = new PlayerClientWorld(player);
-        Selection selection = findSelection(player);
+    public static EditExit cut(Player player, Vector3d pos, Options options) {
+        PlayerClientWorld pcw = new PlayerClientWorld(player);
+        Selection selection = findSelection(player, options.shape);
         Clipboard clipboard = new Clipboard();
-        WorldEdits.copy(pw, selection, pos, clipboard);
+        WorldEdits.copy(pcw, selection, pos, clipboard);
         if (selection instanceof BlockSelection blockSelection) {
-            blockSelection.setBackwardBlocks(pw);
+            blockSelection.setBackwardBlocks(pcw);
         } else {
-            WorldEdits.fill(pw, selection, player.getBackgroundBlock());
+            WorldEdits.fill(pcw, selection, player.getBackgroundBlock());
         }
         player.setClipboard(clipboard);
-        pw.setSelection(null);
-        return pw.end();
-    }
-
-    /**
-     * Copy options.
-     * @param shape nullable.
-     */
-    public static record CopyOptions(SelectionShape shape) {
+        pcw.setSelection(null);
+        return pcw.end();
     }
 
     /**
@@ -282,7 +282,7 @@ public class PlayerEdits {
      * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
      * the shape.
      */
-    public static EditExit copy(Player player, Vector3d pos, CopyOptions options) {
+    public static EditExit copy(Player player, Vector3d pos, Options options) {
         Selection selection = findSelection(player, options.shape);
         Clipboard clipboard = new Clipboard();
         WorldEdits.copy(new ClientWorld(player.getEditWorld()), selection, pos, clipboard);
@@ -313,14 +313,6 @@ public class PlayerEdits {
     }
 
     /**
-     * Fill options.
-     * @param shape Nullable.
-     */
-    public static record FillOptions(double integrity, boolean masked, SelectionShape shape) {
-
-    }
-
-    /**
      * Fills the block into the selection
      * @param player the player.
      * @param block the block
@@ -330,11 +322,11 @@ public class PlayerEdits {
      * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
      * the shape.
      */
-    public static EditExit fill(Player player, VoxelBlock block, FillOptions options) {
+    public static EditExit fill(Player player, VoxelBlock block, Options options) {
         Selection selection = findSelection(player, options.shape);
         FillSelection fillSelection = new FillSelection.Builder(block, selection)
-                .integrity(options.integrity())
-                .masked(options.masked())
+                .integrity(options.integrity)
+                .masked(options.masked)
                 .build();
         PlayerClientWorld pcw = new PlayerClientWorld(player);
         fillSelection.setForwardBlocks(pcw);
@@ -347,65 +339,25 @@ public class PlayerEdits {
      * @param player the player.
      * @param blockFrom the block to be replaced from
      * @param blockTo the block to be replaced to
-     * @param integrity the integrity of replacing.
-     * @return the edit-exit.
-     * @throws IllegalArgumentException if integrity is less than 0 or larger than 1.
-     */
-    public static EditExit replace(Player player, Selection sel, VoxelBlock blockFrom, VoxelBlock blockTo, double integrity) {
-        Selection selTo;
-        if(sel instanceof BlockSelection bs) {
-            selTo = bs.toNonBlock();
-        }else {
-            selTo = sel;
-        }
-        PlayerClientWorld pw = new PlayerClientWorld(player);
-        IntegrityClientWorld icw = new IntegrityClientWorld(integrity, pw);
-        WorldEdits.replace(icw, sel, blockFrom, blockTo);
-        pw.setSelection(selTo);
-        return pw.end();
-    }
-
-    public static record ReplaceOptions(double integrity, boolean masked, SelectionShape shape) {
-
-    }
-
-    /**
-     * Replaces blocks.
-     * @param player the player.
-     * @param blockFrom the block to be replaced from
-     * @param blockTo the block to be replaced to
      * @param options the options.
      * @return the edit-exit.
+     * @throws MissingPosException if player does not have a selection and some pos are missing.
+     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
      * @throws IllegalArgumentException if integrity is less than 0 or larger than 1.
      */
-    public static EditExit replace(Player player, VoxelBlock blockFrom, VoxelBlock blockTo, ReplaceOptions options) {
+    public static EditExit replace(Player player, VoxelBlock blockFrom, VoxelBlock blockTo, Options options) {
         Selection selTo;
-        var sel = findSelection(player, options.shape());
+        var sel = findSelection(player, options.shape);
         if(sel instanceof BlockSelection bs) {
             selTo = bs.toNonBlock();
         }else {
             selTo = sel;
         }
         PlayerClientWorld pcw = new PlayerClientWorld(player);
-        IntegrityClientWorld icw = new IntegrityClientWorld(options.integrity(), pcw);
+        IntegrityClientWorld icw = new IntegrityClientWorld(options.integrity, pcw);
         WorldEdits.replace(icw, sel, blockFrom, blockTo);
         pcw.setSelection(selTo);
         return pcw.end();
-    }
-
-    /**
-     * Replaces blocks.
-     * @param player the player.
-     * @param blockFrom the block to be replaced from
-     * @param blockTo the block to be replaced to
-     * @param integrity the integrity of replacing.
-     * @return the edit-exit.
-     * @throws IllegalArgumentException if integrity is less than 0 or larger than 1.
-     * @throws SelectionNotFoundException if a selection is not found
-     */
-    public static EditExit replace(Player player, VoxelBlock blockFrom, VoxelBlock blockTo, double integrity) {
-        Selection sel = findSelection(player);
-        return replace(player, sel, blockFrom, blockTo, integrity);
     }
 
     /*
@@ -487,10 +439,11 @@ public class PlayerEdits {
      * @param countX the count along x-axis.
      * @param countY the count along y-axis.
      * @param countZ the count along z-axis.
-     * @throws SelectionNotFoundException if a selection is not found
+     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
+     * @throws IllegalArgumentException if integrity is less than 0 or larger than 1.
      */
-    public static EditExit repeat(Player player, int countX, int countY, int countZ) {
-        Selection sel = findSelection(player);
+    public static EditExit repeat(Player player, int countX, int countY, int countZ, Options options) {
+        Selection sel = findSelection(player, options.shape);
         Parallelepiped bound = sel.getBound();
         double dx = bound.maxX() - bound.minX();
         double dy = bound.maxY() - bound.minY();
