@@ -8,6 +8,7 @@ import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.command.Block;
 import tokyo.nakanaka.buildvox.core.command.Integrity;
+import tokyo.nakanaka.buildvox.core.command.Masked;
 import tokyo.nakanaka.buildvox.core.command.Shape;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.player.Player;
@@ -29,8 +30,8 @@ public class FillCommand implements Runnable {
     private BvCommand bvCmd;
     @Mixin
     private Integrity integrity;
-    @Option(names = {"-m", "--masked"})
-    private boolean masked;
+    @Mixin
+    private Masked masked;
     @Mixin
     private Shape shape;
     @Parameters(description = "The block.", completionCandidates = Block.Candidates.class, converter = Block.Converter.class)
@@ -46,7 +47,7 @@ public class FillCommand implements Runnable {
         double integrity = this.integrity.integrity();
         var options = new PlayerEdits.Options();
         options.integrity = integrity;
-        options.masked = masked;
+        options.masked = masked.masked();
         options.shape = shape.shape();
         EditExit exit;
         try {
