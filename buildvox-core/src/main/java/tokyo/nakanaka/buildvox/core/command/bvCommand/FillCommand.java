@@ -6,7 +6,7 @@ import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.EditExit;
 import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
-import tokyo.nakanaka.buildvox.core.command.BlockParameter;
+import tokyo.nakanaka.buildvox.core.command.Block;
 import tokyo.nakanaka.buildvox.core.command.SelectionShapeParameter;
 import tokyo.nakanaka.buildvox.core.command.mixin.Integrity;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
@@ -35,9 +35,9 @@ public class FillCommand implements Runnable {
     @Option(names = {"-s", "--shape"}, completionCandidates = SelectionShapeParameter.Candidates.class,
             converter = SelectionShapeParameter.Converter.class)
     private SelectionShape shape;
-    @Parameters(description = "The block.", completionCandidates = BlockParameter.Candidates.class, converter = BlockParameter.Converter.class)
+    @Parameters(description = "The block.", completionCandidates = Block.Candidates.class, converter = Block.Converter.class)
     private VoxelBlock block;
-    @Option(names = {"-r", "--replace"}, description = "The block to replace", completionCandidates = BlockParameter.Candidates.class, converter = BlockParameter.Converter.class)
+    @Option(names = {"-r", "--replace"}, description = "The block to replace", completionCandidates = Block.Candidates.class, converter = Block.Converter.class)
     private VoxelBlock filter;
 
     @Override

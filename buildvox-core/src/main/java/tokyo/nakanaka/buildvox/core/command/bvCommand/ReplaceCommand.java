@@ -2,7 +2,7 @@ package tokyo.nakanaka.buildvox.core.command.bvCommand;
 
 import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.Messages;
-import tokyo.nakanaka.buildvox.core.command.BlockParameter;
+import tokyo.nakanaka.buildvox.core.command.Block;
 import tokyo.nakanaka.buildvox.core.EditExit;
 import tokyo.nakanaka.buildvox.core.command.mixin.Integrity;
 import tokyo.nakanaka.buildvox.core.command.SelectionShapeParameter;
@@ -25,10 +25,10 @@ public class ReplaceCommand implements Runnable {
     @ParentCommand
     private BvCommand bvCmd;
     @Parameters(arity = "1",
-            description = "The block type to replace from.", completionCandidates = BlockParameter.Candidates.class)
+            description = "The block type to replace from.", completionCandidates = Block.Candidates.class)
     private String blockFrom;
     @Parameters(arity = "1",
-            description = "The block type to replace to.", completionCandidates = BlockParameter.Candidates.class)
+            description = "The block type to replace to.", completionCandidates = Block.Candidates.class)
     private String blockTo;
     @Mixin
     private Integrity integrity;

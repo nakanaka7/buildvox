@@ -1,7 +1,7 @@
 package tokyo.nakanaka.buildvox.core.command.bvCommand;
 
 import picocli.CommandLine.*;
-import tokyo.nakanaka.buildvox.core.command.BlockParameter;
+import tokyo.nakanaka.buildvox.core.command.Block;
 import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
@@ -17,7 +17,7 @@ public class BackgroundCommand implements Runnable {
     @ParentCommand
     private BvCommand bvCmd;
     @Parameters(arity = "1",
-            description = "The block.", completionCandidates = BlockParameter.Candidates.class)
+            description = "The block.", completionCandidates = Block.Candidates.class)
     private String block;
 
     @Override
