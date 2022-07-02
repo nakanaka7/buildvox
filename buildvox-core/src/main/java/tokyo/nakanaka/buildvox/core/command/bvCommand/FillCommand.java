@@ -7,13 +7,12 @@ import tokyo.nakanaka.buildvox.core.EditExit;
 import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.command.Block;
-import tokyo.nakanaka.buildvox.core.command.Shape;
 import tokyo.nakanaka.buildvox.core.command.Integrity;
+import tokyo.nakanaka.buildvox.core.command.Shape;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.selectionShape.MissingPosException;
 import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
-import tokyo.nakanaka.buildvox.core.selectionShape.SelectionShape;
 
 import java.io.PrintWriter;
 
@@ -32,9 +31,8 @@ public class FillCommand implements Runnable {
     private Integrity integrity;
     @Option(names = {"-m", "--masked"})
     private boolean masked;
-    @Option(names = {"-s", "--shape"}, completionCandidates = Shape.Candidates.class,
-            converter = Shape.Converter.class)
-    private SelectionShape shape;
+    @Mixin
+    private Shape shape;
     @Parameters(description = "The block.", completionCandidates = Block.Candidates.class, converter = Block.Converter.class)
     private VoxelBlock block;
     @Option(names = {"-r", "--replace"}, description = "The block to replace", completionCandidates = Block.Candidates.class, converter = Block.Converter.class)
@@ -55,7 +53,7 @@ public class FillCommand implements Runnable {
         var options = new PlayerEdits.Options();
         options.integrity = integrity;
         options.masked = masked;
-        options.shape = shape;
+        options.shape = shape.shape();
         EditExit exit;
         try {
             if(filter == null) {
