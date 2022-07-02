@@ -123,10 +123,11 @@ public class PlayerEdits {
 
     /**
      * Applies physics in the selection.
-     * @throws SelectionNotFoundException if a selection is not found
+     * @throws MissingPosException if player does not have a selection and some pos are missing.
+     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
      */
-    public static void applyPhysics(Player player) {
-        Selection selFrom = findSelection(player);
+    public static void applyPhysics(Player player, Options options) {
+        Selection selFrom = findSelection(player, options.shape);
         Clipboard clipboard = new Clipboard();
         ClientWorld clientWorld = new ClientWorld(player.getEditWorld(), true);
         WorldEdits.copy(clientWorld, selFrom, Vector3d.ZERO, clipboard);
