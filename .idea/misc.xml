@@ -8,6 +8,7 @@
       <writeAnnotation name="picocli.CommandLine.Spec" />
       <writeAnnotation name="picocli.CommandLine.Parameters" />
       <writeAnnotation name="picocli.CommandLine.Mixin" />
+      <writeAnnotation name="picocli.CommandLine.Option" />
     </writeAnnotations>
   </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
