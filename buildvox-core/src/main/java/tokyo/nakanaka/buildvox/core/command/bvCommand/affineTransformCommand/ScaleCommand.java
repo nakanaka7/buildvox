@@ -4,7 +4,7 @@ import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.EditExit;
 import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.command.NumberCompletionCandidates;
-import tokyo.nakanaka.buildvox.core.command.Pos;
+import tokyo.nakanaka.buildvox.core.command.mixin.Pos;
 import tokyo.nakanaka.buildvox.core.command.SelectionShapeParameter;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
