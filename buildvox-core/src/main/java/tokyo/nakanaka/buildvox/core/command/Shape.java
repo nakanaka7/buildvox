@@ -1,6 +1,7 @@
 package tokyo.nakanaka.buildvox.core.command;
 
 import picocli.CommandLine;
+import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.ParseUtils;
 import tokyo.nakanaka.buildvox.core.selectionShape.SelectionShape;
 import tokyo.nakanaka.buildvox.core.selectionShape.SelectionShapeImpl;
@@ -28,8 +29,9 @@ public class Shape {
         shapeMap.put("triangle", TriangleMixin.class);
     }
 
-    private Shape() {
-    }
+    @Option(names = {"-s", "--shape"}, completionCandidates = Candidates.class,
+            converter = Converter.class)
+    private SelectionShape shape;
 
     public static class Candidates implements Iterable<String> {
         @Override
