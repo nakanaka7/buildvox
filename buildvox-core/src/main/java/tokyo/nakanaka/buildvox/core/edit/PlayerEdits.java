@@ -357,65 +357,25 @@ public class PlayerEdits {
      * @param player the player.
      * @param blockFrom the block to be replaced from
      * @param blockTo the block to be replaced to
-     * @param integrity the integrity of replacing.
-     * @return the edit-exit.
-     * @throws IllegalArgumentException if integrity is less than 0 or larger than 1.
-     */
-    public static EditExit replace(Player player, Selection sel, VoxelBlock blockFrom, VoxelBlock blockTo, double integrity) {
-        Selection selTo;
-        if(sel instanceof BlockSelection bs) {
-            selTo = bs.toNonBlock();
-        }else {
-            selTo = sel;
-        }
-        PlayerClientWorld pw = new PlayerClientWorld(player);
-        IntegrityClientWorld icw = new IntegrityClientWorld(integrity, pw);
-        WorldEdits.replace(icw, sel, blockFrom, blockTo);
-        pw.setSelection(selTo);
-        return pw.end();
-    }
-
-    public static record ReplaceOptions(double integrity, boolean masked, SelectionShape shape) {
-
-    }
-
-    /**
-     * Replaces blocks.
-     * @param player the player.
-     * @param blockFrom the block to be replaced from
-     * @param blockTo the block to be replaced to
      * @param options the options.
      * @return the edit-exit.
+     * @throws MissingPosException if player does not have a selection and some pos are missing.
+     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
      * @throws IllegalArgumentException if integrity is less than 0 or larger than 1.
      */
-    public static EditExit replace(Player player, VoxelBlock blockFrom, VoxelBlock blockTo, ReplaceOptions options) {
+    public static EditExit replace(Player player, VoxelBlock blockFrom, VoxelBlock blockTo, Options options) {
         Selection selTo;
-        var sel = findSelection(player, options.shape());
+        var sel = findSelection(player, options.shape);
         if(sel instanceof BlockSelection bs) {
             selTo = bs.toNonBlock();
         }else {
             selTo = sel;
         }
         PlayerClientWorld pcw = new PlayerClientWorld(player);
-        IntegrityClientWorld icw = new IntegrityClientWorld(options.integrity(), pcw);
+        IntegrityClientWorld icw = new IntegrityClientWorld(options.integrity, pcw);
         WorldEdits.replace(icw, sel, blockFrom, blockTo);
         pcw.setSelection(selTo);
         return pcw.end();
-    }
-
-    /**
-     * Replaces blocks.
-     * @param player the player.
-     * @param blockFrom the block to be replaced from
-     * @param blockTo the block to be replaced to
-     * @param integrity the integrity of replacing.
-     * @return the edit-exit.
-     * @throws IllegalArgumentException if integrity is less than 0 or larger than 1.
-     * @throws SelectionNotFoundException if a selection is not found
-     */
-    public static EditExit replace(Player player, VoxelBlock blockFrom, VoxelBlock blockTo, double integrity) {
-        Selection sel = findSelection(player);
-        return replace(player, sel, blockFrom, blockTo, integrity);
     }
 
     /*
