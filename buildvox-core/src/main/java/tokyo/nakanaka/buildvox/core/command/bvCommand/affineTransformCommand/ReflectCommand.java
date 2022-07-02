@@ -3,7 +3,7 @@ package tokyo.nakanaka.buildvox.core.command.bvCommand.affineTransformCommand;
 import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.EditExit;
 import tokyo.nakanaka.buildvox.core.Messages;
-import tokyo.nakanaka.buildvox.core.command.mixin.Pos;
+import tokyo.nakanaka.buildvox.core.command.Pos;
 import tokyo.nakanaka.buildvox.core.command.Shape;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;

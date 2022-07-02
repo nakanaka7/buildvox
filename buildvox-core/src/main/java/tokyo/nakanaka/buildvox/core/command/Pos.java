@@ -1,4 +1,4 @@
-package tokyo.nakanaka.buildvox.core.command.mixin;
+package tokyo.nakanaka.buildvox.core.command;
 
 import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
