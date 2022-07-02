@@ -5,7 +5,7 @@ import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.command.Block;
 import tokyo.nakanaka.buildvox.core.EditExit;
 import tokyo.nakanaka.buildvox.core.command.mixin.Integrity;
-import tokyo.nakanaka.buildvox.core.command.SelectionShapeParameter;
+import tokyo.nakanaka.buildvox.core.command.Shape;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.selectionShape.MissingPosException;
@@ -32,8 +32,8 @@ public class ReplaceCommand implements Runnable {
     private String blockTo;
     @Mixin
     private Integrity integrity;
-    @Option(names = {"-s", "--shape"}, completionCandidates = SelectionShapeParameter.Candidates.class,
-            converter = SelectionShapeParameter.Converter.class)
+    @Option(names = {"-s", "--shape"}, completionCandidates = Shape.Candidates.class,
+            converter = Shape.Converter.class)
     private SelectionShape shape;
 
     @Override

@@ -3,7 +3,7 @@ package tokyo.nakanaka.buildvox.core.command.bvCommand.affineTransformCommand;
 import tokyo.nakanaka.buildvox.core.EditExit;
 import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.command.NumberCompletionCandidates;
-import tokyo.nakanaka.buildvox.core.command.SelectionShapeParameter;
+import tokyo.nakanaka.buildvox.core.command.Shape;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.player.Player;
@@ -28,8 +28,8 @@ public class TranslateCommand implements Runnable {
     private double dy;
     @Parameters(description = "The displacement along z-axis.", completionCandidates = NumberCompletionCandidates.Integer.class)
     private double dz;
-    @Option(names = {"-s", "--shape"}, completionCandidates = SelectionShapeParameter.Candidates.class,
-            converter = SelectionShapeParameter.Converter.class)
+    @Option(names = {"-s", "--shape"}, completionCandidates = Shape.Candidates.class,
+            converter = Shape.Converter.class)
     private SelectionShape shape;
 
     @Override

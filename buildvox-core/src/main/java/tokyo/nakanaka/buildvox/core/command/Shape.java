@@ -1,16 +1,17 @@
 package tokyo.nakanaka.buildvox.core.command;
 
-import static picocli.CommandLine.*;
-
 import picocli.CommandLine;
 import tokyo.nakanaka.buildvox.core.ParseUtils;
-import tokyo.nakanaka.buildvox.core.selectionShape.shapeMixin.*;
 import tokyo.nakanaka.buildvox.core.selectionShape.SelectionShape;
 import tokyo.nakanaka.buildvox.core.selectionShape.SelectionShapeImpl;
+import tokyo.nakanaka.buildvox.core.selectionShape.shapeMixin.*;
 
 import java.util.*;
 
-public class SelectionShapeParameter {
+import static picocli.CommandLine.Command;
+import static picocli.CommandLine.ITypeConverter;
+
+public class Shape {
     private static final Map<String, Class<? extends ShapeMixin>> shapeMap = new HashMap<>();
 
     static {
@@ -27,7 +28,7 @@ public class SelectionShapeParameter {
         shapeMap.put("triangle", TriangleMixin.class);
     }
 
-    private SelectionShapeParameter() {
+    private Shape() {
     }
 
     public static class Candidates implements Iterable<String> {
