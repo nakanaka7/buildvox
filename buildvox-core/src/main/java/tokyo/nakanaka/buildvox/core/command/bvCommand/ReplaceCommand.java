@@ -4,7 +4,7 @@ import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.command.BlockParameter;
 import tokyo.nakanaka.buildvox.core.EditExit;
-import tokyo.nakanaka.buildvox.core.command.IntegrityMixin;
+import tokyo.nakanaka.buildvox.core.command.Integrity;
 import tokyo.nakanaka.buildvox.core.command.SelectionShapeParameter;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.player.Player;
@@ -31,7 +31,7 @@ public class ReplaceCommand implements Runnable {
             description = "The block type to replace to.", completionCandidates = BlockParameter.Candidates.class)
     private String blockTo;
     @Mixin
-    private IntegrityMixin integrityMixin;
+    private Integrity integrity;
     @Option(names = {"-s", "--shape"}, completionCandidates = SelectionShapeParameter.Candidates.class,
             converter = SelectionShapeParameter.Converter.class)
     private SelectionShape shape;
@@ -56,13 +56,13 @@ public class ReplaceCommand implements Runnable {
             return;
         }
         try{
-            integrityMixin.checkValue();
+            integrity.checkValue();
         }catch (IllegalStateException ex) {
             err.println(ex.getMessage());
             return;
         }
         var options = new PlayerEdits.Options();
-        options.integrity = integrityMixin.integrity();
+        options.integrity = integrity.integrity();
         options.shape = shape;
         EditExit exit;
         try {

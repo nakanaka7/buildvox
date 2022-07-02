@@ -3,7 +3,7 @@ package tokyo.nakanaka.buildvox.core.command.bvCommand;
 import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.EditExit;
-import tokyo.nakanaka.buildvox.core.command.IntegrityMixin;
+import tokyo.nakanaka.buildvox.core.command.Integrity;
 import tokyo.nakanaka.buildvox.core.command.PosMixin;
 import tokyo.nakanaka.buildvox.core.Clipboard;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
@@ -21,7 +21,7 @@ public class PasteCommand implements Runnable {
     @ParentCommand
     private BvCommand bvCmd;
     @Mixin
-    private IntegrityMixin integrityMixin;
+    private Integrity integrity;
     @Mixin
     private PosMixin posMixin;
     @Option(names = {"-m", "--masked"})
@@ -36,7 +36,7 @@ public class PasteCommand implements Runnable {
         PrintWriter out = commandSpec.commandLine().getOut();
         PrintWriter err = commandSpec.commandLine().getErr();
         try{
-            integrityMixin.checkValue();
+            integrity.checkValue();
         }catch (IllegalStateException ex) {
             err.println(ex.getMessage());
             return;
@@ -48,7 +48,7 @@ public class PasteCommand implements Runnable {
             err.println("Copy first");
             return;
         }
-        EditExit exit = PlayerEdits.paste(player, pos, integrityMixin.integrity(), masked);
+        EditExit exit = PlayerEdits.paste(player, pos, integrity.integrity(), masked);
         out.println(Messages.ofSetExit(exit));
     }
 

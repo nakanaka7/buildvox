@@ -8,7 +8,7 @@ import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.command.BlockParameter;
 import tokyo.nakanaka.buildvox.core.command.SelectionShapeParameter;
-import tokyo.nakanaka.buildvox.core.command.IntegrityMixin;
+import tokyo.nakanaka.buildvox.core.command.Integrity;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.selectionShape.MissingPosException;
@@ -29,7 +29,7 @@ public class FillCommand implements Runnable {
     @ParentCommand
     private BvCommand bvCmd;
     @Mixin
-    private IntegrityMixin integrityMixin;
+    private Integrity integrity;
     @Option(names = {"-m", "--masked"})
     private boolean masked;
     @Option(names = {"-s", "--shape"}, completionCandidates = SelectionShapeParameter.Candidates.class,
@@ -46,12 +46,12 @@ public class FillCommand implements Runnable {
         PrintWriter err = commandSpec.commandLine().getErr();
         Player player = bvCmd.getTargetPlayer();
         try{
-            integrityMixin.checkValue();
+            integrity.checkValue();
         }catch (IllegalStateException ex) {
             err.println(ex.getMessage());
             return;
         }
-        double integrity = integrityMixin.integrity();
+        double integrity = this.integrity.integrity();
         var options = new PlayerEdits.Options();
         options.integrity = integrity;
         options.masked = masked;

@@ -3,7 +3,7 @@ package tokyo.nakanaka.buildvox.core.command;
 import picocli.CommandLine;
 import tokyo.nakanaka.buildvox.core.Messages;
 
-public class IntegrityMixin {
+public class Integrity {
     @CommandLine.Option(names = {"-i", "--integrity"}, description = "The integrity of block setting.",
             defaultValue = "1")
     private double integrity;
