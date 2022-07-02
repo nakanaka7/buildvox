@@ -457,10 +457,11 @@ public class PlayerEdits {
      * @param countX the count along x-axis.
      * @param countY the count along y-axis.
      * @param countZ the count along z-axis.
-     * @throws SelectionNotFoundException if a selection is not found
+     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
+     * @throws IllegalArgumentException if integrity is less than 0 or larger than 1.
      */
-    public static EditExit repeat(Player player, int countX, int countY, int countZ) {
-        Selection sel = findSelection(player);
+    public static EditExit repeat(Player player, int countX, int countY, int countZ, Options options) {
+        Selection sel = findSelection(player, options.shape);
         Parallelepiped bound = sel.getBound();
         double dx = bound.maxX() - bound.minX();
         double dy = bound.maxY() - bound.minY();
