@@ -4,6 +4,7 @@ import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.EditExit;
 import tokyo.nakanaka.buildvox.core.command.Integrity;
+import tokyo.nakanaka.buildvox.core.command.Masked;
 import tokyo.nakanaka.buildvox.core.command.Pos;
 import tokyo.nakanaka.buildvox.core.Clipboard;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
@@ -24,8 +25,8 @@ public class PasteCommand implements Runnable {
     private Integrity integrity;
     @Mixin
     private Pos pos;
-    @Option(names = {"-m", "--masked"})
-    private boolean masked;
+    @Mixin
+    private Masked masked;
 
     /**
      * Paste blocks of the clipboard into the world. The origin of the clipboard matches the offset point.
@@ -42,7 +43,7 @@ public class PasteCommand implements Runnable {
             err.println("Copy first");
             return;
         }
-        EditExit exit = PlayerEdits.paste(player, pos, integrity.integrity(), masked);
+        EditExit exit = PlayerEdits.paste(player, pos, integrity.integrity(), masked.masked());
         out.println(Messages.ofSetExit(exit));
     }
 
