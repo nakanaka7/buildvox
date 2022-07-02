@@ -1,6 +1,6 @@
 package tokyo.nakanaka.buildvox.core.command.bvCommand;
 
-import picocli.CommandLine;
+import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.command.BlockParameter;
 import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
@@ -8,15 +8,15 @@ import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 
 import java.io.PrintWriter;
 
-@CommandLine.Command(name = "background", mixinStandardHelpOptions = true,
+@Command(name = "background", mixinStandardHelpOptions = true,
          description = "Set a background block."
 )
 public class BackgroundCommand implements Runnable {
-    @CommandLine.Spec
-    private CommandLine.Model.CommandSpec commandSpec;
-    @CommandLine.ParentCommand
+    @Spec
+    private Model.CommandSpec commandSpec;
+    @ParentCommand
     private BvCommand bvCmd;
-    @CommandLine.Parameters(arity = "1",
+    @Parameters(arity = "1",
             description = "The block.", completionCandidates = BlockParameter.Candidates.class)
     private String block;
 

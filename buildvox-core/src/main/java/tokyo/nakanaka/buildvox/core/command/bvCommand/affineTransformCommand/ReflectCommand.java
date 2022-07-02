@@ -1,11 +1,11 @@
 package tokyo.nakanaka.buildvox.core.command.bvCommand.affineTransformCommand;
 
-import picocli.CommandLine;
-import tokyo.nakanaka.buildvox.core.Messages;
+import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.EditExit;
+import tokyo.nakanaka.buildvox.core.Messages;
+import tokyo.nakanaka.buildvox.core.command.PosMixin;
 import tokyo.nakanaka.buildvox.core.command.SelectionShapeParameter;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
-import tokyo.nakanaka.buildvox.core.command.PosMixin;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
 import tokyo.nakanaka.buildvox.core.player.Player;
@@ -16,19 +16,19 @@ import tokyo.nakanaka.buildvox.core.selectionShape.SelectionShape;
 
 import java.io.PrintWriter;
 
-@CommandLine.Command(name = "reflect",
+@Command(name = "reflect",
         mixinStandardHelpOptions = true,
         description = "Reflect the selected blocks about the position (posX, posY, posZ).")
 public class ReflectCommand implements Runnable {
-    @CommandLine.Spec
-    private CommandLine.Model.CommandSpec commandSpec;
-    @CommandLine.ParentCommand
+    @Spec
+    private Model.CommandSpec commandSpec;
+    @ParentCommand
     private BvCommand bvCmd;
-    @CommandLine.Parameters(description = "The axis which parallels to the reflection direction.")
+    @Parameters(description = "The axis which parallels to the reflection direction.")
     private Axis axis;
-    @CommandLine.Mixin
+    @Mixin
     private PosMixin posMixin;
-    @CommandLine.Option(names = {"-s", "--shape"}, completionCandidates = SelectionShapeParameter.Candidates.class,
+    @Option(names = {"-s", "--shape"}, completionCandidates = SelectionShapeParameter.Candidates.class,
             converter = SelectionShapeParameter.Converter.class)
     private SelectionShape shape;
 

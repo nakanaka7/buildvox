@@ -1,6 +1,6 @@
 package tokyo.nakanaka.buildvox.core.command.bvCommand;
 
-import picocli.CommandLine;
+import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.affineTransformCommand.*;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.posArray.PosArrayCommand;
@@ -12,7 +12,7 @@ import tokyo.nakanaka.buildvox.core.World;
 import java.io.PrintWriter;
 import java.util.Iterator;
 
-@CommandLine.Command(name = "bv",
+@Command(name = "bv",
         mixinStandardHelpOptions = true,
         description = "The root command of BuildVox.",
         subcommands = {
@@ -26,9 +26,9 @@ import java.util.Iterator;
                 RepeatCommand.class,
         })
 public class BvCommand implements Runnable {
-    @CommandLine.Spec
-    private CommandLine.Model.CommandSpec commandSpec;
-    @CommandLine.Option(names = {"-d", "--dummy"},
+    @Spec
+    private Model.CommandSpec commandSpec;
+    @Option(names = {"-d", "--dummy"},
             description = "Set a dummy player of this command execution. See also /bvd command help.",
             completionCandidates = DummyPlayerIdIterable.class
     )
@@ -60,7 +60,7 @@ public class BvCommand implements Runnable {
      * ExecutionStrategy of this command. This method is called before command execution.
      * https://picocli.info/#_initialization_before_execution
      */
-    public int executionStrategy(CommandLine.ParseResult parseResult){
+    public int executionStrategy(ParseResult parseResult){
         PrintWriter err = commandSpec.commandLine().getErr();
         //-d
         if(dummyPlayer != null){
@@ -78,7 +78,7 @@ public class BvCommand implements Runnable {
         if(execWorld != targetPlayer.getEditWorld() ) {
             targetPlayer.setEditWorld(execWorld);
         }
-        return new CommandLine.RunLast().execute(parseResult);
+        return new RunLast().execute(parseResult);
     }
     
     @Override

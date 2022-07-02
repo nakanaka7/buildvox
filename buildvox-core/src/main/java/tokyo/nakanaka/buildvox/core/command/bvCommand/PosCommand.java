@@ -1,6 +1,6 @@
 package tokyo.nakanaka.buildvox.core.command.bvCommand;
 
-import picocli.CommandLine;
+import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.command.PosMixin;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
@@ -11,19 +11,19 @@ import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.List;
 
-@CommandLine.Command(name = "pos", mixinStandardHelpOptions = true,
+@Command(name = "pos", mixinStandardHelpOptions = true,
         description = "Set a pos."
 )
 public class PosCommand implements Runnable {
-    @CommandLine.Spec
-    private CommandLine.Model.CommandSpec commandSpec;
-    @CommandLine.ParentCommand
+    @Spec
+    private Model.CommandSpec commandSpec;
+    @ParentCommand
     private BvCommand bvCmd;
-    @CommandLine.Parameters(
+    @Parameters(
             description = "Pos index",
             completionCandidates = posIndexIterable.class)
     private int index;
-    @CommandLine.Mixin
+    @Mixin
     private PosMixin posMixin;
 
     @Override

@@ -1,6 +1,6 @@
 package tokyo.nakanaka.buildvox.core.command.bvCommand;
 
-import picocli.CommandLine;
+import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.EditExit;
 import tokyo.nakanaka.buildvox.core.selectionShape.MissingPosException;
@@ -14,17 +14,17 @@ import tokyo.nakanaka.buildvox.core.selectionShape.SelectionShape;
 
 import java.io.PrintWriter;
 
-@CommandLine.Command(name = "copy", mixinStandardHelpOptions = true,
+@Command(name = "copy", mixinStandardHelpOptions = true,
          description = "Copy the blocks in the selection. (posX, posY, posZ) is a position which will be the origin in the clipboard."
 )
 public class CopyCommand implements Runnable {
-    @CommandLine.Spec
-    private CommandLine.Model.CommandSpec commandSpec;
-    @CommandLine.ParentCommand
+    @Spec
+    private Model.CommandSpec commandSpec;
+    @ParentCommand
     private BvCommand bvCmd;
-    @CommandLine.Mixin
+    @Mixin
     private PosMixin posMixin;
-    @CommandLine.Option(names = {"-s", "--shape"}, completionCandidates = SelectionShapeParameter.Candidates.class,
+    @Option(names = {"-s", "--shape"}, completionCandidates = SelectionShapeParameter.Candidates.class,
     converter = SelectionShapeParameter.Converter.class)
     private SelectionShape shape;
 

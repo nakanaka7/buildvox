@@ -1,6 +1,6 @@
 package tokyo.nakanaka.buildvox.core.command.bvCommand;
 
-import picocli.CommandLine;
+import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.command.BlockParameter;
 import tokyo.nakanaka.buildvox.core.EditExit;
@@ -16,23 +16,23 @@ import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 
 import java.io.PrintWriter;
 
-@CommandLine.Command(name = "replace", mixinStandardHelpOptions = true,
+@Command(name = "replace", mixinStandardHelpOptions = true,
         description = "Replace specified blocks to another ones."
 )
 public class ReplaceCommand implements Runnable {
-    @CommandLine.Spec
-    private CommandLine.Model.CommandSpec commandSpec;
-    @CommandLine.ParentCommand
+    @Spec
+    private Model.CommandSpec commandSpec;
+    @ParentCommand
     private BvCommand bvCmd;
-    @CommandLine.Parameters(arity = "1",
+    @Parameters(arity = "1",
             description = "The block type to replace from.", completionCandidates = BlockParameter.Candidates.class)
     private String blockFrom;
-    @CommandLine.Parameters(arity = "1",
+    @Parameters(arity = "1",
             description = "The block type to replace to.", completionCandidates = BlockParameter.Candidates.class)
     private String blockTo;
-    @CommandLine.Mixin
+    @Mixin
     private IntegrityMixin integrityMixin;
-    @CommandLine.Option(names = {"-s", "--shape"}, completionCandidates = SelectionShapeParameter.Candidates.class,
+    @Option(names = {"-s", "--shape"}, completionCandidates = SelectionShapeParameter.Candidates.class,
             converter = SelectionShapeParameter.Converter.class)
     private SelectionShape shape;
 

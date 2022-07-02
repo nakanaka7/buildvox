@@ -2,7 +2,7 @@ package tokyo.nakanaka.buildvox.core.command.bvCommand;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import picocli.CommandLine;
+import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.EditExit;
 import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
@@ -17,27 +17,27 @@ import tokyo.nakanaka.buildvox.core.selectionShape.SelectionShape;
 
 import java.io.PrintWriter;
 
-@CommandLine.Command(name = "fill", mixinStandardHelpOptions = true,
+@Command(name = "fill", mixinStandardHelpOptions = true,
         description = "Fill blocks into the selection or specified shape region."
 )
 public class FillCommand implements Runnable {
     private static final Logger LOGGER = LoggerFactory.getLogger(FillCommand.class);
     private static final String DESC_HEAD = "Fill blocks in ";
 
-    @CommandLine.Spec
-    private CommandLine.Model.CommandSpec commandSpec;
-    @CommandLine.ParentCommand
+    @Spec
+    private Model.CommandSpec commandSpec;
+    @ParentCommand
     private BvCommand bvCmd;
-    @CommandLine.Mixin
+    @Mixin
     private IntegrityMixin integrityMixin;
-    @CommandLine.Option(names = {"-m", "--masked"})
+    @Option(names = {"-m", "--masked"})
     private boolean masked;
-    @CommandLine.Option(names = {"-s", "--shape"}, completionCandidates = SelectionShapeParameter.Candidates.class,
+    @Option(names = {"-s", "--shape"}, completionCandidates = SelectionShapeParameter.Candidates.class,
             converter = SelectionShapeParameter.Converter.class)
     private SelectionShape shape;
-    @CommandLine.Parameters(description = "The block.", completionCandidates = BlockParameter.Candidates.class, converter = BlockParameter.Converter.class)
+    @Parameters(description = "The block.", completionCandidates = BlockParameter.Candidates.class, converter = BlockParameter.Converter.class)
     private VoxelBlock block;
-    @CommandLine.Option(names = {"-r", "--replace"}, description = "The block to replace", completionCandidates = BlockParameter.Candidates.class, converter = BlockParameter.Converter.class)
+    @Option(names = {"-r", "--replace"}, description = "The block to replace", completionCandidates = BlockParameter.Candidates.class, converter = BlockParameter.Converter.class)
     private VoxelBlock filter;
 
     @Override

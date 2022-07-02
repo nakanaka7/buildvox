@@ -1,6 +1,6 @@
 package tokyo.nakanaka.buildvox.core.command.bvCommand;
 
-import picocli.CommandLine;
+import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.EditExit;
 import tokyo.nakanaka.buildvox.core.command.IntegrityMixin;
@@ -12,19 +12,19 @@ import tokyo.nakanaka.buildvox.core.player.Player;
 
 import java.io.PrintWriter;
 
-@CommandLine.Command(name = "paste", mixinStandardHelpOptions = true,
+@Command(name = "paste", mixinStandardHelpOptions = true,
         description = "Paste the blocks of the clipboard. The block at the origin of the clipboard will be pasted at (posX, posY, posZ) in the world"
 )
 public class PasteCommand implements Runnable {
-    @CommandLine.Spec
-    private CommandLine.Model.CommandSpec commandSpec;
-    @CommandLine.ParentCommand
+    @Spec
+    private Model.CommandSpec commandSpec;
+    @ParentCommand
     private BvCommand bvCmd;
-    @CommandLine.Mixin
+    @Mixin
     private IntegrityMixin integrityMixin;
-    @CommandLine.Mixin
+    @Mixin
     private PosMixin posMixin;
-    @CommandLine.Option(names = {"-m", "--masked"})
+    @Option(names = {"-m", "--masked"})
     private boolean masked;
 
     /**
