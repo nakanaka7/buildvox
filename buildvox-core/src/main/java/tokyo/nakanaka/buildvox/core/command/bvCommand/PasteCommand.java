@@ -42,7 +42,7 @@ public class PasteCommand implements Runnable {
             return;
         }
         Player player = bvCmd.getTargetPlayer();
-        Vector3d pos = this.pos.calcAbsPos(bvCmd.getExecPos());
+        Vector3d pos = this.pos.toVector3d(bvCmd.getExecPos());
         Clipboard clipboard = player.getClipboard();
         if(clipboard == null){
             err.println("Copy first");

@@ -45,7 +45,7 @@ public class ScaleCommand implements Runnable {
             err.println(Messages.SCALE_FACTOR_ERROR);
             return;
         }
-        Vector3d pos = this.pos.calcAbsPos(bvCmd.getExecPos());
+        Vector3d pos = this.pos.toVector3d(bvCmd.getExecPos());
         var options = new PlayerEdits.Options();
         options.shape = shape;
         EditExit editExit;

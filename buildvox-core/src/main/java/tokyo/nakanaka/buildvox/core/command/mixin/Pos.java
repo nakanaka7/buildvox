@@ -48,7 +48,11 @@ public class Pos {
 
     }
 
-    public Vector3d calcAbsPos(Vector3i execPos) {
+    /**
+     * @param execPos the execution position of the command.
+     * @return the position.
+     */
+    public Vector3d toVector3d(Vector3i execPos) {
         double absX = calcAbsCoordinate(posX, execPos.x());
         double absY = calcAbsCoordinate(posY, execPos.y());
         double absZ = calcAbsCoordinate(posZ, execPos.z());

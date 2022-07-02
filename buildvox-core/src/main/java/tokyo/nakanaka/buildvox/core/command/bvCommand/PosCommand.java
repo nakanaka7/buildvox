@@ -37,7 +37,7 @@ public class PosCommand implements Runnable {
             err.println(Messages.ofPosRangeError(posDataSize));
             return;
         }
-        Vector3d pos = this.pos.calcAbsPos(bvCmd.getExecPos());
+        Vector3d pos = this.pos.toVector3d(bvCmd.getExecPos());
         int posX = (int)Math.floor(pos.x());
         int posY = (int)Math.floor(pos.y());
         int posZ = (int)Math.floor(pos.z());
