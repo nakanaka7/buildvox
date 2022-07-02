@@ -4,7 +4,7 @@ import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.EditExit;
 import tokyo.nakanaka.buildvox.core.command.Integrity;
-import tokyo.nakanaka.buildvox.core.command.PosMixin;
+import tokyo.nakanaka.buildvox.core.command.Pos;
 import tokyo.nakanaka.buildvox.core.Clipboard;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
@@ -23,7 +23,7 @@ public class PasteCommand implements Runnable {
     @Mixin
     private Integrity integrity;
     @Mixin
-    private PosMixin posMixin;
+    private Pos pos;
     @Option(names = {"-m", "--masked"})
     private boolean masked;
 
@@ -42,7 +42,7 @@ public class PasteCommand implements Runnable {
             return;
         }
         Player player = bvCmd.getTargetPlayer();
-        Vector3d pos = posMixin.calcAbsPos(bvCmd.getExecPos());
+        Vector3d pos = this.pos.calcAbsPos(bvCmd.getExecPos());
         Clipboard clipboard = player.getClipboard();
         if(clipboard == null){
             err.println("Copy first");

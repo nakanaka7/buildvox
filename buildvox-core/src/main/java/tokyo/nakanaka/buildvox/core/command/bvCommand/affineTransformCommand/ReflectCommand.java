@@ -3,7 +3,7 @@ package tokyo.nakanaka.buildvox.core.command.bvCommand.affineTransformCommand;
 import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.EditExit;
 import tokyo.nakanaka.buildvox.core.Messages;
-import tokyo.nakanaka.buildvox.core.command.PosMixin;
+import tokyo.nakanaka.buildvox.core.command.Pos;
 import tokyo.nakanaka.buildvox.core.command.SelectionShapeParameter;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
@@ -27,7 +27,7 @@ public class ReflectCommand implements Runnable {
     @Parameters(description = "The axis which parallels to the reflection direction.")
     private Axis axis;
     @Mixin
-    private PosMixin posMixin;
+    private Pos pos;
     @Option(names = {"-s", "--shape"}, completionCandidates = SelectionShapeParameter.Candidates.class,
             converter = SelectionShapeParameter.Converter.class)
     private SelectionShape shape;
@@ -37,7 +37,7 @@ public class ReflectCommand implements Runnable {
         PrintWriter out = commandSpec.commandLine().getOut();
         PrintWriter err = commandSpec.commandLine().getErr();
         Player player = bvCmd.getTargetPlayer();
-        Vector3d pos = posMixin.calcAbsPos(bvCmd.getExecPos());
+        Vector3d pos = this.pos.calcAbsPos(bvCmd.getExecPos());
         var options = new PlayerEdits.Options();
         options.shape = shape;
         EditExit editExit;

@@ -1,11 +1,10 @@
 package tokyo.nakanaka.buildvox.core.command;
 
 import picocli.CommandLine;
-import tokyo.nakanaka.buildvox.core.command.Coordinate;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 
-public class PosMixin {
+public class Pos {
     @CommandLine.Parameters(description = "x-coordinate of pos. default:~", defaultValue = "~", converter = Coordinate.Converter.class, completionCandidates = Coordinate.CompletionCandidates.class)
     private Coordinate posX;
     @CommandLine.Parameters(description = "y-coordinate of pos. default:~", defaultValue = "~", converter = Coordinate.Converter.class, completionCandidates = Coordinate.CompletionCandidates.class)

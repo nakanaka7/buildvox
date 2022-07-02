@@ -2,7 +2,7 @@ package tokyo.nakanaka.buildvox.core.command.bvCommand.affineTransformCommand;
 
 import tokyo.nakanaka.buildvox.core.EditExit;
 import tokyo.nakanaka.buildvox.core.Messages;
-import tokyo.nakanaka.buildvox.core.command.PosMixin;
+import tokyo.nakanaka.buildvox.core.command.Pos;
 import tokyo.nakanaka.buildvox.core.command.SelectionShapeParameter;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
@@ -32,7 +32,7 @@ public class RotateCommand implements Runnable {
     @Parameters(description = "The angle of rotation by degree", completionCandidates = AngleCandidates.class)
     private Double angle;
     @Mixin
-    private PosMixin posMixin;
+    private Pos pos;
     @Option(names = {"-s", "--shape"}, completionCandidates = SelectionShapeParameter.Candidates.class,
             converter = SelectionShapeParameter.Converter.class)
     private SelectionShape shape;
@@ -49,7 +49,7 @@ public class RotateCommand implements Runnable {
         PrintWriter out = commandSpec.commandLine().getOut();
         PrintWriter err = commandSpec.commandLine().getErr();
         Player player = bvCmd.getTargetPlayer();
-        Vector3d pos = posMixin.calcAbsPos(bvCmd.getExecPos());
+        Vector3d pos = this.pos.calcAbsPos(bvCmd.getExecPos());
         var options = new PlayerEdits.Options();
         options.shape = shape;
         EditExit editExit;

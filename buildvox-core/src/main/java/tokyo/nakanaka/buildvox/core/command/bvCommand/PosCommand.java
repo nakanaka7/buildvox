@@ -2,7 +2,7 @@ package tokyo.nakanaka.buildvox.core.command.bvCommand;
 
 import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.Messages;
-import tokyo.nakanaka.buildvox.core.command.PosMixin;
+import tokyo.nakanaka.buildvox.core.command.Pos;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.Player;
@@ -24,7 +24,7 @@ public class PosCommand implements Runnable {
             completionCandidates = posIndexIterable.class)
     private int index;
     @Mixin
-    private PosMixin posMixin;
+    private Pos pos;
 
     @Override
     public void run() {
@@ -37,7 +37,7 @@ public class PosCommand implements Runnable {
             err.println(Messages.ofPosRangeError(posDataSize));
             return;
         }
-        Vector3d pos = posMixin.calcAbsPos(bvCmd.getExecPos());
+        Vector3d pos = this.pos.calcAbsPos(bvCmd.getExecPos());
         int posX = (int)Math.floor(pos.x());
         int posY = (int)Math.floor(pos.y());
         int posZ = (int)Math.floor(pos.z());
