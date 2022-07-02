@@ -82,24 +82,6 @@ public class PlayerEdits {
     }
 
     /**
-     * The exception which represents a selection was not found.
-     */
-    public static class SelectionNotFoundException extends RuntimeException {
-    }
-
-    private static Selection findSelection(Player player) {
-        Selection selection = player.getSelection();
-        if(selection != null) return selection;
-        Vector3i[] posArray = player.getPosArrayClone();
-        boolean posArrayIsFull = Arrays.stream(posArray).allMatch(Objects::nonNull);
-        if(posArrayIsFull) {
-            return SelectionCreations.createDefault(player.getPosArrayClone());
-        }else{
-            throw new SelectionNotFoundException();
-        }
-    }
-
-    /**
      * Finds a selection if possible.
      * @param player the player.
      * @param shape the selection shape. Nullable.
