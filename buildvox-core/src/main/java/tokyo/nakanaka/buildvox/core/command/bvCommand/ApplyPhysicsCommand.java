@@ -2,8 +2,12 @@ package tokyo.nakanaka.buildvox.core.command.bvCommand;
 
 import picocli.CommandLine;
 import tokyo.nakanaka.buildvox.core.Messages;
+import tokyo.nakanaka.buildvox.core.command.SelectionShapeParameter;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.player.Player;
+import tokyo.nakanaka.buildvox.core.selectionShape.MissingPosException;
+import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
+import tokyo.nakanaka.buildvox.core.selectionShape.SelectionShape;
 
 import java.io.PrintWriter;
 
@@ -15,15 +19,20 @@ public class ApplyPhysicsCommand implements Runnable {
     private CommandLine.Model.CommandSpec commandSpec;
     @CommandLine.ParentCommand
     private BvCommand bvCmd;
+    @CommandLine.Option(names = {"-s", "--shape"}, completionCandidates = SelectionShapeParameter.Candidates.class,
+            converter = SelectionShapeParameter.Converter.class)
+    private SelectionShape shape;
 
     @Override
     public void run() {
         PrintWriter out = commandSpec.commandLine().getOut();
         PrintWriter err = commandSpec.commandLine().getErr();
         Player player = bvCmd.getTargetPlayer();
+        var options = new PlayerEdits.Options();
+        options.shape = shape;
         try{
-            PlayerEdits.applyPhysics(player);
-        }catch (PlayerEdits.SelectionNotFoundException ex) {
+            PlayerEdits.applyPhysics(player, options);
+        }catch (MissingPosException | PosArrayLengthException ex) {
             err.println(Messages.SELECTION_NULL_ERROR);
             return;
         }
