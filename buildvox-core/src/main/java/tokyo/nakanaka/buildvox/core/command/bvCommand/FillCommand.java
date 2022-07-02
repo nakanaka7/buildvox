@@ -1,7 +1,5 @@
 package tokyo.nakanaka.buildvox.core.command.bvCommand;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.EditExit;
 import tokyo.nakanaka.buildvox.core.Messages;
@@ -21,21 +19,18 @@ import java.io.PrintWriter;
         description = "Fill blocks into the selection or specified shape region."
 )
 public class FillCommand implements Runnable {
-    private static final Logger LOGGER = LoggerFactory.getLogger(FillCommand.class);
-    private static final String DESC_HEAD = "Fill blocks in ";
-
     @Spec
     private Model.CommandSpec commandSpec;
     @ParentCommand
     private BvCommand bvCmd;
+    @Parameters(description = "The block.", completionCandidates = Block.Candidates.class, converter = Block.Converter.class)
+    private VoxelBlock block;
     @Mixin
     private Integrity integrity;
     @Mixin
     private Masked masked;
     @Mixin
     private Shape shape;
-    @Parameters(description = "The block.", completionCandidates = Block.Candidates.class, converter = Block.Converter.class)
-    private VoxelBlock block;
     @Option(names = {"-r", "--replace"}, description = "The block to replace", completionCandidates = Block.Candidates.class, converter = Block.Converter.class)
     private VoxelBlock filter;
 
@@ -44,13 +39,12 @@ public class FillCommand implements Runnable {
         PrintWriter out = commandSpec.commandLine().getOut();
         PrintWriter err = commandSpec.commandLine().getErr();
         Player player = bvCmd.getTargetPlayer();
-        double integrity = this.integrity.integrity();
         var options = new PlayerEdits.Options();
-        options.integrity = integrity;
+        options.integrity = integrity.integrity();
         options.masked = masked.masked();
         options.shape = shape.shape();
-        EditExit exit;
         try {
+            EditExit exit;
             if(filter == null) {
                 exit = PlayerEdits.fill(player, block, options);
             }else {
