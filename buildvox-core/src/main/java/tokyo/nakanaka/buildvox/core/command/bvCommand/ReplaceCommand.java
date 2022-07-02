@@ -55,12 +55,6 @@ public class ReplaceCommand implements Runnable {
             err.println(Messages.ofBlockParseError(blockTo));
             return;
         }
-        try{
-            integrity.checkValue();
-        }catch (IllegalStateException ex) {
-            err.println(ex.getMessage());
-            return;
-        }
         var options = new PlayerEdits.Options();
         options.integrity = integrity.integrity();
         options.shape = shape;

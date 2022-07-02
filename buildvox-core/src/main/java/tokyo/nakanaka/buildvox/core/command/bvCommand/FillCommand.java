@@ -43,12 +43,6 @@ public class FillCommand implements Runnable {
         PrintWriter out = commandSpec.commandLine().getOut();
         PrintWriter err = commandSpec.commandLine().getErr();
         Player player = bvCmd.getTargetPlayer();
-        try{
-            integrity.checkValue();
-        }catch (IllegalStateException ex) {
-            err.println(ex.getMessage());
-            return;
-        }
         double integrity = this.integrity.integrity();
         var options = new PlayerEdits.Options();
         options.integrity = integrity;

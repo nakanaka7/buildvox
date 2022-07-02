@@ -35,12 +35,6 @@ public class PasteCommand implements Runnable {
     public void run() {
         PrintWriter out = commandSpec.commandLine().getOut();
         PrintWriter err = commandSpec.commandLine().getErr();
-        try{
-            integrity.checkValue();
-        }catch (IllegalStateException ex) {
-            err.println(ex.getMessage());
-            return;
-        }
         Player player = bvCmd.getTargetPlayer();
         Vector3d pos = this.pos.toVector3d(bvCmd.getExecPos());
         Clipboard clipboard = player.getClipboard();
