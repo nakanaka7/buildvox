@@ -1,7 +1,6 @@
 package tokyo.nakanaka.buildvox.core.command;
 
 import picocli.CommandLine;
-import tokyo.nakanaka.buildvox.core.Messages;
 
 import java.util.Iterator;
 import java.util.List;
@@ -30,12 +29,6 @@ public class Integrity {
         public Iterator<String> iterator() {
             return List.of("0.1", "0.2", "0.3", "0.4", "0.5", "0.6",
                     "0.7", "0.8", "0.9", "1.0").iterator();
-        }
-    }
-
-    public void checkValue() {
-        if(integrity < 0 || 1 < integrity) {
-            throw new IllegalStateException(Messages.INTEGRITY_ERROR);
         }
     }
 
