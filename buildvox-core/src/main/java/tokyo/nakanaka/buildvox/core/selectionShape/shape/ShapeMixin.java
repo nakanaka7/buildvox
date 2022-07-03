@@ -1,4 +1,4 @@
-package tokyo.nakanaka.buildvox.core.selectionShape.shapeMixin;
+package tokyo.nakanaka.buildvox.core.selectionShape.shape;
 
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.selection.Selection;

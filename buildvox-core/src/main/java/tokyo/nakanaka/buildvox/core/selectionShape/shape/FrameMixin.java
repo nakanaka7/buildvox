@@ -1,6 +1,7 @@
-package tokyo.nakanaka.buildvox.core.selectionShape.shapeMixin;
+package tokyo.nakanaka.buildvox.core.selectionShape.shape;
 
-import picocli.CommandLine.*;
+import static picocli.CommandLine.*;
+
 import tokyo.nakanaka.buildvox.core.command.NumberCompletionCandidates;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
@@ -9,25 +10,24 @@ import tokyo.nakanaka.buildvox.core.selection.Selection;
 import tokyo.nakanaka.buildvox.core.selectionShape.SelectionCreations;
 
 @Command
-public class TriangleMixin implements ShapeMixin {
+public class FrameMixin implements ShapeMixin {
     @Option(names = {"-t", "--thickness"}, defaultValue = "1", completionCandidates = NumberCompletionCandidates.PositiveInteger.class)
     private int thickness;
 
-    public static final String DESCRIPTION = "a triangle region which vertexes are pos0, pos1, and pos2";
+    public static final String DESCRIPTION = "a frame region of the cuboid by pos0 and pos1";
 
     @Override
     public Selection createSelection(Vector3i[] posArray) {
-        if (posArray.length != 3) {
-            throw new PosArrayLengthException(3);
+        if (posArray.length != 2) {
+            throw new PosArrayLengthException(2);
         }
         Vector3i pos0 = posArray[0];
         Vector3i pos1 = posArray[1];
-        Vector3i pos2 = posArray[2];
-        if (pos0 == null || pos1 == null || pos2 == null) {
+        if (pos0 == null || pos1 == null) {
             throw new PlayerEdits.MissingPosException();
         }
-        try{
-            return SelectionCreations.createTriangle(pos0, pos1, pos2, thickness);
+        try {
+            return SelectionCreations.createFrame(pos0, pos1, thickness);
         }catch (IllegalArgumentException ex) {
             throw new IllegalStateException();
         }

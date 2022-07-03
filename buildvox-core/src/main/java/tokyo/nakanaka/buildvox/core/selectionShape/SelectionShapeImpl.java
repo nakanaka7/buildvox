@@ -1,6 +1,6 @@
 package tokyo.nakanaka.buildvox.core.selectionShape;
 
-import tokyo.nakanaka.buildvox.core.selectionShape.shapeMixin.ShapeMixin;
+import tokyo.nakanaka.buildvox.core.selectionShape.shape.ShapeMixin;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
 
