@@ -4,8 +4,7 @@ import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Model;
 import tokyo.nakanaka.buildvox.core.ParseUtils;
-import tokyo.nakanaka.buildvox.core.selectionShape.SelectionShape;
-import tokyo.nakanaka.buildvox.core.selectionShape.shape.*;
+import tokyo.nakanaka.buildvox.core.selectionShape.*;
 
 import java.util.*;
 
