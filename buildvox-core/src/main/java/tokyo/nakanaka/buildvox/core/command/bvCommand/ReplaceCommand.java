@@ -1,11 +1,11 @@
 package tokyo.nakanaka.buildvox.core.command.bvCommand;
 
-import picocli.CommandLine;
+import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.Messages;
-import tokyo.nakanaka.buildvox.core.command.BlockParameter;
+import tokyo.nakanaka.buildvox.core.command.Block;
 import tokyo.nakanaka.buildvox.core.EditExit;
-import tokyo.nakanaka.buildvox.core.command.IntegrityMixin;
-import tokyo.nakanaka.buildvox.core.command.SelectionShapeParameter;
+import tokyo.nakanaka.buildvox.core.command.Integrity;
+import tokyo.nakanaka.buildvox.core.command.Shape;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.selectionShape.MissingPosException;
@@ -16,24 +16,24 @@ import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 
 import java.io.PrintWriter;
 
-@CommandLine.Command(name = "replace", mixinStandardHelpOptions = true,
+@Command(name = "replace", mixinStandardHelpOptions = true,
         description = "Replace specified blocks to another ones."
 )
 public class ReplaceCommand implements Runnable {
-    @CommandLine.Spec
-    private CommandLine.Model.CommandSpec commandSpec;
-    @CommandLine.ParentCommand
+    @Spec
+    private Model.CommandSpec commandSpec;
+    @ParentCommand
     private BvCommand bvCmd;
-    @CommandLine.Parameters(arity = "1",
-            description = "The block type to replace from.", completionCandidates = BlockParameter.Candidates.class)
+    @Parameters(arity = "1",
+            description = "The block type to replace from.", completionCandidates = Block.Candidates.class)
     private String blockFrom;
-    @CommandLine.Parameters(arity = "1",
-            description = "The block type to replace to.", completionCandidates = BlockParameter.Candidates.class)
+    @Parameters(arity = "1",
+            description = "The block type to replace to.", completionCandidates = Block.Candidates.class)
     private String blockTo;
-    @CommandLine.Mixin
-    private IntegrityMixin integrityMixin;
-    @CommandLine.Option(names = {"-s", "--shape"}, completionCandidates = SelectionShapeParameter.Candidates.class,
-            converter = SelectionShapeParameter.Converter.class)
+    @Mixin
+    private Integrity integrity;
+    @Option(names = {"-s", "--shape"}, completionCandidates = Shape.Candidates.class,
+            converter = Shape.Converter.class)
     private SelectionShape shape;
 
     @Override
@@ -55,14 +55,8 @@ public class ReplaceCommand implements Runnable {
             err.println(Messages.ofBlockParseError(blockTo));
             return;
         }
-        try{
-            integrityMixin.checkValue();
-        }catch (IllegalStateException ex) {
-            err.println(ex.getMessage());
-            return;
-        }
         var options = new PlayerEdits.Options();
-        options.integrity = integrityMixin.integrity();
+        options.integrity = integrity.integrity();
         options.shape = shape;
         EditExit exit;
         try {

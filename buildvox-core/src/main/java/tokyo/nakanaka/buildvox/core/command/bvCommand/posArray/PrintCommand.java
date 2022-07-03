@@ -1,6 +1,6 @@
 package tokyo.nakanaka.buildvox.core.command.bvCommand.posArray;
 
-import picocli.CommandLine;
+import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.Player;
@@ -9,13 +9,13 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-@CommandLine.Command(name = "print", mixinStandardHelpOptions = true,
+@Command(name = "print", mixinStandardHelpOptions = true,
         description = "Print pos array."
 )
 public class PrintCommand implements Runnable {
-    @CommandLine.Spec
-    private CommandLine.Model.CommandSpec commandSpec;
-    @CommandLine.ParentCommand
+    @Spec
+    private Model.CommandSpec commandSpec;
+    @ParentCommand
     private PosArrayCommand posArrayCmd;
 
     @Override

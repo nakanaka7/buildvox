@@ -1,19 +1,19 @@
 package tokyo.nakanaka.buildvox.core.command.bvCommand.posArray;
 
-import picocli.CommandLine;
+import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.Player;
 
 import java.io.PrintWriter;
 
-@CommandLine.Command(name = "clear", mixinStandardHelpOptions = true,
+@Command(name = "clear", mixinStandardHelpOptions = true,
         description = "Clear pos array."
 )
 public class ClearCommand implements Runnable {
-    @CommandLine.Spec
-    private CommandLine.Model.CommandSpec commandSpec;
-    @CommandLine.ParentCommand
+    @Spec
+    private Model.CommandSpec commandSpec;
+    @ParentCommand
     private PosArrayCommand posArrayCmd;
 
     @Override

@@ -1,20 +1,20 @@
 package tokyo.nakanaka.buildvox.core.command.bvCommand;
 
-import picocli.CommandLine;
+import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.player.Player;
 
 import java.io.PrintWriter;
 
-@CommandLine.Command(name = "redo", mixinStandardHelpOptions = true,
+@Command(name = "redo", mixinStandardHelpOptions = true,
         description = "Redo edits.")
 public class RedoCommand implements Runnable {
-    @CommandLine.Spec
-    private CommandLine.Model.CommandSpec commandSpec;
-    @CommandLine.ParentCommand
+    @Spec
+    private Model.CommandSpec commandSpec;
+    @ParentCommand
     private BvCommand bvCmd;
-    @CommandLine.Parameters(description = "The redo count(default: ${DEFAULT-VALUE}).", defaultValue = "1")
+    @Parameters(description = "The redo count(default: ${DEFAULT-VALUE}).", defaultValue = "1")
     private int count;
 
     @Override

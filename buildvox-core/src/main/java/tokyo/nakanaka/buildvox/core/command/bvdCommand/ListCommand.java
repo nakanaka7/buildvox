@@ -1,18 +1,18 @@
 package tokyo.nakanaka.buildvox.core.command.bvdCommand;
 
-import picocli.CommandLine;
+import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 
 import java.io.PrintWriter;
 import java.util.List;
 
-@CommandLine.Command(name = "list",
+@Command(name = "list",
         mixinStandardHelpOptions = true,
         description = "List dummy player(s).")
 public class ListCommand implements Runnable {
-    @CommandLine.Spec
-    private CommandLine.Model.CommandSpec commandSpec;
+    @Spec
+    private Model.CommandSpec commandSpec;
 
     @Override
     public void run() {

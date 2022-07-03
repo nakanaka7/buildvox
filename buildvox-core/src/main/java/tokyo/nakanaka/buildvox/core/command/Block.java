@@ -7,8 +7,8 @@ import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 
 import java.util.Iterator;
 
-public class BlockParameter {
-    private BlockParameter() {
+public class Block {
+    private Block() {
     }
 
     public static class Candidates implements Iterable<String> {

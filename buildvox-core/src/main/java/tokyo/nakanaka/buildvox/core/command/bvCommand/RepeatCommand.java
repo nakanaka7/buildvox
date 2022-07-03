@@ -1,10 +1,10 @@
 package tokyo.nakanaka.buildvox.core.command.bvCommand;
 
-import picocli.CommandLine;
+import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.EditExit;
 import tokyo.nakanaka.buildvox.core.command.NumberCompletionCandidates;
-import tokyo.nakanaka.buildvox.core.command.SelectionShapeParameter;
+import tokyo.nakanaka.buildvox.core.command.Shape;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.Player;
@@ -15,22 +15,22 @@ import tokyo.nakanaka.buildvox.core.selectionShape.SelectionShape;
 
 import java.io.PrintWriter;
 
-@CommandLine.Command(name = "repeat", mixinStandardHelpOptions = true,
+@Command(name = "repeat", mixinStandardHelpOptions = true,
         description = "Repeat the blocks in the selection."
 )
 public class RepeatCommand implements Runnable {
-    @CommandLine.Spec
-    private CommandLine.Model.CommandSpec commandSpec;
-    @CommandLine.ParentCommand
+    @Spec
+    private Model.CommandSpec commandSpec;
+    @ParentCommand
     private BvCommand bvCmd;
-    @CommandLine.Parameters(description = "The count along x-axis.", completionCandidates = NumberCompletionCandidates.Integer.class)
+    @Parameters(description = "The count along x-axis.", completionCandidates = NumberCompletionCandidates.Integer.class)
     private int countX;
-    @CommandLine.Parameters(description = "The count along y-axis.", completionCandidates = NumberCompletionCandidates.Integer.class)
+    @Parameters(description = "The count along y-axis.", completionCandidates = NumberCompletionCandidates.Integer.class)
     private int countY;
-    @CommandLine.Parameters(description = "The count along z-axis.", completionCandidates = NumberCompletionCandidates.Integer.class)
+    @Parameters(description = "The count along z-axis.", completionCandidates = NumberCompletionCandidates.Integer.class)
     private int countZ;
-    @CommandLine.Option(names = {"-s", "--shape"}, completionCandidates = SelectionShapeParameter.Candidates.class,
-            converter = SelectionShapeParameter.Converter.class)
+    @Option(names = {"-s", "--shape"}, completionCandidates = Shape.Candidates.class,
+            converter = Shape.Converter.class)
     private SelectionShape shape;
 
     @Override

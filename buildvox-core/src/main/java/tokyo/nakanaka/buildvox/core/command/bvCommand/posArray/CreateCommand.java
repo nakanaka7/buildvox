@@ -1,6 +1,6 @@
 package tokyo.nakanaka.buildvox.core.command.bvCommand.posArray;
 
-import picocli.CommandLine;
+import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
@@ -10,15 +10,15 @@ import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.List;
 
-@CommandLine.Command(name = "create", mixinStandardHelpOptions = true,
+@Command(name = "create", mixinStandardHelpOptions = true,
         description = "Create new pos array with given length."
 )
 public class CreateCommand implements Runnable {
-    @CommandLine.Spec
-    private CommandLine.Model.CommandSpec commandSpec;
-    @CommandLine.ParentCommand
+    @Spec
+    private Model.CommandSpec commandSpec;
+    @ParentCommand
     private PosArrayCommand posArrayCmd;
-    @CommandLine.Parameters(description = "length of a new pos array", completionCandidates = LengthCandidates.class)
+    @Parameters(description = "length of a new pos array", completionCandidates = LengthCandidates.class)
     private int length;
 
     private static class LengthCandidates implements Iterable<String> {

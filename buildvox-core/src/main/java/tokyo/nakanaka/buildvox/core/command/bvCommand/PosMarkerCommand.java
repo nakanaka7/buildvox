@@ -1,19 +1,19 @@
 package tokyo.nakanaka.buildvox.core.command.bvCommand;
 
-import picocli.CommandLine;
+import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.player.PlayerEntity;
 import tokyo.nakanaka.buildvox.core.player.Player;
 
 import java.io.PrintWriter;
 
-@CommandLine.Command(name = "pos-marker", mixinStandardHelpOptions = true,
+@Command(name = "pos-marker", mixinStandardHelpOptions = true,
         description = "Get a pos marker."
 )
 public class PosMarkerCommand implements Runnable {
-    @CommandLine.Spec
-    private CommandLine.Model.CommandSpec commandSpec;
-    @CommandLine.ParentCommand
+    @Spec
+    private Model.CommandSpec commandSpec;
+    @ParentCommand
     private BvCommand bvCmd;
 
     @Override
