@@ -1,4 +1,4 @@
-package tokyo.nakanaka.buildvox.core.command;
+package tokyo.nakanaka.buildvox.core.command.util;
 
 import java.util.Iterator;
 import java.util.List;
