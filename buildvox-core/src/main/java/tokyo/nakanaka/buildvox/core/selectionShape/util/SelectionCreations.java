@@ -351,6 +351,35 @@ public class SelectionCreations {
         return createOriented(SelectionCreations::createCylinder, pos0, pos1, axis);
     }
 
+    private static Direction calculateDirection(Vector3i pos0, Vector3i pos1, Axis axis) {
+        Direction dir;
+        switch (axis) {
+            case X -> {
+                if (pos1.x() - pos0.x() >= 0) {
+                    dir = Direction.EAST;
+                } else {
+                    dir = Direction.WEST;
+                }
+            }
+            case Y -> {
+                if(pos1.y() - pos0.y() >= 0) {
+                    dir = Direction.UP;
+                } else {
+                    dir = Direction.DOWN;
+                }
+            }
+            case Z -> {
+                if(pos1.z() - pos0.z() >= 0) {
+                    dir = Direction.SOUTH;
+                }else {
+                    dir = Direction.NORTH;
+                }
+            }
+            default -> dir = Direction.UP;
+        }
+        return dir;
+    }
+
     /**
      * Creates a positive y-oriented cone selection which is bounded by the cuboid by pos0 and pos1.
      * @param pos0 pos0
@@ -382,8 +411,21 @@ public class SelectionCreations {
      * @param dir the direction from base to apex.
      * @return a cone selection
      */
-    public static Selection createCone(Vector3i pos0, Vector3i pos1, Direction dir) {
+    private static Selection createCone(Vector3i pos0, Vector3i pos1, Direction dir) {
         return createOriented(SelectionCreations::createCone, pos0, pos1, dir);
+    }
+
+    /**
+     * Creates a cone selection which is bounded by the cuboid by pos0 and pos1. The direction from base to apex is
+     * that of smaller coordinate to larger coordinate.
+     * @param pos0 pos0.
+     * @param pos1 pos1.
+     * @param axis the axis.
+     * @return a cone selection.
+     */
+    public static Selection createCone(Vector3i pos0, Vector3i pos1, Axis axis) {
+        Direction dir = calculateDirection(pos0, pos1, axis);
+        return createCone(pos0, pos1, dir);
     }
 
     /**
