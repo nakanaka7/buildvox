@@ -4,16 +4,15 @@ import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
-import tokyo.nakanaka.buildvox.core.property.Axis;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
 import tokyo.nakanaka.buildvox.core.selectionShape.SelectionCreations;
 
 @Command
-public class CylinderMixin implements ShapeMixin {
-    @Option(names = {"-a", "--axis"})
-    private Axis axis = Axis.Y;
+public class Line implements Shape {
+    @Option(names = {"-t", "--thickness"}, defaultValue = "1")
+    private double thickness;
 
-    public static final String DESCRIPTION = "a cylinder region in the cuboid by pos0 and pos1";
+    public static final String DESCRIPTION = "a line region which vertexes are pos0 and pos1";
 
     @Override
     public Selection createSelection(Vector3i[] posArray) {
@@ -25,7 +24,11 @@ public class CylinderMixin implements ShapeMixin {
         if (pos0 == null || pos1 == null) {
             throw new PlayerEdits.MissingPosException();
         }
-        return SelectionCreations.createCylinder(pos0, pos1, axis);
+        try {
+            return SelectionCreations.createLine(pos0, pos1, thickness);
+        }catch (IllegalArgumentException ex) {
+            throw new IllegalStateException();
+        }
     }
 
 }

@@ -9,7 +9,7 @@ import tokyo.nakanaka.buildvox.core.selection.Selection;
 import tokyo.nakanaka.buildvox.core.selectionShape.SelectionCreations;
 
 @Command
-public class TriangleMixin implements ShapeMixin {
+public class Triangle implements Shape {
     @Option(names = {"-t", "--thickness"}, defaultValue = "1", completionCandidates = NumberCompletionCandidates.PositiveInteger.class)
     private int thickness;
 

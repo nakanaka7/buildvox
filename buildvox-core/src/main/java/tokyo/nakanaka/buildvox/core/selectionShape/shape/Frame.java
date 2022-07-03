@@ -1,19 +1,20 @@
 package tokyo.nakanaka.buildvox.core.selectionShape.shape;
 
-import picocli.CommandLine.*;
+import static picocli.CommandLine.*;
+
+import tokyo.nakanaka.buildvox.core.command.NumberCompletionCandidates;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
-import tokyo.nakanaka.buildvox.core.property.Direction;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
 import tokyo.nakanaka.buildvox.core.selectionShape.SelectionCreations;
 
 @Command
-public class PyramidMixin implements ShapeMixin {
-    @Option(names = {"-d", "--direction"}, completionCandidates = Direction.CompletionCandidates.class)
-    private Direction direction = Direction.UP;
+public class Frame implements Shape {
+    @Option(names = {"-t", "--thickness"}, defaultValue = "1", completionCandidates = NumberCompletionCandidates.PositiveInteger.class)
+    private int thickness;
 
-    public static final String DESCRIPTION = "a pyramid in the cuboid by pos0 and pos1";
+    public static final String DESCRIPTION = "a frame region of the cuboid by pos0 and pos1";
 
     @Override
     public Selection createSelection(Vector3i[] posArray) {
@@ -25,7 +26,11 @@ public class PyramidMixin implements ShapeMixin {
         if (pos0 == null || pos1 == null) {
             throw new PlayerEdits.MissingPosException();
         }
-        return SelectionCreations.createPyramid(pos0, pos1, direction);
+        try {
+            return SelectionCreations.createFrame(pos0, pos1, thickness);
+        }catch (IllegalArgumentException ex) {
+            throw new IllegalStateException();
+        }
     }
 
 }

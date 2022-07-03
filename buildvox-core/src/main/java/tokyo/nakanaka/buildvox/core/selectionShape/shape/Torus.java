@@ -8,11 +8,9 @@ import tokyo.nakanaka.buildvox.core.selection.Selection;
 import tokyo.nakanaka.buildvox.core.selectionShape.SelectionCreations;
 
 @Command
-public class LineMixin implements ShapeMixin {
-    @Option(names = {"-t", "--thickness"}, defaultValue = "1")
-    private double thickness;
+public class Torus implements Shape {
 
-    public static final String DESCRIPTION = "a line region which vertexes are pos0 and pos1";
+    public static final String DESCRIPTION = "a torus region in the cuboid by pos0 and pos1";
 
     @Override
     public Selection createSelection(Vector3i[] posArray) {
@@ -24,11 +22,7 @@ public class LineMixin implements ShapeMixin {
         if (pos0 == null || pos1 == null) {
             throw new PlayerEdits.MissingPosException();
         }
-        try {
-            return SelectionCreations.createLine(pos0, pos1, thickness);
-        }catch (IllegalArgumentException ex) {
-            throw new IllegalStateException();
-        }
+        return SelectionCreations.createTorus(pos0, pos1);
     }
 
 }

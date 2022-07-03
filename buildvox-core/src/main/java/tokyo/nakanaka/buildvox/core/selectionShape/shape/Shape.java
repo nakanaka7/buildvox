@@ -4,7 +4,7 @@ import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
 import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
 
-public interface ShapeMixin {
+public interface Shape {
     /**
      * @throws PosArrayLengthException if the size of posData is invalid.
      */

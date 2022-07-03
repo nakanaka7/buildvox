@@ -1,16 +1,22 @@
 package tokyo.nakanaka.buildvox.core.selectionShape.shape;
 
 import picocli.CommandLine.*;
+import tokyo.nakanaka.buildvox.core.command.NumberCompletionCandidates;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
+import tokyo.nakanaka.buildvox.core.property.Axis;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
 import tokyo.nakanaka.buildvox.core.selectionShape.SelectionCreations;
 
 @Command
-public class TorusMixin implements ShapeMixin {
+public class Plate implements Shape {
+    @Option(names = {"-a", "--axis"})
+    private Axis axis = Axis.Y;
+    @Option(names = {"-t", "--thickness"}, defaultValue = "1", completionCandidates = NumberCompletionCandidates.PositiveInteger.class)
+    private int thickness;
 
-    public static final String DESCRIPTION = "a torus region in the cuboid by pos0 and pos1";
+    public static final String DESCRIPTION = "a plate region which corners are pos0 and pos1";
 
     @Override
     public Selection createSelection(Vector3i[] posArray) {
@@ -22,7 +28,11 @@ public class TorusMixin implements ShapeMixin {
         if (pos0 == null || pos1 == null) {
             throw new PlayerEdits.MissingPosException();
         }
-        return SelectionCreations.createTorus(pos0, pos1);
+        try{
+            return SelectionCreations.createPlate(pos0, pos1, axis, thickness);
+        }catch (IllegalArgumentException ex) {
+            throw new IllegalStateException();
+        }
     }
 
 }
