@@ -1,9 +1,9 @@
-package tokyo.nakanaka.buildvox.core.property;
+package tokyo.nakanaka.buildvox.core.selectionShape.util;
 
 import java.util.Arrays;
 import java.util.Iterator;
 
-public enum Direction {
+enum Direction {
     NORTH, SOUTH, EAST, WEST, UP, DOWN;
 
     public static class CompletionCandidates implements Iterable<String> {
