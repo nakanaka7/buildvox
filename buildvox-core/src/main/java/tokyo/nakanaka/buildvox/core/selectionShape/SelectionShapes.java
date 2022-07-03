@@ -97,7 +97,7 @@ public class SelectionShapes {
         cmdLine.execute(args);
         Map<String, Object> mixins = cmdLine.getMixins();
         Shape shape = (Shape) mixins.get(name);
-        return new SelectionShapeImpl(shape);
+        return shape;
     }
 
     @Command
