@@ -1,16 +1,16 @@
 package tokyo.nakanaka.buildvox.core.selectionShape.shape;
 
-import picocli.CommandLine.Command;
-import picocli.CommandLine.Option;
+import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
 import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
 import tokyo.nakanaka.buildvox.core.selectionShape.SelectionCreations;
+import tokyo.nakanaka.buildvox.core.selectionShape.shape.mixin.Thickness;
 
 @Command
 public class Line implements Shape {
-    @Option(names = {"-t", "--thickness"}, defaultValue = "1")
-    private double thickness;
+    @Mixin
+    private Thickness thickness;
 
     public static final String DESCRIPTION = "a line region which vertexes are pos0 and pos1";
 
@@ -21,11 +21,7 @@ public class Line implements Shape {
         }
         Vector3i pos0 = posArray[0];
         Vector3i pos1 = posArray[1];
-        try {
-            return SelectionCreations.createLine(pos0, pos1, thickness);
-        }catch (IllegalArgumentException ex) {
-            throw new IllegalStateException();
-        }
+        return SelectionCreations.createLine(pos0, pos1, thickness.thickness());
     }
 
 }

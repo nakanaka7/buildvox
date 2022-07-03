@@ -1,8 +1,6 @@
 package tokyo.nakanaka.buildvox.core.selectionShape.shape;
 
-import picocli.CommandLine;
-import picocli.CommandLine.Command;
-import picocli.CommandLine.Option;
+import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.property.Axis;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
@@ -14,7 +12,7 @@ import tokyo.nakanaka.buildvox.core.selectionShape.shape.mixin.Thickness;
 public class Plate implements Shape {
     @Option(names = {"-a", "--axis"})
     private Axis axis = Axis.Y;
-    @CommandLine.Mixin
+    @Mixin
     private Thickness thickness;
 
     public static final String DESCRIPTION = "a plate region which corners are pos0 and pos1";
@@ -26,11 +24,7 @@ public class Plate implements Shape {
         }
         Vector3i pos0 = posArray[0];
         Vector3i pos1 = posArray[1];
-        try{
-            return SelectionCreations.createPlate(pos0, pos1, axis, thickness.thickness());
-        }catch (IllegalArgumentException ex) {
-            throw new IllegalStateException();
-        }
+        return SelectionCreations.createPlate(pos0, pos1, axis, thickness.thickness());
     }
 
 }
