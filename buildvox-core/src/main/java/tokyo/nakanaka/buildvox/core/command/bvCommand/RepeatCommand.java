@@ -9,7 +9,6 @@ import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.World;
-import tokyo.nakanaka.buildvox.core.selectionShape.MissingPosException;
 import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
 import tokyo.nakanaka.buildvox.core.selectionShape.SelectionShape;
 
@@ -43,7 +42,7 @@ public class RepeatCommand implements Runnable {
         try {
             EditExit exit = PlayerEdits.repeat(player, countX, countY, countZ, options);
             out.println(Messages.ofSetExit(exit));
-        } catch (MissingPosException | PosArrayLengthException ex) {
+        } catch (PlayerEdits.MissingPosException | PosArrayLengthException ex) {
             err.println(Messages.SELECTION_NULL_ERROR);
         }
     }

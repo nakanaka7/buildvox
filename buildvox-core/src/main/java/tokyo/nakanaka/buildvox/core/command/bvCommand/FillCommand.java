@@ -10,7 +10,6 @@ import tokyo.nakanaka.buildvox.core.command.Masked;
 import tokyo.nakanaka.buildvox.core.command.Shape;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.player.Player;
-import tokyo.nakanaka.buildvox.core.selectionShape.MissingPosException;
 import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
 
 import java.io.PrintWriter;
@@ -51,7 +50,7 @@ public class FillCommand implements Runnable {
                 exit = PlayerEdits.replace(player, filter, block, options);
             }
             out.println(Messages.ofSetExit(exit));
-        }catch (MissingPosException | PosArrayLengthException ex) {
+        }catch (PlayerEdits.MissingPosException | PosArrayLengthException ex) {
             err.println(Messages.SELECTION_NULL_ERROR);
         }
 
