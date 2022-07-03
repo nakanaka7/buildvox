@@ -6,10 +6,11 @@ import tokyo.nakanaka.buildvox.core.property.Axis;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
 import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
 import tokyo.nakanaka.buildvox.core.selectionShape.SelectionCreations;
+import tokyo.nakanaka.buildvox.core.selectionShape.SelectionShape;
 import tokyo.nakanaka.buildvox.core.selectionShape.shape.mixin.Thickness;
 
 @Command
-public class Plate implements Shape {
+public class Plate implements SelectionShape {
     @Option(names = {"-a", "--axis"})
     private Axis axis = Axis.Y;
     @Mixin

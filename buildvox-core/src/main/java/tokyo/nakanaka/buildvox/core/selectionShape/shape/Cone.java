@@ -7,9 +7,10 @@ import tokyo.nakanaka.buildvox.core.property.Direction;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
 import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
 import tokyo.nakanaka.buildvox.core.selectionShape.SelectionCreations;
+import tokyo.nakanaka.buildvox.core.selectionShape.SelectionShape;
 
 @Command
-public class Cone implements Shape {
+public class Cone implements SelectionShape {
     @Option(names = {"-d", "--direction"}, completionCandidates = Direction.CompletionCandidates.class)
     private Direction direction = Direction.UP;
 

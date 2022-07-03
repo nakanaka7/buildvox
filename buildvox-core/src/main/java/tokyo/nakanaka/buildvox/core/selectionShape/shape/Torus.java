@@ -5,9 +5,10 @@ import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
 import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
 import tokyo.nakanaka.buildvox.core.selectionShape.SelectionCreations;
+import tokyo.nakanaka.buildvox.core.selectionShape.SelectionShape;
 
 @Command
-public class Torus implements Shape {
+public class Torus implements SelectionShape {
 
     public static final String DESCRIPTION = "a torus region in the cuboid by pos0 and pos1";
 
