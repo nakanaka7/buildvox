@@ -21,7 +21,7 @@ public class Shape {
     public static class Candidates implements Iterable<String> {
         @Override
         public Iterator<String> iterator() {
-            Set<String> shapes = SelectionShapes.shapeMap.keySet();
+            Set<String> shapes = SelectionShapes.getShapeNames();
             return shapes.iterator();
         }
     }
