@@ -2,7 +2,7 @@ package tokyo.nakanaka.buildvox.core.command.bvCommand.affineTransformCommand;
 
 import tokyo.nakanaka.buildvox.core.EditExit;
 import tokyo.nakanaka.buildvox.core.Messages;
-import tokyo.nakanaka.buildvox.core.command.NumberCompletionCandidates;
+import tokyo.nakanaka.buildvox.core.command.util.NumberCompletionCandidates;
 import tokyo.nakanaka.buildvox.core.command.mixin.Shape;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
