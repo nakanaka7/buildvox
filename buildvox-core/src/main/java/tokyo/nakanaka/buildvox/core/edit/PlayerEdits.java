@@ -239,12 +239,15 @@ public class PlayerEdits {
             selectionTo = blockSelection.affineTransform(trans);
         }else {
             Clipboard clipboard = new Clipboard();
-            Vector3d copyOffset = Vector3d.ZERO;
-            WorldEdits.copy(new ClientWorld(player.getEditWorld()), selectionFrom, copyOffset, clipboard);
+            Vector3d copyPos = Vector3d.ZERO;
+            WorldEdits.copy(new ClientWorld(player.getEditWorld()), selectionFrom, copyPos, clipboard);
             clipboard.lock();
             AffineTransformation3d newClipTrans = trans.linear();
-            Vector3d pasteOffset = trans.apply(copyOffset);
-            selectionTo = new PasteSelection.Builder(clipboard, pasteOffset).clipTrans(newClipTrans).build();
+            Vector3d pastePos = trans.apply(copyPos);
+            selectionTo = new PasteSelection.Builder(clipboard, pastePos)
+                    .clipTrans(newClipTrans)
+                    .integrity(options.integrity)
+                    .masked(options.masked).build();
         }
         PlayerClientWorld pw = new PlayerClientWorld(player);
         if (selectionFrom instanceof BlockSelection blockSelection) {
