@@ -21,7 +21,7 @@ public class SelectionShapes {
         shapeMap.put("ellipse", Ellipse.class);
         shapeMap.put("frame", Frame.class);
         shapeMap.put("line", Line.class);
-        shapeMap.put("plate", Plate.class);
+        shapeMap.put("plane", Plane.class);
         shapeMap.put("pyramid", Pyramid.class);
         shapeMap.put("tetrahedron", Tetrahedron.class);
         shapeMap.put("torus", Torus.class);

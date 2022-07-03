@@ -9,7 +9,7 @@ import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
 import tokyo.nakanaka.buildvox.core.player.Player;
-import tokyo.nakanaka.buildvox.core.property.Axis;
+import tokyo.nakanaka.buildvox.core.Axis;
 import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
 import tokyo.nakanaka.buildvox.core.selectionShape.SelectionShape;
 
