@@ -5,7 +5,7 @@ import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
 import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
 import tokyo.nakanaka.buildvox.core.selectionShape.SelectionCreations;
-import tokyo.nakanaka.buildvox.core.selectionShape.Thickness;
+import tokyo.nakanaka.buildvox.core.selectionShape.shape.mixin.Thickness;
 
 import static picocli.CommandLine.Command;
 
