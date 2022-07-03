@@ -429,13 +429,26 @@ public class SelectionCreations {
     }
 
     /**
+     * Creates a pyramid selection which is bounded by the cuboid by pos0 and pos1. The direction from base to apex is
+     * that of smaller coordinate to larger coordinate.
+     * @param pos0 pos0
+     * @param pos1 pos1
+     * @param axis the axis.
+     * @return a pyramid selection.
+     */
+    public static Selection createPyramid(Vector3i pos0, Vector3i pos1, Axis axis) {
+        Direction dir = calculateDirection(pos0, pos1, axis);
+        return createPyramid(pos0, pos1, dir);
+    }
+
+    /**
      * Creates a pyramid selection which is bounded by the cuboid by pos0 and pos1.
      * @param pos0 pos0
      * @param pos1 pos1
      * @param dir the direction from base to apex.
      * @return a pyramid selection
      */
-    public static Selection createPyramid(Vector3i pos0, Vector3i pos1, Direction dir) {
+    private static Selection createPyramid(Vector3i pos0, Vector3i pos1, Direction dir) {
         return createOriented(SelectionCreations::createPyramid, pos0, pos1, dir);
     }
 
