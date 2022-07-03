@@ -10,7 +10,7 @@ import java.util.*;
  * A utility class for SelectionShape.
  */
 public class SelectionShapes {
-    public static final Map<String, Class<? extends ShapeMixin>> shapeMap = new HashMap<>();
+    private static final Map<String, Class<? extends ShapeMixin>> shapeMap = new HashMap<>();
 
     static {
         shapeMap.put("cone", ConeMixin.class);
