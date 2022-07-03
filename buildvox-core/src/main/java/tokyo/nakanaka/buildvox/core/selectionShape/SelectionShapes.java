@@ -1,6 +1,8 @@
 package tokyo.nakanaka.buildvox.core.selectionShape;
 
 import picocli.CommandLine;
+import picocli.CommandLine.Command;
+import picocli.CommandLine.Model;
 import tokyo.nakanaka.buildvox.core.ParseUtils;
 import tokyo.nakanaka.buildvox.core.selectionShape.shape.*;
 
@@ -29,6 +31,44 @@ public class SelectionShapes {
     /** Gets shape names. */
     public static Set<String> getShapeNames() {
         return new HashSet<>(shapeMap.keySet());
+    }
+
+    public static List<String> getKeys(String shapeName) {
+        List<Model.OptionSpec> options = getOptionSpecs(shapeName);
+        List<String> keys = new ArrayList<>();
+        for(var opt : options) {
+            String longName = opt.longestName();
+            keys.add(longName.substring(2));
+        }
+        return keys;
+    }
+
+    public static List<String> getValues(String shapeName, String key) {
+        List<Model.OptionSpec> optionSpecs = getOptionSpecs(shapeName);
+        for(var spec : optionSpecs) {
+            if(spec.longestName().equals("--" + key)) {
+                Iterable<String> candidates = spec.completionCandidates();
+                List<String> list = new ArrayList<>();
+                for(var e : candidates) {
+                    list.add(e);
+                }
+                return list;
+            }
+        }
+        return List.of();
+    }
+
+    private static List<Model.OptionSpec> getOptionSpecs(String shapeName) {
+        Class<? extends Shape> shapeClazz = shapeMap.get(shapeName);
+        if(shapeClazz == null) return new ArrayList<>();
+        CommandLine cmdLine = new CommandLine(new DummyCommand());
+        try {
+            cmdLine.addMixin(shapeName, shapeClazz.getDeclaredConstructor().newInstance());
+        }catch (Exception ex) {
+            return new ArrayList<>();
+        }
+        Model.CommandSpec spec = cmdLine.getCommandSpec();
+        return spec.options();
     }
 
     /**
@@ -60,7 +100,7 @@ public class SelectionShapes {
         return new SelectionShapeImpl(shape);
     }
 
-    @CommandLine.Command
+    @Command
     private static class DummyCommand implements Runnable {
         @Override
         public void run() {
