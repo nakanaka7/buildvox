@@ -12,7 +12,7 @@ import java.util.*;
  * A utility class for SelectionShape.
  */
 public class SelectionShapes {
-    private static final Map<String, Class<? extends Shape>> shapeMap = new HashMap<>();
+    private static final Map<String, Class<? extends SelectionShape>> shapeMap = new HashMap<>();
 
     static {
         shapeMap.put("cone", Cone.class);
@@ -59,7 +59,7 @@ public class SelectionShapes {
     }
 
     private static List<Model.OptionSpec> getOptionSpecs(String shapeName) {
-        Class<? extends Shape> shapeClazz = shapeMap.get(shapeName);
+        Class<? extends SelectionShape> shapeClazz = shapeMap.get(shapeName);
         if(shapeClazz == null) return new ArrayList<>();
         CommandLine cmdLine = new CommandLine(new DummyCommand());
         try {
@@ -81,7 +81,7 @@ public class SelectionShapes {
         ParseUtils.NameStateEntity nse = ParseUtils.parseNameStateEntity(value);
         if(!nse.entity().isEmpty()) throw new Exception();
         String name = nse.name();
-        Class<? extends Shape> shapeClazz = shapeMap.get(name);
+        Class<? extends SelectionShape> shapeClazz = shapeMap.get(name);
         if(shapeClazz == null) throw new Exception();
         CommandLine cmdLine = new CommandLine(new DummyCommand());
         cmdLine.addMixin(name, shapeClazz.getDeclaredConstructor().newInstance());
@@ -96,7 +96,7 @@ public class SelectionShapes {
         args = argsList.toArray(new String[0]);
         cmdLine.execute(args);
         Map<String, Object> mixins = cmdLine.getMixins();
-        Shape shape = (Shape) mixins.get(name);
+        SelectionShape shape = (SelectionShape) mixins.get(name);
         return shape;
     }
 
