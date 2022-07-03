@@ -88,7 +88,7 @@ public class SelectionCreations {
      * @return a plane-shaped selection.
      * @throws IllegalArgumentException if thickness <= 0
      */
-    public static Selection createPlate(Vector3i pos0, Vector3i pos1, Axis axis, int thickness) {
+    public static Selection createPlane(Vector3i pos0, Vector3i pos1, Axis axis, int thickness) {
         if (thickness <= 0) {
             throw new IllegalArgumentException();
         }
