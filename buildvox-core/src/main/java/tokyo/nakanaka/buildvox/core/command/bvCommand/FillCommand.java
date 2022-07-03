@@ -5,7 +5,7 @@ import tokyo.nakanaka.buildvox.core.EditExit;
 import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.command.mixin.Block;
-import tokyo.nakanaka.buildvox.core.command.Integrity;
+import tokyo.nakanaka.buildvox.core.command.mixin.Integrity;
 import tokyo.nakanaka.buildvox.core.command.Masked;
 import tokyo.nakanaka.buildvox.core.command.Shape;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
