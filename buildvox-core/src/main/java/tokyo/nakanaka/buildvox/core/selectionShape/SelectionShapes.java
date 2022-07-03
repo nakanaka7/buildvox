@@ -6,6 +6,9 @@ import tokyo.nakanaka.buildvox.core.selectionShape.shapeMixin.*;
 
 import java.util.*;
 
+/**
+ * A utility class for SelectionShape.
+ */
 public class SelectionShapes {
     public static final Map<String, Class<? extends ShapeMixin>> shapeMap = new HashMap<>();
 
@@ -28,6 +31,12 @@ public class SelectionShapes {
         return new HashSet<>(shapeMap.keySet());
     }
 
+    /**
+     * Parses selection shape. Its format is "name[key=value,...]".
+     * @param value the input.
+     * @return a selection shape if possible.
+     * @throws Exception if failed to parse.
+     */
     public static SelectionShape parseSelectionShape(String value) throws Exception {
         ParseUtils.NameStateEntity nse = ParseUtils.parseNameStateEntity(value);
         if(!nse.entity().isEmpty()) throw new Exception();
