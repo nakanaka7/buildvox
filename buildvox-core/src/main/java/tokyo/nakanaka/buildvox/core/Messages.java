@@ -1,7 +1,5 @@
 package tokyo.nakanaka.buildvox.core;
 
-import tokyo.nakanaka.buildvox.core.property.Axis;
-
 import java.util.List;
 
 public class Messages {

@@ -3,7 +3,7 @@ package tokyo.nakanaka.buildvox.core.selectionShape;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
-import tokyo.nakanaka.buildvox.core.property.Axis;
+import tokyo.nakanaka.buildvox.core.Axis;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
 import tokyo.nakanaka.buildvox.core.selectionShape.util.SelectionCreations;
 

@@ -1,4 +1,4 @@
-package tokyo.nakanaka.buildvox.core.property;
+package tokyo.nakanaka.buildvox.core;
 
 /**
  * Represents 3-dimensional axis
