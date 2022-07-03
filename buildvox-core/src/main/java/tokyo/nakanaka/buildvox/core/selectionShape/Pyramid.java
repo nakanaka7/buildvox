@@ -1,17 +1,14 @@
 package tokyo.nakanaka.buildvox.core.selectionShape;
 
-import picocli.CommandLine.Command;
-import picocli.CommandLine.Option;
+import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.property.Direction;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
-import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
 import tokyo.nakanaka.buildvox.core.selectionShape.util.SelectionCreations;
-import tokyo.nakanaka.buildvox.core.selectionShape.SelectionShape;
 
 @Command
 public class Pyramid implements SelectionShape {
-    @Option(names = {"-d", "--direction"}, completionCandidates = Direction.CompletionCandidates.class)
+    @Option(names = {"--direction"}, completionCandidates = Direction.CompletionCandidates.class)
     private Direction direction = Direction.UP;
 
     public static final String DESCRIPTION = "a pyramid in the cuboid by pos0 and pos1";

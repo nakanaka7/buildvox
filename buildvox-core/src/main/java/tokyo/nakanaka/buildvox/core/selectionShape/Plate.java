@@ -9,7 +9,7 @@ import tokyo.nakanaka.buildvox.core.selectionShape.mixin.Thickness;
 
 @Command
 public class Plate implements SelectionShape {
-    @Option(names = {"-a", "--axis"})
+    @Option(names = {"--axis"})
     private Axis axis = Axis.Y;
     @Mixin
     private Thickness thickness;
