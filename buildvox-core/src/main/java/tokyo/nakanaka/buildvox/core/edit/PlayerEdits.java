@@ -5,7 +5,6 @@ import tokyo.nakanaka.buildvox.core.EditExit;
 import tokyo.nakanaka.buildvox.core.clientWorld.ClientWorld;
 import tokyo.nakanaka.buildvox.core.clientWorld.IntegrityClientWorld;
 import tokyo.nakanaka.buildvox.core.clientWorld.PlayerClientWorld;
-import tokyo.nakanaka.buildvox.core.selectionShape.MissingPosException;
 import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
 import tokyo.nakanaka.buildvox.core.math.Drawings;
 import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
@@ -79,6 +78,9 @@ public class PlayerEdits {
         public boolean masked = false;
         public double integrity = 1.0;
         public SelectionShape shape = null;
+    }
+
+    public static class MissingPosException extends RuntimeException {
     }
 
     /**

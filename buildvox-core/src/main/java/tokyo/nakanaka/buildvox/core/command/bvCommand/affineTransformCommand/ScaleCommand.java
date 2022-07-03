@@ -10,7 +10,6 @@ import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
 import tokyo.nakanaka.buildvox.core.player.Player;
-import tokyo.nakanaka.buildvox.core.selectionShape.MissingPosException;
 import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
 import tokyo.nakanaka.buildvox.core.selectionShape.SelectionShape;
 
@@ -51,7 +50,7 @@ public class ScaleCommand implements Runnable {
         EditExit editExit;
         try {
             editExit = PlayerEdits.scale(player, factorX, factorY, factorZ, pos, options);
-        }catch (MissingPosException | PosArrayLengthException ex) {
+        }catch (PlayerEdits.MissingPosException | PosArrayLengthException ex) {
             err.println(Messages.SELECTION_NULL_ERROR);
             return;
         }

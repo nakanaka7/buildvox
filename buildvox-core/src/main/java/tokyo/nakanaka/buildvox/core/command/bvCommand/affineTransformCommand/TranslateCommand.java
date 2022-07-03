@@ -7,7 +7,6 @@ import tokyo.nakanaka.buildvox.core.command.Shape;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.player.Player;
-import tokyo.nakanaka.buildvox.core.selectionShape.MissingPosException;
 import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
 import tokyo.nakanaka.buildvox.core.selectionShape.SelectionShape;
 import picocli.CommandLine.*;
@@ -42,7 +41,7 @@ public class TranslateCommand implements Runnable {
         EditExit editExit;
         try {
             editExit = PlayerEdits.translate(player, dx, dy, dz, options);
-        }catch (MissingPosException | PosArrayLengthException ex) {
+        }catch (PlayerEdits.MissingPosException | PosArrayLengthException ex) {
             err.println(Messages.SELECTION_NULL_ERROR);
             return;
         }

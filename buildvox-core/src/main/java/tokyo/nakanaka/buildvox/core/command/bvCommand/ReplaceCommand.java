@@ -8,7 +8,6 @@ import tokyo.nakanaka.buildvox.core.command.Integrity;
 import tokyo.nakanaka.buildvox.core.command.Shape;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.player.Player;
-import tokyo.nakanaka.buildvox.core.selectionShape.MissingPosException;
 import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
 import tokyo.nakanaka.buildvox.core.selectionShape.SelectionShape;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
@@ -61,7 +60,7 @@ public class ReplaceCommand implements Runnable {
         EditExit exit;
         try {
             exit = PlayerEdits.replace(player, bFrom, bTo, options);
-        }catch (MissingPosException | PosArrayLengthException ex) {
+        }catch (PlayerEdits.MissingPosException | PosArrayLengthException ex) {
             err.println(Messages.SELECTION_NULL_ERROR);
             return;
         }

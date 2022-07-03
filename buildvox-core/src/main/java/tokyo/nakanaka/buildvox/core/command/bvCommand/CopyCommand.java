@@ -3,7 +3,6 @@ package tokyo.nakanaka.buildvox.core.command.bvCommand;
 import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.EditExit;
-import tokyo.nakanaka.buildvox.core.selectionShape.MissingPosException;
 import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
 import tokyo.nakanaka.buildvox.core.command.Shape;
 import tokyo.nakanaka.buildvox.core.command.Pos;
@@ -42,7 +41,7 @@ public class CopyCommand implements Runnable {
         try{
             EditExit exit = PlayerEdits.copy(player, pos, options);
             out.println(Messages.ofCopyExit(exit));
-        }catch (MissingPosException | PosArrayLengthException ex) {
+        }catch (PlayerEdits.MissingPosException | PosArrayLengthException ex) {
             err.println(Messages.SELECTION_NULL_ERROR);
         }
     }

@@ -1,7 +1,7 @@
 package tokyo.nakanaka.buildvox.core.selectionShape.shapeMixin;
 
 import picocli.CommandLine.*;
-import tokyo.nakanaka.buildvox.core.selectionShape.MissingPosException;
+import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
@@ -20,7 +20,7 @@ public class TorusMixin implements ShapeMixin {
         Vector3i pos0 = posArray[0];
         Vector3i pos1 = posArray[1];
         if (pos0 == null || pos1 == null) {
-            throw new MissingPosException();
+            throw new PlayerEdits.MissingPosException();
         }
         return SelectionCreations.createTorus(pos0, pos1);
     }
