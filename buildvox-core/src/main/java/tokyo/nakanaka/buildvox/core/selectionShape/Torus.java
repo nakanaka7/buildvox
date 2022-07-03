@@ -5,10 +5,8 @@ import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
 import tokyo.nakanaka.buildvox.core.selectionShape.util.SelectionCreations;
 
-@Command
+@Command(description = "a torus region in the cuboid by pos0 and pos1")
 public class Torus implements SelectionShape {
-
-    public static final String DESCRIPTION = "a torus region in the cuboid by pos0 and pos1";
 
     @Override
     public Selection createSelection(Vector3i[] posArray) {

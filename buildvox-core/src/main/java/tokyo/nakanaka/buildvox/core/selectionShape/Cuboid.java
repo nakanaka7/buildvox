@@ -2,16 +2,12 @@ package tokyo.nakanaka.buildvox.core.selectionShape;
 
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
-import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
 import tokyo.nakanaka.buildvox.core.selectionShape.util.SelectionCreations;
-import tokyo.nakanaka.buildvox.core.selectionShape.SelectionShape;
 
 import static picocli.CommandLine.Command;
 
-@Command
+@Command(description = "a cuboid by pos0 and pos1")
 public class Cuboid implements SelectionShape {
-
-    public static final String DESCRIPTION = "a cuboid by pos0 and pos1";
 
     @Override
     public Selection createSelection(Vector3i[] posArray) {

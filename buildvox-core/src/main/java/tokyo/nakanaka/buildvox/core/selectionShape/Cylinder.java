@@ -6,12 +6,10 @@ import tokyo.nakanaka.buildvox.core.property.Axis;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
 import tokyo.nakanaka.buildvox.core.selectionShape.util.SelectionCreations;
 
-@Command
+@Command(description = "a cylinder region in the cuboid by pos0 and pos1")
 public class Cylinder implements SelectionShape {
     @Option(names = {"--axis"})
     private Axis axis = Axis.Y;
-
-    public static final String DESCRIPTION = "a cylinder region in the cuboid by pos0 and pos1";
 
     @Override
     public Selection createSelection(Vector3i[] posArray) {

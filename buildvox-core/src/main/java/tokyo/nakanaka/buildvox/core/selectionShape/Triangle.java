@@ -6,12 +6,10 @@ import tokyo.nakanaka.buildvox.core.selection.Selection;
 import tokyo.nakanaka.buildvox.core.selectionShape.util.SelectionCreations;
 import tokyo.nakanaka.buildvox.core.selectionShape.mixin.Thickness;
 
-@Command
+@Command(description = "a triangle region which vertexes are pos0, pos1, and pos2")
 public class Triangle implements SelectionShape {
     @Mixin
     private Thickness thickness;
-
-    public static final String DESCRIPTION = "a triangle region which vertexes are pos0, pos1, and pos2";
 
     @Override
     public Selection createSelection(Vector3i[] posArray) {

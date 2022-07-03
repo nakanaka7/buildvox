@@ -8,12 +8,10 @@ import tokyo.nakanaka.buildvox.core.selectionShape.mixin.Thickness;
 
 import static picocli.CommandLine.Command;
 
-@Command
+@Command(description = "a frame region of the cuboid by pos0 and pos1")
 public class Frame implements SelectionShape {
     @Mixin
     private Thickness thickness;
-
-    public static final String DESCRIPTION = "a frame region of the cuboid by pos0 and pos1";
 
     @Override
     public Selection createSelection(Vector3i[] posArray) {

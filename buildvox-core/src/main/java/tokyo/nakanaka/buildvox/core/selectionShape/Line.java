@@ -6,12 +6,10 @@ import tokyo.nakanaka.buildvox.core.selection.Selection;
 import tokyo.nakanaka.buildvox.core.selectionShape.util.SelectionCreations;
 import tokyo.nakanaka.buildvox.core.selectionShape.mixin.Thickness;
 
-@Command
+@Command(description = "a line region which vertexes are pos0 and pos1")
 public class Line implements SelectionShape {
     @Mixin
     private Thickness thickness;
-
-    public static final String DESCRIPTION = "a line region which vertexes are pos0 and pos1";
 
     @Override
     public Selection createSelection(Vector3i[] posArray) {

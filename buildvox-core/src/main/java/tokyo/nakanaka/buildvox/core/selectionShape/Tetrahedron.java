@@ -3,14 +3,10 @@ package tokyo.nakanaka.buildvox.core.selectionShape;
 import picocli.CommandLine.Command;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
-import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
 import tokyo.nakanaka.buildvox.core.selectionShape.util.SelectionCreations;
-import tokyo.nakanaka.buildvox.core.selectionShape.SelectionShape;
 
-@Command
+@Command(description = "a tetrahedron region which vertexes are pos0, pos1, pos2, and pos3")
 public class Tetrahedron implements SelectionShape {
-
-    public static final String DESCRIPTION = "a tetrahedron region which vertexes are pos0, pos1, pos2, and pos3";
 
     @Override
     public Selection createSelection(Vector3i[] posArray) {
