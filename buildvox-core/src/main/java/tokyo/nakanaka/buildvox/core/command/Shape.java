@@ -40,9 +40,9 @@ public class Shape {
                         if (stateCandidates.size() == 0) {
                             stateCandidates.addAll(keyValueSet);
                         } else {
+                            Set<String> clone = new HashSet<>(stateCandidates);
+                            stateCandidates = new HashSet<>();
                             for (String keyValue : keyValueSet) {
-                                Set<String> clone = new HashSet<>(stateCandidates);
-                                stateCandidates = new HashSet<>();
                                 for (String e : clone) {
                                     stateCandidates.add(e + "," + keyValue);
                                 }
