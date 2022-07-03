@@ -1,4 +1,4 @@
-package tokyo.nakanaka.buildvox.core.selectionShape.shape.mixin;
+package tokyo.nakanaka.buildvox.core.selectionShape.mixin;
 
 import picocli.CommandLine.*;
 
