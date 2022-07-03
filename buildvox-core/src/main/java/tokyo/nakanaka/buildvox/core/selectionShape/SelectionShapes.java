@@ -23,6 +23,11 @@ public class SelectionShapes {
         shapeMap.put("triangle", TriangleMixin.class);
     }
 
+    /** Gets shape names. */
+    public static Set<String> getShapeNames() {
+        return new HashSet<>(shapeMap.keySet());
+    }
+
     public static SelectionShape parseSelectionShape(String value) throws Exception {
         ParseUtils.NameStateEntity nse = ParseUtils.parseNameStateEntity(value);
         if(!nse.entity().isEmpty()) throw new Exception();
