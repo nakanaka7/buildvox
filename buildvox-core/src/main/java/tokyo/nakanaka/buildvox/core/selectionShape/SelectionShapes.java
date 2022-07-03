@@ -10,20 +10,20 @@ import java.util.*;
  * A utility class for SelectionShape.
  */
 public class SelectionShapes {
-    private static final Map<String, Class<? extends ShapeMixin>> shapeMap = new HashMap<>();
+    private static final Map<String, Class<? extends Shape>> shapeMap = new HashMap<>();
 
     static {
-        shapeMap.put("cone", ConeMixin.class);
-        shapeMap.put("cuboid", CuboidMixin.class);
-        shapeMap.put("cylinder", CylinderMixin.class);
-        shapeMap.put("ellipse", EllipseMixin.class);
-        shapeMap.put("frame", FrameMixin.class);
-        shapeMap.put("line", LineMixin.class);
-        shapeMap.put("plate", PlateMixin.class);
-        shapeMap.put("pyramid", PyramidMixin.class);
-        shapeMap.put("tetrahedron", TetrahedronMixin.class);
-        shapeMap.put("torus", TorusMixin.class);
-        shapeMap.put("triangle", TriangleMixin.class);
+        shapeMap.put("cone", Cone.class);
+        shapeMap.put("cuboid", Cuboid.class);
+        shapeMap.put("cylinder", Cylinder.class);
+        shapeMap.put("ellipse", Ellipse.class);
+        shapeMap.put("frame", Frame.class);
+        shapeMap.put("line", Line.class);
+        shapeMap.put("plate", Plate.class);
+        shapeMap.put("pyramid", Pyramid.class);
+        shapeMap.put("tetrahedron", Tetrahedron.class);
+        shapeMap.put("torus", Torus.class);
+        shapeMap.put("triangle", Triangle.class);
     }
 
     /** Gets shape names. */
@@ -41,7 +41,7 @@ public class SelectionShapes {
         ParseUtils.NameStateEntity nse = ParseUtils.parseNameStateEntity(value);
         if(!nse.entity().isEmpty()) throw new Exception();
         String name = nse.name();
-        Class<? extends ShapeMixin> shapeClazz = shapeMap.get(name);
+        Class<? extends Shape> shapeClazz = shapeMap.get(name);
         if(shapeClazz == null) throw new Exception();
         CommandLine cmdLine = new CommandLine(new DummyCommand());
         cmdLine.addMixin(name, shapeClazz.getDeclaredConstructor().newInstance());
@@ -56,8 +56,8 @@ public class SelectionShapes {
         args = argsList.toArray(new String[0]);
         cmdLine.execute(args);
         Map<String, Object> mixins = cmdLine.getMixins();
-        ShapeMixin shapeMixin = (ShapeMixin) mixins.get(name);
-        return new SelectionShapeImpl(shapeMixin);
+        Shape shape = (Shape) mixins.get(name);
+        return new SelectionShapeImpl(shape);
     }
 
     @CommandLine.Command
