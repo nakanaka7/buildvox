@@ -2,7 +2,7 @@ package tokyo.nakanaka.buildvox.core.command;
 
 import picocli.CommandLine.Option;
 import tokyo.nakanaka.buildvox.core.selectionShape.SelectionShape;
-import tokyo.nakanaka.buildvox.core.selectionShape.SelectionShapes;
+import tokyo.nakanaka.buildvox.core.selectionShape.util.SelectionShapes;
 
 import java.util.*;
 
