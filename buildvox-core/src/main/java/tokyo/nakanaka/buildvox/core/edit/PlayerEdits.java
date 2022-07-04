@@ -266,12 +266,10 @@ public class PlayerEdits {
             Vector3d copyPos = Vector3d.ZERO;
             WorldEdits.copy(new ClientWorld(player.getEditWorld()), selectionFrom, copyPos, clipboard);
             clipboard.lock();
-            AffineTransformation3d newClipTrans = trans.linear();
-            Vector3d pastePos = trans.apply(copyPos);
-            BlockSelection selectionTo = new PasteSelection.Builder(clipboard, pastePos)
-                    .clipTrans(newClipTrans)
-                    .integrity(options.integrity)
-                    .masked(options.masked).build();
+            BlockSelection selFrom = new PasteSelection.Builder(clipboard, copyPos).build();
+            selFrom.setIntegrity(options.integrity);
+            selFrom.setMasked(options.masked);
+            BlockSelection selectionTo = selFrom.affineTransform(trans);
             WorldEdits.fill(pcw, selectionFrom, player.getBackgroundBlock());
             selectionTo.setForwardBlocks(pcw);
             pcw.setSelection(selectionTo);
