@@ -1,16 +1,15 @@
 package tokyo.nakanaka.buildvox.core.command.bvCommand;
 
 import picocli.CommandLine.*;
-import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.EditExit;
-import tokyo.nakanaka.buildvox.core.command.util.NumberCompletionCandidates;
+import tokyo.nakanaka.buildvox.core.Messages;
+import tokyo.nakanaka.buildvox.core.World;
 import tokyo.nakanaka.buildvox.core.command.mixin.Shape;
+import tokyo.nakanaka.buildvox.core.command.util.NumberCompletionCandidates;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.Player;
-import tokyo.nakanaka.buildvox.core.World;
 import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
-import tokyo.nakanaka.buildvox.core.selectionShape.SelectionShape;
 
 import java.io.PrintWriter;
 
@@ -28,9 +27,8 @@ public class RepeatCommand implements Runnable {
     private int countY;
     @Parameters(description = "The count along z-axis.", completionCandidates = NumberCompletionCandidates.Integer.class)
     private int countZ;
-    @Option(names = {"-s", "--shape"}, completionCandidates = Shape.Candidates.class,
-            converter = Shape.Converter.class)
-    private SelectionShape shape;
+    @Mixin
+    private Shape shape;
 
     @Override
     public void run() {
@@ -38,7 +36,7 @@ public class RepeatCommand implements Runnable {
         PrintWriter err = commandSpec.commandLine().getErr();
         Player player = bvCmd.getPlayer();
         PlayerEdits.Options options = new PlayerEdits.Options();
-        options.shape = shape;
+        options.shape = shape.shape();
         try {
             EditExit exit = PlayerEdits.repeat(player, countX, countY, countZ, options);
             out.println(Messages.ofSetExit(exit));
