@@ -37,7 +37,7 @@ public class FillCommand implements Runnable {
     public void run() {
         PrintWriter out = commandSpec.commandLine().getOut();
         PrintWriter err = commandSpec.commandLine().getErr();
-        Player player = bvCmd.getTargetPlayer();
+        Player player = bvCmd.getPlayer();
         var options = new PlayerEdits.Options();
         options.integrity = integrity.integrity();
         options.masked = masked.masked();

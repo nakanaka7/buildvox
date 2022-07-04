@@ -37,7 +37,7 @@ public class CreateCommand implements Runnable {
             return;
         }
         BvCommand bvCmd = posArrayCmd.getParentCommand();
-        Player player = bvCmd.getTargetPlayer();
+        Player player = bvCmd.getPlayer();
         Vector3i[] newPosArray = new Vector3i[length];
         player.setPosArray(newPosArray);
         out.println("Created new pos array with length " + length);

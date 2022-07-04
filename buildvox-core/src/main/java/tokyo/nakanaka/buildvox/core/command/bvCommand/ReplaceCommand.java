@@ -39,7 +39,7 @@ public class ReplaceCommand implements Runnable {
     public void run() {
         PrintWriter out = commandSpec.commandLine().getOut();
         PrintWriter err = commandSpec.commandLine().getErr();
-        Player player = bvCmd.getTargetPlayer();
+        Player player = bvCmd.getPlayer();
         VoxelBlock bFrom;
         try {
             bFrom = BuildVoxSystem.parseBlock(blockFrom);

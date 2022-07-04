@@ -36,7 +36,7 @@ public class RepeatCommand implements Runnable {
     public void run() {
         PrintWriter out = commandSpec.commandLine().getOut();
         PrintWriter err = commandSpec.commandLine().getErr();
-        Player player = bvCmd.getTargetPlayer();
+        Player player = bvCmd.getPlayer();
         PlayerEdits.Options options = new PlayerEdits.Options();
         options.shape = shape;
         try {
@@ -50,7 +50,7 @@ public class RepeatCommand implements Runnable {
     public void runOld() {
         PrintWriter out = commandSpec.commandLine().getOut();
         PrintWriter err = commandSpec.commandLine().getErr();
-        Player player = bvCmd.getTargetPlayer();
+        Player player = bvCmd.getPlayer();
         World world = player.getEditWorld();
         Vector3i[] posData = player.getPosArrayClone();
         if(posData.length != 2) {
