@@ -21,14 +21,10 @@ public class SelectionCreations {
      * Creates a default selection of pos array depends on its length. The length 2, 3, and 4 pos array will return cuboid, triangle
      * (thickness 1) and tetrahedron selection respectively.
      * @param posArray the pos array
-     * @return a selection of pos data depends on its size.
+     * @return a selection of pos array depends on its size.
      * @throws IllegalArgumentException if the pos array length is not 2, 3, nor 4.
-     * @throws IllegalArgumentException if some pos is null.
      */
     public static Selection createDefault(Vector3i... posArray) {
-        for(var pos : posArray) {
-            if(pos == null)throw new IllegalArgumentException();
-        }
         int length = posArray.length;
         if(length == 2) {
             return createCuboid(posArray[0], posArray[1]);
