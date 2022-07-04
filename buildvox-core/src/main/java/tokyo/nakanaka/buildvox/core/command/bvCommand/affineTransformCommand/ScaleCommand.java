@@ -43,12 +43,12 @@ public class ScaleCommand implements Runnable {
     public void run() {
         PrintWriter out = commandSpec.commandLine().getOut();
         PrintWriter err = commandSpec.commandLine().getErr();
-        Player player = bvCmd.getTargetPlayer();
+        Player player = bvCmd.getPlayer();
         if(factorX * factorY * factorZ == 0) {
             err.println(Messages.SCALE_FACTOR_ERROR);
             return;
         }
-        Vector3d pos = this.pos.toVector3d(bvCmd.getExecPos());
+        Vector3d pos = this.pos.toVector3d(bvCmd.getExecutionPos());
         var options = new PlayerEdits.Options();
         options.integrity = integrity.integrity();
         options.masked = masked.masked();

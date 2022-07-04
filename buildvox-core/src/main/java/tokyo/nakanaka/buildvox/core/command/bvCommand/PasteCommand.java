@@ -36,8 +36,8 @@ public class PasteCommand implements Runnable {
     public void run() {
         PrintWriter out = commandSpec.commandLine().getOut();
         PrintWriter err = commandSpec.commandLine().getErr();
-        Player player = bvCmd.getTargetPlayer();
-        Vector3d pos = this.pos.toVector3d(bvCmd.getExecPos());
+        Player player = bvCmd.getPlayer();
+        Vector3d pos = this.pos.toVector3d(bvCmd.getExecutionPos());
         Clipboard clipboard = player.getClipboard();
         if(clipboard == null){
             err.println("Copy first");

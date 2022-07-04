@@ -139,7 +139,7 @@ public class BuildVoxMod implements ModInitializer {
 		);
 	}
 
-	/** convert ServerWorld to {@link World} */
+	/* convert ServerWorld to {@link World} */
 	public static World convertServerWorldToBvWorld(ServerWorld original) {
 		RegistryKey<net.minecraft.world.World> key = original.getRegistryKey();
 		Identifier worldId0 = key.getValue();

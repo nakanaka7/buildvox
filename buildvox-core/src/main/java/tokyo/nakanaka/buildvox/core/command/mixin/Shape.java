@@ -9,7 +9,7 @@ import java.util.*;
 import static picocli.CommandLine.ITypeConverter;
 
 public class Shape {
-    @Option(names = {"-s", "--shape"}, description = "selection shape", completionCandidates = Candidates.class,
+    @Option(names = {"-s", "--shape"}, description = "Selection shape.", completionCandidates = Candidates.class,
             converter = Converter.class)
     private SelectionShape shape;
 

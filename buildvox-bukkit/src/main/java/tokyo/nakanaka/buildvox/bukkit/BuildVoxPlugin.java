@@ -126,7 +126,7 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
         return p;
     }
 
-    /** Gets the {@link World} of the {@link org.bukkit.World} */
+    /* Gets the {@link World} of the {@link org.bukkit.World} */
     public static World getWorld(org.bukkit.World world) {
         NamespacedId worldId = new NamespacedId(world.getName());
         return BuildVoxSystem.getWorldRegistry().get(worldId);

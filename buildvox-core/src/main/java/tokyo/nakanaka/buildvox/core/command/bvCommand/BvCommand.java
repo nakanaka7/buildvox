@@ -89,12 +89,12 @@ public class BvCommand implements Runnable {
      *  Get the target player of this command. The player may not be the execPlayer because of specifying a
      *  dummy player.
      */
-    public Player getTargetPlayer() {
+    public Player getPlayer() {
         return targetPlayer;
     }
 
     /** Get the execution block position of this command */
-    public Vector3i getExecPos() {
+    public Vector3i getExecutionPos() {
         return execPos;
     }
 

@@ -30,14 +30,14 @@ public class PosCommand implements Runnable {
     public void run() {
         PrintWriter out = commandSpec.commandLine().getOut();
         PrintWriter err = commandSpec.commandLine().getErr();
-        Player player = bvCmd.getTargetPlayer();
+        Player player = bvCmd.getPlayer();
         Vector3i[] posArray = player.getPosArrayClone();
         int posDataSize = posArray.length;
         if(index < 0 || posDataSize <= index){
             err.println(Messages.ofPosRangeError(posDataSize));
             return;
         }
-        Vector3d pos = this.pos.toVector3d(bvCmd.getExecPos());
+        Vector3d pos = this.pos.toVector3d(bvCmd.getExecutionPos());
         int posX = (int)Math.floor(pos.x());
         int posY = (int)Math.floor(pos.y());
         int posZ = (int)Math.floor(pos.z());
