@@ -94,7 +94,7 @@ public class BvCommand implements Runnable {
     }
 
     /** Get the execution block position of this command */
-    public Vector3i getExecPos() {
+    public Vector3i getExecutionPos() {
         return execPos;
     }
 

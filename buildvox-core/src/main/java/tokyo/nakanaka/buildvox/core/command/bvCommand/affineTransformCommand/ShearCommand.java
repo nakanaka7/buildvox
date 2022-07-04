@@ -47,7 +47,7 @@ public class ShearCommand implements Runnable {
         PrintWriter out = commandSpec.commandLine().getOut();
         PrintWriter err = commandSpec.commandLine().getErr();
         Player player = bvCmd.getPlayer();
-        Vector3d pos = this.pos.toVector3d(bvCmd.getExecPos());
+        Vector3d pos = this.pos.toVector3d(bvCmd.getExecutionPos());
         var options = new PlayerEdits.Options();
         options.integrity = integrity.integrity();
         options.masked = masked.masked();
