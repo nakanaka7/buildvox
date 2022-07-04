@@ -6,7 +6,9 @@ import java.util.Map;
 
 /**
  * A functional interface for block state transformation.
+ * Deprecated. BlockState transforming should be done by Block.transformState().
  */
+@Deprecated
 public interface BlockStateTransformer {
     /**
      * Gets the block state map which represents the state of the transformed block.

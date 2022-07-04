@@ -3,6 +3,8 @@ package tokyo.nakanaka.buildvox.core.block;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.Identifiable;
 
+import java.util.Map;
+
 /**
  * Represents a block.
  * @param <S> the state object.
@@ -11,14 +13,12 @@ import tokyo.nakanaka.buildvox.core.Identifiable;
 public interface Block<S extends Block.State, E extends Block.Entity> extends Identifiable<NamespacedId> {
     /** * Represents a block state. */
     interface State {
+        /** Gets the state map */
+        Map<String, String> getStateMap();
     }
 
     /** Represents a block entity. */
     interface Entity {
-    }
-
-    /** Empty block entity */
-    class EmptyEntity implements Block.Entity {
     }
 
     /**

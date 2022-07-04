@@ -3,8 +3,9 @@ package tokyo.nakanaka.buildvox.core.edit;
 import tokyo.nakanaka.buildvox.core.Clipboard;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.VoxelSpace;
+import tokyo.nakanaka.buildvox.core.World;
 import tokyo.nakanaka.buildvox.core.block.BlockTransformation;
-import tokyo.nakanaka.buildvox.core.block.StateImpl;
+import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.clientWorld.BlockTransformingClientWorld;
 import tokyo.nakanaka.buildvox.core.clientWorld.ClientWorld;
 import tokyo.nakanaka.buildvox.core.math.region3d.Cuboid;
@@ -13,8 +14,6 @@ import tokyo.nakanaka.buildvox.core.math.transformation.Matrix3x3i;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
-import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
-import tokyo.nakanaka.buildvox.core.World;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -100,11 +99,11 @@ public class WorldEdits {
      */
     public static void replace(ClientWorld world, Selection sel, VoxelBlock fromBlock, VoxelBlock toBlock) {
         NamespacedId fromId = fromBlock.getBlockId();
-        Map<String, String> fromStateMap = ((StateImpl) fromBlock.getState()).getStateMap();
+        Map<String, String> fromStateMap = fromBlock.getState().getStateMap();
         VoxelSpaceEdits.replace(world, sel.calculateBlockPosSet(),
                 (block) -> {
                     NamespacedId id = block.getBlockId();
-                    Map<String, String> stateMap = ((StateImpl) block.getState()).getStateMap();
+                    Map<String, String> stateMap = block.getState().getStateMap();
                     if (!fromId.equals(id)) return false;
                     for (Map.Entry<String, String> entry : fromStateMap.entrySet()) {
                         String value = stateMap.get(entry.getKey());
