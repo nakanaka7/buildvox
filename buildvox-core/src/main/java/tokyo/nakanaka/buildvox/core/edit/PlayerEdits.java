@@ -253,11 +253,14 @@ public class PlayerEdits {
      * the shape.
      */
     private static EditExit affineTransform(Player player, Vector3d pos, AffineTransformation3d relativeTrans, Options options) {
-        Selection selectionFrom = findSelection(player, options.shape);
         AffineTransformation3d trans = AffineTransformation3d.withOffset(relativeTrans, pos.x() + 0.5, pos.y() + 0.5, pos.z() + 0.5);
-        BlockSelection selectionTo;
+        Selection selectionFrom = findSelection(player, options.shape);
+        PlayerClientWorld pcw = new PlayerClientWorld(player);
         if(selectionFrom instanceof BlockSelection blockSelection) {
-            selectionTo = blockSelection.affineTransform(trans);
+            BlockSelection selectionTo = blockSelection.affineTransform(trans);
+            blockSelection.setBackwardBlocks(pcw);
+            selectionTo.setForwardBlocks(pcw);
+            pcw.setSelection(selectionTo);
         }else {
             Clipboard clipboard = new Clipboard();
             Vector3d copyPos = Vector3d.ZERO;
@@ -265,20 +268,15 @@ public class PlayerEdits {
             clipboard.lock();
             AffineTransformation3d newClipTrans = trans.linear();
             Vector3d pastePos = trans.apply(copyPos);
-            selectionTo = new PasteSelection.Builder(clipboard, pastePos)
+            BlockSelection selectionTo = new PasteSelection.Builder(clipboard, pastePos)
                     .clipTrans(newClipTrans)
                     .integrity(options.integrity)
                     .masked(options.masked).build();
+            WorldEdits.fill(pcw, selectionFrom, player.getBackgroundBlock());
+            selectionTo.setForwardBlocks(pcw);
+            pcw.setSelection(selectionTo);
         }
-        PlayerClientWorld pw = new PlayerClientWorld(player);
-        if (selectionFrom instanceof BlockSelection blockSelection) {
-            blockSelection.setBackwardBlocks(pw);
-        } else {
-            WorldEdits.fill(pw, selectionFrom, player.getBackgroundBlock());
-        }
-        selectionTo.setForwardBlocks(pw);
-        pw.setSelection(selectionTo);
-        return pw.end();
+        return pcw.end();
     }
 
     /**
