@@ -13,7 +13,6 @@ public class BukkitWorld implements World {
 
     /**
      * Constructs an instance from a Server and the original world of org.bukkit.World
-     * @param server a server
      * @param original the original world
      */
     public BukkitWorld(org.bukkit.World original) {
