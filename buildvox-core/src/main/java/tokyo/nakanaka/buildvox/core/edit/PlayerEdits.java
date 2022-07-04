@@ -75,8 +75,11 @@ public class PlayerEdits {
      * General options.
      */
     public static class Options {
+        /** masked */
         public boolean masked = false;
+        /** integrity */
         public double integrity = 1.0;
+        /** shape */
         public SelectionShape shape = null;
     }
 
