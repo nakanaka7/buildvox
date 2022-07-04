@@ -20,6 +20,7 @@ import java.util.Iterator;
                 ApplyPhysicsCommand.class,
                 BackgroundCommand.class,
                 UndoCommand.class, RedoCommand.class,
+                SelectCommand.class,
                 TranslateCommand.class, RotateCommand.class, ScaleCommand.class, ReflectCommand.class, ShearCommand.class,
                 FillCommand.class, ReplaceCommand.class,
                 CopyCommand.class, CutCommand.class, PasteCommand.class,
