@@ -6,6 +6,7 @@ import picocli.CommandLine.Model;
 import tokyo.nakanaka.buildvox.core.ParseUtils;
 import tokyo.nakanaka.buildvox.core.selectionShape.*;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 /**
@@ -33,6 +34,11 @@ public class SelectionShapes {
         return new HashSet<>(shapeMap.keySet());
     }
 
+    /**
+     * Gets the keys of selection shape.
+     * @param shapeName the shape name.
+     * @return the list of keys.
+     */
     public static List<String> getKeys(String shapeName) {
         List<Model.OptionSpec> options = getOptionSpecs(shapeName);
         List<String> keys = new ArrayList<>();
@@ -43,6 +49,13 @@ public class SelectionShapes {
         return keys;
     }
 
+    /**
+     * Gets the values of a key of a selection shape. This may not contain all the acceptable values. For example,
+     * the values of the key "thickness" will return limited values.
+     * @param shapeName the shape name.
+     * @param key the key.
+     * @return the vlaues of a key of a selection shape.
+     */
     public static List<String> getValues(String shapeName, String key) {
         List<Model.OptionSpec> optionSpecs = getOptionSpecs(shapeName);
         for(var spec : optionSpecs) {
@@ -75,16 +88,22 @@ public class SelectionShapes {
      * Parses selection shape. Its format is "name[key=value,...]".
      * @param value the input.
      * @return a selection shape if possible.
-     * @throws Exception if failed to parse.
+     * @throws IllegalArgumentException if failed to parse.
      */
-    public static SelectionShape parseSelectionShape(String value) throws Exception {
+    public static SelectionShape parseSelectionShape(String value) {
         ParseUtils.NameStateEntity nse = ParseUtils.parseNameStateEntity(value);
-        if(!nse.entity().isEmpty()) throw new Exception();
+        if(!nse.entity().isEmpty()) throw new IllegalArgumentException();
         String name = nse.name();
         Class<? extends SelectionShape> shapeClazz = shapeMap.get(name);
-        if(shapeClazz == null) throw new Exception();
+        if(shapeClazz == null) throw new IllegalArgumentException();
         CommandLine cmdLine = new CommandLine(new DummyCommand());
-        cmdLine.addMixin(name, shapeClazz.getDeclaredConstructor().newInstance());
+        SelectionShape mixin;
+        try {
+            mixin = shapeClazz.getDeclaredConstructor().newInstance();
+        }catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ex) {
+            throw new IllegalArgumentException();
+        }
+        cmdLine.addMixin(name, mixin);
         List<String> argsList = new ArrayList<>();
         String state = nse.state();
         Map<String, String> stateMap = ParseUtils.parseStateMap(state);
@@ -96,8 +115,7 @@ public class SelectionShapes {
         args = argsList.toArray(new String[0]);
         cmdLine.execute(args);
         Map<String, Object> mixins = cmdLine.getMixins();
-        SelectionShape shape = (SelectionShape) mixins.get(name);
-        return shape;
+        return (SelectionShape) mixins.get(name);
     }
 
     @Command
