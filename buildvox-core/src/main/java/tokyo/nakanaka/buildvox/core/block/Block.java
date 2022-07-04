@@ -21,10 +21,6 @@ public interface Block<S extends Block.State, E extends Block.Entity> extends Id
     interface Entity {
     }
 
-    /** Empty block entity */
-    class EmptyEntity implements Block.Entity {
-    }
-
     /**
      * Transforms the state.
      * @param state the original state.
