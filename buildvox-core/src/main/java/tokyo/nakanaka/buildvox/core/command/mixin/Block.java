@@ -7,8 +7,16 @@ import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 
 import java.util.Iterator;
 
+@Command
 public class Block {
     private Block() {
+    }
+
+    @Parameters(description = "The Block.", completionCandidates = Candidates.class, converter = Converter.class)
+    private VoxelBlock block;
+
+    public VoxelBlock block() {
+        return block;
     }
 
     public static class Candidates implements Iterable<String> {
