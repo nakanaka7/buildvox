@@ -1,17 +1,18 @@
 package tokyo.nakanaka.buildvox.core.command.bvCommand.affineTransformCommand;
 
 import picocli.CommandLine.*;
+import tokyo.nakanaka.buildvox.core.Axis;
 import tokyo.nakanaka.buildvox.core.EditExit;
 import tokyo.nakanaka.buildvox.core.Messages;
+import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
+import tokyo.nakanaka.buildvox.core.command.mixin.Integrity;
+import tokyo.nakanaka.buildvox.core.command.mixin.Masked;
 import tokyo.nakanaka.buildvox.core.command.mixin.Pos;
 import tokyo.nakanaka.buildvox.core.command.mixin.Shape;
-import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
 import tokyo.nakanaka.buildvox.core.player.Player;
-import tokyo.nakanaka.buildvox.core.Axis;
 import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
-import tokyo.nakanaka.buildvox.core.selectionShape.SelectionShape;
 
 import java.io.PrintWriter;
 
@@ -27,9 +28,12 @@ public class ReflectCommand implements Runnable {
     private Axis axis;
     @Mixin
     private Pos pos;
-    @Option(names = {"-s", "--shape"}, completionCandidates = Shape.Candidates.class,
-            converter = Shape.Converter.class)
-    private SelectionShape shape;
+    @Mixin
+    private Integrity integrity;
+    @Mixin
+    private Masked masked;
+    @Mixin
+    private Shape shape;
 
     @Override
     public void run() {
@@ -38,7 +42,9 @@ public class ReflectCommand implements Runnable {
         Player player = bvCmd.getTargetPlayer();
         Vector3d pos = this.pos.toVector3d(bvCmd.getExecPos());
         var options = new PlayerEdits.Options();
-        options.shape = shape;
+        options.integrity = integrity.integrity();
+        options.masked = masked.masked();
+        options.shape = shape.shape();
         EditExit editExit;
         try {
             editExit = PlayerEdits.reflect(player, axis, pos, options);

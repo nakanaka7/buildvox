@@ -1,15 +1,16 @@
 package tokyo.nakanaka.buildvox.core.command.bvCommand.affineTransformCommand;
 
+import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.EditExit;
 import tokyo.nakanaka.buildvox.core.Messages;
-import tokyo.nakanaka.buildvox.core.command.util.NumberCompletionCandidates;
-import tokyo.nakanaka.buildvox.core.command.mixin.Shape;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
+import tokyo.nakanaka.buildvox.core.command.mixin.Integrity;
+import tokyo.nakanaka.buildvox.core.command.mixin.Masked;
+import tokyo.nakanaka.buildvox.core.command.mixin.Shape;
+import tokyo.nakanaka.buildvox.core.command.util.NumberCompletionCandidates;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
-import tokyo.nakanaka.buildvox.core.selectionShape.SelectionShape;
-import picocli.CommandLine.*;
 
 import java.io.PrintWriter;
 
@@ -27,9 +28,12 @@ public class TranslateCommand implements Runnable {
     private double dy;
     @Parameters(description = "The displacement along z-axis.", completionCandidates = NumberCompletionCandidates.Integer.class)
     private double dz;
-    @Option(names = {"-s", "--shape"}, completionCandidates = Shape.Candidates.class,
-            converter = Shape.Converter.class)
-    private SelectionShape shape;
+    @Mixin
+    private Integrity integrity;
+    @Mixin
+    private Masked masked;
+    @Mixin
+    private Shape shape;
 
     @Override
     public void run() {
@@ -37,7 +41,9 @@ public class TranslateCommand implements Runnable {
         PrintWriter err = commandSpec.commandLine().getErr();
         Player player = bvCmd.getTargetPlayer();
         var options = new PlayerEdits.Options();
-        options.shape = shape;
+        options.integrity = integrity.integrity();
+        options.masked = masked.masked();
+        options.shape = shape.shape();
         EditExit editExit;
         try {
             editExit = PlayerEdits.translate(player, dx, dy, dz, options);
