@@ -109,6 +109,24 @@ public class PlayerEdits {
     }
 
     /**
+     * Creates a new non-block selection from pos-array, or reselect block-selection with the new options.
+     * @param player the player.
+     * @param options the options.
+     */
+    public static void select(Player player, Options options) {
+        PlayerClientWorld pcw = new PlayerClientWorld(player);
+        Selection selection = findSelection(player, options.shape);
+        if(selection instanceof BlockSelection blockSel) {
+            blockSel.setBackwardBlocks(pcw);
+            blockSel.setIntegrity(options.integrity);
+            blockSel.setMasked(options.masked);
+            blockSel.setForwardBlocks(pcw);
+        }
+        pcw.setSelection(selection);
+        pcw.end();
+    }
+
+    /**
      * Applies physics in the selection.
      * @throws MissingPosException if player does not have a selection and some pos are missing.
      * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
