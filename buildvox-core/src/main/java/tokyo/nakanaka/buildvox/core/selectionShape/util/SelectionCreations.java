@@ -11,6 +11,7 @@ import tokyo.nakanaka.buildvox.core.Axis;
 import tokyo.nakanaka.buildvox.core.math.region3d.*;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
 
+/** The utility class which has selection creation methods. */
 public class SelectionCreations {
     private SelectionCreations(){
     }
@@ -38,7 +39,9 @@ public class SelectionCreations {
     }
 
     /**
-     * Create a cuboid selection of pos data. The cuboid corner will be pos 0 and pos 1.
+     * Create a cuboid-shaped selection. The cuboid corner will be pos 0 and pos 1.
+     * @param pos0 the corner position.
+     * @param pos1 the corner position.
      * @return a cuboid selection. The cuboid corner will be pos 0 and pos 1.
      */
     public static Selection createCuboid(Vector3i pos0, Vector3i pos1) {
@@ -52,7 +55,15 @@ public class SelectionCreations {
         return new Selection(cuboid, cuboid);
     }
 
-    public static Selection createLine(Vector3i pos0, Vector3i pos1, double thickness) {
+    /**
+     * Creates a line-shaped line.
+     * @param pos0 the beginning position.
+     * @param pos1 the end position.
+     * @param thickness the diameter.
+     * @return a line-shaped line.
+     * @throws IllegalArgumentException if thickness is less than or equals to 0.
+     */
+    public static Selection createLine(Vector3i pos0, Vector3i pos1, int thickness) {
         return createLine(pos0.toVector3d(), pos1.toVector3d(), thickness);
     }
 
@@ -77,11 +88,11 @@ public class SelectionCreations {
     }
 
     /**
-     * Create a plane-shaped selection of pos data.
+     * Create a plane-shaped selection.
      * @param axis the axis which is parallel to the plane
      * @param thickness the thickness of the plane
      * @return a plane-shaped selection.
-     * @throws IllegalArgumentException if thickness <= 0
+     * @throws IllegalArgumentException if thickness is less than or equals to 0.
      */
     public static Selection createPlane(Vector3i pos0, Vector3i pos1, Axis axis, int thickness) {
         if (thickness <= 0) {
@@ -131,8 +142,10 @@ public class SelectionCreations {
     }
 
     /**
-     * Creates a cuboid frame with given thickness
-     * @throws IllegalArgumentException if thickness <= 0
+     * Creates a cuboid frame-shaped selection.
+     * @param pos0 the corner position.
+     * @param pos1 the corner position.
+     * @throws IllegalArgumentException if thickness is less than or equals to 0.
      */
     public static Selection createFrame(Vector3i pos0, Vector3i pos1, int thickness){
         if (thickness <= 0) {
@@ -164,9 +177,12 @@ public class SelectionCreations {
     }
 
     /**
-     * Create a triangle selection of pos data.
-     * @return a triangle selection
-     * @throws IllegalArgumentException if thickness <= 0
+     * Creates a triangle-shaped selection.
+     * @param pos0 the vertex.
+     * @param pos1 the vertex.
+     * @param pos2 the vertex.
+     * @return a triangle-shaped selection
+     * @throws IllegalArgumentException if thickness is less than or equals to 0.
      */
     public static Selection createTriangle(Vector3i pos0, Vector3i pos1, Vector3i pos2, int thickness) {
         if (thickness <= 0) {
@@ -208,8 +224,12 @@ public class SelectionCreations {
     }
 
     /**
-     * Create a tetrahedron selection which vertexes are pos0, pos1, pos2, and pos3.
-     * @return a tetrahedron selection
+     * Create a tetrahedron-shaped selection.
+     * @param pos0 the vertex.
+     * @param pos1 the vertex.
+     * @param pos2 the vertex.
+     * @param pos3 the vertex.
+     * @return a tetrahedron-shaped selection.
      */
     public static Selection createTetrahedron(Vector3i pos0, Vector3i pos1, Vector3i pos2, Vector3i pos3) {
         Vector3d p0 = pos0.toVector3d().add(0.5, 0.5, 0.5);
@@ -251,6 +271,12 @@ public class SelectionCreations {
         return new Selection(region, bound);
     }
 
+    /**
+     * Creates an ellipse-shaped selection in the cuboid.
+     * @param pos0 the corner of the cuboid.
+     * @param pos1 the corner of the cuboid.
+     * @return an ellipse-shaped selection.
+     */
     public static Selection createEllipse(Vector3i pos0, Vector3i pos1) {
         double maxX = Math.max(pos0.x(), pos1.x()) + 1;
         double maxY = Math.max(pos0.y(), pos1.y()) + 1;
@@ -336,11 +362,11 @@ public class SelectionCreations {
     }
 
     /**
-     * Creates a cylinder selection which is bounded by the cuboid by pos0 and pos1.
-     * @param pos0 pos0
-     * @param pos1 pos1
-     * @param axis the axis of the cylinder
-     * @return a cylinder selection
+     * Creates a cylinder-shaped selection in the cuboid.
+     * @param pos0 the corner of the cuboid.
+     * @param pos1 the corner of the cuboid.
+     * @param axis the axis of the cylinder.
+     * @return a cylinder-shaped selection.
      */
     public static Selection createCylinder(Vector3i pos0, Vector3i pos1, Axis axis) {
         return createOriented(SelectionCreations::createCylinder, pos0, pos1, axis);
@@ -411,12 +437,12 @@ public class SelectionCreations {
     }
 
     /**
-     * Creates a cone selection which is bounded by the cuboid by pos0 and pos1. The direction from base to apex is
-     * that of smaller coordinate to larger coordinate.
-     * @param pos0 pos0.
-     * @param pos1 pos1.
+     * Creates a cone-shaped selection in the cuboid. The direction from base to apex is
+     * from smaller to larger coordinate.
+     * @param pos0 the corner of the cuboid.
+     * @param pos1 the corner of the cuboid.
      * @param axis the axis.
-     * @return a cone selection.
+     * @return a cone-shaped selection.
      */
     public static Selection createCone(Vector3i pos0, Vector3i pos1, Axis axis) {
         Direction dir = calculateDirection(pos0, pos1, axis);
@@ -424,12 +450,12 @@ public class SelectionCreations {
     }
 
     /**
-     * Creates a pyramid selection which is bounded by the cuboid by pos0 and pos1. The direction from base to apex is
-     * that of smaller coordinate to larger coordinate.
-     * @param pos0 pos0
-     * @param pos1 pos1
+     * Creates a pyramid-shaped selection in the cuboid. The direction from base to apex is
+     * from smaller to larger coordinate.
+     * @param pos0 the corner of the cuboid.
+     * @param pos1 the corner of the cuboid.
      * @param axis the axis.
-     * @return a pyramid selection.
+     * @return a pyramid-shaped selection.
      */
     public static Selection createPyramid(Vector3i pos0, Vector3i pos1, Axis axis) {
         Direction dir = calculateDirection(pos0, pos1, axis);
@@ -471,6 +497,12 @@ public class SelectionCreations {
                 .translate(baseCenter);
     }
 
+    /**
+     * Creates a torus-shaped selection in the cuboid.
+     * @param pos0 the corner of the cuboid.
+     * @param pos1 the corner of the cuboid.
+     * @return a torus-shaped selection.
+     */
     public static Selection createTorus(Vector3i pos0, Vector3i pos1) {
         double maxX = Math.max(pos0.x(), pos1.x()) + 1;
         double maxY = Math.max(pos0.y(), pos1.y()) + 1;
