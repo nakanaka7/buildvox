@@ -36,6 +36,16 @@ public abstract class BlockSelection extends Selection {
         return new Selection(getRegion3d(), getBound());
     }
 
+    /** Sets the integrity. Should be called before setForwardBlocks(). */
+    public void setIntegrity(double integrity) {
+        this.integrity = integrity;
+    }
+
+    /** Sets the masked. Should be called before setForwardBlocks().  */
+    public void setMasked(boolean masked) {
+        this.masked = masked;
+    }
+
     /**
      * Set forward blocks.
      * @param playerClientWorld a world to set blocks.
