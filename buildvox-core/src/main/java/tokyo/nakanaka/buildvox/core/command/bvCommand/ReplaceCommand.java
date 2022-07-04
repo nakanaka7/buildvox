@@ -14,7 +14,7 @@ import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
 import java.io.PrintWriter;
 
 @Command(name = "replace", mixinStandardHelpOptions = true,
-        description = "Replace specified blocks to another ones."
+        description = "Replace blocks to another ones. See also /fill with -r."
 )
 public class ReplaceCommand implements Runnable {
     @Spec
