@@ -4,8 +4,6 @@ import tokyo.nakanaka.buildvox.core.Clipboard;
 import tokyo.nakanaka.buildvox.core.clientWorld.ClientWorld;
 import tokyo.nakanaka.buildvox.core.edit.WorldEdits;
 import tokyo.nakanaka.buildvox.core.math.region3d.Cuboid;
-import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
-import tokyo.nakanaka.buildvox.core.math.region3d.Region3d;
 import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
 
@@ -17,33 +15,29 @@ public class PasteSelection extends BlockSelection {
     private final Vector3d pos;
     private final AffineTransformation3d clipTrans;
 
-    private PasteSelection(Region3d region3d, Parallelepiped bound, Clipboard clipboard, Vector3d pos,
+    private PasteSelection(Selection selection, Clipboard clipboard, Vector3d pos,
                            AffineTransformation3d clipTrans) {
-        super(region3d, bound);
+        super(selection.getRegion3d(), selection.getBound());
         this.clipboard = clipboard;
         this.pos = pos;
         this.clipTrans = clipTrans;
     }
 
-    private static PasteSelection newInstance(Clipboard clipboard, Vector3d pos, AffineTransformation3d clipTrans) {
+    private static Cuboid calcClipboardCuboid(Clipboard clipboard) {
         double maxX = clipboard.maxX() + 1;
         double maxY = clipboard.maxY() + 1;
         double maxZ = clipboard.maxZ() + 1;
         double minX = clipboard.minX();
         double minY = clipboard.minY();
         double minZ = clipboard.minZ();
-        Cuboid cuboid = new Cuboid(maxX, maxY, maxZ, minX, minY, minZ);
-        var bound = new Parallelepiped(cuboid.x1(), cuboid.y1(), cuboid.z1(), cuboid.x2(), cuboid.y2(), cuboid.z2());
-        var selection = new Selection(cuboid, bound)
-                .affineTransform(clipTrans)
-                .translate(pos.x(), pos.y(), pos.z());
-        return new PasteSelection(selection.getRegion3d(), selection.getBound(), clipboard, pos, clipTrans);
+        return new Cuboid(maxX, maxY, maxZ, minX, minY, minZ);
     }
 
     /**
      * The builder class of PasteSelection.
      */
     public static class Builder {
+        private final Selection selection;
         private final Clipboard clipboard;
         private final Vector3d pos;
         private AffineTransformation3d clipTrans = AffineTransformation3d.IDENTITY;
@@ -58,6 +52,20 @@ public class PasteSelection extends BlockSelection {
         public Builder(Clipboard clipboard, Vector3d pos) {
             this.clipboard = clipboard;
             this.pos = pos;
+            Cuboid cuboid = calcClipboardCuboid(clipboard);
+            this.selection = new Selection(cuboid, cuboid);
+        }
+
+        /**
+         * Creates a new instance.
+         * @param clipboard the clipboard.
+         * @param pos the position to paste.
+         * @param selection the base selection.
+         */
+        public Builder(Clipboard clipboard, Vector3d pos, Selection selection) {
+            this.clipboard = clipboard;
+            this.pos = pos;
+            this.selection = selection;
         }
 
         /**
@@ -89,7 +97,7 @@ public class PasteSelection extends BlockSelection {
          * @return a new instance.
          */
         public PasteSelection build() {
-            var i = newInstance(clipboard, pos, clipTrans);
+            var i = new PasteSelection(selection, clipboard, pos, clipTrans);
             i.integrity = this.integrity;
             i.masked = this.masked;
             return i;
@@ -105,7 +113,8 @@ public class PasteSelection extends BlockSelection {
     public PasteSelection affineTransform(AffineTransformation3d trans) {
         AffineTransformation3d newClipTrans = trans.linear().compose(this.clipTrans);
         Vector3d transPos = trans.apply(pos);
-        return new Builder(clipboard, transPos)
+        Selection newSel = toNonBlock().affineTransform(trans);
+        return new Builder(clipboard, transPos, newSel)
                 .clipTrans(newClipTrans)
                 .integrity(this.integrity)
                 .masked(this.masked)
