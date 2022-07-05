@@ -98,6 +98,7 @@ public class PlayerEdits {
      * @param shape the shape. Nullable.
      * @return a selection from the pos-array.
      * @throws MissingPosException if some pos is null.
+     * @throws PosArrayLengthException if the pos-array length is invalid for the shape.
      */
     private static Selection createPosArraySelection(Vector3i[] posArray, SelectionShape shape) {
         boolean posArrayIsFull = Arrays.stream(posArray).allMatch(Objects::nonNull);
@@ -291,7 +292,7 @@ public class PlayerEdits {
     /**
      * Cuts the blocks in the selection. If player does not have a selection, a selection will be created from pos-array.
      * If the selection is block-selection, backward blocks will be set. If the selection is non-block selection, the
-     * background blocks will be set.
+     * background blocks will be set. The selection of the player will be set null in the end.
      * @throws MissingPosException if player does not have a selection and some pos are missing.
      * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
      * the shape.
@@ -334,7 +335,7 @@ public class PlayerEdits {
     }
 
     /**
-     * Pastes the blocks of the clipboard.
+     * Pastes the blocks of the clipboard. A paste-selection will be set in the end.
      * @param player the player.
      * @param pos the position which corresponds to the origin of the clipboard.
      * @throws IllegalStateException if clipboard is null
@@ -356,6 +357,7 @@ public class PlayerEdits {
 
     /**
      * Fills the blocks into the selection. If player does not have a selection, a selection will be created from pos-array.
+     * A fill-selection will be set in the end.
      * @param player the player.
      * @param block the block
      * @param options the fill options.
@@ -478,7 +480,7 @@ public class PlayerEdits {
 
     /**
      * Repeats the blocks in the player selection. countX, countY, and countZ defines the repeating direction vector.
-     * The end selection will be the paste selection of the last repeating blocks
+     * The end selection will be the paste selection of the last repeating blocks.
      * @param player the player.
      * @param countX the count along x-axis.
      * @param countY the count along y-axis.
