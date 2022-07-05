@@ -254,26 +254,22 @@ public class PlayerEdits {
      */
     private static EditExit affineTransform(Player player, Vector3d pos, AffineTransformation3d relativeTrans, Options options) {
         AffineTransformation3d trans = AffineTransformation3d.withOffset(relativeTrans, pos.x() + 0.5, pos.y() + 0.5, pos.z() + 0.5);
-        Selection selectionFrom = findSelection(player, options.shape);
-        PlayerClientWorld pcw = new PlayerClientWorld(player);
-        if(selectionFrom instanceof BlockSelection blockSelection) {
-            BlockSelection selectionTo = blockSelection.affineTransform(trans);
-            blockSelection.setBackwardBlocks(pcw);
-            selectionTo.setForwardBlocks(pcw);
-            pcw.setSelection(selectionTo);
+        Selection selFrom = findSelection(player, options.shape);
+        BlockSelection blockSelFrom;
+        if(selFrom instanceof BlockSelection) {
+            blockSelFrom = (BlockSelection) selFrom;
         }else {
             Clipboard clipboard = new Clipboard();
-            Vector3d copyPos = Vector3d.ZERO;
-            WorldEdits.copy(new ClientWorld(player.getEditWorld()), selectionFrom, copyPos, clipboard);
-            clipboard.lock();
-            BlockSelection selFrom = new PasteSelection.Builder(clipboard, copyPos).build();
-            selFrom.setIntegrity(options.integrity);
-            selFrom.setMasked(options.masked);
-            BlockSelection selectionTo = selFrom.affineTransform(trans);
-            WorldEdits.fill(pcw, selectionFrom, player.getBackgroundBlock());
-            selectionTo.setForwardBlocks(pcw);
-            pcw.setSelection(selectionTo);
+            WorldEdits.copy(new ClientWorld(player.getEditWorld()), selFrom, Vector3d.ZERO, clipboard);
+            blockSelFrom = new PasteSelection.Builder(clipboard, Vector3d.ZERO).build();
+            blockSelFrom.setIntegrity(options.integrity);
+            blockSelFrom.setMasked(options.masked);
         }
+        PlayerClientWorld pcw = new PlayerClientWorld(player);
+        blockSelFrom.setBackwardBlocks(pcw);
+        BlockSelection selTo = blockSelFrom.affineTransform(trans);
+        selTo.setForwardBlocks(pcw);
+        pcw.setSelection(selTo);
         return pcw.end();
     }
 
