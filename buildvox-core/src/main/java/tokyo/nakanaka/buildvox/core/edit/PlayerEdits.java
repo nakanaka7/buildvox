@@ -146,7 +146,7 @@ public class PlayerEdits {
         WorldEdits.paste(clipboard, clientWorld, Vector3d.ZERO);
         Clipboard clipboard1 = new Clipboard();
         WorldEdits.copy(player.getEditWorld(), sel, Vector3d.ZERO, clipboard1);
-        Selection pasteSel = new PasteSelection.Builder(clipboard1, Vector3d.ZERO).build();
+        Selection pasteSel = new PasteSelection.Builder(clipboard1, Vector3d.ZERO, sel).build();
         player.setSelection(pasteSel);
     }
 
