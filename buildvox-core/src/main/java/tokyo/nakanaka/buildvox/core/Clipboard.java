@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/** Represents a clipboard. */
 public class Clipboard implements VoxelSpace<VoxelBlock> {
     private final Selection selection;
     private final Map<Vector3i, VoxelBlock> blockMap = new HashMap<>();
