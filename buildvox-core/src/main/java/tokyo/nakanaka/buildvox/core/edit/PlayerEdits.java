@@ -84,6 +84,9 @@ public class PlayerEdits {
         public SelectionShape shape = null;
     }
 
+    /**
+     * Threw when create a selection from pos-array in createPosArraySelection().
+     */
     public static class MissingPosException extends RuntimeException {
     }
 
