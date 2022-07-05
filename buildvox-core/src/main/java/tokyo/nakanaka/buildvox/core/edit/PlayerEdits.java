@@ -393,20 +393,15 @@ public class PlayerEdits {
      * @throws IllegalArgumentException if integrity is less than 0 or larger than 1.
      */
     public static EditExit replace(Player player, VoxelBlock blockFrom, VoxelBlock blockTo, Options options) {
-        Selection selTo;
         Selection sel = player.getSelection();
         if(sel == null) {
             sel = createPosArraySelection(player.getPosArrayClone(), options.shape);
         }
-        if(sel instanceof BlockSelection bs) {
-            selTo = bs.toNonBlock();
-        }else {
-            selTo = sel;
-        }
         PlayerClientWorld pcw = new PlayerClientWorld(player);
         IntegrityClientWorld icw = new IntegrityClientWorld(options.integrity, pcw);
         WorldEdits.replace(icw, sel, blockFrom, blockTo);
-        pcw.setSelection(selTo);
+        Selection pasteSel = createPasteSelection(player.getEditWorld(), sel);
+        pcw.setSelection(pasteSel);
         return pcw.end();
     }
 
