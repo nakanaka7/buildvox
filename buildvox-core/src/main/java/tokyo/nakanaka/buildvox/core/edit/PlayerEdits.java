@@ -111,7 +111,8 @@ public class PlayerEdits {
     }
 
     /**
-     * Creates a new non-block selection from pos-array, or reselect block-selection with the new options.
+     * Creates a new selection from existing selection or pos-array. If the new selection is block-selection, options
+     * will be rebound.
      * @param player the player.
      * @param options the options.
      */
