@@ -13,8 +13,8 @@ import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
 
 import java.io.PrintWriter;
 
-@Command(name = "select", description = "Creates a new non-block selection from pos-array, or reselect block-selection with the new options.",
-        mixinStandardHelpOptions = true)
+@Command(name = "select", description = "Creates a new selection from existing selection or pos-array. The options will be rebound."
+        , mixinStandardHelpOptions = true)
 public class SelectCommand implements Runnable {
     @CommandLine.Spec
     private CommandLine.Model.CommandSpec commandSpec;
