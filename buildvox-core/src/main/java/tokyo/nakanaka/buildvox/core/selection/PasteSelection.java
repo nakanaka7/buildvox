@@ -48,18 +48,6 @@ public class PasteSelection extends BlockSelection {
          * Creates a new instance.
          * @param clipboard the clipboard.
          * @param pos the position to paste.
-         */
-        public Builder(Clipboard clipboard, Vector3d pos) {
-            this.clipboard = clipboard;
-            this.pos = pos;
-            Cuboid cuboid = calcClipboardCuboid(clipboard);
-            this.selection = new Selection(cuboid, cuboid);
-        }
-
-        /**
-         * Creates a new instance.
-         * @param clipboard the clipboard.
-         * @param pos the position to paste.
          * @param selection the base selection.
          */
         public Builder(Clipboard clipboard, Vector3d pos, Selection selection) {
