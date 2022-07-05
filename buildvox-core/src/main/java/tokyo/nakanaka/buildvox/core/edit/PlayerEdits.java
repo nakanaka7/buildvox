@@ -100,7 +100,6 @@ public class PlayerEdits {
         Selection selection = player.getSelection();
         if(selection != null && shape == null) return selection;
         Vector3i[] posArray = player.getPosArrayClone();
-        if(!posArrayIsFull(posArray)) throw new MissingPosException();
         return createPosArraySelection(posArray, shape);
     }
 
@@ -109,22 +108,16 @@ public class PlayerEdits {
      * @param posArray the pos-array. All the pos must not be null.
      * @param shape the shape. Nullable.
      * @return a selection from the pos-array.
+     * @throws MissingPosException if some pos is null.
      */
     private static Selection createPosArraySelection(Vector3i[] posArray, SelectionShape shape) {
+        boolean posArrayIsFull = Arrays.stream(posArray).allMatch(Objects::nonNull);
+        if(!posArrayIsFull) throw new MissingPosException();
         if(shape == null) {
             return SelectionCreations.createDefault(posArray);
         }else {
             return shape.createSelection(posArray);
         }
-    }
-
-    /**
-     * Checks if pos-array is full.
-     * @param posArray the pos-array.
-     * @return true if the pos-array is full, otherwise false.
-     */
-    private static boolean posArrayIsFull(Vector3i[] posArray) {
-        return Arrays.stream(posArray).allMatch(Objects::nonNull);
     }
 
     /**
@@ -275,9 +268,7 @@ public class PlayerEdits {
         AffineTransformation3d trans = AffineTransformation3d.withOffset(relativeTrans, pos.x() + 0.5, pos.y() + 0.5, pos.z() + 0.5);
         Selection selFrom = player.getSelection();
         if(selFrom == null) {
-            Vector3i[] posArray= player.getPosArrayClone();
-            if(!posArrayIsFull(posArray)) throw new MissingPosException();
-            Selection posArraySel = createPosArraySelection(posArray, options.shape);
+            Selection posArraySel = createPosArraySelection(player.getPosArrayClone(), options.shape);
             PasteSelection pasteSel = createPasteSelection(player.getEditWorld(), posArraySel);
             pasteSel.setIntegrity(options.integrity);
             pasteSel.setMasked(options.masked);
