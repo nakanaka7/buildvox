@@ -136,22 +136,17 @@ public class PlayerEdits {
      * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
      */
     public static void applyPhysics(Player player, Options options) {
-        Selection selFrom = player.getSelection();
-        if(selFrom == null) {
-            selFrom = createPosArraySelection(player.getPosArrayClone(), options.shape);
+        Selection sel = player.getSelection();
+        if(sel == null) {
+            sel = createPosArraySelection(player.getPosArrayClone(), options.shape);
         }
         Clipboard clipboard = new Clipboard();
         ClientWorld clientWorld = new ClientWorld(player.getEditWorld(), true);
-        WorldEdits.copy(clientWorld, selFrom, Vector3d.ZERO, clipboard);
-        WorldEdits.fill(clientWorld, selFrom, BuildVoxSystem.parseBlock("air"));
+        WorldEdits.copy(clientWorld, sel, Vector3d.ZERO, clipboard);
+        WorldEdits.fill(clientWorld, sel, VoxelBlock.valueOf("air"));
         WorldEdits.paste(clipboard, clientWorld, Vector3d.ZERO);
-        Selection selTo;
-        if(selFrom instanceof BlockSelection bs) {
-            selTo = bs.toNonBlock();
-        }else {
-            selTo = selFrom;
-        }
-        player.setSelection(selTo);
+        Selection pasteSel = createPasteSelection(player.getEditWorld(), sel);
+        player.setSelection(pasteSel);
     }
 
     /**
