@@ -17,7 +17,6 @@ import java.util.Iterator;
         description = "The root command of BuildVox.",
         subcommands = {
                 PosCommand.class, PosMarkerCommand.class, PosArrayCommand.class,
-                ApplyPhysicsCommand.class,
                 BackgroundCommand.class,
                 UndoCommand.class, RedoCommand.class,
                 SelectCommand.class,
