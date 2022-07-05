@@ -392,9 +392,7 @@ public class PlayerEdits {
         PlayerClientWorld pcw = new PlayerClientWorld(player);
         IntegrityClientWorld icw = new IntegrityClientWorld(options.integrity, pcw);
         WorldEdits.replace(icw, sel, blockFrom, blockTo);
-        Clipboard clipboard = new Clipboard();
-        WorldEdits.copy(pcw, sel, Vector3d.ZERO, clipboard);
-        Selection pasteSel = new PasteSelection.Builder(clipboard, Vector3d.ZERO, sel).build();
+        Selection pasteSel = createPasteSelection(player.getEditWorld(), sel);
         pcw.setSelection(pasteSel);
         return pcw.end();
     }
