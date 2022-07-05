@@ -2,6 +2,7 @@ package tokyo.nakanaka.buildvox.core.edit;
 
 import tokyo.nakanaka.buildvox.core.Clipboard;
 import tokyo.nakanaka.buildvox.core.EditExit;
+import tokyo.nakanaka.buildvox.core.World;
 import tokyo.nakanaka.buildvox.core.clientWorld.ClientWorld;
 import tokyo.nakanaka.buildvox.core.clientWorld.IntegrityClientWorld;
 import tokyo.nakanaka.buildvox.core.clientWorld.PlayerClientWorld;
@@ -106,6 +107,29 @@ public class PlayerEdits {
         }else {
             return SelectionCreations.createDefault(posArray);
         }
+    }
+
+    /**
+     * Creates a selection from the pos-array. If shape is null, returns default selection.
+     * @param posArray the pos-array. All the pos must not be null.
+     * @param shape the shape. Nullable.
+     * @return a selection from the pos-array.
+     */
+    private static Selection createPosArraySelection(Vector3i[] posArray, SelectionShape shape) {
+        if(shape == null) {
+            return SelectionCreations.createDefault(posArray);
+        }else {
+            return shape.createSelection(posArray);
+        }
+    }
+
+    /**
+     * Checks if pos-array is full.
+     * @param posArray the pos-array.
+     * @return true if the pos-array is full, otherwise false.
+     */
+    private static boolean posArrayIsFull(Vector3i[] posArray) {
+        return Arrays.stream(posArray).allMatch(Objects::nonNull);
     }
 
     /**
@@ -254,23 +278,38 @@ public class PlayerEdits {
      */
     private static EditExit affineTransform(Player player, Vector3d pos, AffineTransformation3d relativeTrans, Options options) {
         AffineTransformation3d trans = AffineTransformation3d.withOffset(relativeTrans, pos.x() + 0.5, pos.y() + 0.5, pos.z() + 0.5);
-        Selection selFrom = findSelection(player, options.shape);
-        BlockSelection blockSelFrom;
-        if(selFrom instanceof BlockSelection) {
-            blockSelFrom = (BlockSelection) selFrom;
-        }else {
-            Clipboard clipboard = new Clipboard();
-            WorldEdits.copy(new ClientWorld(player.getEditWorld()), selFrom, Vector3d.ZERO, clipboard);
-            blockSelFrom = new PasteSelection.Builder(clipboard, Vector3d.ZERO).build();
-            blockSelFrom.setIntegrity(options.integrity);
-            blockSelFrom.setMasked(options.masked);
+        Selection selFrom = player.getSelection();
+        if(selFrom == null) {
+            Vector3i[] posArray= player.getPosArrayClone();
+            if(!posArrayIsFull(posArray)) throw new MissingPosException();
+            Selection posArraySel = createPosArraySelection(posArray, options.shape);
+            PasteSelection pasteSel = createPasteSelection(player.getEditWorld(), posArraySel);
+            pasteSel.setIntegrity(options.integrity);
+            pasteSel.setMasked(options.masked);
+            selFrom = pasteSel;
         }
         PlayerClientWorld pcw = new PlayerClientWorld(player);
-        blockSelFrom.setBackwardBlocks(pcw);
-        BlockSelection selTo = blockSelFrom.affineTransform(trans);
-        selTo.setForwardBlocks(pcw);
+        if(selFrom instanceof BlockSelection blockSel) {
+            blockSel.setBackwardBlocks(pcw);
+        }
+        Selection selTo = selFrom.affineTransform(trans);
+        if(selTo instanceof BlockSelection blockSel) {
+            blockSel.setForwardBlocks(pcw);
+        }
         pcw.setSelection(selTo);
         return pcw.end();
+    }
+
+    /**
+     * Creates a paste selection from the selection.
+     * @param world the world.
+     * @param sel the selection.
+     * @return the paste selection.
+     */
+    private static PasteSelection createPasteSelection(World world, Selection sel) {
+        Clipboard clipboard = new Clipboard();
+        WorldEdits.copy(new ClientWorld(world), sel, Vector3d.ZERO, clipboard);
+        return new PasteSelection.Builder(clipboard, Vector3d.ZERO).build();
     }
 
     /**
