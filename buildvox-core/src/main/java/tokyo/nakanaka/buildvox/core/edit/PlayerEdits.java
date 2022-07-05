@@ -290,7 +290,7 @@ public class PlayerEdits {
         if(sel == null) {
             sel = createPosArraySelection(player.getPosArrayClone(), options.shape);
         }
-        Clipboard clipboard = new Clipboard();
+        Clipboard clipboard = new Clipboard(sel.translate(pos.negate()));
         WorldEdits.copy(player.getEditWorld(), sel, pos, clipboard);
         player.setClipboard(clipboard);
         PlayerClientWorld pcw = new PlayerClientWorld(player);
@@ -315,7 +315,7 @@ public class PlayerEdits {
         if(sel == null) {
             sel = createPosArraySelection(player.getPosArrayClone(), options.shape);
         }
-        Clipboard clipboard = new Clipboard();
+        Clipboard clipboard = new Clipboard(sel.translate(pos.negate()));
         WorldEdits.copy(new ClientWorld(player.getEditWorld()), sel, pos, clipboard);
         clipboard.lock();
         player.setClipboard(clipboard);
@@ -334,7 +334,7 @@ public class PlayerEdits {
         if(clipboard == null){
             throw new IllegalStateException();
         }
-        PasteSelection pasteSelection = new PasteSelection.Builder(clipboard, pos)
+        PasteSelection pasteSelection = new PasteSelection.Builder(clipboard, pos, clipboard.getSelection().translate(pos))
                 .integrity(integrity)
                 .masked(masked).build();
         PlayerClientWorld pw = new PlayerClientWorld(player);
