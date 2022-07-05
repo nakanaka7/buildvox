@@ -56,12 +56,11 @@ public class Clipboard implements VoxelSpace<VoxelBlock> {
     }
 
     /**
-     * Set the block into this clipboard.
+     * Set the block into this clipboard. If the pos is out of the selection, if skips the block setting.
      * @param x the x-coordinate of the block in the clipboard position
      * @param y the y-coordinate of the block in the clipboard position
      * @param z the z-coordinate of the block in the clipboard position
      * @param block the block to set
-     * @throws IllegalArgumentException if pos is out of the selection.
      * @throws IllegalStateException if this clipboard is locked(the read only mode).
      */
     public void setBlock(int x, int y, int z, VoxelBlock block){
@@ -69,7 +68,7 @@ public class Clipboard implements VoxelSpace<VoxelBlock> {
             throw new IllegalStateException();
         }
         if(!selection.getRegion3d().contains(x + 0.5, y + 0.5, z + 0.5)) {
-            throw new IllegalArgumentException();
+            return;
         }
         if(this.blockCount() == 0){
             this.maxX = x;
