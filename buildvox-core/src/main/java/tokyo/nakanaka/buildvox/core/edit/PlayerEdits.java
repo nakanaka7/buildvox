@@ -3,6 +3,7 @@ package tokyo.nakanaka.buildvox.core.edit;
 import tokyo.nakanaka.buildvox.core.Axis;
 import tokyo.nakanaka.buildvox.core.Clipboard;
 import tokyo.nakanaka.buildvox.core.EditExit;
+import tokyo.nakanaka.buildvox.core.World;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.clientWorld.ClientWorld;
 import tokyo.nakanaka.buildvox.core.clientWorld.IntegrityClientWorld;
@@ -258,26 +259,30 @@ public class PlayerEdits {
     private static EditExit affineTransform(Player player, Vector3d pos, AffineTransformation3d relativeTrans, Options options) {
         AffineTransformation3d trans = AffineTransformation3d.withOffset(relativeTrans, pos.x() + 0.5, pos.y() + 0.5, pos.z() + 0.5);
         Selection selFrom = player.getSelection();
-        Selection selTo;
-        PlayerClientWorld pcw = new PlayerClientWorld(player);
-        if(selFrom != null) {
-            if(selFrom instanceof BlockSelection blockSel) {
-                blockSel.setBackwardBlocks(pcw);
-            }
-        }else {
+        if(selFrom == null) {
             Selection posArraySel = createPosArraySelection(player.getPosArrayClone(), options.shape);
-            Clipboard clipboard = new Clipboard(posArraySel);
-            WorldEdits.copy(pcw, posArraySel, Vector3d.ZERO, clipboard);
-            selFrom = new PasteSelection.Builder(clipboard, Vector3d.ZERO, posArraySel)
-                    .masked(options.masked).integrity(options.integrity).build();
-            WorldEdits.fill(pcw, posArraySel, player.getBackgroundBlock());
+            PasteSelection pasteSel = createPasteSelection(player.getEditWorld(), posArraySel);
+            pasteSel.setIntegrity(options.integrity);
+            pasteSel.setMasked(options.masked);
+            selFrom = pasteSel;
         }
+        PlayerClientWorld pcw = new PlayerClientWorld(player);
+        if(selFrom instanceof BlockSelection blockSel) {
+            blockSel.setBackwardBlocks(pcw);
+        }
+        Selection selTo;
         selTo = selFrom.affineTransform(trans);
         if(selTo instanceof BlockSelection blockSel) {
             blockSel.setForwardBlocks(pcw);
         }
         pcw.setSelection(selTo);
         return pcw.end();
+    }
+
+    private static PasteSelection createPasteSelection(World world, Selection sel) {
+        Clipboard clipboard = new Clipboard(sel);
+        WorldEdits.copy(world, sel, Vector3d.ZERO, clipboard);
+        return new PasteSelection.Builder(clipboard, Vector3d.ZERO, sel).build();
     }
 
     /**
