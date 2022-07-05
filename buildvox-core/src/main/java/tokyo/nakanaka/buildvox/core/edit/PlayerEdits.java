@@ -3,7 +3,6 @@ package tokyo.nakanaka.buildvox.core.edit;
 import tokyo.nakanaka.buildvox.core.Axis;
 import tokyo.nakanaka.buildvox.core.Clipboard;
 import tokyo.nakanaka.buildvox.core.EditExit;
-import tokyo.nakanaka.buildvox.core.World;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.clientWorld.ClientWorld;
 import tokyo.nakanaka.buildvox.core.clientWorld.IntegrityClientWorld;
@@ -145,7 +144,9 @@ public class PlayerEdits {
         WorldEdits.copy(clientWorld, sel, Vector3d.ZERO, clipboard);
         WorldEdits.fill(clientWorld, sel, VoxelBlock.valueOf("air"));
         WorldEdits.paste(clipboard, clientWorld, Vector3d.ZERO);
-        Selection pasteSel = createPasteSelection(player.getEditWorld(), sel);
+        Clipboard clipboard1 = new Clipboard();
+        WorldEdits.copy(player.getEditWorld(), sel, Vector3d.ZERO, clipboard1);
+        Selection pasteSel = new PasteSelection.Builder(clipboard1, Vector3d.ZERO).build();
         player.setSelection(pasteSel);
     }
 
@@ -280,18 +281,6 @@ public class PlayerEdits {
     }
 
     /**
-     * Creates a paste selection from the selection.
-     * @param world the world.
-     * @param sel the selection.
-     * @return the paste selection.
-     */
-    private static PasteSelection createPasteSelection(World world, Selection sel) {
-        Clipboard clipboard = new Clipboard();
-        WorldEdits.copy(new ClientWorld(world), sel, Vector3d.ZERO, clipboard);
-        return new PasteSelection.Builder(clipboard, Vector3d.ZERO).build();
-    }
-
-    /**
      * @throws MissingPosException if player does not have a selection and some pos are missing.
      * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
      * the shape.
@@ -398,7 +387,9 @@ public class PlayerEdits {
         PlayerClientWorld pcw = new PlayerClientWorld(player);
         IntegrityClientWorld icw = new IntegrityClientWorld(options.integrity, pcw);
         WorldEdits.replace(icw, sel, blockFrom, blockTo);
-        Selection pasteSel = createPasteSelection(player.getEditWorld(), sel);
+        Clipboard clipboard = new Clipboard();
+        WorldEdits.copy(pcw, sel, Vector3d.ZERO, clipboard);
+        Selection pasteSel = new PasteSelection.Builder(clipboard, Vector3d.ZERO).build();
         pcw.setSelection(pasteSel);
         return pcw.end();
     }
