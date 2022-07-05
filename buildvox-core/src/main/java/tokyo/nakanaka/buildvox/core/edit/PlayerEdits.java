@@ -247,7 +247,9 @@ public class PlayerEdits {
     }
 
     /**
-     * Affine transform the player's selection.
+     * Affine transform the selection. If player does not have a selection, a selection will be created from pos-array,
+     * and then converted to a paste-selection. If the selection is block-selection, backward and forward blocks
+     * will be set.
      * @param player the player.
      * @param pos the block position of the center of affine transformation
      * @param relativeTrans the affine transformation.
@@ -286,6 +288,9 @@ public class PlayerEdits {
     }
 
     /**
+     * Cuts the blocks in the selection. If player does not have a selection, a selection will be created from pos-array.
+     * If the selection is block-selection, backward blocks will be set. If the selection is non-block selection, the
+     * background blocks will be set.
      * @throws MissingPosException if player does not have a selection and some pos are missing.
      * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
      * the shape.
@@ -309,7 +314,7 @@ public class PlayerEdits {
     }
 
     /**
-     * Copies the blocks in the selection.
+     * Copies the blocks in the selection. If player does not have a selection, a selection will be created from pos-array.
      * @param pos the position which corresponds to the origin of the clipboard.
      * @throws MissingPosException if player does not have a selection and some pos are missing.
      * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
@@ -349,7 +354,7 @@ public class PlayerEdits {
     }
 
     /**
-     * Fills the block into the selection
+     * Fills the blocks into the selection. If player does not have a selection, a selection will be created from pos-array.
      * @param player the player.
      * @param block the block
      * @param options the fill options.
@@ -374,7 +379,8 @@ public class PlayerEdits {
     }
 
     /**
-     * Replaces blocks.
+     * Replaces blocks. If player does not have a selection, a selection will be created from pos-array. A paste-selection
+     * will be set in the end.
      * @param player the player.
      * @param blockFrom the block to be replaced from
      * @param blockTo the block to be replaced to
