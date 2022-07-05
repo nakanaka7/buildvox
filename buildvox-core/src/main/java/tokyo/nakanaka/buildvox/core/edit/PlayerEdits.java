@@ -266,7 +266,7 @@ public class PlayerEdits {
             }
         }else {
             Selection posArraySel = createPosArraySelection(player.getPosArrayClone(), options.shape);
-            Clipboard clipboard = new Clipboard();
+            Clipboard clipboard = new Clipboard(posArraySel);
             WorldEdits.copy(pcw, posArraySel, Vector3d.ZERO, clipboard);
             selFrom = new PasteSelection.Builder(clipboard, Vector3d.ZERO, posArraySel)
                     .masked(options.masked).integrity(options.integrity).build();
