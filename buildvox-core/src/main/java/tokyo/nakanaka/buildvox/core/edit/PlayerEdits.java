@@ -318,16 +318,18 @@ public class PlayerEdits {
      * the shape.
      */
     public static EditExit cut(Player player, Vector3d pos, Options options) {
-        PlayerClientWorld pcw = new PlayerClientWorld(player);
-        Selection selection = findSelection(player, options.shape);
+        Selection sel = findSelection(player, options.shape);
         Clipboard clipboard = new Clipboard();
-        WorldEdits.copy(pcw, selection, pos, clipboard);
-        if (selection instanceof BlockSelection blockSelection) {
-            blockSelection.setBackwardBlocks(pcw);
-        } else {
-            WorldEdits.fill(pcw, selection, player.getBackgroundBlock());
-        }
+        WorldEdits.copy(player.getEditWorld(), sel, pos, clipboard);
         player.setClipboard(clipboard);
+        BlockSelection blockSel;
+        if(sel instanceof BlockSelection) {
+            blockSel = (BlockSelection) sel;
+        }else {
+            blockSel = createPasteSelection(player.getEditWorld(), sel);
+        }
+        PlayerClientWorld pcw = new PlayerClientWorld(player);
+        blockSel.setBackwardBlocks(pcw);
         pcw.setSelection(null);
         return pcw.end();
     }
