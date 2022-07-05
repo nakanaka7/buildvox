@@ -1,7 +1,10 @@
 package tokyo.nakanaka.buildvox.core;
 
-import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
+import tokyo.nakanaka.buildvox.core.math.region3d.Infinite;
+import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
+import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
+import tokyo.nakanaka.buildvox.core.selection.Selection;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,6 +12,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Clipboard implements VoxelSpace<VoxelBlock> {
+    private final Selection selection;
     private final Map<Vector3i, VoxelBlock> blockMap = new HashMap<>();
     private Integer maxX;
     private Integer maxY;
@@ -17,6 +21,28 @@ public class Clipboard implements VoxelSpace<VoxelBlock> {
     private Integer minY;
     private Integer minZ;
     private boolean locked = false;
+
+    /**
+     * Creates a new instance.
+     * @param selection the selection which is the bound of this clipboard.
+     */
+    public Clipboard(Selection selection) {
+        this.selection = selection;
+    }
+
+    /**
+     * Creates a new instance with infinite selection.
+     */
+    public Clipboard() {
+        Parallelepiped bound = new Parallelepiped(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE,
+                Double.MAX_VALUE, Double.MAX_VALUE);
+        this.selection = new Selection(new Infinite(), bound);
+    }
+
+    /** Gets the selection */
+    public Selection getSelection() {
+        return selection;
+    }
 
     /**
      * Locks this clipboard, which means that this clipboard will be read only.
@@ -30,16 +56,20 @@ public class Clipboard implements VoxelSpace<VoxelBlock> {
     }
 
     /**
-     * Set the block into this clipboard
+     * Set the block into this clipboard.
      * @param x the x-coordinate of the block in the clipboard position
      * @param y the y-coordinate of the block in the clipboard position
      * @param z the z-coordinate of the block in the clipboard position
      * @param block the block to set
+     * @throws IllegalArgumentException if pos is out of the selection.
      * @throws IllegalStateException if this clipboard is locked(the read only mode).
      */
     public void setBlock(int x, int y, int z, VoxelBlock block){
         if(this.locked){
             throw new IllegalStateException();
+        }
+        if(!selection.getRegion3d().contains(x + 0.5, y + 0.5, z + 0.5)) {
+            throw new IllegalArgumentException();
         }
         if(this.blockCount() == 0){
             this.maxX = x;
