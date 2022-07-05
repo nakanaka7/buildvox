@@ -17,10 +17,11 @@ import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
  * the selection is created. Backward blocks are the blocks which were replaced with the forward blocks. For blocks to
  * accompany the selection properly when it is affine transformed, both setForwardBlocks() and setBackwardBlocks() must
  * be called properly. Namely, firstly, call setBackwardBlocks() of the original selection, and secondly, call
- * setForwardBlocks() of the transformed selection.
+ * setForwardBlocks() of the transformed selection. Calling setBackwardBlocks() before setForwardBlocks() will fill with
+ * background blocks.
  */
 public abstract class BlockSelection extends Selection {
-    protected Clipboard backwardClip = new Clipboard();
+    protected Clipboard backwardClip;
     protected double integrity;
     protected boolean masked;
 
@@ -71,11 +72,16 @@ public abstract class BlockSelection extends Selection {
     }
 
     /**
-     * Set backward blocks.
+     * Set backward blocks. The backward blocks are the blocks which were replaced by the last setForwardBlocks().
+     * If no calling setForwardBlocks() before, this sets background block into this selection.
      * @param playerClientWorld a world to set blocks.
      */
     public void setBackwardBlocks(PlayerClientWorld playerClientWorld) {
-        WorldEdits.paste(backwardClip, playerClientWorld, Vector3d.ZERO);
+        if(backwardClip == null) {
+            WorldEdits.fill(playerClientWorld, this, playerClientWorld.getPlayer().getBackgroundBlock());
+        }else {
+            WorldEdits.paste(backwardClip, playerClientWorld, Vector3d.ZERO);
+        }
     }
 
     @Override
