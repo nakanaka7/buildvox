@@ -130,7 +130,8 @@ public class PlayerEdits {
         pcw.end();
     }
 
-    /**
+    /*
+     * Experimental
      * Applies physics in the selection.
      * @throws MissingPosException if player does not have a selection and some pos are missing.
      * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
