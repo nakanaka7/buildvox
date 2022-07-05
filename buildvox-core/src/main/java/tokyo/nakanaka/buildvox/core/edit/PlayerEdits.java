@@ -100,13 +100,8 @@ public class PlayerEdits {
         Selection selection = player.getSelection();
         if(selection != null && shape == null) return selection;
         Vector3i[] posArray = player.getPosArrayClone();
-        boolean posArrayIsFull = Arrays.stream(posArray).allMatch(Objects::nonNull);
-        if(!posArrayIsFull) throw new MissingPosException();
-        if(shape != null) {
-            return shape.createSelection(posArray);
-        }else {
-            return SelectionCreations.createDefault(posArray);
-        }
+        if(!posArrayIsFull(posArray)) throw new MissingPosException();
+        return createPosArraySelection(posArray, shape);
     }
 
     /**
