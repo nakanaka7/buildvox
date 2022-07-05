@@ -1,24 +1,26 @@
 package tokyo.nakanaka.buildvox.core.edit;
 
+import tokyo.nakanaka.buildvox.core.Axis;
 import tokyo.nakanaka.buildvox.core.Clipboard;
 import tokyo.nakanaka.buildvox.core.EditExit;
 import tokyo.nakanaka.buildvox.core.World;
+import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.clientWorld.ClientWorld;
 import tokyo.nakanaka.buildvox.core.clientWorld.IntegrityClientWorld;
 import tokyo.nakanaka.buildvox.core.clientWorld.PlayerClientWorld;
-import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
 import tokyo.nakanaka.buildvox.core.math.Drawings;
 import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
 import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.Player;
-import tokyo.nakanaka.buildvox.core.Axis;
-import tokyo.nakanaka.buildvox.core.selection.*;
-import tokyo.nakanaka.buildvox.core.selectionShape.util.SelectionCreations;
+import tokyo.nakanaka.buildvox.core.selection.BlockSelection;
+import tokyo.nakanaka.buildvox.core.selection.FillSelection;
+import tokyo.nakanaka.buildvox.core.selection.PasteSelection;
+import tokyo.nakanaka.buildvox.core.selection.Selection;
+import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
 import tokyo.nakanaka.buildvox.core.selectionShape.SelectionShape;
-import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
-import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
+import tokyo.nakanaka.buildvox.core.selectionShape.util.SelectionCreations;
 
 import javax.swing.undo.UndoManager;
 import java.util.Arrays;
@@ -304,14 +306,12 @@ public class PlayerEdits {
         Clipboard clipboard = new Clipboard();
         WorldEdits.copy(player.getEditWorld(), sel, pos, clipboard);
         player.setClipboard(clipboard);
-        BlockSelection blockSel;
-        if(sel instanceof BlockSelection) {
-            blockSel = (BlockSelection) sel;
-        }else {
-            blockSel = createPasteSelection(player.getEditWorld(), sel);
-        }
         PlayerClientWorld pcw = new PlayerClientWorld(player);
-        blockSel.setBackwardBlocks(pcw);
+        if(sel instanceof BlockSelection blockSel) {
+            blockSel.setBackwardBlocks(pcw);
+        }else {
+            WorldEdits.fill(pcw, sel, player.getBackgroundBlock());
+        }
         pcw.setSelection(null);
         return pcw.end();
     }
