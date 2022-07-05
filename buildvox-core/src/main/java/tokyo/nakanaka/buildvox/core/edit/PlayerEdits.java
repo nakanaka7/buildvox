@@ -257,18 +257,21 @@ public class PlayerEdits {
     private static EditExit affineTransform(Player player, Vector3d pos, AffineTransformation3d relativeTrans, Options options) {
         AffineTransformation3d trans = AffineTransformation3d.withOffset(relativeTrans, pos.x() + 0.5, pos.y() + 0.5, pos.z() + 0.5);
         Selection selFrom = player.getSelection();
-        if(selFrom == null) {
-            Selection posArraySel = createPosArraySelection(player.getPosArrayClone(), options.shape);
-            PasteSelection pasteSel = createPasteSelection(player.getEditWorld(), posArraySel);
-            pasteSel.setIntegrity(options.integrity);
-            pasteSel.setMasked(options.masked);
-            selFrom = pasteSel;
-        }
+        Selection selTo;
         PlayerClientWorld pcw = new PlayerClientWorld(player);
-        if(selFrom instanceof BlockSelection blockSel) {
-            blockSel.setBackwardBlocks(pcw);
+        if(selFrom != null) {
+            if(selFrom instanceof BlockSelection blockSel) {
+                blockSel.setBackwardBlocks(pcw);
+            }
+        }else {
+            Selection posArraySel = createPosArraySelection(player.getPosArrayClone(), options.shape);
+            Clipboard clipboard = new Clipboard();
+            WorldEdits.copy(pcw, posArraySel, Vector3d.ZERO, clipboard);
+            selFrom = new PasteSelection.Builder(clipboard, Vector3d.ZERO)
+                    .masked(options.masked).integrity(options.integrity).build();
+            WorldEdits.fill(pcw, posArraySel, player.getBackgroundBlock());
         }
-        Selection selTo = selFrom.affineTransform(trans);
+        selTo = selFrom.affineTransform(trans);
         if(selTo instanceof BlockSelection blockSel) {
             blockSel.setForwardBlocks(pcw);
         }
