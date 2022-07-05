@@ -88,22 +88,6 @@ public class PlayerEdits {
     }
 
     /**
-     * Finds a selection if possible.
-     * @param player the player.
-     * @param shape the selection shape. Nullable.
-     * @return a selection if possible.
-     * @throws MissingPosException if player does not have a selection and some pos are missing.
-     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
-     * the shape.
-     */
-    private static Selection findSelection(Player player, SelectionShape shape) {
-        Selection selection = player.getSelection();
-        if(selection != null && shape == null) return selection;
-        Vector3i[] posArray = player.getPosArrayClone();
-        return createPosArraySelection(posArray, shape);
-    }
-
-    /**
      * Creates a selection from the pos-array. If shape is null, returns default selection.
      * @param posArray the pos-array. All the pos must not be null.
      * @param shape the shape. Nullable.
@@ -126,15 +110,18 @@ public class PlayerEdits {
      * @param options the options.
      */
     public static void select(Player player, Options options) {
+        Selection sel = player.getSelection();
+        if(sel == null) {
+            sel = createPosArraySelection(player.getPosArrayClone(), options.shape);
+        }
         PlayerClientWorld pcw = new PlayerClientWorld(player);
-        Selection selection = findSelection(player, options.shape);
-        if(selection instanceof BlockSelection blockSel) {
+        if(sel instanceof BlockSelection blockSel) {
             blockSel.setBackwardBlocks(pcw);
             blockSel.setIntegrity(options.integrity);
             blockSel.setMasked(options.masked);
             blockSel.setForwardBlocks(pcw);
         }
-        pcw.setSelection(selection);
+        pcw.setSelection(sel);
         pcw.end();
     }
 
@@ -144,7 +131,10 @@ public class PlayerEdits {
      * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
      */
     public static void applyPhysics(Player player, Options options) {
-        Selection selFrom = findSelection(player, options.shape);
+        Selection selFrom = player.getSelection();
+        if(selFrom == null) {
+            selFrom = createPosArraySelection(player.getPosArrayClone(), options.shape);
+        }
         Clipboard clipboard = new Clipboard();
         ClientWorld clientWorld = new ClientWorld(player.getEditWorld(), true);
         WorldEdits.copy(clientWorld, selFrom, Vector3d.ZERO, clipboard);
@@ -304,7 +294,10 @@ public class PlayerEdits {
      * the shape.
      */
     public static EditExit cut(Player player, Vector3d pos, Options options) {
-        Selection sel = findSelection(player, options.shape);
+        Selection sel = player.getSelection();
+        if(sel == null) {
+            sel = createPosArraySelection(player.getPosArrayClone(), options.shape);
+        }
         Clipboard clipboard = new Clipboard();
         WorldEdits.copy(player.getEditWorld(), sel, pos, clipboard);
         player.setClipboard(clipboard);
@@ -328,9 +321,12 @@ public class PlayerEdits {
      * the shape.
      */
     public static EditExit copy(Player player, Vector3d pos, Options options) {
-        Selection selection = findSelection(player, options.shape);
+        Selection sel = player.getSelection();
+        if(sel == null) {
+            sel = createPosArraySelection(player.getPosArrayClone(), options.shape);
+        }
         Clipboard clipboard = new Clipboard();
-        WorldEdits.copy(new ClientWorld(player.getEditWorld()), selection, pos, clipboard);
+        WorldEdits.copy(new ClientWorld(player.getEditWorld()), sel, pos, clipboard);
         clipboard.lock();
         player.setClipboard(clipboard);
         return new EditExit(clipboard.blockCount(), 0, 0);
@@ -368,8 +364,11 @@ public class PlayerEdits {
      * the shape.
      */
     public static EditExit fill(Player player, VoxelBlock block, Options options) {
-        Selection selection = findSelection(player, options.shape);
-        FillSelection fillSelection = new FillSelection.Builder(block, selection)
+        Selection sel = player.getSelection();
+        if(sel == null) {
+            sel = createPosArraySelection(player.getPosArrayClone(), options.shape);
+        }
+        FillSelection fillSelection = new FillSelection.Builder(block, sel)
                 .integrity(options.integrity)
                 .masked(options.masked)
                 .build();
@@ -392,7 +391,10 @@ public class PlayerEdits {
      */
     public static EditExit replace(Player player, VoxelBlock blockFrom, VoxelBlock blockTo, Options options) {
         Selection selTo;
-        var sel = findSelection(player, options.shape);
+        Selection sel = player.getSelection();
+        if(sel == null) {
+            sel = createPosArraySelection(player.getPosArrayClone(), options.shape);
+        }
         if(sel instanceof BlockSelection bs) {
             selTo = bs.toNonBlock();
         }else {
@@ -488,7 +490,10 @@ public class PlayerEdits {
      * @throws IllegalArgumentException if integrity is less than 0 or larger than 1.
      */
     public static EditExit repeat(Player player, int countX, int countY, int countZ, Options options) {
-        Selection sel = findSelection(player, options.shape);
+        Selection sel = player.getSelection();
+        if(sel == null) {
+            sel = createPosArraySelection(player.getPosArrayClone(), options.shape);
+        }
         Parallelepiped bound = sel.getBound();
         double dx = bound.maxX() - bound.minX();
         double dy = bound.maxY() - bound.minY();
