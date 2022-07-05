@@ -1,6 +1,7 @@
 package tokyo.nakanaka.buildvox.core.selection;
 
 import tokyo.nakanaka.buildvox.core.Clipboard;
+import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.clientWorld.ClientWorld;
 import tokyo.nakanaka.buildvox.core.clientWorld.IntegrityClientWorld;
 import tokyo.nakanaka.buildvox.core.clientWorld.MaskedClientWorld;
@@ -8,9 +9,7 @@ import tokyo.nakanaka.buildvox.core.clientWorld.PlayerClientWorld;
 import tokyo.nakanaka.buildvox.core.edit.WorldEdits;
 import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
 import tokyo.nakanaka.buildvox.core.math.region3d.Region3d;
-import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
-import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 
 /**
  * Represents block accompanied selection. Forward blocks are the blocks which are created at the same time when
@@ -83,8 +82,5 @@ public abstract class BlockSelection extends Selection {
             WorldEdits.paste(backwardClip, playerClientWorld, Vector3d.ZERO);
         }
     }
-
-    @Override
-    public abstract BlockSelection affineTransform(AffineTransformation3d trans);
 
 }
