@@ -389,7 +389,7 @@ public class PlayerEdits {
         WorldEdits.replace(icw, sel, blockFrom, blockTo);
         Clipboard clipboard = new Clipboard();
         WorldEdits.copy(pcw, sel, Vector3d.ZERO, clipboard);
-        Selection pasteSel = new PasteSelection.Builder(clipboard, Vector3d.ZERO).build();
+        Selection pasteSel = new PasteSelection.Builder(clipboard, Vector3d.ZERO, sel).build();
         pcw.setSelection(pasteSel);
         return pcw.end();
     }
