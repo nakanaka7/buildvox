@@ -15,7 +15,7 @@ import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
 import java.io.PrintWriter;
 
 @Command(name = "fill", mixinStandardHelpOptions = true,
-        description = "Fill blocks into the selection or specified shape region."
+        description = "Fill blocks into the selection. Use -s option to specify a shape."
 )
 public class FillCommand implements Runnable {
     @Spec
