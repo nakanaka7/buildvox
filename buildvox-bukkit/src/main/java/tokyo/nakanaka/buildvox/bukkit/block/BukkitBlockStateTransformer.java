@@ -23,9 +23,7 @@ import java.util.*;
 
 import static org.bukkit.block.BlockFace.*;
 
-/**
- * The class which implements {@link BlockStateTransformer} for Bukkit Platform
- */
+/* internal */
 public class BukkitBlockStateTransformer implements BlockStateTransformer {
     private static final Logger LOGGER = LoggerFactory.getLogger(BukkitBlockStateTransformer.class);
     private Server server;

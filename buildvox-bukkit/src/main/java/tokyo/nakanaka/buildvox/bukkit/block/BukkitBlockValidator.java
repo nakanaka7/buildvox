@@ -4,9 +4,7 @@ import org.bukkit.Server;
 import tokyo.nakanaka.buildvox.core.block.BlockValidator;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 
-/**
- * The class which implements {@link BlockValidator} for Bukkit Platform
- */
+/* internal */
 public class BukkitBlockValidator implements BlockValidator {
     private Server server;
 
