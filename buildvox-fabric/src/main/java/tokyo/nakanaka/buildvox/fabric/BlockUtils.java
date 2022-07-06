@@ -120,8 +120,8 @@ public class BlockUtils {
         @Override
         public Map<String, String> transform(NamespacedId blockId, Map<String, String> stateMap, BlockTransformation blockTrans) {
             Matrix3x3i transMatrix = blockTrans.toMatrix3x3i();
-            String blockStr = new VoxelBlock(blockId, new StateImpl(stateMap)).toString();
-            BlockState blockState = parseBlockState(blockStr);
+            VoxelBlock block = new VoxelBlock(blockId, new StateImpl(stateMap));
+            BlockState blockState = createBlockState(block);
             Vector3i transI = transMatrix.apply(Vector3i.PLUS_I);
             Vector3i transJ = transMatrix.apply(Vector3i.PLUS_J);
             Vector3i transK = transMatrix.apply(Vector3i.PLUS_K);
