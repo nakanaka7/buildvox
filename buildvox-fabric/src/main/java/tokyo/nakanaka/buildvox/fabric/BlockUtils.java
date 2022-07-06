@@ -51,7 +51,7 @@ public class BlockUtils {
         net.minecraft.block.Block block0 = blockState.getBlock();
         Identifier id0 = Registry.BLOCK.getId(block0);
         NamespacedId id = createId(id0);
-        StateImpl state = convertToStateImpl(blockState);
+        StateImpl state = createStateImpl(blockState);
         EntityImpl entity = null;
         if(blockEntity != null) {
             NbtCompound nbt = blockEntity.createNbtWithId();
@@ -60,7 +60,8 @@ public class BlockUtils {
         return new VoxelBlock(id, state, entity);
     }
 
-    public static StateImpl convertToStateImpl(BlockState blockState) {
+    /** Creates StateImpl */
+    public static StateImpl createStateImpl(BlockState blockState) {
         Collection<Property<?>> properties0 = blockState.getProperties();
         Map<String, String> stateMap = new HashMap<>();
         for(var key0 : properties0){
@@ -153,7 +154,7 @@ public class BlockUtils {
             net.minecraft.block.Block block0 = blockState.getBlock();
             Identifier id0 = Registry.BLOCK.getId(block0);
             NamespacedId id = new NamespacedId(id0.getNamespace(), id0.getPath());
-            var stateMap = convertToStateImpl(blockState).getStateMap();
+            var stateMap = createStateImpl(blockState).getStateMap();
             return new VoxelBlock(id, new StateImpl(stateMap));
         }
 
