@@ -33,16 +33,16 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
-import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
-import tokyo.nakanaka.buildvox.core.system.CommandSource;
-import tokyo.nakanaka.buildvox.core.system.Messenger;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
+import tokyo.nakanaka.buildvox.core.World;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.player.PlayerEntity;
 import tokyo.nakanaka.buildvox.core.player.RealPlayer;
-import tokyo.nakanaka.buildvox.core.World;
-import tokyo.nakanaka.buildvox.fabric.block.BlockUtils;
+import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
+import tokyo.nakanaka.buildvox.core.system.CommandSource;
+import tokyo.nakanaka.buildvox.core.system.Messenger;
+import tokyo.nakanaka.buildvox.fabric.block.FabricBlock;
 import tokyo.nakanaka.buildvox.fabric.block.FabricBlockValidator;
 
 import java.util.*;
@@ -82,7 +82,7 @@ public class BuildVoxMod implements ModInitializer {
 	public static void registerBlocks() {
 		for(Identifier blockId0 : Registry.BLOCK.getIds()) {
 			NamespacedId id = createId(blockId0);
-			BuildVoxSystem.getBlockRegistry().register(BlockUtils.createBlock(id));
+			BuildVoxSystem.getBlockRegistry().register(new FabricBlock(id));
 		}
 	}
 
