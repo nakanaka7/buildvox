@@ -32,7 +32,33 @@ public class BlockUtils {
 
     /** Creates block from its id */
     public static Block<StateImpl, EntityImpl> createBlock(NamespacedId id) {
-        return new BlockImpl(id, new FabricBlockStateTransformer());
+        return new FabricBlock(id, new FabricBlockStateTransformer());
+    }
+
+    /** Block implementation class for Fabric platform. */
+    private static class FabricBlock implements Block<StateImpl, EntityImpl> {
+        private NamespacedId id;
+        private BlockStateTransformer stateTransformer;
+
+        public FabricBlock(NamespacedId id, BlockStateTransformer stateTransformer) {
+            this.id = id;
+            this.stateTransformer = stateTransformer;
+        }
+
+        @Override
+        public NamespacedId getId() {
+            return id;
+        }
+
+        @Override
+        public StateImpl transformState(StateImpl state, BlockTransformation trans) {
+            Map<String, String> transMap = stateTransformer.transform(id, state.getStateMap(), trans);
+            return new StateImpl(transMap);
+        }
+
+        public StateImpl parseState(String s) {
+            return StateImpl.valueOf(s);
+        }
     }
 
     /** Creates a voxel block */
