@@ -86,10 +86,20 @@ public class BlockUtils {
         return new StateEntity(state, entity);
     }
 
-    /** Creates a BlockState */
+    /**
+     * Creates a BlockState
+     * @throws IllegalArgumentException if fails to create.
+     */
     private static BlockState createBlockState(VoxelBlock block) {
-        String blockStr = block.withoutEntity().toString();
-        return parseBlockState(blockStr);
+        String s = block.withoutEntity().toString();
+        StringReader strReader = new StringReader(s);
+        BlockStateArgument blockStateArg;
+        try {
+            blockStateArg = new BlockStateArgumentType().parse(strReader);
+        } catch (CommandSyntaxException e) {
+            throw new IllegalArgumentException("Cannot parse:" + s);
+        }
+        return blockStateArg.getBlockState();
     }
 
     private static BlockEntity createBlockEntity(int x, int y, int z, VoxelBlock block, BlockState blockState) {
@@ -99,17 +109,6 @@ public class BlockUtils {
         }
         NbtCompound nbt = (NbtCompound) entity.getObj();
         return BlockEntity.createFromNbt(new BlockPos(x, y, z), blockState, nbt);
-    }
-
-    public static BlockState parseBlockState(String s) {
-        StringReader strReader = new StringReader(s);
-        BlockStateArgument blockStateArg;
-        try {
-            blockStateArg = new BlockStateArgumentType().parse(strReader);
-        } catch (CommandSyntaxException e) {
-            throw new IllegalArgumentException("Cannot parse:" + s);
-        }
-        return blockStateArg.getBlockState();
     }
 
     /**
