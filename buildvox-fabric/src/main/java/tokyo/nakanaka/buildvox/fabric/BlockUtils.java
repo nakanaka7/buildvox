@@ -33,8 +33,13 @@ public class BlockUtils {
     public static void registerBlocks() {
         for(Identifier blockId0 : Registry.BLOCK.getIds()) {
             NamespacedId id = new NamespacedId(blockId0.getNamespace(), blockId0.getPath());
-            BuildVoxSystem.getBlockRegistry().register(new BlockImpl(id, new FabricBlockStateTransformer()));
+            BuildVoxSystem.getBlockRegistry().register(createBlock(id));
         }
+    }
+
+    /** Creates block from its id */
+    private static Block<StateImpl, EntityImpl> createBlock(NamespacedId id) {
+        return new BlockImpl(id, new FabricBlockStateTransformer());
     }
 
     public static VoxelBlock getVoxelBlock(net.minecraft.block.BlockState blockState, BlockEntity blockEntity) {
