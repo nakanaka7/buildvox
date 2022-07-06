@@ -12,10 +12,12 @@ import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.block.BlockStateTransformer;
 import tokyo.nakanaka.buildvox.core.block.BlockTransformation;
 import tokyo.nakanaka.buildvox.core.block.StateImpl;
-import tokyo.nakanaka.buildvox.core.math.transformation.*;
-import tokyo.nakanaka.buildvox.core.math.vector.*;
-import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
+import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
+import tokyo.nakanaka.buildvox.core.math.transformation.Matrix3x3d;
+import tokyo.nakanaka.buildvox.core.math.transformation.Matrix3x3i;
+import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
+import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 
 import java.util.*;
 
@@ -67,7 +69,7 @@ public class BukkitBlockStateTransformer implements BlockStateTransformer {
         if(blockData instanceof Stairs stairs){
             blockData = transformStairsShape(stairs, transMatrix);
         }
-        return ((StateImpl)BuildVoxSystem.parseBlock(blockData.getAsString()).getState()).getStateMap();
+        return ((StateImpl)VoxelBlock.valueOf(blockData.getAsString()).getState()).getStateMap();
     }
 
     private Bisected transformBisected(Bisected bisected, Matrix3x3i transMatrix){
