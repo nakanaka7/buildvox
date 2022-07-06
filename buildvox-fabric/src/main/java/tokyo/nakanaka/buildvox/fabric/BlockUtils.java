@@ -25,6 +25,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import static tokyo.nakanaka.buildvox.fabric.NamespacedIds.createId;
+
 public class BlockUtils {
     private BlockUtils() {
     }
@@ -34,11 +36,6 @@ public class BlockUtils {
             NamespacedId id = createId(blockId0);
             BuildVoxSystem.getBlockRegistry().register(createBlock(id));
         }
-    }
-
-    /** Creates a namespaced id from Identifier */
-    private static NamespacedId createId(Identifier id) {
-        return new NamespacedId(id.getNamespace(), id.getPath());
     }
 
     /** Creates block from its id */
