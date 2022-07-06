@@ -1,23 +1,26 @@
 package tokyo.nakanaka.buildvox.core.edit;
 
+import tokyo.nakanaka.buildvox.core.Axis;
 import tokyo.nakanaka.buildvox.core.Clipboard;
 import tokyo.nakanaka.buildvox.core.EditExit;
+import tokyo.nakanaka.buildvox.core.World;
+import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.clientWorld.ClientWorld;
 import tokyo.nakanaka.buildvox.core.clientWorld.IntegrityClientWorld;
 import tokyo.nakanaka.buildvox.core.clientWorld.PlayerClientWorld;
-import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
 import tokyo.nakanaka.buildvox.core.math.Drawings;
 import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
 import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.Player;
-import tokyo.nakanaka.buildvox.core.Axis;
-import tokyo.nakanaka.buildvox.core.selection.*;
-import tokyo.nakanaka.buildvox.core.selectionShape.util.SelectionCreations;
+import tokyo.nakanaka.buildvox.core.selection.BlockSelection;
+import tokyo.nakanaka.buildvox.core.selection.FillSelection;
+import tokyo.nakanaka.buildvox.core.selection.PasteSelection;
+import tokyo.nakanaka.buildvox.core.selection.Selection;
+import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
 import tokyo.nakanaka.buildvox.core.selectionShape.SelectionShape;
-import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
-import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
+import tokyo.nakanaka.buildvox.core.selectionShape.util.SelectionCreations;
 
 import javax.swing.undo.UndoManager;
 import java.util.Arrays;
@@ -83,50 +86,72 @@ public class PlayerEdits {
         public SelectionShape shape = null;
     }
 
+    /**
+     * Threw when create a selection from pos-array in createPosArraySelection().
+     */
     public static class MissingPosException extends RuntimeException {
     }
 
     /**
-     * Finds a selection if possible.
-     * @param player the player.
-     * @param shape the selection shape. Nullable.
-     * @return a selection if possible.
-     * @throws MissingPosException if player does not have a selection and some pos are missing.
-     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
-     * the shape.
+     * Creates a selection from the pos-array. If shape is null, returns default selection.
+     * @param posArray the pos-array. All the pos must not be null.
+     * @param shape the shape. Nullable.
+     * @return a selection from the pos-array.
+     * @throws MissingPosException if some pos is null.
+     * @throws PosArrayLengthException if the pos-array length is invalid for the shape.
      */
-    private static Selection findSelection(Player player, SelectionShape shape) {
-        Selection selection = player.getSelection();
-        if(selection != null && shape == null) return selection;
-        Vector3i[] posArray = player.getPosArrayClone();
+    private static Selection createPosArraySelection(Vector3i[] posArray, SelectionShape shape) {
         boolean posArrayIsFull = Arrays.stream(posArray).allMatch(Objects::nonNull);
         if(!posArrayIsFull) throw new MissingPosException();
-        if(shape != null) {
-            return shape.createSelection(posArray);
-        }else {
+        if(shape == null) {
             return SelectionCreations.createDefault(posArray);
+        }else {
+            return shape.createSelection(posArray);
         }
     }
 
     /**
+     * Creates a new selection from existing selection or pos-array. If the new selection is block-selection, options
+     * will be rebound.
+     * @param player the player.
+     * @param options the options.
+     */
+    public static void select(Player player, Options options) {
+        Selection sel = player.getSelection();
+        if(sel == null) {
+            sel = createPosArraySelection(player.getPosArrayClone(), options.shape);
+        }
+        PlayerClientWorld pcw = new PlayerClientWorld(player);
+        if(sel instanceof BlockSelection blockSel) {
+            blockSel.setBackwardBlocks(pcw);
+            blockSel.setIntegrity(options.integrity);
+            blockSel.setMasked(options.masked);
+            blockSel.setForwardBlocks(pcw);
+        }
+        pcw.setSelection(sel);
+        pcw.end();
+    }
+
+    /*
+     * Experimental
      * Applies physics in the selection.
      * @throws MissingPosException if player does not have a selection and some pos are missing.
      * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
      */
     public static void applyPhysics(Player player, Options options) {
-        Selection selFrom = findSelection(player, options.shape);
+        Selection sel = player.getSelection();
+        if(sel == null) {
+            sel = createPosArraySelection(player.getPosArrayClone(), options.shape);
+        }
         Clipboard clipboard = new Clipboard();
         ClientWorld clientWorld = new ClientWorld(player.getEditWorld(), true);
-        WorldEdits.copy(clientWorld, selFrom, Vector3d.ZERO, clipboard);
-        WorldEdits.fill(clientWorld, selFrom, BuildVoxSystem.parseBlock("air"));
+        WorldEdits.copy(clientWorld, sel, Vector3d.ZERO, clipboard);
+        WorldEdits.fill(clientWorld, sel, VoxelBlock.valueOf("air"));
         WorldEdits.paste(clipboard, clientWorld, Vector3d.ZERO);
-        Selection selTo;
-        if(selFrom instanceof BlockSelection bs) {
-            selTo = bs.toNonBlock();
-        }else {
-            selTo = selFrom;
-        }
-        player.setSelection(selTo);
+        Clipboard clipboard1 = new Clipboard();
+        WorldEdits.copy(player.getEditWorld(), sel, Vector3d.ZERO, clipboard1);
+        Selection pasteSel = new PasteSelection.Builder(clipboard1, Vector3d.ZERO, sel).build();
+        player.setSelection(pasteSel);
     }
 
     /**
@@ -225,7 +250,9 @@ public class PlayerEdits {
     }
 
     /**
-     * Affine transform the player's selection.
+     * Affine transform the selection. If player does not have a selection, a selection will be created from pos-array,
+     * and then converted to a paste-selection. If the selection is block-selection, backward and forward blocks
+     * will be set.
      * @param player the player.
      * @param pos the block position of the center of affine transformation
      * @param relativeTrans the affine transformation.
@@ -235,72 +262,81 @@ public class PlayerEdits {
      * the shape.
      */
     private static EditExit affineTransform(Player player, Vector3d pos, AffineTransformation3d relativeTrans, Options options) {
-        Selection selectionFrom = findSelection(player, options.shape);
         AffineTransformation3d trans = AffineTransformation3d.withOffset(relativeTrans, pos.x() + 0.5, pos.y() + 0.5, pos.z() + 0.5);
-        BlockSelection selectionTo;
-        if(selectionFrom instanceof BlockSelection blockSelection) {
-            selectionTo = blockSelection.affineTransform(trans);
-        }else {
-            Clipboard clipboard = new Clipboard();
-            Vector3d copyPos = Vector3d.ZERO;
-            WorldEdits.copy(new ClientWorld(player.getEditWorld()), selectionFrom, copyPos, clipboard);
-            clipboard.lock();
-            AffineTransformation3d newClipTrans = trans.linear();
-            Vector3d pastePos = trans.apply(copyPos);
-            selectionTo = new PasteSelection.Builder(clipboard, pastePos)
-                    .clipTrans(newClipTrans)
-                    .integrity(options.integrity)
-                    .masked(options.masked).build();
+        Selection selFrom = player.getSelection();
+        if(selFrom == null) {
+            Selection posArraySel = createPosArraySelection(player.getPosArrayClone(), options.shape);
+            PasteSelection pasteSel = createPasteSelection(player.getEditWorld(), posArraySel);
+            pasteSel.setIntegrity(options.integrity);
+            pasteSel.setMasked(options.masked);
+            selFrom = pasteSel;
         }
-        PlayerClientWorld pw = new PlayerClientWorld(player);
-        if (selectionFrom instanceof BlockSelection blockSelection) {
-            blockSelection.setBackwardBlocks(pw);
-        } else {
-            WorldEdits.fill(pw, selectionFrom, player.getBackgroundBlock());
+        PlayerClientWorld pcw = new PlayerClientWorld(player);
+        if(selFrom instanceof BlockSelection blockSel) {
+            blockSel.setBackwardBlocks(pcw);
         }
-        selectionTo.setForwardBlocks(pw);
-        pw.setSelection(selectionTo);
-        return pw.end();
+        Selection selTo;
+        selTo = selFrom.affineTransform(trans);
+        if(selTo instanceof BlockSelection blockSel) {
+            blockSel.setForwardBlocks(pcw);
+        }
+        pcw.setSelection(selTo);
+        return pcw.end();
+    }
+
+    private static PasteSelection createPasteSelection(World world, Selection sel) {
+        Clipboard clipboard = new Clipboard(sel);
+        WorldEdits.copy(world, sel, Vector3d.ZERO, clipboard);
+        return new PasteSelection.Builder(clipboard, Vector3d.ZERO, sel).build();
     }
 
     /**
+     * Cuts the blocks in the selection. If player does not have a selection, a selection will be created from pos-array.
+     * If the selection is block-selection, backward blocks will be set. If the selection is non-block selection, the
+     * background blocks will be set. The selection of the player will be set null in the end.
      * @throws MissingPosException if player does not have a selection and some pos are missing.
      * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
      * the shape.
      */
     public static EditExit cut(Player player, Vector3d pos, Options options) {
-        PlayerClientWorld pcw = new PlayerClientWorld(player);
-        Selection selection = findSelection(player, options.shape);
-        Clipboard clipboard = new Clipboard();
-        WorldEdits.copy(pcw, selection, pos, clipboard);
-        if (selection instanceof BlockSelection blockSelection) {
-            blockSelection.setBackwardBlocks(pcw);
-        } else {
-            WorldEdits.fill(pcw, selection, player.getBackgroundBlock());
+        Selection sel = player.getSelection();
+        if(sel == null) {
+            sel = createPosArraySelection(player.getPosArrayClone(), options.shape);
         }
+        Clipboard clipboard = new Clipboard(sel.translate(pos.negate()));
+        WorldEdits.copy(player.getEditWorld(), sel, pos, clipboard);
         player.setClipboard(clipboard);
+        PlayerClientWorld pcw = new PlayerClientWorld(player);
+        if(sel instanceof BlockSelection blockSel) {
+            blockSel.setBackwardBlocks(pcw);
+        }else {
+            WorldEdits.fill(pcw, sel, player.getBackgroundBlock());
+        }
         pcw.setSelection(null);
         return pcw.end();
     }
 
     /**
-     * Copies the blocks in the selection.
+     * Copies the blocks in the selection. If player does not have a selection, a selection will be created from pos-array.
      * @param pos the position which corresponds to the origin of the clipboard.
      * @throws MissingPosException if player does not have a selection and some pos are missing.
      * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
      * the shape.
      */
     public static EditExit copy(Player player, Vector3d pos, Options options) {
-        Selection selection = findSelection(player, options.shape);
-        Clipboard clipboard = new Clipboard();
-        WorldEdits.copy(new ClientWorld(player.getEditWorld()), selection, pos, clipboard);
+        Selection sel = player.getSelection();
+        if(sel == null) {
+            sel = createPosArraySelection(player.getPosArrayClone(), options.shape);
+        }
+        Clipboard clipboard = new Clipboard(sel.translate(pos.negate()));
+        WorldEdits.copy(new ClientWorld(player.getEditWorld()), sel, pos, clipboard);
         clipboard.lock();
         player.setClipboard(clipboard);
         return new EditExit(clipboard.blockCount(), 0, 0);
     }
 
     /**
-     * Pastes the blocks of the clipboard.
+     * Pastes the blocks of the clipboard. A paste-selection will be set in the end.
      * @param player the player.
      * @param pos the position which corresponds to the origin of the clipboard.
      * @throws IllegalStateException if clipboard is null
@@ -311,7 +347,7 @@ public class PlayerEdits {
         if(clipboard == null){
             throw new IllegalStateException();
         }
-        PasteSelection pasteSelection = new PasteSelection.Builder(clipboard, pos)
+        PasteSelection pasteSelection = new PasteSelection.Builder(clipboard, pos, clipboard.getSelection().translate(pos))
                 .integrity(integrity)
                 .masked(masked).build();
         PlayerClientWorld pw = new PlayerClientWorld(player);
@@ -321,7 +357,8 @@ public class PlayerEdits {
     }
 
     /**
-     * Fills the block into the selection
+     * Fills the blocks into the selection. If player does not have a selection, a selection will be created from pos-array.
+     * A fill-selection will be set in the end.
      * @param player the player.
      * @param block the block
      * @param options the fill options.
@@ -331,8 +368,11 @@ public class PlayerEdits {
      * the shape.
      */
     public static EditExit fill(Player player, VoxelBlock block, Options options) {
-        Selection selection = findSelection(player, options.shape);
-        FillSelection fillSelection = new FillSelection.Builder(block, selection)
+        Selection sel = player.getSelection();
+        if(sel == null) {
+            sel = createPosArraySelection(player.getPosArrayClone(), options.shape);
+        }
+        FillSelection fillSelection = new FillSelection.Builder(block, sel)
                 .integrity(options.integrity)
                 .masked(options.masked)
                 .build();
@@ -343,7 +383,8 @@ public class PlayerEdits {
     }
 
     /**
-     * Replaces blocks.
+     * Replaces blocks. If player does not have a selection, a selection will be created from pos-array. A paste-selection
+     * will be set in the end.
      * @param player the player.
      * @param blockFrom the block to be replaced from
      * @param blockTo the block to be replaced to
@@ -354,17 +395,15 @@ public class PlayerEdits {
      * @throws IllegalArgumentException if integrity is less than 0 or larger than 1.
      */
     public static EditExit replace(Player player, VoxelBlock blockFrom, VoxelBlock blockTo, Options options) {
-        Selection selTo;
-        var sel = findSelection(player, options.shape);
-        if(sel instanceof BlockSelection bs) {
-            selTo = bs.toNonBlock();
-        }else {
-            selTo = sel;
+        Selection sel = player.getSelection();
+        if(sel == null) {
+            sel = createPosArraySelection(player.getPosArrayClone(), options.shape);
         }
         PlayerClientWorld pcw = new PlayerClientWorld(player);
         IntegrityClientWorld icw = new IntegrityClientWorld(options.integrity, pcw);
         WorldEdits.replace(icw, sel, blockFrom, blockTo);
-        pcw.setSelection(selTo);
+        Selection pasteSel = createPasteSelection(player.getEditWorld(), sel);
+        pcw.setSelection(pasteSel);
         return pcw.end();
     }
 
@@ -442,7 +481,7 @@ public class PlayerEdits {
 
     /**
      * Repeats the blocks in the player selection. countX, countY, and countZ defines the repeating direction vector.
-     * The end selection will be the paste selection of the last repeating blocks
+     * The end selection will be the paste selection of the last repeating blocks.
      * @param player the player.
      * @param countX the count along x-axis.
      * @param countY the count along y-axis.
@@ -451,7 +490,10 @@ public class PlayerEdits {
      * @throws IllegalArgumentException if integrity is less than 0 or larger than 1.
      */
     public static EditExit repeat(Player player, int countX, int countY, int countZ, Options options) {
-        Selection sel = findSelection(player, options.shape);
+        Selection sel = player.getSelection();
+        if(sel == null) {
+            sel = createPosArraySelection(player.getPosArrayClone(), options.shape);
+        }
         Parallelepiped bound = sel.getBound();
         double dx = bound.maxX() - bound.minX();
         double dy = bound.maxY() - bound.minY();
@@ -464,7 +506,8 @@ public class PlayerEdits {
             double qx = pos.x() * dx;
             double qy = pos.y() * dy;
             double qz = pos.z() * dz;
-            PasteSelection pasteSel = new PasteSelection.Builder(clip, new Vector3d(qx, qy, qz)).build();
+            Vector3d q = new Vector3d(qx, qy, qz);
+            PasteSelection pasteSel = new PasteSelection.Builder(clip, q, sel.translate(q)).build();
             pasteSel.setForwardBlocks(pw);
             pw.setSelection(pasteSel);
         }

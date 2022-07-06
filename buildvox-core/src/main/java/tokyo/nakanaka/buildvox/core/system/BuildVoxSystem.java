@@ -4,7 +4,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import picocli.AutoComplete;
 import picocli.CommandLine;
-import tokyo.nakanaka.buildvox.core.*;
+import tokyo.nakanaka.buildvox.core.ColorCode;
+import tokyo.nakanaka.buildvox.core.Messages;
+import tokyo.nakanaka.buildvox.core.NamespacedId;
+import tokyo.nakanaka.buildvox.core.World;
 import tokyo.nakanaka.buildvox.core.block.Block;
 import tokyo.nakanaka.buildvox.core.block.BlockValidator;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
@@ -12,8 +15,6 @@ import tokyo.nakanaka.buildvox.core.command.bvdCommand.BvdCommand;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.DummyPlayer;
 import tokyo.nakanaka.buildvox.core.player.RealPlayer;
-import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
-import tokyo.nakanaka.buildvox.core.World;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -48,12 +49,6 @@ public class BuildVoxSystem {
     @Deprecated
     private static record Config(String outColor, String errColor, String backgroundBlock, int posArrayLength) {
         public static final Config DEFAULT = new Config(ColorCode.GREEN, ColorCode.RED, "minecraft:air", 2);
-    }
-
-    /** Use VoxelBlock.valueOf() */
-    @Deprecated
-    public static VoxelBlock parseBlock(String s) {
-        return VoxelBlock.valueOf(s);
     }
 
     /** Sets the scheduler */

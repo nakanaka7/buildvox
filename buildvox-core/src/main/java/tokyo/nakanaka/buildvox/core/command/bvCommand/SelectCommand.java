@@ -1,10 +1,9 @@
 package tokyo.nakanaka.buildvox.core.command.bvCommand;
 
-import picocli.CommandLine.*;
-import tokyo.nakanaka.buildvox.core.EditExit;
+import picocli.CommandLine;
+import picocli.CommandLine.Command;
+import picocli.CommandLine.Mixin;
 import tokyo.nakanaka.buildvox.core.Messages;
-import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
-import tokyo.nakanaka.buildvox.core.command.mixin.Block;
 import tokyo.nakanaka.buildvox.core.command.mixin.Integrity;
 import tokyo.nakanaka.buildvox.core.command.mixin.Masked;
 import tokyo.nakanaka.buildvox.core.command.mixin.Shape;
@@ -14,26 +13,20 @@ import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
 
 import java.io.PrintWriter;
 
-@Command(name = "fill", mixinStandardHelpOptions = true,
-        description = "Fill blocks into the selection. Use -s option to specify a shape."
-)
-public class FillCommand implements Runnable {
-    @Spec
-    private Model.CommandSpec commandSpec;
-    @ParentCommand
+@Command(name = "select", description = "Creates a new selection from existing selection or pos-array. The options will be rebound."
+        , mixinStandardHelpOptions = true)
+public class SelectCommand implements Runnable {
+    @CommandLine.Spec
+    private CommandLine.Model.CommandSpec commandSpec;
+    @CommandLine.ParentCommand
     private BvCommand bvCmd;
-    @Parameters(description = "The block.", completionCandidates = Block.Candidates.class, converter = Block.Converter.class)
-    private VoxelBlock block;
     @Mixin
     private Integrity integrity;
     @Mixin
     private Masked masked;
     @Mixin
     private Shape shape;
-    @Option(names = {"-r", "--replace"}, description = "The block to replace", completionCandidates = Block.Candidates.class, converter = Block.Converter.class)
-    private VoxelBlock filter;
 
-    @Override
     public void run() {
         PrintWriter out = commandSpec.commandLine().getOut();
         PrintWriter err = commandSpec.commandLine().getErr();
@@ -43,17 +36,11 @@ public class FillCommand implements Runnable {
         options.masked = masked.masked();
         options.shape = shape.shape();
         try {
-            EditExit exit;
-            if(filter == null) {
-                exit = PlayerEdits.fill(player, block, options);
-            }else {
-                exit = PlayerEdits.replace(player, filter, block, options);
-            }
-            out.println(Messages.ofSetExit(exit));
+            PlayerEdits.select(player, options);
+            out.println("Creates a new selection.");
         }catch (PlayerEdits.MissingPosException | PosArrayLengthException ex) {
             err.println(Messages.SELECTION_NULL_ERROR);
         }
-
     }
 
 }

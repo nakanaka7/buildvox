@@ -9,7 +9,8 @@ import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
 import tokyo.nakanaka.buildvox.core.selectionShape.SelectionShape;
 
 import java.io.PrintWriter;
-
+/** experimental */
+@SuppressWarnings("unused")
 @Command(name = "apply-physics", mixinStandardHelpOptions = true,
         description = "Apply physics in the selection."
 )
