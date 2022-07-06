@@ -7,6 +7,7 @@ import net.minecraft.util.math.BlockPos;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.World;
+import tokyo.nakanaka.buildvox.fabric.block.BlockUtils;
 
 import java.util.HashSet;
 import java.util.Objects;

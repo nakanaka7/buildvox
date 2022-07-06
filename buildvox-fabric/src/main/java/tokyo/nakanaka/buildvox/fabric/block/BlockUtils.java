@@ -1,4 +1,4 @@
-package tokyo.nakanaka.buildvox.fabric;
+package tokyo.nakanaka.buildvox.fabric.block;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -12,8 +12,10 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
-import tokyo.nakanaka.buildvox.core.block.*;
-import tokyo.nakanaka.buildvox.fabric.block.FabricBlock;
+import tokyo.nakanaka.buildvox.core.block.Block;
+import tokyo.nakanaka.buildvox.core.block.EntityImpl;
+import tokyo.nakanaka.buildvox.core.block.StateImpl;
+import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 
 import java.util.Collection;
 import java.util.HashMap;

@@ -2,7 +2,6 @@ package tokyo.nakanaka.buildvox.fabric.block;
 
 import tokyo.nakanaka.buildvox.core.block.BlockValidator;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
-import tokyo.nakanaka.buildvox.fabric.BlockUtils;
 
 /*
  * Internal

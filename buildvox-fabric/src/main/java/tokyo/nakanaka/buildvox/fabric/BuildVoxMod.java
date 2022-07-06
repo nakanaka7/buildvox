@@ -42,6 +42,7 @@ import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.player.PlayerEntity;
 import tokyo.nakanaka.buildvox.core.player.RealPlayer;
 import tokyo.nakanaka.buildvox.core.World;
+import tokyo.nakanaka.buildvox.fabric.block.BlockUtils;
 import tokyo.nakanaka.buildvox.fabric.block.FabricBlockValidator;
 
 import java.util.*;
