@@ -50,10 +50,11 @@ public class FillCommand implements Runnable {
                 exit = PlayerEdits.replace(player, filter, block, options);
             }
             out.println(Messages.ofSetExit(exit));
-        }catch (PlayerEdits.MissingPosException | PosArrayLengthException ex) {
-            err.println(Messages.SELECTION_NULL_ERROR);
+        }catch (PlayerEdits.MissingPosException ex) {
+            err.println(Messages.MISSING_POS_ERROR);
+        }catch (PosArrayLengthException ex) {
+            err.println(Messages.ofPosArrayLengthError(ex.getAcceptableLength()));
         }
-
     }
 
 }

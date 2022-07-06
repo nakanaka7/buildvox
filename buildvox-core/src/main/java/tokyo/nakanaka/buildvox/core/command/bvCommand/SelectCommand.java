@@ -38,8 +38,10 @@ public class SelectCommand implements Runnable {
         try {
             PlayerEdits.select(player, options);
             out.println("Creates a new selection.");
-        }catch (PlayerEdits.MissingPosException | PosArrayLengthException ex) {
-            err.println(Messages.SELECTION_NULL_ERROR);
+        }catch (PlayerEdits.MissingPosException ex) {
+            err.println(Messages.MISSING_POS_ERROR);
+        }catch (PosArrayLengthException ex) {
+            err.println(Messages.ofPosArrayLengthError(ex.getAcceptableLength()));
         }
     }
 

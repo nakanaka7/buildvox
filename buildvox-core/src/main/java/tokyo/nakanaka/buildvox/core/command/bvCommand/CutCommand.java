@@ -37,14 +37,14 @@ public class CutCommand implements Runnable {
         Vector3d pos = this.pos.toVector3d(bvCmd.getExecutionPos());
         var options = new PlayerEdits.Options();
         options.shape = shape.shape();
-        EditExit exit;
         try {
-            exit = PlayerEdits.cut(player, pos, options);
-        }catch (PlayerEdits.MissingPosException | PosArrayLengthException ex) {
-            err.println(Messages.SELECTION_NULL_ERROR);
-            return;
+            EditExit exit = PlayerEdits.cut(player, pos, options);
+            out.println(Messages.ofCutExit(exit));
+        }catch (PlayerEdits.MissingPosException ex) {
+            err.println(Messages.MISSING_POS_ERROR);
+        }catch (PosArrayLengthException ex) {
+            err.println(Messages.ofPosArrayLengthError(ex.getAcceptableLength()));
         }
-        out.println(Messages.ofCutExit(exit));
     }
 
 }

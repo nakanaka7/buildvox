@@ -57,14 +57,14 @@ public class RotateCommand implements Runnable {
         options.integrity = integrity.integrity();
         options.masked = masked.masked();
         options.shape = shape.shape();
-        EditExit editExit;
         try {
-            editExit = PlayerEdits.rotate(player, axis, angle, pos, options);
-        }catch (PlayerEdits.MissingPosException | PosArrayLengthException ex) {
-            err.println(Messages.SELECTION_NULL_ERROR);
-            return;
+            EditExit editExit = PlayerEdits.rotate(player, axis, angle, pos, options);
+            out.println(Messages.ofSetExit(editExit));
+        }catch (PlayerEdits.MissingPosException ex) {
+            err.println(Messages.MISSING_POS_ERROR);
+        }catch (PosArrayLengthException ex) {
+            err.println(Messages.ofPosArrayLengthError(ex.getAcceptableLength()));
         }
-        out.println(Messages.ofSetExit(editExit));
     }
 
 }

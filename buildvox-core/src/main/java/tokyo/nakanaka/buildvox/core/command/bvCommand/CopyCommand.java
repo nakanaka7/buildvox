@@ -41,8 +41,10 @@ public class CopyCommand implements Runnable {
         try{
             EditExit exit = PlayerEdits.copy(player, pos, options);
             out.println(Messages.ofCopyExit(exit));
-        }catch (PlayerEdits.MissingPosException | PosArrayLengthException ex) {
-            err.println(Messages.SELECTION_NULL_ERROR);
+        }catch (PlayerEdits.MissingPosException ex) {
+            err.println(Messages.MISSING_POS_ERROR);
+        }catch (PosArrayLengthException ex) {
+            err.println(Messages.ofPosArrayLengthError(ex.getAcceptableLength()));
         }
     }
 
