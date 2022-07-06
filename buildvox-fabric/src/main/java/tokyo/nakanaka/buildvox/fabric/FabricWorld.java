@@ -51,12 +51,12 @@ public class FabricWorld implements World {
     public VoxelBlock getBlock(int x, int y, int z) {
         net.minecraft.block.BlockState blockState = original.getBlockState(new BlockPos(x, y, z));
         BlockEntity blockEntity = original.getBlockEntity(new BlockPos(x, y, z));
-        return BlockUtils.getVoxelBlock(blockState, blockEntity);
+        return BlockUtils.createVoxelBlock(blockState, blockEntity);
     }
 
     @Override
     public void setBlock(int x, int y, int z, VoxelBlock block, boolean physics) {
-        var stateEntity = BlockUtils.getBlockStateEntity(x, y, z, block);
+        var stateEntity = BlockUtils.createBlockStateEntity(x, y, z, block);
         var state = stateEntity.state();
         if(physics) {
             original.setBlockState(new BlockPos(x, y, z), state, net.minecraft.block.Block.NOTIFY_ALL);
