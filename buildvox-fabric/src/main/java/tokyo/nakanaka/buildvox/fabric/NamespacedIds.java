@@ -8,7 +8,7 @@ public class NamespacedIds {
     }
 
     /** Creates a namespaced id from Identifier */
-    static NamespacedId createId(Identifier id) {
+    public static NamespacedId createId(Identifier id) {
         return new NamespacedId(id.getNamespace(), id.getPath());
     }
 
