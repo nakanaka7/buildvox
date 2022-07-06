@@ -46,7 +46,8 @@ public class BlockUtils {
         return new BlockImpl(id, new FabricBlockStateTransformer());
     }
 
-    public static VoxelBlock getVoxelBlock(net.minecraft.block.BlockState blockState, BlockEntity blockEntity) {
+    /** Creates a voxel block */
+    public static VoxelBlock createVoxelBlock(net.minecraft.block.BlockState blockState, BlockEntity blockEntity) {
         net.minecraft.block.Block block0 = blockState.getBlock();
         Identifier id0 = Registry.BLOCK.getId(block0);
         NamespacedId id = createId(id0);

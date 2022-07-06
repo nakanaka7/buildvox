@@ -51,7 +51,7 @@ public class FabricWorld implements World {
     public VoxelBlock getBlock(int x, int y, int z) {
         net.minecraft.block.BlockState blockState = original.getBlockState(new BlockPos(x, y, z));
         BlockEntity blockEntity = original.getBlockEntity(new BlockPos(x, y, z));
-        return BlockUtils.getVoxelBlock(blockState, blockEntity);
+        return BlockUtils.createVoxelBlock(blockState, blockEntity);
     }
 
     @Override
