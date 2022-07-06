@@ -209,9 +209,8 @@ public class BlockUtils {
     public static class FabricBlockValidator implements BlockValidator {
         @Override
         public boolean validate(VoxelBlock block) {
-            String blockStr = block.withoutEntity().toString();
             try{
-                parseBlockState(blockStr);
+                createBlockState(block);
             }catch (IllegalArgumentException e){
                 return false;
             }
