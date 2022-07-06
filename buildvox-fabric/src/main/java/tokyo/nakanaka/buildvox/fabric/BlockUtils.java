@@ -115,7 +115,7 @@ public class BlockUtils {
     /**
      * The implementation of {@link BlockStateTransformer} for Fabric platform
      */
-    public static class FabricBlockStateTransformer implements BlockStateTransformer {
+    private static class FabricBlockStateTransformer implements BlockStateTransformer {
 
         @Override
         public Map<String, String> transform(NamespacedId blockId, Map<String, String> stateMap, BlockTransformation blockTrans) {
