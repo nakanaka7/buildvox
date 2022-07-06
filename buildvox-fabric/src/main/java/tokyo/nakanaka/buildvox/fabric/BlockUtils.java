@@ -51,14 +51,13 @@ public class BlockUtils {
         net.minecraft.block.Block block0 = blockState.getBlock();
         Identifier id0 = Registry.BLOCK.getId(block0);
         NamespacedId id = createId(id0);
-        BlockImpl block = new BlockImpl(id, new FabricBlockStateTransformer());
         StateImpl state = convertToStateImpl(blockState);
         EntityImpl entity = null;
         if(blockEntity != null) {
             NbtCompound nbt = blockEntity.createNbtWithId();
             entity = new EntityImpl(nbt);
         }
-        return new VoxelBlock(block.getId(), state, entity);
+        return new VoxelBlock(id, state, entity);
     }
 
     public static StateImpl convertToStateImpl(BlockState blockState) {
