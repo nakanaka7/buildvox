@@ -152,16 +152,7 @@ public class BlockUtils {
             }else {
                 transState = blockState;
             }
-            VoxelBlock transBlock = getVoxelBlock(transState);
-            return ((StateImpl)transBlock.getState()).getStateMap();
-        }
-
-        public static VoxelBlock getVoxelBlock(BlockState blockState) {
-            net.minecraft.block.Block block0 = blockState.getBlock();
-            Identifier id0 = Registry.BLOCK.getId(block0);
-            NamespacedId id = new NamespacedId(id0.getNamespace(), id0.getPath());
-            var stateMap = createStateImpl(blockState).getStateMap();
-            return new VoxelBlock(id, new StateImpl(stateMap));
+            return createStateImpl(transState).getStateMap();
         }
 
         private Map<String, String> transformStairsShape(Map<String, String> stateMap, Matrix3x3i transMatrix) {
