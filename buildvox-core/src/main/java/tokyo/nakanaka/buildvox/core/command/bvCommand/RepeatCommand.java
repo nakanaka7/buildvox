@@ -58,7 +58,7 @@ public class RepeatCommand implements Runnable {
         Vector3i pos0 = posData[0];
         Vector3i pos1 = posData[1];
         if(world == null || pos0 == null || pos1 == null) {
-            err.println(Messages.INCOMPLETE_POS_DATA_ERROR);
+            err.println(Messages.MISSING_POS_ERROR);
             return;
         }
         EditExit exit = PlayerEdits.repeatOld(player, pos0, pos1, countX, countY, countZ);
