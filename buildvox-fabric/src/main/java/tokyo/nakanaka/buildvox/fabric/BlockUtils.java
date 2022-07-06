@@ -32,17 +32,16 @@ public class BlockUtils {
 
     /** Creates block from its id */
     public static Block<StateImpl, EntityImpl> createBlock(NamespacedId id) {
-        return new FabricBlock(id, new FabricBlockStateTransformer());
+        return new FabricBlock(id);
     }
 
     /** Block implementation class for Fabric platform. */
     private static class FabricBlock implements Block<StateImpl, EntityImpl> {
         private NamespacedId id;
-        private BlockStateTransformer stateTransformer;
+        private FabricBlockStateTransformer stateTransformer = new FabricBlockStateTransformer();
 
-        public FabricBlock(NamespacedId id, BlockStateTransformer stateTransformer) {
+        public FabricBlock(NamespacedId id) {
             this.id = id;
-            this.stateTransformer = stateTransformer;
         }
 
         @Override
@@ -127,12 +126,7 @@ public class BlockUtils {
         return BlockEntity.createFromNbt(new BlockPos(x, y, z), blockState, nbt);
     }
 
-    /**
-     * The implementation of {@link BlockStateTransformer} for Fabric platform
-     */
-    private static class FabricBlockStateTransformer implements BlockStateTransformer {
-
-        @Override
+    private static class FabricBlockStateTransformer {
         public Map<String, String> transform(NamespacedId blockId, Map<String, String> stateMap, BlockTransformation blockTrans) {
             Matrix3x3i transMatrix = blockTrans.toMatrix3x3i();
             VoxelBlock block = new VoxelBlock(blockId, new StateImpl(stateMap));
