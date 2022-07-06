@@ -12,7 +12,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
-import tokyo.nakanaka.buildvox.core.block.Block;
 import tokyo.nakanaka.buildvox.core.block.EntityImpl;
 import tokyo.nakanaka.buildvox.core.block.StateImpl;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
@@ -25,11 +24,6 @@ import static tokyo.nakanaka.buildvox.fabric.NamespacedIds.createId;
 
 public class BlockUtils {
     private BlockUtils() {
-    }
-
-    /** Creates block from its id */
-    public static Block<StateImpl, EntityImpl> createBlock(NamespacedId id) {
-        return new FabricBlock(id);
     }
 
     /** Creates a voxel block */
