@@ -9,7 +9,7 @@ public class Messages {
     public static final String POS_DATA_ERROR = "Have illegal pos";
     public static final String CANNOT_FIND_PLAYER_ERROR = "Cannot find a player.";
     public static final String UNDO_REDO_COUNT_ERROR = "The count must be larger than 0.";
-    public static final String MISSING_POS_ERROR = "Some pos data is missing.";
+    public static final String MISSING_POS_ERROR = "Some pos is missing.";
     public static final String SELECTION_NULL_ERROR = "Selection is empty.";
     public static final String SCALE_FACTOR_ERROR = "The scale factor must not be 0.";
     public static final String INTEGRITY_ERROR = "The integrity must be between 0 and 1 (inclusive).";
