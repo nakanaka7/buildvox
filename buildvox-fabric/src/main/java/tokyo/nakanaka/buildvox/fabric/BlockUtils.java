@@ -54,8 +54,7 @@ public class BlockUtils {
         StateImpl state = createStateImpl(blockState);
         EntityImpl entity = null;
         if(blockEntity != null) {
-            NbtCompound nbt = blockEntity.createNbtWithId();
-            entity = new EntityImpl(nbt);
+            entity = createEntityImpl(blockEntity);
         }
         return new VoxelBlock(id, state, entity);
     }
@@ -69,6 +68,12 @@ public class BlockUtils {
             stateMap.put(key0.getName().toLowerCase(), value0.toString().toLowerCase());
         }
         return new StateImpl(stateMap);
+    }
+
+    /** Creates EntityImpl */
+    private static EntityImpl createEntityImpl(BlockEntity blockEntity) {
+        NbtCompound nbt = blockEntity.createNbtWithId();
+        return new EntityImpl(nbt);
     }
 
     public record StateEntity(BlockState state, BlockEntity entity) {
