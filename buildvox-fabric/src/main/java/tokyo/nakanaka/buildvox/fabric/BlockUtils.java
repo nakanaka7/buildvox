@@ -96,19 +96,4 @@ public class BlockUtils {
         return BlockEntity.createFromNbt(new BlockPos(x, y, z), blockState, nbt);
     }
 
-    /**
-     * The implementation of BlockValidator for Fabric platform
-     */
-    public static class FabricBlockValidator implements BlockValidator {
-        @Override
-        public boolean validate(VoxelBlock block) {
-            try{
-                createBlockState(block);
-            }catch (IllegalArgumentException e){
-                return false;
-            }
-            return true;
-        }
-    }
-
 }
