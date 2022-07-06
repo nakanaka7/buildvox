@@ -56,7 +56,7 @@ public class FabricWorld implements World {
 
     @Override
     public void setBlock(int x, int y, int z, VoxelBlock block, boolean physics) {
-        var stateEntity = BlockUtils.getBlockStateEntity(x, y, z, block);
+        var stateEntity = BlockUtils.createBlockStateEntity(x, y, z, block);
         var state = stateEntity.state();
         if(physics) {
             original.setBlockState(new BlockPos(x, y, z), state, net.minecraft.block.Block.NOTIFY_ALL);

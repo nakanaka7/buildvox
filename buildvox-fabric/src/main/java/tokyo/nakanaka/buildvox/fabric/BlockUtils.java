@@ -79,7 +79,8 @@ public class BlockUtils {
     public record StateEntity(BlockState state, BlockEntity entity) {
     }
 
-    public static StateEntity getBlockStateEntity(int x, int y, int z, VoxelBlock block) {
+    /** Creates a BlockStateEntity */
+    public static StateEntity createBlockStateEntity(int x, int y, int z, VoxelBlock block) {
         String blockStr = block.withoutEntity().toString();
         var state = parseBlockState(blockStr);
         var entity = createBlockEntity(x, y, z, block, state);
