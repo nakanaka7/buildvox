@@ -102,6 +102,7 @@ public class BlockUtils {
         return blockStateArg.getBlockState();
     }
 
+    /** Creates a BlockEntity */
     private static BlockEntity createBlockEntity(int x, int y, int z, VoxelBlock block, BlockState blockState) {
         EntityImpl entity = (EntityImpl) block.getEntity();
         if(entity == null) {
