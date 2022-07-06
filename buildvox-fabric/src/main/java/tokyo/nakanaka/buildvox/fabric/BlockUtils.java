@@ -49,7 +49,7 @@ public class BlockUtils {
     public static VoxelBlock getVoxelBlock(net.minecraft.block.BlockState blockState, BlockEntity blockEntity) {
         net.minecraft.block.Block block0 = blockState.getBlock();
         Identifier id0 = Registry.BLOCK.getId(block0);
-        NamespacedId id = new NamespacedId(id0.getNamespace(), id0.getPath());
+        NamespacedId id = createId(id0);
         BlockImpl block = new BlockImpl(id, new FabricBlockStateTransformer());
         StateImpl state = convertToStateImpl(blockState);
         EntityImpl entity = null;
