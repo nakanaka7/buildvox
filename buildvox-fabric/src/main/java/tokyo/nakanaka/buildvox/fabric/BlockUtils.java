@@ -20,7 +20,6 @@ import tokyo.nakanaka.buildvox.core.block.*;
 import tokyo.nakanaka.buildvox.core.math.transformation.Matrix3x3i;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
-import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -32,9 +31,14 @@ public class BlockUtils {
 
     public static void registerBlocks() {
         for(Identifier blockId0 : Registry.BLOCK.getIds()) {
-            NamespacedId id = new NamespacedId(blockId0.getNamespace(), blockId0.getPath());
+            NamespacedId id = createId(blockId0);
             BuildVoxSystem.getBlockRegistry().register(createBlock(id));
         }
+    }
+
+    /** Creates a namespaced id from Identifier */
+    private static NamespacedId createId(Identifier id) {
+        return new NamespacedId(id.getNamespace(), id.getPath());
     }
 
     /** Creates block from its id */
