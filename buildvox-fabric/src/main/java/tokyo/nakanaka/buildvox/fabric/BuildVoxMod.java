@@ -74,7 +74,14 @@ public class BuildVoxMod implements ModInitializer {
 		FabricScheduler.initialize();
 		BuildVoxSystem.setScheduler(FabricScheduler.getInstance());
 		BuildVoxSystem.setBlockValidator(new BlockUtils.FabricBlockValidator());
-		BlockUtils.registerBlocks();
+		registerBlocks();
+	}
+
+	public static void registerBlocks() {
+		for(Identifier blockId0 : Registry.BLOCK.getIds()) {
+			NamespacedId id = createId(blockId0);
+			BuildVoxSystem.getBlockRegistry().register(BlockUtils.createBlock(id));
+		}
 	}
 
 	private void onWorldLoad(MinecraftServer server, ServerWorld world){
