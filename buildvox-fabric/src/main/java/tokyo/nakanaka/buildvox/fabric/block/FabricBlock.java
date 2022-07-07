@@ -4,7 +4,6 @@ import net.minecraft.block.BlockState;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.block.Block;
 import tokyo.nakanaka.buildvox.core.block.BlockTransformation;
-import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 
 /*
  * internal
@@ -24,9 +23,7 @@ public class FabricBlock implements Block<FabricBlockState, FabricBlockEntity> {
 
     @Override
     public FabricBlockState transformState(FabricBlockState state, BlockTransformation blockTrans) {
-        VoxelBlock block = new VoxelBlock(id, state);
-        BlockState blockState = BlockUtils.createBlockState(block);
-        BlockState transState = FabricBlockState.transform(blockState, blockTrans);
+        BlockState transState = state.transform(blockTrans);
         return new FabricBlockState(transState);
     }
 

@@ -33,7 +33,7 @@ public class FabricBlockState implements Block.State {
         return stateMap;
     }
 
-    static BlockState transform(BlockState blockState, BlockTransformation blockTrans) {
+    public BlockState transform(BlockTransformation blockTrans) {
         Matrix3x3i transMatrix = blockTrans.toMatrix3x3i();
         Vector3i transI = transMatrix.apply(Vector3i.PLUS_I);
         Vector3i transJ = transMatrix.apply(Vector3i.PLUS_J);
