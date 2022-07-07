@@ -22,6 +22,14 @@ public class BlockUtils {
      */
     public static BlockState createBlockState(VoxelBlock block) {
         String s = block.withoutEntity().toString();
+        return parseBlockState(s);
+    }
+
+    /**
+     * Parses a BlockState
+     * @throws IllegalArgumentException if fails to create.
+     */
+    public static BlockState parseBlockState(String s) {
         StringReader strReader = new StringReader(s);
         BlockStateArgument blockStateArg;
         try {
