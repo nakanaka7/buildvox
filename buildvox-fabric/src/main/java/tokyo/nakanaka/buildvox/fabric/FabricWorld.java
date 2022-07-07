@@ -1,16 +1,23 @@
 package tokyo.nakanaka.buildvox.fabric;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.Registry;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
-import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.World;
+import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
+import tokyo.nakanaka.buildvox.fabric.block.FabricBlockEntity;
+import tokyo.nakanaka.buildvox.fabric.block.FabricBlockState;
 
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+
+import static tokyo.nakanaka.buildvox.fabric.NamespacedIds.createId;
 
 /**
  * The implementation of World for Fabric platform. This class uses a mixin class, {@link net.minecraft.world.chunk.WorldChunk}
@@ -19,6 +26,8 @@ import java.util.Set;
 public class FabricWorld implements World {
     private ServerWorld original;
     public static final Set<ServerWorld> stopPhysicsWorlds = new HashSet<>();
+
+
 
     @Override
     public NamespacedId getId() {
@@ -51,12 +60,26 @@ public class FabricWorld implements World {
     public VoxelBlock getBlock(int x, int y, int z) {
         net.minecraft.block.BlockState blockState = original.getBlockState(new BlockPos(x, y, z));
         BlockEntity blockEntity = original.getBlockEntity(new BlockPos(x, y, z));
-        return BlockUtils.createVoxelBlock(blockState, blockEntity);
+        return createVoxelBlock(blockState, blockEntity);
+    }
+
+    /** Creates a voxel block */
+    private static VoxelBlock createVoxelBlock(BlockState blockState, BlockEntity blockEntity) {
+        net.minecraft.block.Block block0 = blockState.getBlock();
+        Identifier id0 = Registry.BLOCK.getId(block0);
+        NamespacedId id = createId(id0);
+        FabricBlockState state = new FabricBlockState(blockState);
+        FabricBlockEntity entity = null;
+        if(blockEntity != null) {
+            NbtCompound nbt = blockEntity.createNbtWithId();
+            entity = new FabricBlockEntity(nbt);
+        }
+        return new VoxelBlock(id, state, entity);
     }
 
     @Override
     public void setBlock(int x, int y, int z, VoxelBlock block, boolean physics) {
-        var stateEntity = BlockUtils.createBlockStateEntity(x, y, z, block);
+        var stateEntity = createBlockStateEntity(x, y, z, block);
         var state = stateEntity.state();
         if(physics) {
             original.setBlockState(new BlockPos(x, y, z), state, net.minecraft.block.Block.NOTIFY_ALL);
@@ -69,6 +92,33 @@ public class FabricWorld implements World {
         if(entity != null) {
             original.addBlockEntity(entity);
         }
+    }
+
+    public record StateEntity(BlockState state, BlockEntity entity) {
+    }
+
+    /** Creates a BlockStateEntity */
+    private static StateEntity createBlockStateEntity(int x, int y, int z, VoxelBlock block) {
+        var state = createBlockState(block);
+        BlockEntity entity = null;
+        FabricBlockEntity fbe = (FabricBlockEntity) block.getEntity();
+        if(fbe != null) {
+            entity = createBlockEntity(fbe, x, y, z, state);
+        }
+        return new StateEntity(state, entity);
+    }
+
+    /**
+     * Creates a BlockState
+     */
+    private static BlockState createBlockState(VoxelBlock block) {
+        return ((FabricBlockState)block.getState()).getBlockState();
+    }
+
+    /** Creates a BlockEntity */
+    private static BlockEntity createBlockEntity(FabricBlockEntity fbe, int x, int y, int z, BlockState state) {
+        NbtCompound nbt = fbe.getNbt();
+        return BlockEntity.createFromNbt(new BlockPos(x, y, z), state, nbt);
     }
 
     /**

@@ -33,20 +33,23 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
-import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
-import tokyo.nakanaka.buildvox.core.system.CommandSource;
-import tokyo.nakanaka.buildvox.core.system.Messenger;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
+import tokyo.nakanaka.buildvox.core.World;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.player.PlayerEntity;
 import tokyo.nakanaka.buildvox.core.player.RealPlayer;
-import tokyo.nakanaka.buildvox.core.World;
+import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
+import tokyo.nakanaka.buildvox.core.system.CommandSource;
+import tokyo.nakanaka.buildvox.core.system.Messenger;
+import tokyo.nakanaka.buildvox.fabric.block.BlockRegistering;
+import tokyo.nakanaka.buildvox.fabric.block.FabricBlockValidator;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 import static net.minecraft.server.command.CommandManager.argument;
+import static tokyo.nakanaka.buildvox.fabric.NamespacedIds.createId;
 
 /**
  * The entry point of BuildVox Fabric
@@ -72,8 +75,8 @@ public class BuildVoxMod implements ModInitializer {
 	private void onServerStarting(MinecraftServer server) {
 		FabricScheduler.initialize();
 		BuildVoxSystem.setScheduler(FabricScheduler.getInstance());
-		BuildVoxSystem.setBlockValidator(new BlockUtils.FabricBlockValidator());
-		BlockUtils.registerBlocks();
+		BuildVoxSystem.setBlockValidator(new FabricBlockValidator());
+		BlockRegistering.registerBlocks();
 	}
 
 	private void onWorldLoad(MinecraftServer server, ServerWorld world){
@@ -81,7 +84,7 @@ public class BuildVoxMod implements ModInitializer {
 		for (var key : worldRegistryKeys) {
 			if (world == server.getWorld(key)) {//have to find the registry key of worldId
 				Identifier worldId0 = key.getValue();
-				NamespacedId worldId = new NamespacedId(worldId0.getNamespace(), worldId0.getPath());
+				NamespacedId worldId = createId(worldId0);
 				worldIdMap.put(world, worldId);
 				World world1 = new FabricWorld(world);
 				BuildVoxSystem.getWorldRegistry().register(world1);
@@ -95,7 +98,7 @@ public class BuildVoxMod implements ModInitializer {
 		for(var key : worldRegistryKeys) {
 			if(world == server.getWorld(key)) {//have to find the registry key of worldId
 				Identifier worldId0 = key.getValue();
-				NamespacedId worldId = new NamespacedId(worldId0.getNamespace(), worldId0.getPath());
+				NamespacedId worldId = createId(worldId0);
 				worldIdMap.remove(world);
 				BuildVoxSystem.getWorldRegistry().unregister(worldId);
 				break;
@@ -143,7 +146,7 @@ public class BuildVoxMod implements ModInitializer {
 	public static World convertServerWorldToBvWorld(ServerWorld original) {
 		RegistryKey<net.minecraft.world.World> key = original.getRegistryKey();
 		Identifier worldId0 = key.getValue();
-		NamespacedId worldId = new NamespacedId(worldId0.getNamespace(), worldId0.getPath());
+		NamespacedId worldId = createId(worldId0);
 		return BuildVoxSystem.getWorldRegistry().get(worldId);
 	}
 
