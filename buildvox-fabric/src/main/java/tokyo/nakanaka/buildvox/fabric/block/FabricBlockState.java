@@ -6,7 +6,6 @@ import net.minecraft.block.enums.StairShape;
 import net.minecraft.state.property.Property;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
-import tokyo.nakanaka.buildvox.core.ParseUtils;
 import tokyo.nakanaka.buildvox.core.block.Block;
 import tokyo.nakanaka.buildvox.core.block.BlockTransformation;
 import tokyo.nakanaka.buildvox.core.math.transformation.Matrix3x3i;
@@ -115,11 +114,6 @@ public class FabricBlockState implements Block.State {
             }
             return transStateMap;
         }
-    }
-
-    public static FabricBlockState valueOf(String s) {
-        Map<String, String> stateMap = ParseUtils.parseStateMap(s);
-        return new FabricBlockState(stateMap);
     }
 
     @Override

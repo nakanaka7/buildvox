@@ -2,9 +2,12 @@ package tokyo.nakanaka.buildvox.fabric.block;
 
 import net.minecraft.block.BlockState;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
+import tokyo.nakanaka.buildvox.core.ParseUtils;
 import tokyo.nakanaka.buildvox.core.block.Block;
 import tokyo.nakanaka.buildvox.core.block.BlockTransformation;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
+
+import java.util.Map;
 
 /*
  * internal
@@ -31,7 +34,8 @@ public class FabricBlock implements Block<FabricBlockState, FabricBlockEntity> {
     }
 
     public FabricBlockState parseState(String s) {
-        return FabricBlockState.valueOf(s);
+        Map<String, String> stateMap = ParseUtils.parseStateMap(s);
+        return new FabricBlockState(stateMap);
     }
 
 }
