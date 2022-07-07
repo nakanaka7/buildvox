@@ -15,9 +15,11 @@ import java.util.*;
 
 /* internal */
 public class FabricBlockState implements Block.State {
-    private Map<String, String> stateMap;
+    private final BlockState blockState;
+    private final Map<String, String> stateMap;
 
     public FabricBlockState(BlockState blockState) {
+        this.blockState = blockState;
         Collection<Property<?>> properties0 = blockState.getProperties();
         Map<String, String> stateMap = new HashMap<>();
         for(var key0 : properties0){
