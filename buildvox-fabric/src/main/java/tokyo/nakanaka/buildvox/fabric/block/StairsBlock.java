@@ -15,9 +15,13 @@ public class StairsBlock extends FabricBlock {
     public StairsBlock(NamespacedId id) {
         super(id);
     }
-
     @Override
     public FabricBlockState transformState(FabricBlockState state, BlockTransformation blockTrans) {
+        var transState = super.transformState(state, blockTrans);
+        return transState;
+    }
+
+    public FabricBlockState transformStateOld(FabricBlockState state, BlockTransformation blockTrans) {
         Map<String, String> stateMap = state.getStateMap();
         Map<String, String> transStateMap = transformStairsShape(stateMap, blockTrans.toMatrix3x3i());
         String s = new StateImpl(transStateMap).toString();
