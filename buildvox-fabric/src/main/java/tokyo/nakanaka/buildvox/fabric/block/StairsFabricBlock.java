@@ -11,8 +11,8 @@ import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import java.util.HashMap;
 import java.util.Map;
 
-public class StairsBlock extends FabricBlock {
-    public StairsBlock(NamespacedId id) {
+public class StairsFabricBlock extends FabricBlock {
+    public StairsFabricBlock(NamespacedId id) {
         super(id);
     }
     @Override
