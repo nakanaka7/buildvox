@@ -9,7 +9,6 @@ import net.minecraft.command.argument.BlockStateArgumentType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.state.property.Property;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
@@ -54,20 +53,6 @@ public class BlockUtils {
         return new FabricBlockEntity(nbt);
     }
 
-    public record StateEntity(BlockState state, BlockEntity entity) {
-    }
-
-    /** Creates a BlockStateEntity */
-    public static StateEntity createBlockStateEntity(int x, int y, int z, VoxelBlock block) {
-        var state = createBlockState(block);
-        BlockEntity entity = null;
-        FabricBlockEntity fbe = (FabricBlockEntity) block.getEntity();
-        if(fbe != null) {
-            entity = createBlockEntity(fbe, x, y, z, state);
-        }
-        return new StateEntity(state, entity);
-    }
-
     /**
      * Creates a BlockState
      * @throws IllegalArgumentException if fails to create.
@@ -82,12 +67,6 @@ public class BlockUtils {
             throw new IllegalArgumentException("Cannot parse:" + s);
         }
         return blockStateArg.getBlockState();
-    }
-
-    /** Creates a BlockEntity */
-    private static BlockEntity createBlockEntity(FabricBlockEntity fbe, int x, int y, int z, BlockState state) {
-        NbtCompound nbt = fbe.getNbt();
-        return BlockEntity.createFromNbt(new BlockPos(x, y, z), state, nbt);
     }
 
 }

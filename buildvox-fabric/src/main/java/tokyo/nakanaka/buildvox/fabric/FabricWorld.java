@@ -1,6 +1,8 @@
 package tokyo.nakanaka.buildvox.fabric;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -8,6 +10,7 @@ import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.World;
 import tokyo.nakanaka.buildvox.fabric.block.BlockUtils;
+import tokyo.nakanaka.buildvox.fabric.block.FabricBlockEntity;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -57,7 +60,7 @@ public class FabricWorld implements World {
 
     @Override
     public void setBlock(int x, int y, int z, VoxelBlock block, boolean physics) {
-        var stateEntity = BlockUtils.createBlockStateEntity(x, y, z, block);
+        var stateEntity = createBlockStateEntity(x, y, z, block);
         var state = stateEntity.state();
         if(physics) {
             original.setBlockState(new BlockPos(x, y, z), state, net.minecraft.block.Block.NOTIFY_ALL);
@@ -70,6 +73,26 @@ public class FabricWorld implements World {
         if(entity != null) {
             original.addBlockEntity(entity);
         }
+    }
+
+    public record StateEntity(BlockState state, BlockEntity entity) {
+    }
+
+    /** Creates a BlockStateEntity */
+    private static StateEntity createBlockStateEntity(int x, int y, int z, VoxelBlock block) {
+        var state = BlockUtils.createBlockState(block);
+        BlockEntity entity = null;
+        FabricBlockEntity fbe = (FabricBlockEntity) block.getEntity();
+        if(fbe != null) {
+            entity = createBlockEntity(fbe, x, y, z, state);
+        }
+        return new StateEntity(state, entity);
+    }
+
+    /** Creates a BlockEntity */
+    private static BlockEntity createBlockEntity(FabricBlockEntity fbe, int x, int y, int z, BlockState state) {
+        NbtCompound nbt = fbe.getNbt();
+        return BlockEntity.createFromNbt(new BlockPos(x, y, z), state, nbt);
     }
 
     /**
