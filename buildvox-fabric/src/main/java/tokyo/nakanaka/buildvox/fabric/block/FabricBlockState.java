@@ -29,6 +29,10 @@ public class FabricBlockState implements Block.State {
         this.stateMap = stateMap;
     }
 
+    public BlockState getBlockState() {
+        return blockState;
+    }
+
     public Map<String, String> getStateMap() {
         return stateMap;
     }
