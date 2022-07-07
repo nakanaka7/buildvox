@@ -32,7 +32,7 @@ public class BlockUtils {
         FabricBlockState state = createFabricBlockState(blockState);
         FabricBlockEntity entity = null;
         if(blockEntity != null) {
-            entity = createEntityImpl(blockEntity);
+            entity = createFabricBlockEntity(blockEntity);
         }
         return new VoxelBlock(id, state, entity);
     }
@@ -49,7 +49,7 @@ public class BlockUtils {
     }
 
     /** Creates EntityImpl */
-    private static FabricBlockEntity createEntityImpl(BlockEntity blockEntity) {
+    private static FabricBlockEntity createFabricBlockEntity(BlockEntity blockEntity) {
         NbtCompound nbt = blockEntity.createNbtWithId();
         return new FabricBlockEntity(nbt);
     }
