@@ -28,6 +28,8 @@ public class FabricWorld implements World {
     private ServerWorld original;
     public static final Set<ServerWorld> stopPhysicsWorlds = new HashSet<>();
 
+
+
     @Override
     public NamespacedId getId() {
         Identifier id = original.getRegistryKey().getValue();
@@ -67,13 +69,20 @@ public class FabricWorld implements World {
         net.minecraft.block.Block block0 = blockState.getBlock();
         Identifier id0 = Registry.BLOCK.getId(block0);
         NamespacedId id = createId(id0);
-        FabricBlockState state = BlockUtils.createFabricBlockState(blockState);
+        FabricBlockState state = createFabricBlockState(blockState);
         FabricBlockEntity entity = null;
         if(blockEntity != null) {
             entity = createFabricBlockEntity(blockEntity);
         }
         return new VoxelBlock(id, state, entity);
     }
+
+    /** Creates FabricBlockState */
+    private static FabricBlockState createFabricBlockState(BlockState blockState) {
+        return new FabricBlockState(blockState);
+    }
+
+
 
     /** Creates a FabricBlockEntity. */
     private static FabricBlockEntity createFabricBlockEntity(BlockEntity blockEntity) {
@@ -103,13 +112,22 @@ public class FabricWorld implements World {
 
     /** Creates a BlockStateEntity */
     private static StateEntity createBlockStateEntity(int x, int y, int z, VoxelBlock block) {
-        var state = BlockUtils.createBlockState(block);
+        var state = createBlockState(block);
         BlockEntity entity = null;
         FabricBlockEntity fbe = (FabricBlockEntity) block.getEntity();
         if(fbe != null) {
             entity = createBlockEntity(fbe, x, y, z, state);
         }
         return new StateEntity(state, entity);
+    }
+
+    /**
+     * Creates a BlockState
+     * @throws IllegalArgumentException if fails to create.
+     */
+    private static BlockState createBlockState(VoxelBlock block) {
+        String s = block.withoutEntity().toString();
+        return BlockUtils.parseBlockState(s);
     }
 
     /** Creates a BlockEntity */
