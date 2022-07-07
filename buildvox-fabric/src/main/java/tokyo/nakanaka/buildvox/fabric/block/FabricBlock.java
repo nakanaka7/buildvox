@@ -17,7 +17,7 @@ import java.util.Map;
  * internal
  * Block implementation class for Fabric platform.
  */
-public class FabricBlock implements Block<StateImpl, EntityImpl> {
+public class FabricBlock implements Block<FabricBlockState, EntityImpl> {
     private NamespacedId id;
     private FabricBlockStateTransformer stateTransformer = new FabricBlockStateTransformer();
 
@@ -31,19 +31,19 @@ public class FabricBlock implements Block<StateImpl, EntityImpl> {
     }
 
     @Override
-    public StateImpl transformState(StateImpl state, BlockTransformation trans) {
+    public FabricBlockState transformState(FabricBlockState state, BlockTransformation trans) {
         Map<String, String> transMap = stateTransformer.transform(id, state.getStateMap(), trans);
-        return new StateImpl(transMap);
+        return new FabricBlockState(transMap);
     }
 
-    public StateImpl parseState(String s) {
-        return StateImpl.valueOf(s);
+    public FabricBlockState parseState(String s) {
+        return FabricBlockState.valueOf(s);
     }
 
     private static class FabricBlockStateTransformer {
         public Map<String, String> transform(NamespacedId blockId, Map<String, String> stateMap, BlockTransformation blockTrans) {
             Matrix3x3i transMatrix = blockTrans.toMatrix3x3i();
-            VoxelBlock block = new VoxelBlock(blockId, new StateImpl(stateMap));
+            VoxelBlock block = new VoxelBlock(blockId, new FabricBlockState(stateMap));
             BlockState blockState = BlockUtils.createBlockState(block);
             Vector3i transI = transMatrix.apply(Vector3i.PLUS_I);
             Vector3i transJ = transMatrix.apply(Vector3i.PLUS_J);

@@ -13,7 +13,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.block.EntityImpl;
-import tokyo.nakanaka.buildvox.core.block.StateImpl;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 
 import java.util.Collection;
@@ -31,7 +30,7 @@ public class BlockUtils {
         net.minecraft.block.Block block0 = blockState.getBlock();
         Identifier id0 = Registry.BLOCK.getId(block0);
         NamespacedId id = createId(id0);
-        StateImpl state = createStateImpl(blockState);
+        FabricBlockState state = createStateImpl(blockState);
         EntityImpl entity = null;
         if(blockEntity != null) {
             entity = createEntityImpl(blockEntity);
@@ -40,14 +39,14 @@ public class BlockUtils {
     }
 
     /** Creates StateImpl */
-    public static StateImpl createStateImpl(BlockState blockState) {
+    public static FabricBlockState createStateImpl(BlockState blockState) {
         Collection<Property<?>> properties0 = blockState.getProperties();
         Map<String, String> stateMap = new HashMap<>();
         for(var key0 : properties0){
             Object value0 = blockState.get(key0);
             stateMap.put(key0.getName().toLowerCase(), value0.toString().toLowerCase());
         }
-        return new StateImpl(stateMap);
+        return new FabricBlockState(stateMap);
     }
 
     /** Creates EntityImpl */
