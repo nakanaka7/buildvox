@@ -86,7 +86,7 @@ public class BlockUtils {
         if(entity == null) {
             return null;
         }
-        NbtCompound nbt = (NbtCompound) entity.getObj();
+        NbtCompound nbt = entity.getNbt();
         return BlockEntity.createFromNbt(new BlockPos(x, y, z), blockState, nbt);
     }
 
