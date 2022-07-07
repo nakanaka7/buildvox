@@ -1,7 +1,10 @@
 package tokyo.nakanaka.buildvox.fabric.block;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.block.enums.StairShape;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
+import tokyo.nakanaka.buildvox.core.block.BlockTransformation;
+import tokyo.nakanaka.buildvox.core.block.StateImpl;
 import tokyo.nakanaka.buildvox.core.math.transformation.Matrix3x3i;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 
@@ -11,6 +14,16 @@ import java.util.Map;
 public class StairsBlock extends FabricBlock {
     public StairsBlock(NamespacedId id) {
         super(id);
+    }
+
+    @Override
+    public FabricBlockState transformState(FabricBlockState state, BlockTransformation blockTrans) {
+        Map<String, String> stateMap = state.getStateMap();
+        Map<String, String> transStateMap = transformStairsShape(stateMap, blockTrans.toMatrix3x3i());
+        String s = new StateImpl(transStateMap).toString();
+        String t = id + "[" + s +"]";
+        BlockState blockState = parseBlockState(t);
+        return new FabricBlockState(blockState);
     }
 
     private static Map<String, String> transformStairsShape(Map<String, String> stateMap, Matrix3x3i transMatrix) {
