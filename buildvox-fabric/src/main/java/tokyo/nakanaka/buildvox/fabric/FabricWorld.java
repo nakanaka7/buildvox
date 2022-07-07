@@ -6,15 +6,19 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.Registry;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.World;
 import tokyo.nakanaka.buildvox.fabric.block.BlockUtils;
 import tokyo.nakanaka.buildvox.fabric.block.FabricBlockEntity;
+import tokyo.nakanaka.buildvox.fabric.block.FabricBlockState;
 
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+
+import static tokyo.nakanaka.buildvox.fabric.NamespacedIds.createId;
 
 /**
  * The implementation of World for Fabric platform. This class uses a mixin class, {@link net.minecraft.world.chunk.WorldChunk}
@@ -55,7 +59,26 @@ public class FabricWorld implements World {
     public VoxelBlock getBlock(int x, int y, int z) {
         net.minecraft.block.BlockState blockState = original.getBlockState(new BlockPos(x, y, z));
         BlockEntity blockEntity = original.getBlockEntity(new BlockPos(x, y, z));
-        return BlockUtils.createVoxelBlock(blockState, blockEntity);
+        return createVoxelBlock(blockState, blockEntity);
+    }
+
+    /** Creates a voxel block */
+    private static VoxelBlock createVoxelBlock(BlockState blockState, BlockEntity blockEntity) {
+        net.minecraft.block.Block block0 = blockState.getBlock();
+        Identifier id0 = Registry.BLOCK.getId(block0);
+        NamespacedId id = createId(id0);
+        FabricBlockState state = BlockUtils.createFabricBlockState(blockState);
+        FabricBlockEntity entity = null;
+        if(blockEntity != null) {
+            entity = createFabricBlockEntity(blockEntity);
+        }
+        return new VoxelBlock(id, state, entity);
+    }
+
+    /** Creates a FabricBlockEntity. */
+    private static FabricBlockEntity createFabricBlockEntity(BlockEntity blockEntity) {
+        NbtCompound nbt = blockEntity.createNbtWithId();
+        return new FabricBlockEntity(nbt);
     }
 
     @Override
