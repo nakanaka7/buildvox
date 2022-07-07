@@ -17,10 +17,6 @@ import java.util.*;
 public class FabricBlockState implements Block.State {
     private Map<String, String> stateMap;
 
-    public FabricBlockState(Map<String, String> stateMap) {
-        this.stateMap = stateMap;
-    }
-
     public FabricBlockState(BlockState blockState) {
         Collection<Property<?>> properties0 = blockState.getProperties();
         Map<String, String> stateMap = new HashMap<>();
