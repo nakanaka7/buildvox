@@ -68,25 +68,13 @@ public class FabricWorld implements World {
         net.minecraft.block.Block block0 = blockState.getBlock();
         Identifier id0 = Registry.BLOCK.getId(block0);
         NamespacedId id = createId(id0);
-        FabricBlockState state = createFabricBlockState(blockState);
+        FabricBlockState state = new FabricBlockState(blockState);
         FabricBlockEntity entity = null;
         if(blockEntity != null) {
-            entity = createFabricBlockEntity(blockEntity);
+            NbtCompound nbt = blockEntity.createNbtWithId();
+            entity = new FabricBlockEntity(nbt);
         }
         return new VoxelBlock(id, state, entity);
-    }
-
-    /** Creates FabricBlockState */
-    private static FabricBlockState createFabricBlockState(BlockState blockState) {
-        return new FabricBlockState(blockState);
-    }
-
-
-
-    /** Creates a FabricBlockEntity. */
-    private static FabricBlockEntity createFabricBlockEntity(BlockEntity blockEntity) {
-        NbtCompound nbt = blockEntity.createNbtWithId();
-        return new FabricBlockEntity(nbt);
     }
 
     @Override
