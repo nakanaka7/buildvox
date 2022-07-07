@@ -10,11 +10,12 @@ import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 public class FabricBlockValidator implements BlockValidator {
     @Override
     public boolean validate(VoxelBlock block) {
-        try {
-            BlockUtils.createBlockState(block);
-        } catch (IllegalArgumentException e) {
-            return false;
+        var state = block.getState();
+        var entity = block.getEntity();
+        if(entity == null) {
+            return state instanceof FabricBlockState;
+        }else {
+            return state instanceof FabricBlockState && entity instanceof FabricBlockEntity;
         }
-        return true;
     }
 }
