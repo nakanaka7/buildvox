@@ -48,7 +48,7 @@ public class BlockUtils {
         return new FabricBlockState(stateMap);
     }
 
-    /** Creates EntityImpl */
+    /** Creates a FabricBlockEntity. */
     private static FabricBlockEntity createFabricBlockEntity(BlockEntity blockEntity) {
         NbtCompound nbt = blockEntity.createNbtWithId();
         return new FabricBlockEntity(nbt);
