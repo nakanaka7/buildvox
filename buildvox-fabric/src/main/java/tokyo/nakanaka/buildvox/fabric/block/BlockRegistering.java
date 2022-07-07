@@ -22,7 +22,7 @@ public class BlockRegistering {
             net.minecraft.block.Block block0 = registry0.get(id0);
             Block<?, ?> block;
             if(block0 instanceof StairsBlock) {
-                block = new FabricBlock(id);
+                block = new StairsFabricBlock(id);
             }else {
                 block = new FabricBlock(id);
             }
