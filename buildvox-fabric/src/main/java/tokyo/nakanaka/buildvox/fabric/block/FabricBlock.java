@@ -30,8 +30,11 @@ public class FabricBlock implements Block<FabricBlockState, FabricBlockEntity> {
     }
 
     @Override
-    public FabricBlockState transformState(FabricBlockState state, BlockTransformation trans) {
-        Map<String, String> transMap = transform(id, state.getStateMap(), trans);
+    public FabricBlockState transformState(FabricBlockState state, BlockTransformation blockTrans) {
+        VoxelBlock block = new VoxelBlock(id, new FabricBlockState(state.getStateMap()));
+        BlockState blockState = BlockUtils.createBlockState(block);
+        BlockState transState = transform(blockState, blockTrans);
+        Map<String, String> transMap = BlockUtils.createFabricBlockState(transState).getStateMap();
         return new FabricBlockState(transMap);
     }
 
@@ -39,10 +42,8 @@ public class FabricBlock implements Block<FabricBlockState, FabricBlockEntity> {
         return FabricBlockState.valueOf(s);
     }
 
-    private Map<String, String> transform(NamespacedId id, Map<String, String> stateMap, BlockTransformation blockTrans) {
+    private BlockState transform(BlockState blockState, BlockTransformation blockTrans) {
         Matrix3x3i transMatrix = blockTrans.toMatrix3x3i();
-        VoxelBlock block = new VoxelBlock(id, new FabricBlockState(stateMap));
-        BlockState blockState = BlockUtils.createBlockState(block);
         Vector3i transI = transMatrix.apply(Vector3i.PLUS_I);
         Vector3i transJ = transMatrix.apply(Vector3i.PLUS_J);
         Vector3i transK = transMatrix.apply(Vector3i.PLUS_K);
@@ -78,7 +79,7 @@ public class FabricBlock implements Block<FabricBlockState, FabricBlockEntity> {
         }else {
             transState = blockState;
         }
-        return BlockUtils.createFabricBlockState(transState).getStateMap();
+        return transState;
     }
 
     private Map<String, String> transformStairsShape(Map<String, String> stateMap, Matrix3x3i transMatrix) {
