@@ -1,19 +1,20 @@
 package tokyo.nakanaka.buildvox.fabric.block;
 
+import net.minecraft.nbt.NbtCompound;
 import tokyo.nakanaka.buildvox.core.block.Block;
 
 import java.util.Objects;
 
 /* internal */
 public class FabricBlockEntity implements Block.Entity {
-    private Object obj;
+    private NbtCompound nbt;
 
-    public FabricBlockEntity(Object obj) {
-        this.obj = obj;
+    public FabricBlockEntity(NbtCompound nbt) {
+        this.nbt = nbt;
     }
 
-    public Object getObj() {
-        return obj;
+    public NbtCompound getNbt() {
+        return nbt;
     }
 
     @Override
@@ -21,12 +22,12 @@ public class FabricBlockEntity implements Block.Entity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         FabricBlockEntity entity = (FabricBlockEntity) o;
-        return obj.equals(entity.obj);
+        return nbt.equals(entity.nbt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(obj);
+        return Objects.hash(nbt);
     }
 
 }
