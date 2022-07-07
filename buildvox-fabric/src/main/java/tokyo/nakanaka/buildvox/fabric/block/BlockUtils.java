@@ -60,7 +60,11 @@ public class BlockUtils {
     /** Creates a BlockStateEntity */
     public static StateEntity createBlockStateEntity(int x, int y, int z, VoxelBlock block) {
         var state = createBlockState(block);
-        var entity = createBlockEntity(x, y, z, block, state);
+        BlockEntity entity = null;
+        FabricBlockEntity fbe = (FabricBlockEntity) block.getEntity();
+        if(fbe != null) {
+            entity = createBlockEntity(fbe, x, y, z, state);
+        }
         return new StateEntity(state, entity);
     }
 
@@ -81,13 +85,9 @@ public class BlockUtils {
     }
 
     /** Creates a BlockEntity */
-    private static BlockEntity createBlockEntity(int x, int y, int z, VoxelBlock block, BlockState blockState) {
-        FabricBlockEntity entity = (FabricBlockEntity) block.getEntity();
-        if(entity == null) {
-            return null;
-        }
-        NbtCompound nbt = entity.getNbt();
-        return BlockEntity.createFromNbt(new BlockPos(x, y, z), blockState, nbt);
+    private static BlockEntity createBlockEntity(FabricBlockEntity fbe, int x, int y, int z, BlockState state) {
+        NbtCompound nbt = fbe.getNbt();
+        return BlockEntity.createFromNbt(new BlockPos(x, y, z), state, nbt);
     }
 
 }
