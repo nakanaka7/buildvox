@@ -18,13 +18,11 @@ import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
  * Block implementation class for Fabric platform.
  */
 public class FabricBlock implements Block<FabricBlockState, FabricBlockEntity> {
-    private NamespacedId id;
+    protected final NamespacedId id;
 
     public FabricBlock(NamespacedId id) {
         this.id = id;
     }
-
-
 
     @Override
     public NamespacedId getId() {
@@ -88,7 +86,7 @@ public class FabricBlock implements Block<FabricBlockState, FabricBlockEntity> {
      * Parses a BlockState
      * @throws IllegalArgumentException if fails to create.
      */
-    private static BlockState parseBlockState(String s) {
+    protected static BlockState parseBlockState(String s) {
         StringReader strReader = new StringReader(s);
         BlockStateArgument blockStateArg;
         try {
