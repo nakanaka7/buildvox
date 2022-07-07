@@ -80,7 +80,7 @@ public class FabricBlock implements Block<FabricBlockState, EntityImpl> {
             }else {
                 transState = blockState;
             }
-            return BlockUtils.createStateImpl(transState).getStateMap();
+            return BlockUtils.createFabricBlockState(transState).getStateMap();
         }
 
         private Map<String, String> transformStairsShape(Map<String, String> stateMap, Matrix3x3i transMatrix) {

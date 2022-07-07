@@ -30,7 +30,7 @@ public class BlockUtils {
         net.minecraft.block.Block block0 = blockState.getBlock();
         Identifier id0 = Registry.BLOCK.getId(block0);
         NamespacedId id = createId(id0);
-        FabricBlockState state = createStateImpl(blockState);
+        FabricBlockState state = createFabricBlockState(blockState);
         EntityImpl entity = null;
         if(blockEntity != null) {
             entity = createEntityImpl(blockEntity);
@@ -38,8 +38,8 @@ public class BlockUtils {
         return new VoxelBlock(id, state, entity);
     }
 
-    /** Creates StateImpl */
-    public static FabricBlockState createStateImpl(BlockState blockState) {
+    /** Creates FabricBlockState */
+    public static FabricBlockState createFabricBlockState(BlockState blockState) {
         Collection<Property<?>> properties0 = blockState.getProperties();
         Map<String, String> stateMap = new HashMap<>();
         for(var key0 : properties0){
