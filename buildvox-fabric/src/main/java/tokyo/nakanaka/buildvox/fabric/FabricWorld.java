@@ -8,9 +8,8 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
-import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.World;
-import tokyo.nakanaka.buildvox.fabric.block.BlockUtils;
+import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 import tokyo.nakanaka.buildvox.fabric.block.FabricBlockEntity;
 import tokyo.nakanaka.buildvox.fabric.block.FabricBlockState;
 
@@ -123,11 +122,9 @@ public class FabricWorld implements World {
 
     /**
      * Creates a BlockState
-     * @throws IllegalArgumentException if fails to create.
      */
     private static BlockState createBlockState(VoxelBlock block) {
-        String s = block.withoutEntity().toString();
-        return BlockUtils.parseBlockState(s);
+        return ((FabricBlockState)block.getState()).getBlockState();
     }
 
     /** Creates a BlockEntity */
