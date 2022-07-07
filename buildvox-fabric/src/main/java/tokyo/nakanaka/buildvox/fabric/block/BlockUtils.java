@@ -12,7 +12,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
-import tokyo.nakanaka.buildvox.core.block.EntityImpl;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 
 import java.util.Collection;
@@ -31,7 +30,7 @@ public class BlockUtils {
         Identifier id0 = Registry.BLOCK.getId(block0);
         NamespacedId id = createId(id0);
         FabricBlockState state = createFabricBlockState(blockState);
-        EntityImpl entity = null;
+        FabricBlockEntity entity = null;
         if(blockEntity != null) {
             entity = createEntityImpl(blockEntity);
         }
@@ -50,9 +49,9 @@ public class BlockUtils {
     }
 
     /** Creates EntityImpl */
-    private static EntityImpl createEntityImpl(BlockEntity blockEntity) {
+    private static FabricBlockEntity createEntityImpl(BlockEntity blockEntity) {
         NbtCompound nbt = blockEntity.createNbtWithId();
-        return new EntityImpl(nbt);
+        return new FabricBlockEntity(nbt);
     }
 
     public record StateEntity(BlockState state, BlockEntity entity) {
@@ -83,7 +82,7 @@ public class BlockUtils {
 
     /** Creates a BlockEntity */
     private static BlockEntity createBlockEntity(int x, int y, int z, VoxelBlock block, BlockState blockState) {
-        EntityImpl entity = (EntityImpl) block.getEntity();
+        FabricBlockEntity entity = (FabricBlockEntity) block.getEntity();
         if(entity == null) {
             return null;
         }

@@ -17,7 +17,7 @@ import java.util.Map;
  * internal
  * Block implementation class for Fabric platform.
  */
-public class FabricBlock implements Block<FabricBlockState, EntityImpl> {
+public class FabricBlock implements Block<FabricBlockState, FabricBlockEntity> {
     private NamespacedId id;
     private FabricBlockStateTransformer stateTransformer = new FabricBlockStateTransformer();
 
