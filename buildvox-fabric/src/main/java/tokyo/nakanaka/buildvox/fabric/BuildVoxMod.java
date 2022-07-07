@@ -42,7 +42,7 @@ import tokyo.nakanaka.buildvox.core.player.RealPlayer;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.system.CommandSource;
 import tokyo.nakanaka.buildvox.core.system.Messenger;
-import tokyo.nakanaka.buildvox.fabric.block.FabricBlock;
+import tokyo.nakanaka.buildvox.fabric.block.BlockRegistering;
 import tokyo.nakanaka.buildvox.fabric.block.FabricBlockValidator;
 
 import java.util.*;
@@ -76,14 +76,7 @@ public class BuildVoxMod implements ModInitializer {
 		FabricScheduler.initialize();
 		BuildVoxSystem.setScheduler(FabricScheduler.getInstance());
 		BuildVoxSystem.setBlockValidator(new FabricBlockValidator());
-		registerBlocks();
-	}
-
-	public static void registerBlocks() {
-		for(Identifier blockId0 : Registry.BLOCK.getIds()) {
-			NamespacedId id = createId(blockId0);
-			BuildVoxSystem.getBlockRegistry().register(new FabricBlock(id));
-		}
+		BlockRegistering.registerBlocks();
 	}
 
 	private void onWorldLoad(MinecraftServer server, ServerWorld world){
