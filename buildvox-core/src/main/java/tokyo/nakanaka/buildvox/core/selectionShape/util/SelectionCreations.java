@@ -510,6 +510,32 @@ public class SelectionCreations {
     }
 
     /**
+     * Creates a hollow torus-shape selection in the cuboid.
+     * @param pos0 the corner of the cuboid.
+     * @param pos1 the corner of the cuboid.
+     * @param thickness the thickness of the wall.
+     * @return a hollow torus-shape selection.
+     */
+    public static Selection createHollowTorus(Vector3i pos0, Vector3i pos1, int thickness) {
+        CuboidSelectionBound outerBound = new CuboidSelectionBound(pos0, pos1);
+        Selection outerSel = createTorus(outerBound);
+        CuboidSelectionBound innerBound;
+        try {
+            innerBound = outerBound.shrink(Axis.X, thickness).shrink(Axis.Y, thickness).shrink(Axis.Z, thickness);
+        }catch (IllegalStateException ex) {
+            return outerSel;
+        }
+        Region3d outerReg = outerSel.getRegion3d();
+        Region3d innerReg = createTorus(innerBound).getRegion3d();
+        Region3d hollowReg = new DifferenceRegion3d(outerReg, innerReg);
+        return new Selection(hollowReg, outerSel.getBound());
+    }
+
+    private static Selection createTorus(CuboidSelectionBound cuboidBound) {
+        return createTorus(cuboidBound.pos0(), cuboidBound.pos1());
+    }
+
+    /**
      * Creates a torus-shaped selection in the cuboid.
      * @param pos0 the corner of the cuboid.
      * @param pos1 the corner of the cuboid.
