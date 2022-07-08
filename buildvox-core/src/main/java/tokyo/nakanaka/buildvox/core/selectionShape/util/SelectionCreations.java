@@ -332,13 +332,36 @@ public class SelectionCreations {
         Selection create(Vector3i pos0, Vector3i pos1);
     }
 
-    /**
-     * Creates a cylinder-shaped selection in the cuboid.
-     * @param pos0 the corner of the cuboid.
-     * @param pos1 the corner of the cuboid.
-     * @param axis the axis of the cylinder.
-     * @return a cylinder-shaped selection.
-     */
+    public static Selection createHollowCylinder(Vector3i pos0, Vector3i pos1, Axis axis, int thickness) {
+        CuboidSelectionBound outerBound = new CuboidSelectionBound(pos0, pos1);
+        CuboidSelectionBound innerBound;
+        try {
+            innerBound = switch (axis) {
+                case X -> outerBound.shrink(Axis.Y, thickness).shrink(Axis.Z, thickness);
+                case Y -> outerBound.shrink(Axis.Z, thickness).shrink(Axis.X, thickness);
+                case Z -> outerBound.shrink(Axis.X, thickness).shrink(Axis.Y, thickness);
+            };
+        }catch (IllegalStateException ex) {
+            return new Selection(new Empty(), new Cuboid(0, 0, 0, 0, 0, 0));
+        }
+        Selection outerSel = createCylinder(outerBound, axis);
+        Selection innerSel = createCylinder(innerBound, axis);
+        Region3d outerReg = outerSel.getRegion3d();
+        Region3d innerReg = innerSel.getRegion3d();
+        Region3d hollowReg = new DifferenceRegion3d(outerReg, innerReg);
+        return new Selection(hollowReg, outerSel.getBound());
+    }
+
+    public static Selection createCylinder(CuboidSelectionBound cuboidBound, Axis axis) {
+        return createCylinder(cuboidBound.pos0(), cuboidBound.pos1(), axis);
+    }
+        /**
+         * Creates a cylinder-shaped selection in the cuboid.
+         * @param pos0 the corner of the cuboid.
+         * @param pos1 the corner of the cuboid.
+         * @param axis the axis of the cylinder.
+         * @return a cylinder-shaped selection.
+         */
     public static Selection createCylinder(Vector3i pos0, Vector3i pos1, Axis axis) {
         Direction dir = calculateDirection(pos0, pos1, axis);
         return createOriented(SelectionCreations::createCylinder, pos0, pos1, dir);
