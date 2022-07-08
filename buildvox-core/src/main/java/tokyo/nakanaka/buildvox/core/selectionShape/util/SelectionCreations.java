@@ -420,17 +420,6 @@ public class SelectionCreations {
      */
     public static Selection createCone(Vector3i pos0, Vector3i pos1, Axis axis) {
         Direction dir = calculateDirection(pos0, pos1, axis);
-        return createCone(pos0, pos1, dir);
-    }
-
-    /**
-     * Creates a cone selection which is bounded by the cuboid by pos0 and pos1.
-     * @param pos0 pos0
-     * @param pos1 pos1
-     * @param dir the direction from base to apex.
-     * @return a cone selection
-     */
-    private static Selection createCone(Vector3i pos0, Vector3i pos1, Direction dir) {
         return createOriented(SelectionCreations::createCone, pos0, pos1, dir);
     }
 
@@ -468,17 +457,6 @@ public class SelectionCreations {
      */
     public static Selection createPyramid(Vector3i pos0, Vector3i pos1, Axis axis) {
         Direction dir = calculateDirection(pos0, pos1, axis);
-        return createPyramid(pos0, pos1, dir);
-    }
-
-    /**
-     * Creates a pyramid selection which is bounded by the cuboid by pos0 and pos1.
-     * @param pos0 pos0
-     * @param pos1 pos1
-     * @param dir the direction from base to apex.
-     * @return a pyramid selection
-     */
-    private static Selection createPyramid(Vector3i pos0, Vector3i pos1, Direction dir) {
         return createOriented(SelectionCreations::createPyramid, pos0, pos1, dir);
     }
 
