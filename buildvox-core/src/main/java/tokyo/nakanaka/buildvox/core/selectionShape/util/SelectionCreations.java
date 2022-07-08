@@ -343,6 +343,17 @@ public class SelectionCreations {
     }
 
     /**
+     * Creates a cylinder-shaped selection in the cuboid.
+     * @param pos0 the corner of the cuboid.
+     * @param pos1 the corner of the cuboid.
+     * @param axis the axis of the cylinder.
+     * @return a cylinder-shaped selection.
+     */
+    public static Selection createCylinder(Vector3i pos0, Vector3i pos1, Axis axis) {
+        return createOriented(SelectionCreations::createCylinder, pos0, pos1, axis);
+    }
+
+    /**
      * Creates a positive y-oriented cylinder selection which is bounded by the cuboid by pos0 and pos1.
      * @param pos0 pos0
      * @param pos1 pos1
@@ -364,17 +375,6 @@ public class SelectionCreations {
                 .rotateX(-Math.PI / 2)
                 .scale(radiusX, height, radiusZ)
                 .translate(baseCenter);
-    }
-
-    /**
-     * Creates a cylinder-shaped selection in the cuboid.
-     * @param pos0 the corner of the cuboid.
-     * @param pos1 the corner of the cuboid.
-     * @param axis the axis of the cylinder.
-     * @return a cylinder-shaped selection.
-     */
-    public static Selection createCylinder(Vector3i pos0, Vector3i pos1, Axis axis) {
-        return createOriented(SelectionCreations::createCylinder, pos0, pos1, axis);
     }
 
     /**
@@ -411,6 +411,30 @@ public class SelectionCreations {
     }
 
     /**
+     * Creates a cone-shaped selection in the cuboid. The direction from base to apex is
+     * from smaller to larger coordinate.
+     * @param pos0 the corner of the cuboid.
+     * @param pos1 the corner of the cuboid.
+     * @param axis the axis.
+     * @return a cone-shaped selection.
+     */
+    public static Selection createCone(Vector3i pos0, Vector3i pos1, Axis axis) {
+        Direction dir = calculateDirection(pos0, pos1, axis);
+        return createCone(pos0, pos1, dir);
+    }
+
+    /**
+     * Creates a cone selection which is bounded by the cuboid by pos0 and pos1.
+     * @param pos0 pos0
+     * @param pos1 pos1
+     * @param dir the direction from base to apex.
+     * @return a cone selection
+     */
+    private static Selection createCone(Vector3i pos0, Vector3i pos1, Direction dir) {
+        return createOriented(SelectionCreations::createCone, pos0, pos1, dir);
+    }
+
+    /**
      * Creates a positive y-oriented cone selection which is bounded by the cuboid by pos0 and pos1.
      * @param pos0 pos0
      * @param pos1 pos1
@@ -432,30 +456,6 @@ public class SelectionCreations {
                 .rotateX(-Math.PI / 2)
                 .scale(radiusX, height, radiusZ)
                 .translate(baseCenter);
-    }
-
-    /**
-     * Creates a cone selection which is bounded by the cuboid by pos0 and pos1.
-     * @param pos0 pos0
-     * @param pos1 pos1
-     * @param dir the direction from base to apex.
-     * @return a cone selection
-     */
-    private static Selection createCone(Vector3i pos0, Vector3i pos1, Direction dir) {
-        return createOriented(SelectionCreations::createCone, pos0, pos1, dir);
-    }
-
-    /**
-     * Creates a cone-shaped selection in the cuboid. The direction from base to apex is
-     * from smaller to larger coordinate.
-     * @param pos0 the corner of the cuboid.
-     * @param pos1 the corner of the cuboid.
-     * @param axis the axis.
-     * @return a cone-shaped selection.
-     */
-    public static Selection createCone(Vector3i pos0, Vector3i pos1, Axis axis) {
-        Direction dir = calculateDirection(pos0, pos1, axis);
-        return createCone(pos0, pos1, dir);
     }
 
     /**
