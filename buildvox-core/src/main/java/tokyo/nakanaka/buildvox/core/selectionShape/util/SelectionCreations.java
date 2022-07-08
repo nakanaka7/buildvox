@@ -334,6 +334,7 @@ public class SelectionCreations {
 
     public static Selection createHollowCylinder(Vector3i pos0, Vector3i pos1, Axis axis, int thickness) {
         CuboidSelectionBound outerBound = new CuboidSelectionBound(pos0, pos1);
+        Selection outerSel = createCylinder(outerBound, axis);
         CuboidSelectionBound innerBound;
         try {
             innerBound = switch (axis) {
@@ -342,12 +343,10 @@ public class SelectionCreations {
                 case Z -> outerBound.shrink(Axis.X, thickness).shrink(Axis.Y, thickness);
             };
         }catch (IllegalStateException ex) {
-            return new Selection(new Empty(), new Cuboid(0, 0, 0, 0, 0, 0));
+            return outerSel;
         }
-        Selection outerSel = createCylinder(outerBound, axis);
-        Selection innerSel = createCylinder(innerBound, axis);
         Region3d outerReg = outerSel.getRegion3d();
-        Region3d innerReg = innerSel.getRegion3d();
+        Region3d innerReg = createCylinder(innerBound, axis).getRegion3d();
         Region3d hollowReg = new DifferenceRegion3d(outerReg, innerReg);
         return new Selection(hollowReg, outerSel.getBound());
     }
