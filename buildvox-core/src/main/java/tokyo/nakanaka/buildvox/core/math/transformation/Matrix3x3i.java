@@ -13,15 +13,15 @@ public class Matrix3x3i {
      */
     @SuppressWarnings("unused")
     public static final Matrix3x3i IDENTITY = new Matrix3x3i(1, 0, 0, 0, 1, 0, 0, 0, 1);
-    private int e00;
-    private int e01;
-    private int e02;
-    private int e10;
-    private int e11;
-    private int e12;
-    private int e20;
-    private int e21;
-    private int e22;
+    private final int e00;
+    private final int e01;
+    private final int e02;
+    private final int e10;
+    private final int e11;
+    private final int e12;
+    private final int e20;
+    private final int e21;
+    private final int e22;
 
     /**
      * Constructs the following 3 x 3 matrix <br>
@@ -56,6 +56,26 @@ public class Matrix3x3i {
         this.e20 = matrix[2][0];
         this.e21 = matrix[2][1];
         this.e22 = matrix[2][2];
+    }
+
+    /**
+     * Gets an element of the matrix of the given row and column indexes
+     * @param rowIndex the row index
+     * @param columnIndex the column index
+     * @throws IllegalArgumentException if index < 0, or 2 < index
+     * @return an element of the matrix of the given row and column indexes
+     */
+    public int element(int rowIndex, int columnIndex){
+        if(rowIndex == 0 && columnIndex == 0)return e00;
+        if(rowIndex == 0 && columnIndex == 1)return e01;
+        if(rowIndex == 0 && columnIndex == 2)return e02;
+        if(rowIndex == 1 && columnIndex == 0)return e10;
+        if(rowIndex == 1 && columnIndex == 1)return e11;
+        if(rowIndex == 1 && columnIndex == 2)return e12;
+        if(rowIndex == 2 && columnIndex == 0)return e20;
+        if(rowIndex == 2 && columnIndex == 1)return e21;
+        if(rowIndex == 2 && columnIndex == 2)return e22;
+        throw new IllegalArgumentException();
     }
 
     /**
