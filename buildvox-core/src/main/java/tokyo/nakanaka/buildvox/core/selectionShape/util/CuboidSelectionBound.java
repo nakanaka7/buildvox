@@ -14,6 +14,14 @@ class CuboidSelectionBound {
         this.pos1 = pos1;
     }
 
+    Vector3i pos0() {
+        return pos0;
+    }
+
+    Vector3i pos1() {
+        return pos1;
+    }
+
     /**
      * Shrinks the cuboid along the axis.
      * @param axis the axis to shrink this cuboid along.
