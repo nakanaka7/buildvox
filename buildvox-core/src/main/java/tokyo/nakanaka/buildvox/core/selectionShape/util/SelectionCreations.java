@@ -332,6 +332,14 @@ public class SelectionCreations {
         Selection create(Vector3i pos0, Vector3i pos1);
     }
 
+    /**
+     * Creates a hollow cylinder-shape selection in the cuboid.
+     * @param pos0 the corner of the cuboid.
+     * @param pos1 the corner of the cuboid.
+     * @param axis the axis of the cylinder.
+     * @param thickness the thickness of the wall.
+     * @return a hollow cylinder-shape selection.
+     */
     public static Selection createHollowCylinder(Vector3i pos0, Vector3i pos1, Axis axis, int thickness) {
         CuboidSelectionBound outerBound = new CuboidSelectionBound(pos0, pos1);
         Selection outerSel = createCylinder(outerBound, axis);
@@ -351,16 +359,18 @@ public class SelectionCreations {
         return new Selection(hollowReg, outerSel.getBound());
     }
 
-    public static Selection createCylinder(CuboidSelectionBound cuboidBound, Axis axis) {
+    /** Creates a cylinder in the cuboid bound. */
+    private static Selection createCylinder(CuboidSelectionBound cuboidBound, Axis axis) {
         return createCylinder(cuboidBound.pos0(), cuboidBound.pos1(), axis);
     }
-        /**
-         * Creates a cylinder-shaped selection in the cuboid.
-         * @param pos0 the corner of the cuboid.
-         * @param pos1 the corner of the cuboid.
-         * @param axis the axis of the cylinder.
-         * @return a cylinder-shaped selection.
-         */
+
+    /**
+     * Creates a cylinder-shaped selection in the cuboid.
+     * @param pos0 the corner of the cuboid.
+     * @param pos1 the corner of the cuboid.
+     * @param axis the axis of the cylinder.
+     * @return a cylinder-shaped selection.
+     */
     public static Selection createCylinder(Vector3i pos0, Vector3i pos1, Axis axis) {
         Direction dir = calculateDirection(pos0, pos1, axis);
         return createOriented(SelectionCreations::createCylinder, pos0, pos1, dir);
