@@ -59,6 +59,23 @@ class CuboidSelectionBound {
         return new CuboidSelectionBound(pos0, q1);
     }
 
+    /** Shrink the bottom of the bound. (The direction of the axis is from "bottom" to "top")
+     * @throws IllegalStateException if it cannot shrink anymore.
+     */
+    CuboidSelectionBound shrinkBottom(Axis axis, int length) {
+        Vector3i s = pos0.subtract(pos1);
+        int t = switch (axis) {
+            case X -> s.x();
+            case Y -> s.y();
+            case Z -> s.z();
+        };
+        if(Math.abs(t) < length) throw new IllegalStateException();
+        Direction dir = calculateDirection(axis);
+        Vector3i dirV = dir.toVector3i();
+        Vector3i q0 = pos0.add(dirV.scalarMultiply(length));
+        return new CuboidSelectionBound(q0, pos1);
+    }
+
     /**
      * Shrinks the sides along the axis.
      * @param thickness the displacement of the wall.
