@@ -22,6 +22,23 @@ class CuboidSelectionBound {
         return pos1;
     }
 
+    /** Shrink the top of the bound. (The direction of the axis is from "bottom" to "top")
+     * @throws IllegalStateException if it cannot shrink anymore.
+     */
+    CuboidSelectionBound shrinkTop(Axis axis, int length) {
+        Vector3i s = pos0.subtract(pos1);
+        int t = switch (axis) {
+            case X -> s.x();
+            case Y -> s.y();
+            case Z -> s.z();
+        };
+        if(Math.abs(t) < length) throw new IllegalStateException();
+        Direction dir = calculateDirection(axis);
+        Vector3i dirV = dir.toVector3i();
+        Vector3i q1 = pos1.subtract(dirV.scalarMultiply(length));
+        return new CuboidSelectionBound(pos0, q1);
+    }
+
     /**
      * Shrinks the cuboid along the axis.
      * @param axis the axis to shrink this cuboid along.
