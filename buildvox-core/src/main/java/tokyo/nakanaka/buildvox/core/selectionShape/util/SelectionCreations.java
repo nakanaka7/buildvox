@@ -405,6 +405,37 @@ public class SelectionCreations {
     }
 
     /**
+     * Creates a hollow cone-shape selection in the cuboid.
+     * @param pos0 the corner of the cuboid.
+     * @param pos1 the corner of the cuboid.
+     * @param axis the axis of the cylinder.
+     * @param thickness the thickness of the wall.
+     * @return a hollow cone-shape selection.
+     */
+    public static Selection createHollowCone(Vector3i pos0, Vector3i pos1, Axis axis, int thickness) {
+        CuboidSelectionBound outerBound = new CuboidSelectionBound(pos0, pos1);
+        Selection outerSel = createCone(outerBound, axis);
+        CuboidSelectionBound innerBound;
+        double a = outerBound.calculateLength(axis);
+        double b = outerBound.calculateMaxSideLength(axis);
+        int c = - (int)Math.floor(- (2 * a) / b);
+        try {
+            innerBound = outerBound.shrinkSides(axis, thickness).shrinkTop(axis, c);
+        }catch (IllegalStateException ex) {
+            return outerSel;
+        }
+        Region3d outerReg = outerSel.getRegion3d();
+        Region3d innerReg = createCone(innerBound, axis).getRegion3d();
+        Region3d hollowReg = new DifferenceRegion3d(outerReg, innerReg);
+        return new Selection(hollowReg, outerSel.getBound());
+    }
+
+    /** Creates a cylinder in the cuboid bound. */
+    private static Selection createCone(CuboidSelectionBound cuboidBound, Axis axis) {
+        return createCone(cuboidBound.pos0(), cuboidBound.pos1(), axis);
+    }
+
+    /**
      * Creates a cone-shaped selection in the cuboid. The direction from base to apex is
      * from smaller to larger coordinate.
      * @param pos0 the corner of the cuboid.
