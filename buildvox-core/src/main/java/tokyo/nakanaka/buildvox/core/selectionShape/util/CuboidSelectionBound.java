@@ -32,6 +32,16 @@ class CuboidSelectionBound {
         };
     }
 
+    /** Calculates the max of the side length. */
+    int calculateMaxSideLength(Axis axis) {
+        Vector3i v = pos0.subtract(pos1);
+        return switch (axis) {
+            case X -> Math.max(Math.abs(v.y()), Math.abs(v.z()));
+            case Y -> Math.max(Math.abs(v.z()), Math.abs(v.x()));
+            case Z -> Math.max(Math.abs(v.x()), Math.abs(v.y()));
+        };
+    }
+
     /** Shrink the top of the bound. (The direction of the axis is from "bottom" to "top")
      * @throws IllegalStateException if it cannot shrink anymore.
      */
