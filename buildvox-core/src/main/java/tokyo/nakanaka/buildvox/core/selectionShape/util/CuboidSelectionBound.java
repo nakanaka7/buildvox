@@ -22,6 +22,16 @@ class CuboidSelectionBound {
         return pos1;
     }
 
+    /** Calculates the length along the axis. */
+    int calculateLength(Axis axis) {
+        Vector3i v = pos0.subtract(pos1);
+        return switch (axis) {
+            case X -> Math.abs(v.x());
+            case Y -> Math.abs(v.y());
+            case Z -> Math.abs(v.z());
+        };
+    }
+
     /** Shrink the top of the bound. (The direction of the axis is from "bottom" to "top")
      * @throws IllegalStateException if it cannot shrink anymore.
      */
