@@ -350,7 +350,8 @@ public class SelectionCreations {
      * @return a cylinder-shaped selection.
      */
     public static Selection createCylinder(Vector3i pos0, Vector3i pos1, Axis axis) {
-        return createOriented(SelectionCreations::createCylinder, pos0, pos1, axis);
+        Direction dir = calculateDirection(pos0, pos1, axis);
+        return createOriented(SelectionCreations::createCylinder, pos0, pos1, dir);
     }
 
     /**
