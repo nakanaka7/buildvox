@@ -345,11 +345,7 @@ public class SelectionCreations {
         Selection outerSel = createCylinder(outerBound, axis);
         CuboidSelectionBound innerBound;
         try {
-            innerBound = switch (axis) {
-                case X -> outerBound.shrink(Axis.Y, thickness).shrink(Axis.Z, thickness);
-                case Y -> outerBound.shrink(Axis.Z, thickness).shrink(Axis.X, thickness);
-                case Z -> outerBound.shrink(Axis.X, thickness).shrink(Axis.Y, thickness);
-            };
+            innerBound = outerBound.shrinkSides(axis, thickness);
         }catch (IllegalStateException ex) {
             return outerSel;
         }
