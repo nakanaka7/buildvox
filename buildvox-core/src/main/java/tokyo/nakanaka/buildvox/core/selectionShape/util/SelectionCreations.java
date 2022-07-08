@@ -294,6 +294,7 @@ public class SelectionCreations {
         return selection.translate(center.x(), center.y(), center.z());
     }
 
+    /** Creates a selection which axis is oriented. */
     private static Selection createOriented(CuboidBoundShapeCreator callback, Vector3i pos0, Vector3i pos1, Axis axis) {
         Direction dir = switch (axis) {
             case X -> Direction.EAST;
@@ -303,6 +304,7 @@ public class SelectionCreations {
         return createOriented(callback, pos0, pos1, dir);
     }
 
+    /** Creates a selection which direction is oriented. The cuboid bound of selection remains. */
     private static Selection createOriented(CuboidBoundShapeCreator callback, Vector3i pos0, Vector3i pos1, Direction dir) {
         if(dir == Direction.UP)return callback.create(pos0, pos1);
         double maxXd = Math.max(pos0.x(), pos1.x()) + 1;
@@ -333,7 +335,10 @@ public class SelectionCreations {
                 .affineTransform(trans.inverse());
     }
 
-    public interface CuboidBoundShapeCreator {
+    /** A functional interface to create a selection in the cuboid bound. The direction of the selection is lower to
+     * upper y-axis. */
+    private interface CuboidBoundShapeCreator {
+        /** Creates a selection which bound is the cuboid by pos0 and pos1 */
         Selection create(Vector3i pos0, Vector3i pos1);
     }
 
@@ -372,6 +377,10 @@ public class SelectionCreations {
         return createOriented(SelectionCreations::createCylinder, pos0, pos1, axis);
     }
 
+    /**
+     * Calculates a direction which is parallel to the axis and the coordinate of the direction is
+     * from pos0's to pos1's coordinate.
+     */
     private static Direction calculateDirection(Vector3i pos0, Vector3i pos1, Axis axis) {
         Direction dir;
         switch (axis) {
