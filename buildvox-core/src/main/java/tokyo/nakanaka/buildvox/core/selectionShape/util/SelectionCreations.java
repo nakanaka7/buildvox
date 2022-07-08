@@ -294,16 +294,6 @@ public class SelectionCreations {
         return selection.translate(center.x(), center.y(), center.z());
     }
 
-    /** Creates a selection which axis is oriented. */
-    private static Selection createOriented(CuboidBoundShapeCreator callback, Vector3i pos0, Vector3i pos1, Axis axis) {
-        Direction dir = switch (axis) {
-            case X -> Direction.EAST;
-            case Z -> Direction.SOUTH;
-            default -> Direction.UP;
-        };
-        return createOriented(callback, pos0, pos1, dir);
-    }
-
     /** Creates a selection which direction is oriented. The cuboid bound of selection remains. */
     private static Selection createOriented(CuboidBoundShapeCreator callback, Vector3i pos0, Vector3i pos1, Direction dir) {
         if(dir == Direction.UP)return callback.create(pos0, pos1);
@@ -515,7 +505,8 @@ public class SelectionCreations {
     }
 
     private static Selection createTorus(Vector3i pos0, Vector3i pos1, Axis axis) {
-        return createOriented(SelectionCreations::createTorusAlongYAxis, pos0, pos1, axis);
+        Direction dir = calculateDirection(pos0, pos1, axis);
+        return createOriented(SelectionCreations::createTorusAlongYAxis, pos0, pos1, dir);
     }
 
     private static Selection createTorusAlongYAxis(Vector3i pos0, Vector3i pos1) {
