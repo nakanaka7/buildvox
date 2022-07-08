@@ -35,7 +35,7 @@ class CuboidSelectionBound {
             case Y -> s.y();
             case Z -> s.z();
         };
-        if(Math.abs(t) < 2) throw new IllegalStateException();
+        if(Math.abs(t) < 2 * thickness) throw new IllegalStateException();
         Direction dir = calculateDirection(axis);
         Vector3i dirV = dir.toVector3i();
         Vector3i q0 = pos0.add(dirV.scalarMultiply(thickness));
