@@ -26,9 +26,9 @@ class CuboidSelectionBound {
     int calculateLength(Axis axis) {
         Vector3i v = pos0.subtract(pos1);
         return switch (axis) {
-            case X -> Math.abs(v.x());
-            case Y -> Math.abs(v.y());
-            case Z -> Math.abs(v.z());
+            case X -> Math.abs(v.x()) + 1;
+            case Y -> Math.abs(v.y()) + 1;
+            case Z -> Math.abs(v.z()) + 1;
         };
     }
 
@@ -36,9 +36,9 @@ class CuboidSelectionBound {
     int calculateMaxSideLength(Axis axis) {
         Vector3i v = pos0.subtract(pos1);
         return switch (axis) {
-            case X -> Math.max(Math.abs(v.y()), Math.abs(v.z()));
-            case Y -> Math.max(Math.abs(v.z()), Math.abs(v.x()));
-            case Z -> Math.max(Math.abs(v.x()), Math.abs(v.y()));
+            case X -> Math.max(Math.abs(v.y()), Math.abs(v.z())) + 1;
+            case Y -> Math.max(Math.abs(v.z()), Math.abs(v.x())) + 1;
+            case Z -> Math.max(Math.abs(v.x()), Math.abs(v.y())) + 1;
         };
     }
 
