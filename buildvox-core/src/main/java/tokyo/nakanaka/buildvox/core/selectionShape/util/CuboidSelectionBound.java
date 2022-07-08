@@ -94,6 +94,7 @@ class CuboidSelectionBound {
      * @param axis the axis to shrink this cuboid along.
      * @param thickness the displacement of the wall.
      * @throws IllegalStateException if it cannot shrink anymore.
+     * @deprecated ambiguous side to shrink. Use shrinkTop(), shrinkBottom(), or shrinkSides()
      */
     CuboidSelectionBound shrink(Axis axis, int thickness) {
         Vector3i s = pos0.subtract(pos1);
