@@ -473,6 +473,36 @@ public class SelectionCreations {
     }
 
     /**
+     * Creates a hollow pyramid-shape selection in the cuboid.
+     * @param pos0 the corner of the cuboid.
+     * @param pos1 the corner of the cuboid.
+     * @param axis the axis of the pyramid.
+     * @param thickness the thickness of the wall.
+     * @return a hollow pyramid-shape selection.
+     */
+    public static Selection createHollowPyramid(Vector3i pos0, Vector3i pos1, Axis axis, int thickness) {
+        CuboidSelectionBound outerBound = new CuboidSelectionBound(pos0, pos1);
+        Selection outerSel = createPyramid(outerBound, axis);
+        CuboidSelectionBound innerBound;
+        double a = outerBound.calculateLength(axis);
+        double b = outerBound.calculateMaxSideLength(axis);
+        int c = - (int)Math.floor(- (2 * a) / b);
+        try {
+            innerBound = outerBound.shrinkSides(axis, thickness).shrinkTop(axis, c);
+        }catch (IllegalStateException ex) {
+            return outerSel;
+        }
+        Region3d outerReg = outerSel.getRegion3d();
+        Region3d innerReg = createPyramid(innerBound, axis).getRegion3d();
+        Region3d hollowReg = new DifferenceRegion3d(outerReg, innerReg);
+        return new Selection(hollowReg, outerSel.getBound());
+    }
+
+    private static Selection createPyramid(CuboidSelectionBound cuboidBound, Axis axis) {
+        return createPyramid(cuboidBound.pos0(), cuboidBound.pos1(), axis);
+    }
+
+    /**
      * Creates a pyramid-shaped selection in the cuboid. The direction from base to apex is
      * from smaller to larger coordinate.
      * @param pos0 the corner of the cuboid.
