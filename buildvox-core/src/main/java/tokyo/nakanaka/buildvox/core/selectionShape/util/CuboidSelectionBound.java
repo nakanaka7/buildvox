@@ -40,6 +40,19 @@ class CuboidSelectionBound {
     }
 
     /**
+     * Shrinks the sides along the axis.
+     * @param thickness the displacement of the wall.
+     * @throws IllegalStateException if it cannot shrink anymore.
+     */
+    CuboidSelectionBound shrinkSides(Axis axis, int thickness) {
+        return switch (axis) {
+            case X -> shrink(Axis.Y, thickness).shrink(Axis.Z, thickness);
+            case Y -> shrink(Axis.Z, thickness).shrink(Axis.X, thickness);
+            case Z -> shrink(Axis.X, thickness).shrink(Axis.Y, thickness);
+        };
+    }
+
+    /**
      * Shrinks the cuboid along the axis.
      * @param axis the axis to shrink this cuboid along.
      * @param thickness the displacement of the wall.
