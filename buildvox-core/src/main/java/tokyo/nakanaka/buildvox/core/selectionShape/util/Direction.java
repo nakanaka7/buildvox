@@ -11,7 +11,7 @@ enum Direction {
     EAST(Vector3i.PLUS_I),
     WEST(Vector3i.MINUS_I),
     UP(Vector3i.PLUS_J),
-    DOWN(Vector3i.MINUS_I);
+    DOWN(Vector3i.MINUS_J);
     private Vector3i v;
 
     Direction(Vector3i v) {
