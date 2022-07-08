@@ -373,32 +373,7 @@ public class SelectionCreations {
      * from pos0's to pos1's coordinate.
      */
     private static Direction calculateDirection(Vector3i pos0, Vector3i pos1, Axis axis) {
-        Direction dir;
-        switch (axis) {
-            case X -> {
-                if (pos1.x() - pos0.x() >= 0) {
-                    dir = Direction.EAST;
-                } else {
-                    dir = Direction.WEST;
-                }
-            }
-            case Y -> {
-                if(pos1.y() - pos0.y() >= 0) {
-                    dir = Direction.UP;
-                } else {
-                    dir = Direction.DOWN;
-                }
-            }
-            case Z -> {
-                if(pos1.z() - pos0.z() >= 0) {
-                    dir = Direction.SOUTH;
-                }else {
-                    dir = Direction.NORTH;
-                }
-            }
-            default -> dir = Direction.UP;
-        }
-        return dir;
+        return new CuboidSelectionBound(pos0, pos1).calculateDirection(axis);
     }
 
     /**
