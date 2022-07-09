@@ -504,7 +504,7 @@ public class SelectionCreations {
     }
 
     private static Selection createPyramid(CuboidSelectionBound cuboidBound, Axis axis) {
-        return createPyramid(cuboidBound.pos0(), cuboidBound.pos1(), axis);
+        return createOriented(SelectionCreations::createPyramid, cuboidBound, axis);
     }
 
     /**
@@ -516,8 +516,7 @@ public class SelectionCreations {
      * @return a pyramid-shaped selection.
      */
     public static Selection createPyramid(Vector3i pos0, Vector3i pos1, Axis axis) {
-        Direction dir = calculateDirection(pos0, pos1, axis);
-        return createOriented(SelectionCreations::createPyramid, pos0, pos1, dir);
+        return createPyramid(new CuboidSelectionBound(pos0, pos1), axis);
     }
 
     /**
