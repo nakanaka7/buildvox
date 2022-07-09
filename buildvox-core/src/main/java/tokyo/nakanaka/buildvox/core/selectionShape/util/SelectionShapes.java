@@ -99,8 +99,20 @@ public class SelectionShapes {
     public static SelectionShape parseSelectionShape(String value) {
         ParseUtils.NameStateEntity nse = ParseUtils.parseNameStateEntity(value);
         if(!nse.entity().isEmpty()) throw new IllegalArgumentException();
-        String name = nse.name();
-        Class<? extends SelectionShape> shapeClazz = shapeMap.get(name);
+        String shapeName = nse.name();
+        CommandLine cmdLine = createShapeCommandLine(shapeName);
+        String[] args = createArgs(nse.state());
+        cmdLine.execute(args);
+        Map<String, Object> mixins = cmdLine.getMixins();
+        return (SelectionShape) mixins.get(shapeName);
+    }
+
+    /**
+     * Creates a CommandLine which has the mixin of the shapeName.
+     * @throws IllegalArgumentException if failed.
+     */
+    private static CommandLine createShapeCommandLine(String shapeName) {
+        Class<? extends SelectionShape> shapeClazz = shapeMap.get(shapeName);
         if(shapeClazz == null) throw new IllegalArgumentException();
         CommandLine cmdLine = new CommandLine(new DummyCommand());
         SelectionShape mixin;
@@ -109,18 +121,19 @@ public class SelectionShapes {
         }catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ex) {
             throw new IllegalArgumentException();
         }
-        cmdLine.addMixin(name, mixin);
+        cmdLine.addMixin(shapeName, mixin);
+        return cmdLine;
+    }
+
+    private static String[] createArgs(String state) {
         List<String> argsList = new ArrayList<>();
-        String state = nse.state();
         Map<String, String> stateMap = ParseUtils.parseStateMap(state);
         for(Map.Entry<String, String> e : stateMap.entrySet()) {
             argsList.add("--" + e.getKey() + "=" +  e.getValue());
         }
         String[] args;
         args = argsList.toArray(new String[0]);
-        cmdLine.execute(args);
-        Map<String, Object> mixins = cmdLine.getMixins();
-        return (SelectionShape) mixins.get(name);
+        return args;
     }
 
     @Command
