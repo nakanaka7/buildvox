@@ -362,7 +362,7 @@ public class SelectionCreations {
 
     /** Creates a cylinder in the cuboid bound. */
     private static Selection createCylinder(CuboidSelectionBound cuboidBound, Axis axis) {
-        return createCylinder(cuboidBound.pos0(), cuboidBound.pos1(), axis);
+        return createOriented(SelectionCreations::createCylinder, cuboidBound, axis);
     }
 
     /**
@@ -373,8 +373,7 @@ public class SelectionCreations {
      * @return a cylinder-shaped selection.
      */
     public static Selection createCylinder(Vector3i pos0, Vector3i pos1, Axis axis) {
-        Direction dir = calculateDirection(pos0, pos1, axis);
-        return createOriented(SelectionCreations::createCylinder, pos0, pos1, dir);
+        return createCylinder(new CuboidSelectionBound(pos0, pos1), axis);
     }
 
     /**
@@ -405,6 +404,7 @@ public class SelectionCreations {
      * Calculates a direction which is parallel to the axis and the coordinate of the direction is
      * from pos0's to pos1's coordinate.
      */
+    @Deprecated
     private static Direction calculateDirection(Vector3i pos0, Vector3i pos1, Axis axis) {
         return new CuboidSelectionBound(pos0, pos1).calculateDirection(axis);
     }
@@ -437,7 +437,7 @@ public class SelectionCreations {
 
     /** Creates a cylinder in the cuboid bound. */
     private static Selection createCone(CuboidSelectionBound cuboidBound, Axis axis) {
-        return createCone(cuboidBound.pos0(), cuboidBound.pos1(), axis);
+        return createOriented(SelectionCreations::createCone, cuboidBound, axis);
     }
 
     /**
@@ -449,8 +449,7 @@ public class SelectionCreations {
      * @return a cone-shaped selection.
      */
     public static Selection createCone(Vector3i pos0, Vector3i pos1, Axis axis) {
-        Direction dir = calculateDirection(pos0, pos1, axis);
-        return createOriented(SelectionCreations::createCone, pos0, pos1, dir);
+        return createCone(new CuboidSelectionBound(pos0, pos1), axis);
     }
 
     /**
@@ -601,8 +600,7 @@ public class SelectionCreations {
     }
 
     private static Selection createTorus(Vector3i pos0, Vector3i pos1, Axis axis) {
-        Direction dir = calculateDirection(pos0, pos1, axis);
-        return createOriented(SelectionCreations::createTorusAlongYAxis, pos0, pos1, dir);
+        return createOriented(SelectionCreations::createTorusAlongYAxis, new CuboidSelectionBound(pos0, pos1), axis);
     }
 
     private static Selection createTorusAlongYAxis(Vector3i pos0, Vector3i pos1) {
