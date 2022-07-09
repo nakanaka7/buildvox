@@ -83,20 +83,17 @@ class CuboidSelectionBound {
      */
     CuboidSelectionBound shrinkSides(Axis axis, int thickness) {
         return switch (axis) {
-            case X -> shrink(Axis.Y, thickness).shrink(Axis.Z, thickness);
-            case Y -> shrink(Axis.Z, thickness).shrink(Axis.X, thickness);
-            case Z -> shrink(Axis.X, thickness).shrink(Axis.Y, thickness);
+            case X -> shrinkTopBottom(Axis.Y, thickness).shrinkTopBottom(Axis.Z, thickness);
+            case Y -> shrinkTopBottom(Axis.Z, thickness).shrinkTopBottom(Axis.X, thickness);
+            case Z -> shrinkTopBottom(Axis.X, thickness).shrinkTopBottom(Axis.Y, thickness);
         };
     }
 
     /**
-     * Shrinks the cuboid along the axis.
-     * @param axis the axis to shrink this cuboid along.
-     * @param thickness the displacement of the wall.
+     * Shrinks both top and bottom.
      * @throws IllegalStateException if it cannot shrink anymore.
-     * @deprecated ambiguous side to shrink. Use shrinkTop(), shrinkBottom(), or shrinkSides()
      */
-    CuboidSelectionBound shrink(Axis axis, int thickness) {
+    private CuboidSelectionBound shrinkTopBottom(Axis axis, int thickness) {
         Vector3i s = pos0.subtract(pos1);
         int t = switch (axis) {
             case X -> s.x();
