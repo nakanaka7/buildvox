@@ -108,8 +108,7 @@ public class SelectionShapes {
         String state = nse.state();
         Map<String, String> stateMap = ParseUtils.parseStateMap(state);
         for(Map.Entry<String, String> e : stateMap.entrySet()) {
-            argsList.add("--" + e.getKey());
-            argsList.add(e.getValue());
+            argsList.add("--" + e.getKey() + "=" +  e.getValue());
         }
         String[] args;
         args = argsList.toArray(new String[0]);
