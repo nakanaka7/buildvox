@@ -401,15 +401,6 @@ public class SelectionCreations {
     }
 
     /**
-     * Calculates a direction which is parallel to the axis and the coordinate of the direction is
-     * from pos0's to pos1's coordinate.
-     */
-    @Deprecated
-    private static Direction calculateDirection(Vector3i pos0, Vector3i pos1, Axis axis) {
-        return new CuboidSelectionBound(pos0, pos1).calculateDirection(axis);
-    }
-
-    /**
      * Creates a hollow cone-shape selection in the cuboid.
      * @param pos0 the corner of the cuboid.
      * @param pos1 the corner of the cuboid.
