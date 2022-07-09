@@ -78,12 +78,10 @@ public class SelectionShapes {
     }
 
     private static List<Model.OptionSpec> getOptionSpecs(String shapeName) {
-        Class<? extends SelectionShape> shapeClazz = shapeMap.get(shapeName);
-        if(shapeClazz == null) return new ArrayList<>();
-        CommandLine cmdLine = new CommandLine(new DummyCommand());
+        CommandLine cmdLine;
         try {
-            cmdLine.addMixin(shapeName, shapeClazz.getDeclaredConstructor().newInstance());
-        }catch (Exception ex) {
+            cmdLine = createShapeCommandLine(shapeName);
+        }catch (IllegalArgumentException ex) {
             return new ArrayList<>();
         }
         Model.CommandSpec spec = cmdLine.getCommandSpec();
