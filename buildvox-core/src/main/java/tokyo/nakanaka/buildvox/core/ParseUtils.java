@@ -3,6 +3,7 @@ package tokyo.nakanaka.buildvox.core;
 import java.util.HashMap;
 import java.util.Map;
 
+/* internal */
 public class ParseUtils {
     private ParseUtils() {
     }
@@ -11,7 +12,8 @@ public class ParseUtils {
     }
 
     /**
-     * Decompose "name[state]{entity}". "[state]" or "{entity}" may be skipped.
+     * Decompose "name[state]{entity}". "[state]" or "{entity}" may be skipped. If "[state]" or "{entity}" is skipped
+     * the state or entity will be empty String, "".
      * @return the name-state-entity.
      * @throws IllegalArgumentException if the format is invalid.
      */
