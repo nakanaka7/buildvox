@@ -440,12 +440,16 @@ public class SelectionCreations {
      * @return a cylinder selection
      */
     private static Selection createCylinder(Vector3i pos0, Vector3i pos1) {
-        double maxX = Math.max(pos0.x(), pos1.x()) + 1;
-        double maxY = Math.max(pos0.y(), pos1.y()) + 1;
-        double maxZ = Math.max(pos0.z(), pos1.z()) + 1;
-        double minX = Math.min(pos0.x(), pos1.x());
-        double minY = Math.min(pos0.y(), pos1.y());
-        double minZ = Math.min(pos0.z(), pos1.z());
+        return createCylinder(new CuboidSelectionBound(pos0, pos1));
+    }
+
+    private static Selection createCylinder(CuboidSelectionBound cuboidBound) {
+        double maxX = cuboidBound.getMaxDoubleX();
+        double maxY = cuboidBound.getMaxDoubleY();
+        double maxZ = cuboidBound.getMaxDoubleZ();
+        double minX = cuboidBound.getMinDoubleX();
+        double minY = cuboidBound.getMinDoubleY();
+        double minZ = cuboidBound.getMinDoubleZ();
         var baseCenter = new Vector3d((maxX + minX) / 2, minY, (maxZ + minZ) / 2);
         double radiusX = (maxX - minX) / 2;
         double radiusZ = (maxZ - minZ) / 2;
