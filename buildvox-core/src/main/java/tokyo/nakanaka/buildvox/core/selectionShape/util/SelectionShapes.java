@@ -1,6 +1,7 @@
 package tokyo.nakanaka.buildvox.core.selectionShape.util;
 
 import picocli.CommandLine;
+import picocli.CommandLine.Command;
 import picocli.CommandLine.Model;
 import tokyo.nakanaka.buildvox.core.ParseUtils;
 import tokyo.nakanaka.buildvox.core.selectionShape.*;
@@ -111,7 +112,7 @@ public class SelectionShapes {
     private static CommandLine createShapeCommandLine(String shapeName) {
         Class<? extends SelectionShape> shapeClazz = shapeMap.get(shapeName);
         if(shapeClazz == null) throw new IllegalArgumentException();
-        CommandLine cmdLine = new CommandLine((Runnable) () -> {});
+        CommandLine cmdLine = new CommandLine(new DummyCommand());
         SelectionShape mixin;
         try {
             mixin = shapeClazz.getDeclaredConstructor().newInstance();
@@ -131,6 +132,14 @@ public class SelectionShapes {
         String[] args;
         args = argsList.toArray(new String[0]);
         return args;
+    }
+
+    @Command
+    private static class DummyCommand implements Runnable {
+        @Override
+        public void run() {
+
+        }
     }
 
 }
