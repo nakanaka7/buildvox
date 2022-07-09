@@ -22,6 +22,36 @@ class CuboidSelectionBound {
         return pos1;
     }
 
+    /** Gets the maximum x-coordinate of this bound. */
+    double getMaxDoubleX() {
+        return Math.max(pos0.x(), pos1.x()) + 1;
+    }
+
+    /** Gets the maximum y-coordinate of this bound. */
+    double getMaxDoubleY() {
+        return Math.max(pos0.y(), pos1.y()) + 1;
+    }
+
+    /** Gets the maximum z-coordinate of this bound. */
+    double getMaxDoubleZ() {
+        return Math.max(pos0.z(), pos1.z()) + 1;
+    }
+
+    /** Gets the minimum x-coordinate of this bound. */
+    double getMinDoubleX() {
+        return Math.min(pos0.x(), pos1.x());
+    }
+
+    /** Gets the minimum y-coordinate of this bound. */
+    double getMinDoubleY() {
+        return Math.min(pos0.y(), pos1.y());
+    }
+
+    /** Gets the minimum z-coordinate of this bound. */
+    double getMinDoubleZ() {
+        return Math.min(pos0.z(), pos1.z());
+    }
+
     /** Calculates the length along the axis. */
     int calculateLength(Axis axis) {
         Vector3i v = pos0.subtract(pos1);
