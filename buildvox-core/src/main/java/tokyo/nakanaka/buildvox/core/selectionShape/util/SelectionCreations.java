@@ -59,6 +59,13 @@ public class SelectionCreations {
         return createCuboid(cuboidBound.pos0(), cuboidBound.pos1());
     }
 
+    /**
+     * Create a hollow cuboid-shape selection. The cuboid corner will be pos 0 and pos 1.
+     * @param pos0 the corner position.
+     * @param pos1 the corner position.
+     * @param thickness the thickness of the wall.
+     * @return a hollow cuboid-shape selection.
+     */
     public static Selection createHollowCuboid(Vector3i pos0, Vector3i pos1, int thickness) {
         CuboidSelectionBound outerBound = new CuboidSelectionBound(pos0, pos1);
         Selection outerSel = createCuboid(outerBound);
