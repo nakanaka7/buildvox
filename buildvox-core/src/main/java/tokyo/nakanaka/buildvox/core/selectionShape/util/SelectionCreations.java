@@ -551,7 +551,9 @@ public class SelectionCreations {
         Selection outerSel = createTorus(outerBound);
         CuboidSelectionBound innerBound;
         try {
-            innerBound = outerBound.shrink(Axis.X, thickness).shrink(Axis.Y, thickness).shrink(Axis.Z, thickness);
+            innerBound = outerBound.shrinkTop(Axis.Y, thickness)//any axis is ok
+                    .shrinkBottom(Axis.Y, thickness)
+                    .shrinkSides(Axis.Y, thickness);
         }catch (IllegalStateException ex) {
             return outerSel;
         }
