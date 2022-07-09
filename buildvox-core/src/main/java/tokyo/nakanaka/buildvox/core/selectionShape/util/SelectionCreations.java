@@ -294,7 +294,12 @@ public class SelectionCreations {
         return selection.translate(center.x(), center.y(), center.z());
     }
 
-    /** Creates a selection which direction is oriented. The cuboid bound of selection remains. */
+    private static Selection createOriented(CuboidBoundShapeCreator callback, CuboidSelectionBound cuboidBound, Axis axis) {
+        Direction dir = cuboidBound.calculateDirection(axis);
+        return createOriented(callback, cuboidBound.pos0(), cuboidBound.pos1(), dir);
+    }
+
+        /** Creates a selection which direction is oriented. The cuboid bound of selection remains. */
     private static Selection createOriented(CuboidBoundShapeCreator callback, Vector3i pos0, Vector3i pos1, Direction dir) {
         if(dir == Direction.UP)return callback.create(pos0, pos1);
         double maxXd = Math.max(pos0.x(), pos1.x()) + 1;
