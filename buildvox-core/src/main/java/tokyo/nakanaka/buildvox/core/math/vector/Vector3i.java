@@ -69,6 +69,33 @@ public class Vector3i {
         return new Vector3d(x, y, z);
     }
 
+    /**
+     * Add another vector
+     * @param v another vector
+     * @return a new vector
+     */
+    public Vector3i add(Vector3i v){
+        return new Vector3i(x + v.x, y + v.y, z + v.z);
+    }
+
+    /**
+     * Subtract another vector from this vector
+     * @param v another vector
+     * @return a new vector
+     */
+    public Vector3i subtract(Vector3i v){
+        return new Vector3i(x - v.x, y - v.y, z - v.z);
+    }
+
+    /**
+     * Multiply this vector by the given scalar
+     * @param a scalar
+     * @return a new vector
+     */
+    public Vector3i scalarMultiply(int a){
+        return new Vector3i(a * x, a * y, a * z);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

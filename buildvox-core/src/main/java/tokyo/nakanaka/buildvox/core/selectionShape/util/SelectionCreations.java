@@ -55,6 +55,35 @@ public class SelectionCreations {
         return new Selection(cuboid, cuboid);
     }
 
+    private static Selection createCuboid(CuboidSelectionBound cuboidBound) {
+        return createCuboid(cuboidBound.pos0(), cuboidBound.pos1());
+    }
+
+    /**
+     * Create a hollow cuboid-shape selection. The cuboid corner will be pos 0 and pos 1.
+     * @param pos0 the corner position.
+     * @param pos1 the corner position.
+     * @param thickness the thickness of the wall.
+     * @return a hollow cuboid-shape selection.
+     */
+    public static Selection createHollowCuboid(Vector3i pos0, Vector3i pos1, int thickness) {
+        CuboidSelectionBound outerBound = new CuboidSelectionBound(pos0, pos1);
+        Selection outerSel = createCuboid(outerBound);
+        CuboidSelectionBound innerBound;
+        try {
+            innerBound = outerBound
+                    .shrinkTop(Axis.Y, thickness)
+                    .shrinkBottom(Axis.Y, thickness)
+                    .shrinkSides(Axis.Y, thickness);
+        }catch (IllegalStateException ex) {
+            return outerSel;
+        }
+        Region3d outerReg = outerSel.getRegion3d();
+        Region3d innerReg = createCuboid(innerBound).getRegion3d();
+        Region3d hollowReg = new DifferenceRegion3d(outerReg, innerReg);
+        return new Selection(hollowReg, outerSel.getBound());
+    }
+
     /**
      * Creates a line-shaped line.
      * @param pos0 the beginning position.
@@ -272,6 +301,34 @@ public class SelectionCreations {
     }
 
     /**
+     * Creates a hollow ellipse-shape selection in the cuboid.
+     * @param pos0 the corner of the cuboid.
+     * @param pos1 the corner of the cuboid.
+     * @param thickness the thickness of the wall.
+     * @return a hollow ellipse-shape selection.
+     */
+    public static Selection createHollowEllipse(Vector3i pos0, Vector3i pos1, int thickness) {
+        CuboidSelectionBound outerBound = new CuboidSelectionBound(pos0, pos1);
+        Selection outerSel = createEllipse(outerBound);
+        CuboidSelectionBound innerBound;
+        try {
+            innerBound = outerBound.shrinkTop(Axis.Y, thickness)//any axis is ok
+                    .shrinkBottom(Axis.Y, thickness)
+                    .shrinkSides(Axis.Y, thickness);
+        }catch (IllegalStateException ex) {
+            return outerSel;
+        }
+        Region3d outerReg = outerSel.getRegion3d();
+        Region3d innerReg = createEllipse(innerBound).getRegion3d();
+        Region3d hollowReg = new DifferenceRegion3d(outerReg, innerReg);
+        return new Selection(hollowReg, outerSel.getBound());
+    }
+
+    private static Selection createEllipse(CuboidSelectionBound cuboidBound) {
+        return createEllipse(cuboidBound.pos0(), cuboidBound.pos1());
+    }
+
+    /**
      * Creates an ellipse-shaped selection in the cuboid.
      * @param pos0 the corner of the cuboid.
      * @param pos1 the corner of the cuboid.
@@ -294,15 +351,12 @@ public class SelectionCreations {
         return selection.translate(center.x(), center.y(), center.z());
     }
 
-    private static Selection createOriented(CuboidBoundShapeCreator callback, Vector3i pos0, Vector3i pos1, Axis axis) {
-        Direction dir = switch (axis) {
-            case X -> Direction.EAST;
-            case Z -> Direction.SOUTH;
-            default -> Direction.UP;
-        };
-        return createOriented(callback, pos0, pos1, dir);
+    private static Selection createOriented(CuboidBoundShapeCreator callback, CuboidSelectionBound cuboidBound, Axis axis) {
+        Direction dir = cuboidBound.calculateDirection(axis);
+        return createOriented(callback, cuboidBound.pos0(), cuboidBound.pos1(), dir);
     }
 
+        /** Creates a selection which direction is oriented. The cuboid bound of selection remains. */
     private static Selection createOriented(CuboidBoundShapeCreator callback, Vector3i pos0, Vector3i pos1, Direction dir) {
         if(dir == Direction.UP)return callback.create(pos0, pos1);
         double maxXd = Math.max(pos0.x(), pos1.x()) + 1;
@@ -333,8 +387,50 @@ public class SelectionCreations {
                 .affineTransform(trans.inverse());
     }
 
-    public interface CuboidBoundShapeCreator {
+    /** A functional interface to create a selection in the cuboid bound. The direction of the selection is lower to
+     * upper y-axis. */
+    private interface CuboidBoundShapeCreator {
+        /** Creates a selection which bound is the cuboid by pos0 and pos1 */
         Selection create(Vector3i pos0, Vector3i pos1);
+    }
+
+    /**
+     * Creates a hollow cylinder-shape selection in the cuboid.
+     * @param pos0 the corner of the cuboid.
+     * @param pos1 the corner of the cuboid.
+     * @param axis the axis of the cylinder.
+     * @param thickness the thickness of the wall.
+     * @return a hollow cylinder-shape selection.
+     */
+    public static Selection createHollowCylinder(Vector3i pos0, Vector3i pos1, Axis axis, int thickness) {
+        CuboidSelectionBound outerBound = new CuboidSelectionBound(pos0, pos1);
+        Selection outerSel = createCylinder(outerBound, axis);
+        CuboidSelectionBound innerBound;
+        try {
+            innerBound = outerBound.shrinkSides(axis, thickness);
+        }catch (IllegalStateException ex) {
+            return outerSel;
+        }
+        Region3d outerReg = outerSel.getRegion3d();
+        Region3d innerReg = createCylinder(innerBound, axis).getRegion3d();
+        Region3d hollowReg = new DifferenceRegion3d(outerReg, innerReg);
+        return new Selection(hollowReg, outerSel.getBound());
+    }
+
+    /** Creates a cylinder in the cuboid bound. */
+    private static Selection createCylinder(CuboidSelectionBound cuboidBound, Axis axis) {
+        return createOriented(SelectionCreations::createCylinder, cuboidBound, axis);
+    }
+
+    /**
+     * Creates a cylinder-shaped selection in the cuboid.
+     * @param pos0 the corner of the cuboid.
+     * @param pos1 the corner of the cuboid.
+     * @param axis the axis of the cylinder.
+     * @return a cylinder-shaped selection.
+     */
+    public static Selection createCylinder(Vector3i pos0, Vector3i pos1, Axis axis) {
+        return createCylinder(new CuboidSelectionBound(pos0, pos1), axis);
     }
 
     /**
@@ -362,43 +458,46 @@ public class SelectionCreations {
     }
 
     /**
-     * Creates a cylinder-shaped selection in the cuboid.
+     * Creates a hollow cone-shape selection in the cuboid.
      * @param pos0 the corner of the cuboid.
      * @param pos1 the corner of the cuboid.
      * @param axis the axis of the cylinder.
-     * @return a cylinder-shaped selection.
+     * @param thickness the thickness of the wall.
+     * @return a hollow cone-shape selection.
      */
-    public static Selection createCylinder(Vector3i pos0, Vector3i pos1, Axis axis) {
-        return createOriented(SelectionCreations::createCylinder, pos0, pos1, axis);
+    public static Selection createHollowCone(Vector3i pos0, Vector3i pos1, Axis axis, int thickness) {
+        CuboidSelectionBound outerBound = new CuboidSelectionBound(pos0, pos1);
+        Selection outerSel = createCone(outerBound, axis);
+        CuboidSelectionBound innerBound;
+        double a = outerBound.calculateLength(axis);
+        double b = outerBound.calculateMaxSideLength(axis);
+        int c = - (int)Math.floor(- (2 * a) / b);
+        try {
+            innerBound = outerBound.shrinkSides(axis, thickness).shrinkTop(axis, c);
+        }catch (IllegalStateException ex) {
+            return outerSel;
+        }
+        Region3d outerReg = outerSel.getRegion3d();
+        Region3d innerReg = createCone(innerBound, axis).getRegion3d();
+        Region3d hollowReg = new DifferenceRegion3d(outerReg, innerReg);
+        return new Selection(hollowReg, outerSel.getBound());
     }
 
-    private static Direction calculateDirection(Vector3i pos0, Vector3i pos1, Axis axis) {
-        Direction dir;
-        switch (axis) {
-            case X -> {
-                if (pos1.x() - pos0.x() >= 0) {
-                    dir = Direction.EAST;
-                } else {
-                    dir = Direction.WEST;
-                }
-            }
-            case Y -> {
-                if(pos1.y() - pos0.y() >= 0) {
-                    dir = Direction.UP;
-                } else {
-                    dir = Direction.DOWN;
-                }
-            }
-            case Z -> {
-                if(pos1.z() - pos0.z() >= 0) {
-                    dir = Direction.SOUTH;
-                }else {
-                    dir = Direction.NORTH;
-                }
-            }
-            default -> dir = Direction.UP;
-        }
-        return dir;
+    /** Creates a cylinder in the cuboid bound. */
+    private static Selection createCone(CuboidSelectionBound cuboidBound, Axis axis) {
+        return createOriented(SelectionCreations::createCone, cuboidBound, axis);
+    }
+
+    /**
+     * Creates a cone-shaped selection in the cuboid. The direction from base to apex is
+     * from smaller to larger coordinate.
+     * @param pos0 the corner of the cuboid.
+     * @param pos1 the corner of the cuboid.
+     * @param axis the axis.
+     * @return a cone-shaped selection.
+     */
+    public static Selection createCone(Vector3i pos0, Vector3i pos1, Axis axis) {
+        return createCone(new CuboidSelectionBound(pos0, pos1), axis);
     }
 
     /**
@@ -426,27 +525,33 @@ public class SelectionCreations {
     }
 
     /**
-     * Creates a cone selection which is bounded by the cuboid by pos0 and pos1.
-     * @param pos0 pos0
-     * @param pos1 pos1
-     * @param dir the direction from base to apex.
-     * @return a cone selection
-     */
-    private static Selection createCone(Vector3i pos0, Vector3i pos1, Direction dir) {
-        return createOriented(SelectionCreations::createCone, pos0, pos1, dir);
-    }
-
-    /**
-     * Creates a cone-shaped selection in the cuboid. The direction from base to apex is
-     * from smaller to larger coordinate.
+     * Creates a hollow pyramid-shape selection in the cuboid.
      * @param pos0 the corner of the cuboid.
      * @param pos1 the corner of the cuboid.
-     * @param axis the axis.
-     * @return a cone-shaped selection.
+     * @param axis the axis of the pyramid.
+     * @param thickness the thickness of the wall.
+     * @return a hollow pyramid-shape selection.
      */
-    public static Selection createCone(Vector3i pos0, Vector3i pos1, Axis axis) {
-        Direction dir = calculateDirection(pos0, pos1, axis);
-        return createCone(pos0, pos1, dir);
+    public static Selection createHollowPyramid(Vector3i pos0, Vector3i pos1, Axis axis, int thickness) {
+        CuboidSelectionBound outerBound = new CuboidSelectionBound(pos0, pos1);
+        Selection outerSel = createPyramid(outerBound, axis);
+        CuboidSelectionBound innerBound;
+        double a = outerBound.calculateLength(axis);
+        double b = outerBound.calculateMaxSideLength(axis);
+        int c = - (int)Math.floor(- (2 * a) / b);
+        try {
+            innerBound = outerBound.shrinkSides(axis, thickness).shrinkTop(axis, c);
+        }catch (IllegalStateException ex) {
+            return outerSel;
+        }
+        Region3d outerReg = outerSel.getRegion3d();
+        Region3d innerReg = createPyramid(innerBound, axis).getRegion3d();
+        Region3d hollowReg = new DifferenceRegion3d(outerReg, innerReg);
+        return new Selection(hollowReg, outerSel.getBound());
+    }
+
+    private static Selection createPyramid(CuboidSelectionBound cuboidBound, Axis axis) {
+        return createOriented(SelectionCreations::createPyramid, cuboidBound, axis);
     }
 
     /**
@@ -458,19 +563,7 @@ public class SelectionCreations {
      * @return a pyramid-shaped selection.
      */
     public static Selection createPyramid(Vector3i pos0, Vector3i pos1, Axis axis) {
-        Direction dir = calculateDirection(pos0, pos1, axis);
-        return createPyramid(pos0, pos1, dir);
-    }
-
-    /**
-     * Creates a pyramid selection which is bounded by the cuboid by pos0 and pos1.
-     * @param pos0 pos0
-     * @param pos1 pos1
-     * @param dir the direction from base to apex.
-     * @return a pyramid selection
-     */
-    private static Selection createPyramid(Vector3i pos0, Vector3i pos1, Direction dir) {
-        return createOriented(SelectionCreations::createPyramid, pos0, pos1, dir);
+        return createPyramid(new CuboidSelectionBound(pos0, pos1), axis);
     }
 
     /**
@@ -495,6 +588,34 @@ public class SelectionCreations {
                 .rotateX(-Math.PI / 2)
                 .scale(sideX, height, sideZ)
                 .translate(baseCenter);
+    }
+
+    /**
+     * Creates a hollow torus-shape selection in the cuboid.
+     * @param pos0 the corner of the cuboid.
+     * @param pos1 the corner of the cuboid.
+     * @param thickness the thickness of the wall.
+     * @return a hollow torus-shape selection.
+     */
+    public static Selection createHollowTorus(Vector3i pos0, Vector3i pos1, int thickness) {
+        CuboidSelectionBound outerBound = new CuboidSelectionBound(pos0, pos1);
+        Selection outerSel = createTorus(outerBound);
+        CuboidSelectionBound innerBound;
+        try {
+            innerBound = outerBound.shrinkTop(Axis.Y, thickness)//any axis is ok
+                    .shrinkBottom(Axis.Y, thickness)
+                    .shrinkSides(Axis.Y, thickness);
+        }catch (IllegalStateException ex) {
+            return outerSel;
+        }
+        Region3d outerReg = outerSel.getRegion3d();
+        Region3d innerReg = createTorus(innerBound).getRegion3d();
+        Region3d hollowReg = new DifferenceRegion3d(outerReg, innerReg);
+        return new Selection(hollowReg, outerSel.getBound());
+    }
+
+    private static Selection createTorus(CuboidSelectionBound cuboidBound) {
+        return createTorus(cuboidBound.pos0(), cuboidBound.pos1());
     }
 
     /**
@@ -527,7 +648,7 @@ public class SelectionCreations {
     }
 
     private static Selection createTorus(Vector3i pos0, Vector3i pos1, Axis axis) {
-        return createOriented(SelectionCreations::createTorusAlongYAxis, pos0, pos1, axis);
+        return createOriented(SelectionCreations::createTorusAlongYAxis, new CuboidSelectionBound(pos0, pos1), axis);
     }
 
     private static Selection createTorusAlongYAxis(Vector3i pos0, Vector3i pos1) {

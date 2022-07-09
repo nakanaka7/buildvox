@@ -21,6 +21,12 @@ public class SelectionShapes {
         shapeMap.put("cylinder", Cylinder.class);
         shapeMap.put("ellipse", Ellipse.class);
         shapeMap.put("frame", Frame.class);
+        shapeMap.put("hollow_cone", HollowCone.class);
+        shapeMap.put("hollow_cuboid", HollowCuboid.class);
+        shapeMap.put("hollow_cylinder", HollowCylinder.class);
+        shapeMap.put("hollow_ellipse", HollowEllipse.class);
+        shapeMap.put("hollow_pyramid", HollowPyramid.class);
+        shapeMap.put("hollow_torus", HollowTorus.class);
         shapeMap.put("line", Line.class);
         shapeMap.put("plane", Plane.class);
         shapeMap.put("pyramid", Pyramid.class);
@@ -108,8 +114,7 @@ public class SelectionShapes {
         String state = nse.state();
         Map<String, String> stateMap = ParseUtils.parseStateMap(state);
         for(Map.Entry<String, String> e : stateMap.entrySet()) {
-            argsList.add("--" + e.getKey());
-            argsList.add(e.getValue());
+            argsList.add("--" + e.getKey() + "=" +  e.getValue());
         }
         String[] args;
         args = argsList.toArray(new String[0]);

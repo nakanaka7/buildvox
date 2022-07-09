@@ -1,16 +1,14 @@
 package tokyo.nakanaka.buildvox.core.selectionShape;
 
-import picocli.CommandLine.Command;
-import picocli.CommandLine.Option;
-import tokyo.nakanaka.buildvox.core.Axis;
+import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
+import tokyo.nakanaka.buildvox.core.selectionShape.mixin.Thickness;
 import tokyo.nakanaka.buildvox.core.selectionShape.util.SelectionCreations;
 
-@Command(description = "a pyramid in the cuboid by pos0 and pos1")
-public class Pyramid implements SelectionShape {
-    @Option(names = {"--axis"})
-    private Axis axis = Axis.Y;
+public class HollowTorus implements SelectionShape {
+    @Mixin
+    private Thickness thickness;
 
     @Override
     public Selection createSelection(Vector3i[] posArray) {
@@ -19,7 +17,6 @@ public class Pyramid implements SelectionShape {
         }
         Vector3i pos0 = posArray[0];
         Vector3i pos1 = posArray[1];
-        return SelectionCreations.createPyramid(pos0, pos1, axis);
+        return SelectionCreations.createHollowTorus(pos0, pos1, thickness.thickness());
     }
-
 }
