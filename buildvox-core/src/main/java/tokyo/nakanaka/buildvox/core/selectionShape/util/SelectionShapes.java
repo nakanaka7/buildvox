@@ -22,6 +22,7 @@ public class SelectionShapes {
         shapeMap.put("ellipse", Ellipse.class);
         shapeMap.put("frame", Frame.class);
         shapeMap.put("hollow_cone", HollowCone.class);
+        shapeMap.put("hollow_cuboid", HollowCuboid.class);
         shapeMap.put("hollow_cylinder", HollowCylinder.class);
         shapeMap.put("line", Line.class);
         shapeMap.put("plane", Plane.class);
