@@ -359,12 +359,12 @@ public class SelectionCreations {
         Vector3i pos0 = cuboidBound.pos0();
         Vector3i pos1 = cuboidBound.pos1();
         if(dir == Direction.UP)return callback.create(pos0, pos1);
-        double maxXd = Math.max(pos0.x(), pos1.x()) + 1;
-        double maxYd = Math.max(pos0.y(), pos1.y()) + 1;
-        double maxZd = Math.max(pos0.z(), pos1.z()) + 1;
-        double minXd = Math.min(pos0.x(), pos1.x());
-        double minYd = Math.min(pos0.y(), pos1.y());
-        double minZd = Math.min(pos0.z(), pos1.z());
+        double maxXd = cuboidBound.getMaxDoubleX();
+        double maxYd = cuboidBound.getMaxDoubleY();
+        double maxZd = cuboidBound.getMaxDoubleZ();
+        double minXd = cuboidBound.getMinDoubleX();
+        double minYd = cuboidBound.getMinDoubleY();
+        double minZd = cuboidBound.getMinDoubleZ();
         AffineTransformation3d trans = switch (dir) {
             case EAST -> AffineTransformation3d.ofRotationZ(Math.PI / 2);
             case WEST -> AffineTransformation3d.ofRotationZ(-Math.PI / 2);
