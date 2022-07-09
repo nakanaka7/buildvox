@@ -392,6 +392,9 @@ public class SelectionCreations {
     private interface CuboidBoundShapeCreator {
         /** Creates a selection which bound is the cuboid by pos0 and pos1 */
         Selection create(Vector3i pos0, Vector3i pos1);
+        default Selection create(CuboidSelectionBound cuboidBound) {
+            return create(cuboidBound.pos0(), cuboidBound.pos1());
+        }
     }
 
     /**
