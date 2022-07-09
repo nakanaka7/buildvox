@@ -55,6 +55,28 @@ public class SelectionCreations {
         return new Selection(cuboid, cuboid);
     }
 
+    private static Selection createCuboid(CuboidSelectionBound cuboidBound) {
+        return createCuboid(cuboidBound.pos0(), cuboidBound.pos1());
+    }
+
+    public static Selection createHollowCuboid(Vector3i pos0, Vector3i pos1, int thickness) {
+        CuboidSelectionBound outerBound = new CuboidSelectionBound(pos0, pos1);
+        Selection outerSel = createCuboid(outerBound);
+        CuboidSelectionBound innerBound;
+        try {
+            innerBound = outerBound
+                    .shrinkTop(Axis.Y, thickness)
+                    .shrinkBottom(Axis.Y, thickness)
+                    .shrinkSides(Axis.Y, thickness);
+        }catch (IllegalStateException ex) {
+            return outerSel;
+        }
+        Region3d outerReg = outerSel.getRegion3d();
+        Region3d innerReg = createCuboid(innerBound).getRegion3d();
+        Region3d hollowReg = new DifferenceRegion3d(outerReg, innerReg);
+        return new Selection(hollowReg, outerSel.getBound());
+    }
+
     /**
      * Creates a line-shaped line.
      * @param pos0 the beginning position.
