@@ -28,11 +28,11 @@ class CuboidSelectionBound {
         return pos1;
     }
 
-    Vector3i getPos0Vector3i() {
+    Vector3i pos0I() {
         return toVector3i(pos0);
     }
 
-    Vector3i getPos1Vector3i() {
+    Vector3i pos1I() {
         return toVector3i(pos1);
     }
 

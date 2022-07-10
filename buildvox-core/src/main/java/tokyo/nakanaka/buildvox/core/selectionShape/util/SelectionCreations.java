@@ -388,7 +388,7 @@ public class SelectionCreations {
          * Creates an oriented selection keeping cuboidBound its position.
          */
     private static Selection createOriented(CuboidBoundShapeCreator callback, CuboidSelectionBound cuboidBound, Axis axis) {
-        return createOriented(callback, cuboidBound.getPos0Vector3i(), cuboidBound.getPos1Vector3i(), axis);
+        return createOriented(callback, cuboidBound.pos0I(), cuboidBound.pos1I(), axis);
     }
 
     /** A functional interface to create a selection in the cuboid bound. The direction of the selection is lower to
