@@ -66,12 +66,12 @@ class CuboidSelectionBound {
     }
 
     /** Calculates the length along the axis. */
-    int calculateLength(Axis axis) {
+    double calculateLength(Axis axis) {
         Vector3d v = pos0.subtract(pos1);
         return switch (axis) {
-            case X -> floor(Math.abs(v.x()) + 1);
-            case Y -> floor(Math.abs(v.y()) + 1);
-            case Z -> floor(Math.abs(v.z()) + 1);
+            case X -> Math.abs(v.x()) + 1;
+            case Y -> Math.abs(v.y()) + 1;
+            case Z -> Math.abs(v.z()) + 1;
         };
     }
 
