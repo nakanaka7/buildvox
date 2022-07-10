@@ -355,8 +355,8 @@ public class SelectionCreations {
      * Creates an oriented selection keeping cuboidBound its position.
      */
     private static Selection createOriented(CuboidBoundShapeCreator callback, CuboidSelectionBound cuboidBound, Axis axis) {
-        Vector3i pos0 = cuboidBound.pos0I();
-        Vector3i pos1 = cuboidBound.pos1I();
+        Vector3d pos0 = cuboidBound.pos0D();
+        Vector3d pos1 = cuboidBound.pos1D();
         CuboidSelectionBound cuboidBound1 = new CuboidSelectionBound(pos0, pos1);
         Direction dir = cuboidBound1.calculateDirection(axis);
         if(dir == Direction.UP)return callback.create(pos0, pos1);
@@ -378,14 +378,14 @@ public class SelectionCreations {
         Vector3d posMinD = new Vector3d(minXd, minYd, minZd);
         Vector3d posTransMaxD = trans.apply(posMaxD);
         Vector3d posTransMinD = trans.apply(posMinD);
-        int maxX0I = (int)Math.round(Math.max(posTransMaxD.x(), posTransMinD.x())) - 1;
-        int maxY0I = (int)Math.round(Math.max(posTransMaxD.y(), posTransMinD.y())) - 1;
-        int maxZ0I = (int)Math.round(Math.max(posTransMaxD.z(), posTransMinD.z())) - 1;
-        int minX0I = (int)Math.round(Math.min(posTransMaxD.x(), posTransMinD.x()));
-        int minY0I = (int)Math.round(Math.min(posTransMaxD.y(), posTransMinD.y()));
-        int minZ0I = (int)Math.round(Math.min(posTransMaxD.z(), posTransMinD.z()));
-        Vector3i posMax = new Vector3i(maxX0I, maxY0I, maxZ0I);
-        Vector3i posMin = new Vector3i(minX0I, minY0I, minZ0I);
+        double maxX0I = Math.max(posTransMaxD.x(), posTransMinD.x()) - 1;
+        double maxY0I = Math.max(posTransMaxD.y(), posTransMinD.y()) - 1;
+        double maxZ0I = Math.max(posTransMaxD.z(), posTransMinD.z()) - 1;
+        double minX0I = Math.min(posTransMaxD.x(), posTransMinD.x());
+        double minY0I = Math.min(posTransMaxD.y(), posTransMinD.y());
+        double minZ0I = Math.min(posTransMaxD.z(), posTransMinD.z());
+        Vector3d posMax = new Vector3d(maxX0I, maxY0I, maxZ0I);
+        Vector3d posMin = new Vector3d(minX0I, minY0I, minZ0I);
         return callback.create(posMax, posMin).affineTransform(trans.inverse());
     }
 
@@ -394,6 +394,16 @@ public class SelectionCreations {
     private interface CuboidBoundShapeCreator {
         /** Creates a selection which bound is the cuboid by pos0 and pos1 */
         Selection create(Vector3i pos0, Vector3i pos1);
+        default Selection create(Vector3d pos0, Vector3d pos1) {
+            return create(closestVec3i(pos0), closestVec3i(pos1));
+        }
+    }
+
+    private static Vector3i closestVec3i(Vector3d pos) {
+        int x = (int)Math.round(pos.x());
+        int y = (int)Math.round(pos.y());
+        int z = (int)Math.round(pos.z());
+        return new Vector3i(x, y, z);
     }
 
     /**
