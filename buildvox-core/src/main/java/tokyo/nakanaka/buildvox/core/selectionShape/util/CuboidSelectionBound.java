@@ -80,12 +80,12 @@ class CuboidSelectionBound {
     }
 
     /** Calculates the max of the side length. */
-    int calculateMaxSideLength(Axis axis) {
+    double calculateMaxSideLength(Axis axis) {
         Vector3d v = pos0.subtract(pos1);
         return switch (axis) {
-            case X -> floor(Math.max(Math.abs(v.y()), Math.abs(v.z())) + 1);
-            case Y -> floor(Math.max(Math.abs(v.z()), Math.abs(v.x())) + 1);
-            case Z -> floor(Math.max(Math.abs(v.x()), Math.abs(v.y())) + 1);
+            case X -> Math.max(Math.abs(v.y()), Math.abs(v.z())) + 1;
+            case Y -> Math.max(Math.abs(v.z()), Math.abs(v.x())) + 1;
+            case Z -> Math.max(Math.abs(v.x()), Math.abs(v.y())) + 1;
         };
     }
 
