@@ -58,8 +58,9 @@ class CuboidSelectionBound {
         return Math.min(pos0.z(), pos1.z());
     }
 
+    /** Gets the center point */
     Vector3d getCenter() {
-        return pos0.add(pos1).scalarMultiply(0.5);
+        return pos0.add(pos1).add(1, 1, 1).scalarMultiply(0.5);
     }
 
     /** Gets the mid x-coordinate. */
