@@ -620,7 +620,26 @@ public class SelectionCreations {
     }
 
     private static Selection createTorus(CuboidSelectionBound cuboidBound) {
-        return createTorus(cuboidBound.pos0(), cuboidBound.pos1());
+        double maxX = cuboidBound.getMaxDoubleX();
+        double maxY = cuboidBound.getMaxDoubleY();
+        double maxZ = cuboidBound.getMaxDoubleZ();
+        double minX = cuboidBound.getMinDoubleX();
+        double minY = cuboidBound.getMinDoubleY();
+        double minZ = cuboidBound.getMinDoubleZ();
+        double lx = maxX - minX;
+        double ly = maxY - minY;
+        double lz = maxZ - minZ;
+        double minL = MaxMinCalculator.min(lx, ly, lz);
+        if(minL == lx) {
+            return createTorus(cuboidBound, Axis.X);
+        }else if(minL == ly) {
+            return createTorus(cuboidBound, Axis.Y);
+        }else if(minL == lz) {
+            return createTorus(cuboidBound, Axis.Z);
+        }else{
+            LOGGER.error("Unexpected");
+            return new Selection(new Empty(), 0, 0, 0, 0, 0, 0);
+        }
     }
 
     /**
@@ -630,30 +649,11 @@ public class SelectionCreations {
      * @return a torus-shaped selection.
      */
     public static Selection createTorus(Vector3i pos0, Vector3i pos1) {
-        double maxX = Math.max(pos0.x(), pos1.x()) + 1;
-        double maxY = Math.max(pos0.y(), pos1.y()) + 1;
-        double maxZ = Math.max(pos0.z(), pos1.z()) + 1;
-        double minX = Math.min(pos0.x(), pos1.x());
-        double minY = Math.min(pos0.y(), pos1.y());
-        double minZ = Math.min(pos0.z(), pos1.z());
-        double lx = maxX - minX;
-        double ly = maxY - minY;
-        double lz = maxZ - minZ;
-        double minL = MaxMinCalculator.min(lx, ly, lz);
-        if(minL == lx) {
-            return createTorus(pos0, pos1, Axis.X);
-        }else if(minL == ly) {
-            return createTorus(pos0, pos1, Axis.Y);
-        }else if(minL == lz) {
-            return createTorus(pos0, pos1, Axis.Z);
-        }else{
-            LOGGER.error("Unexpected");
-            return new Selection(new Empty(), 0, 0, 0, 0, 0, 0);
-        }
+        return createTorus(new CuboidSelectionBound(pos0, pos1));
     }
 
-    private static Selection createTorus(Vector3i pos0, Vector3i pos1, Axis axis) {
-        return createOriented(SelectionCreations::createTorusAlongYAxis, new CuboidSelectionBound(pos0, pos1), axis);
+    private static Selection createTorus(CuboidSelectionBound cuboidBound, Axis axis) {
+        return createOriented(SelectionCreations::createTorusAlongYAxis, cuboidBound, axis);
     }
 
     private static Selection createTorusAlongYAxis(Vector3i pos0, Vector3i pos1) {
