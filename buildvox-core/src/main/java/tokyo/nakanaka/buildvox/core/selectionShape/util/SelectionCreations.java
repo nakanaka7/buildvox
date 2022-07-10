@@ -381,8 +381,8 @@ public class SelectionCreations {
         int minX0I = (int)Math.round(Math.min(posTransMaxD.x(), posTransMinD.x()));
         int minY0I = (int)Math.round(Math.min(posTransMaxD.y(), posTransMinD.y()));
         int minZ0I = (int)Math.round(Math.min(posTransMaxD.z(), posTransMinD.z()));
-        return callback.create(new Vector3i(maxX0I, maxY0I, maxZ0I), new Vector3i(minX0I, minY0I, minZ0I))
-                .affineTransform(trans.inverse());
+        CuboidSelectionBound cuboidBound0 = new CuboidSelectionBound(new Vector3i(maxX0I, maxY0I, maxZ0I), new Vector3i(minX0I, minY0I, minZ0I));
+        return callback.create(cuboidBound0).affineTransform(trans.inverse());
     }
 
     /** A functional interface to create a selection in the cuboid bound. The direction of the selection is lower to
