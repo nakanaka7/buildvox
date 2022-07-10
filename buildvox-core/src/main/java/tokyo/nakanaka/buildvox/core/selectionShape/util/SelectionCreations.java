@@ -351,16 +351,21 @@ public class SelectionCreations {
         return createEllipse(new CuboidSelectionBound(pos0, pos1));
     }
 
-    private static Selection createOriented(CuboidBoundShapeCreator callback, Vector3i pos0, Vector3i pos1, Axis axis) {
-        CuboidSelectionBound cuboidBound = new CuboidSelectionBound(pos0, pos1);
-        Direction dir = cuboidBound.calculateDirection(axis);
+    /**
+     * Creates an oriented selection keeping cuboidBound its position.
+     */
+    private static Selection createOriented(CuboidBoundShapeCreator callback, CuboidSelectionBound cuboidBound, Axis axis) {
+        Vector3i pos0 = cuboidBound.pos0I();
+        Vector3i pos1 = cuboidBound.pos1I();
+        CuboidSelectionBound cuboidBound1 = new CuboidSelectionBound(pos0, pos1);
+        Direction dir = cuboidBound1.calculateDirection(axis);
         if(dir == Direction.UP)return callback.create(pos0, pos1);
-        double maxXd = cuboidBound.getMaxDoubleX();
-        double maxYd = cuboidBound.getMaxDoubleY();
-        double maxZd = cuboidBound.getMaxDoubleZ();
-        double minXd = cuboidBound.getMinDoubleX();
-        double minYd = cuboidBound.getMinDoubleY();
-        double minZd = cuboidBound.getMinDoubleZ();
+        double maxXd = cuboidBound1.getMaxDoubleX();
+        double maxYd = cuboidBound1.getMaxDoubleY();
+        double maxZd = cuboidBound1.getMaxDoubleZ();
+        double minXd = cuboidBound1.getMinDoubleX();
+        double minYd = cuboidBound1.getMinDoubleY();
+        double minZd = cuboidBound1.getMinDoubleZ();
         AffineTransformation3d trans = switch (dir) {
             case EAST -> AffineTransformation3d.ofRotationZ(Math.PI / 2);
             case WEST -> AffineTransformation3d.ofRotationZ(-Math.PI / 2);
@@ -382,13 +387,6 @@ public class SelectionCreations {
         Vector3i posMax = new Vector3i(maxX0I, maxY0I, maxZ0I);
         Vector3i posMin = new Vector3i(minX0I, minY0I, minZ0I);
         return callback.create(posMax, posMin).affineTransform(trans.inverse());
-    }
-
-        /**
-         * Creates an oriented selection keeping cuboidBound its position.
-         */
-    private static Selection createOriented(CuboidBoundShapeCreator callback, CuboidSelectionBound cuboidBound, Axis axis) {
-        return createOriented(callback, cuboidBound.pos0I(), cuboidBound.pos1I(), axis);
     }
 
     /** A functional interface to create a selection in the cuboid bound. The direction of the selection is lower to
