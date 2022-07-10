@@ -1,25 +1,38 @@
 package tokyo.nakanaka.buildvox.core.selectionShape.util;
 
 import tokyo.nakanaka.buildvox.core.Axis;
+import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 
 /** Represents a cuboid bound of a selection. Assumed pos-array length is 2. */
 
 class CuboidSelectionBound {
-    private final Vector3i pos0;
-    private final Vector3i pos1;
+    private final Vector3d pos0;
+    private final Vector3d pos1;
 
-    public CuboidSelectionBound(Vector3i pos0, Vector3i pos1) {
+    public CuboidSelectionBound(Vector3d pos0, Vector3d pos1) {
         this.pos0 = pos0;
         this.pos1 = pos1;
     }
 
+    public CuboidSelectionBound(Vector3i pos0, Vector3i pos1) {
+        this.pos0 = pos0.toVector3d();
+        this.pos1 = pos1.toVector3d();
+    }
+
     Vector3i getPos0Vector3i() {
-        return pos0;
+        return toVector3i(pos0);
     }
 
     Vector3i getPos1Vector3i() {
-        return pos1;
+        return toVector3i(pos1);
+    }
+
+    private Vector3i toVector3i(Vector3d v) {
+        int x = (int)Math.floor(v.x());
+        int y = (int)Math.floor(v.y());
+        int z = (int)Math.floor(v.z());
+        return new Vector3i(x, y, z);
     }
 
     /** Gets the maximum x-coordinate of this bound. */
@@ -54,21 +67,25 @@ class CuboidSelectionBound {
 
     /** Calculates the length along the axis. */
     int calculateLength(Axis axis) {
-        Vector3i v = pos0.subtract(pos1);
+        Vector3d v = pos0.subtract(pos1);
         return switch (axis) {
-            case X -> Math.abs(v.x()) + 1;
-            case Y -> Math.abs(v.y()) + 1;
-            case Z -> Math.abs(v.z()) + 1;
+            case X -> floor(Math.abs(v.x()) + 1);
+            case Y -> floor(Math.abs(v.y()) + 1);
+            case Z -> floor(Math.abs(v.z()) + 1);
         };
+    }
+
+    private int floor(double d) {
+        return (int)Math.floor(d);
     }
 
     /** Calculates the max of the side length. */
     int calculateMaxSideLength(Axis axis) {
-        Vector3i v = pos0.subtract(pos1);
+        Vector3d v = pos0.subtract(pos1);
         return switch (axis) {
-            case X -> Math.max(Math.abs(v.y()), Math.abs(v.z())) + 1;
-            case Y -> Math.max(Math.abs(v.z()), Math.abs(v.x())) + 1;
-            case Z -> Math.max(Math.abs(v.x()), Math.abs(v.y())) + 1;
+            case X -> floor(Math.max(Math.abs(v.y()), Math.abs(v.z())) + 1);
+            case Y -> floor(Math.max(Math.abs(v.z()), Math.abs(v.x())) + 1);
+            case Z -> floor(Math.max(Math.abs(v.x()), Math.abs(v.y())) + 1);
         };
     }
 
@@ -76,8 +93,8 @@ class CuboidSelectionBound {
      * @throws IllegalStateException if it cannot shrink anymore.
      */
     CuboidSelectionBound shrinkTop(Axis axis, int length) {
-        Vector3i s = pos0.subtract(pos1);
-        int t = switch (axis) {
+        Vector3d s = pos0.subtract(pos1);
+        double t = switch (axis) {
             case X -> s.x();
             case Y -> s.y();
             case Z -> s.z();
@@ -85,7 +102,7 @@ class CuboidSelectionBound {
         if(Math.abs(t) < length) throw new IllegalStateException();
         Direction dir = calculateDirection(axis);
         Vector3i dirV = dir.toVector3i();
-        Vector3i q1 = pos1.subtract(dirV.scalarMultiply(length));
+        Vector3d q1 = pos1.subtract(dirV.scalarMultiply(length).toVector3d());
         return new CuboidSelectionBound(pos0, q1);
     }
 
@@ -93,16 +110,16 @@ class CuboidSelectionBound {
      * @throws IllegalStateException if it cannot shrink anymore.
      */
     CuboidSelectionBound shrinkBottom(Axis axis, int length) {
-        Vector3i s = pos0.subtract(pos1);
+        Vector3d s = pos0.subtract(pos1);
         int t = switch (axis) {
-            case X -> s.x();
-            case Y -> s.y();
-            case Z -> s.z();
+            case X -> floor(s.x());
+            case Y -> floor(s.y());
+            case Z -> floor(s.z());
         };
         if(Math.abs(t) < length) throw new IllegalStateException();
         Direction dir = calculateDirection(axis);
         Vector3i dirV = dir.toVector3i();
-        Vector3i q0 = pos0.add(dirV.scalarMultiply(length));
+        Vector3d q0 = pos0.add(dirV.scalarMultiply(length).toVector3d());
         return new CuboidSelectionBound(q0, pos1);
     }
 
@@ -124,17 +141,17 @@ class CuboidSelectionBound {
      * @throws IllegalStateException if it cannot shrink anymore.
      */
     private CuboidSelectionBound shrinkTopBottom(Axis axis, int thickness) {
-        Vector3i s = pos0.subtract(pos1);
+        Vector3d s = pos0.subtract(pos1);
         int t = switch (axis) {
-            case X -> s.x();
-            case Y -> s.y();
-            case Z -> s.z();
+            case X -> floor(s.x());
+            case Y -> floor(s.y());
+            case Z -> floor(s.z());
         };
         if(Math.abs(t) < 2 * thickness) throw new IllegalStateException();
         Direction dir = calculateDirection(axis);
         Vector3i dirV = dir.toVector3i();
-        Vector3i q0 = pos0.add(dirV.scalarMultiply(thickness));
-        Vector3i q1 = pos1.subtract(dirV.scalarMultiply(thickness));
+        Vector3d q0 = pos0.add(dirV.scalarMultiply(thickness).toVector3d());
+        Vector3d q1 = pos1.subtract(dirV.scalarMultiply(thickness).toVector3d());
         return new CuboidSelectionBound(q0, q1);
     }
 
