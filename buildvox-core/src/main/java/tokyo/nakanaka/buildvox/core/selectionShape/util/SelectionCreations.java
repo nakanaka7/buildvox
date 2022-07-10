@@ -432,7 +432,7 @@ public class SelectionCreations {
 
     /** Creates a cylinder in the cuboid bound. */
     private static Selection createCylinder(CuboidSelectionBound cuboidBound, Axis axis) {
-        return createOriented(SelectionCreations::createCylinder, cuboidBound, axis);
+        return createOriented(SelectionCreations::createBasicCylinder, cuboidBound, axis);
     }
 
     /**
@@ -441,7 +441,7 @@ public class SelectionCreations {
      * @param pos1 pos1
      * @return a cylinder selection
      */
-    private static Selection createCylinder(Vector3d pos0, Vector3d pos1) {
+    private static Selection createBasicCylinder(Vector3d pos0, Vector3d pos1) {
         CuboidSelectionBound cuboidBound = new CuboidSelectionBound(pos0, pos1);
         double maxX = cuboidBound.getMaxDoubleX();
         double maxY = cuboidBound.getMaxDoubleY();
@@ -502,7 +502,7 @@ public class SelectionCreations {
 
     /** Creates a cylinder in the cuboid bound. */
     private static Selection createCone(CuboidSelectionBound cuboidBound, Axis axis) {
-        return createOriented(SelectionCreations::createCone, cuboidBound, axis);
+        return createOriented(SelectionCreations::createBasicCone, cuboidBound, axis);
     }
 
     /**
@@ -511,7 +511,7 @@ public class SelectionCreations {
      * @param pos1 pos1
      * @return a cone selection
      */
-    private static Selection createCone(Vector3d pos0, Vector3d pos1) {
+    private static Selection createBasicCone(Vector3d pos0, Vector3d pos1) {
         CuboidSelectionBound cuboidBound = new CuboidSelectionBound(pos0, pos1);
         double maxX = cuboidBound.getMaxDoubleX();
         double maxY = cuboidBound.getMaxDoubleY();
@@ -569,7 +569,7 @@ public class SelectionCreations {
     }
 
     private static Selection createPyramid(CuboidSelectionBound cuboidBound, Axis axis) {
-        return createOriented(SelectionCreations::createPyramid, cuboidBound, axis);
+        return createOriented(SelectionCreations::createBasicPyramid, cuboidBound, axis);
     }
 
     /**
@@ -578,7 +578,7 @@ public class SelectionCreations {
      * @param pos1 pos1
      * @return a pyramid selection
      */
-    private static Selection createPyramid(Vector3d pos0, Vector3d pos1) {
+    private static Selection createBasicPyramid(Vector3d pos0, Vector3d pos1) {
         CuboidSelectionBound cuboidBound = new CuboidSelectionBound(pos0, pos1);
         double maxXd = cuboidBound.getMaxDoubleX();
         double maxYd = cuboidBound.getMaxDoubleY();
@@ -655,10 +655,10 @@ public class SelectionCreations {
     }
 
     private static Selection createTorus(CuboidSelectionBound cuboidBound, Axis axis) {
-        return createOriented(SelectionCreations::createTorusAlongYAxis, cuboidBound, axis);
+        return createOriented(SelectionCreations::createBasicTorus, cuboidBound, axis);
     }
 
-    private static Selection createTorusAlongYAxis(CuboidSelectionBound cuboidBound) {
+    private static Selection createBasicTorus(CuboidSelectionBound cuboidBound) {
         double maxX = cuboidBound.getMaxDoubleX();
         double maxY = cuboidBound.getMaxDoubleY();
         double maxZ = cuboidBound.getMaxDoubleZ();
@@ -680,8 +680,8 @@ public class SelectionCreations {
                 .translate(center);
     }
 
-    private static Selection createTorusAlongYAxis(Vector3d pos0, Vector3d pos1) {
-        return createTorusAlongYAxis(new CuboidSelectionBound(pos0, pos1));
+    private static Selection createBasicTorus(Vector3d pos0, Vector3d pos1) {
+        return createBasicTorus(new CuboidSelectionBound(pos0, pos1));
     }
 
 }
