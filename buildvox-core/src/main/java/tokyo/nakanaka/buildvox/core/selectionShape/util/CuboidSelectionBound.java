@@ -14,11 +14,11 @@ class CuboidSelectionBound {
         this.pos1 = pos1;
     }
 
-    Vector3i pos0() {
+    Vector3i getPos0Vector3i() {
         return pos0;
     }
 
-    Vector3i pos1() {
+    Vector3i getPos1Vector3i() {
         return pos1;
     }
 
