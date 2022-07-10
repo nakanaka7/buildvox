@@ -616,15 +616,9 @@ public class SelectionCreations {
     }
 
     private static Selection createTorus(CuboidSelectionBound cuboidBound) {
-        double maxX = cuboidBound.getMaxX();
-        double maxY = cuboidBound.getMaxY();
-        double maxZ = cuboidBound.getMaxZ();
-        double minX = cuboidBound.getMinX();
-        double minY = cuboidBound.getMinY();
-        double minZ = cuboidBound.getMinZ();
-        double lx = maxX - minX;
-        double ly = maxY - minY;
-        double lz = maxZ - minZ;
+        double lx = cuboidBound.getLengthX();
+        double ly = cuboidBound.getLengthY();
+        double lz = cuboidBound.getLengthZ();
         double minL = MaxMinCalculator.min(lx, ly, lz);
         if(minL == lx) {
             return createTorus(cuboidBound, Axis.X);
@@ -643,17 +637,11 @@ public class SelectionCreations {
     }
 
     private static Selection createBasicTorus(Vector3d pos0, Vector3d pos1) {
-        CuboidSelectionBound cuboidBound = new CuboidSelectionBound(pos0, pos1);
-        double maxX = cuboidBound.getMaxX();
-        double maxY = cuboidBound.getMaxY();
-        double maxZ = cuboidBound.getMaxZ();
-        double minX = cuboidBound.getMinX();
-        double minY = cuboidBound.getMinY();
-        double minZ = cuboidBound.getMinZ();
-        var center = new Vector3d((maxX + minX) / 2, (maxY + minY) / 2, (maxZ + minZ) / 2);
-        double minorRadius = (maxY - minY) / 2;
-        double halfDx = (maxX - minX) / 2;
-        double halfDz = (maxZ - minZ) / 2;
+        CuboidSelectionBound cb = new CuboidSelectionBound(pos0, pos1);
+        var center = cb.getCenter();
+        double minorRadius = cb.getHalfLengthY();
+        double halfDx = cb.getHalfLengthX();
+        double halfDz = cb.getHalfLengthZ();
         double majorRadius = Math.min(halfDx, halfDz) - minorRadius;
         double scaleFacX = Math.max(1.0, halfDx / halfDz);
         double scaleFacZ = Math.max(1.0, halfDz / halfDx);
