@@ -73,6 +73,25 @@ class CuboidSelectionBound {
         return Math.min(pos0.z(), pos1.z());
     }
 
+    Vector3d getCenter() {
+        return pos0.add(pos1).scalarMultiply(0.5);
+    }
+
+    /** Gets the mid x-coordinate. */
+    double getMidX() {
+        return getCenter().x();
+    }
+
+    /** Gets the mid y-coordinate. */
+    double getMidY() {
+        return getCenter().y();
+    }
+
+    /** Gets the mid z-coordinate. */
+    double getMidZ() {
+        return getCenter().z();
+    }
+
     /** Calculates the length along the axis. */
     double calculateLength(Axis axis) {
         Vector3d v = pos0.subtract(pos1);
