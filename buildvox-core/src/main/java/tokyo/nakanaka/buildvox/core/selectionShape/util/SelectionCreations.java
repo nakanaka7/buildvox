@@ -656,13 +656,13 @@ public class SelectionCreations {
         return createOriented(SelectionCreations::createTorusAlongYAxis, cuboidBound, axis);
     }
 
-    private static Selection createTorusAlongYAxis(Vector3i pos0, Vector3i pos1) {
-        double maxX = Math.max(pos0.x(), pos1.x()) + 1;
-        double maxY = Math.max(pos0.y(), pos1.y()) + 1;
-        double maxZ = Math.max(pos0.z(), pos1.z()) + 1;
-        double minX = Math.min(pos0.x(), pos1.x());
-        double minY = Math.min(pos0.y(), pos1.y());
-        double minZ = Math.min(pos0.z(), pos1.z());
+    private static Selection createTorusAlongYAxis(CuboidSelectionBound cuboidBound) {
+        double maxX = cuboidBound.getMaxDoubleX();
+        double maxY = cuboidBound.getMaxDoubleY();
+        double maxZ = cuboidBound.getMaxDoubleZ();
+        double minX = cuboidBound.getMinDoubleX();
+        double minY = cuboidBound.getMinDoubleY();
+        double minZ = cuboidBound.getMinDoubleZ();
         var center = new Vector3d((maxX + minX) / 2, (maxY + minY) / 2, (maxZ + minZ) / 2);
         double minorRadius = (maxY - minY) / 2;
         double halfDx = (maxX - minX) / 2;
@@ -676,6 +676,10 @@ public class SelectionCreations {
                 .rotateX(-Math.PI / 2)
                 .scale(scaleFacX, 1, scaleFacZ)
                 .translate(center);
+    }
+
+    private static Selection createTorusAlongYAxis(Vector3i pos0, Vector3i pos1) {
+        return createTorusAlongYAxis(new CuboidSelectionBound(pos0, pos1));
     }
 
 }
