@@ -45,18 +45,18 @@ public class SelectionCreations {
      * @return a cuboid selection. The cuboid corner will be pos 0 and pos 1.
      */
     public static Selection createCuboid(Vector3i pos0, Vector3i pos1) {
-        int maxX = Math.max(pos0.x(), pos1.x());
-        int maxY = Math.max(pos0.y(), pos1.y());
-        int maxZ = Math.max(pos0.z(), pos1.z());
-        int minX = Math.min(pos0.x(), pos1.x());
-        int minY = Math.min(pos0.y(), pos1.y());
-        int minZ = Math.min(pos0.z(), pos1.z());
-        Cuboid cuboid = new Cuboid(maxX + 1, maxY + 1, maxZ + 1, minX, minY, minZ);
-        return new Selection(cuboid, cuboid);
+        return createCuboid(new CuboidSelectionBound(pos0, pos1));
     }
 
     private static Selection createCuboid(CuboidSelectionBound cuboidBound) {
-        return createCuboid(cuboidBound.pos0(), cuboidBound.pos1());
+        Cuboid cuboid = new Cuboid(
+                cuboidBound.getMaxDoubleX(),
+                cuboidBound.getMaxDoubleY(),
+                cuboidBound.getMaxDoubleZ(),
+                cuboidBound.getMinDoubleX(),
+                cuboidBound.getMinDoubleY(),
+                cuboidBound.getMinDoubleZ());
+        return new Selection(cuboid, cuboid);
     }
 
     /**
