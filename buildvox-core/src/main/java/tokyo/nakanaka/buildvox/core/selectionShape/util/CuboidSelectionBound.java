@@ -28,21 +28,6 @@ class CuboidSelectionBound {
         return pos1;
     }
 
-    Vector3i pos0I() {
-        return toVector3i(pos0);
-    }
-
-    Vector3i pos1I() {
-        return toVector3i(pos1);
-    }
-
-    private Vector3i toVector3i(Vector3d v) {
-        int x = (int)Math.floor(v.x());
-        int y = (int)Math.floor(v.y());
-        int z = (int)Math.floor(v.z());
-        return new Vector3i(x, y, z);
-    }
-
     /** Gets the maximum x-coordinate of this bound. */
     double getMaxDoubleX() {
         return Math.max(pos0.x(), pos1.x()) + 1;
