@@ -78,6 +78,40 @@ class CuboidSelectionBound {
         return getCenter().z();
     }
 
+    private Vector3d vec10() {
+        return pos1.subtract(pos0);
+    }
+
+    /** Gets the length along x-axis. */
+    double getLengthX() {
+        return Math.abs(vec10().x()) + 1;
+    }
+
+    /** Gets the length along y-axis. */
+    double getLengthY() {
+        return Math.abs(vec10().y()) + 1;
+    }
+
+    /** Gets the length along z-axis. */
+    double getLengthZ() {
+        return Math.abs(vec10().z()) + 1;
+    }
+
+    /** Gets the half-length along x-axis. */
+    double getHalfLengthX() {
+        return getLengthX() * 0.5;
+    }
+
+    /** Gets the half-length along y-axis. */
+    double getHalfLengthY() {
+        return getLengthY() * 0.5;
+    }
+
+    /** Gets the half-length along z-axis. */
+    double getHalfLengthZ() {
+        return getLengthZ() * 0.5;
+    }
+
     /** Calculates the length along the axis. */
     double calculateLength(Axis axis) {
         Vector3d v = pos0.subtract(pos1);
