@@ -325,7 +325,20 @@ public class SelectionCreations {
     }
 
     private static Selection createEllipse(CuboidSelectionBound cuboidBound) {
-        return createEllipse(cuboidBound.pos0(), cuboidBound.pos1());
+        double maxX = cuboidBound.getMaxDoubleX();
+        double maxY = cuboidBound.getMaxDoubleY();
+        double maxZ = cuboidBound.getMaxDoubleZ();
+        double minX = cuboidBound.getMinDoubleX();
+        double minY = cuboidBound.getMinDoubleY();
+        double minZ = cuboidBound.getMinDoubleZ();
+        Vector3d center = new Vector3d(maxX + minX, maxY + minY, maxZ + minZ).scalarMultiply(0.5);
+        double radiusX = (maxX - minX) / 2;
+        double radiusY = (maxY - minY) / 2;
+        double radiusZ = (maxZ - minZ) / 2;
+        Sphere sphere = new Sphere(1);
+        Selection selection = new Selection(sphere, 1, 1, 1, -1, -1, -1);
+        selection = selection.affineTransform(AffineTransformation3d.ofScale(radiusX, radiusY, radiusZ));
+        return selection.translate(center.x(), center.y(), center.z());
     }
 
     /**
@@ -335,20 +348,7 @@ public class SelectionCreations {
      * @return an ellipse-shaped selection.
      */
     public static Selection createEllipse(Vector3i pos0, Vector3i pos1) {
-        double maxX = Math.max(pos0.x(), pos1.x()) + 1;
-        double maxY = Math.max(pos0.y(), pos1.y()) + 1;
-        double maxZ = Math.max(pos0.z(), pos1.z()) + 1;
-        double minX = Math.min(pos0.x(), pos1.x());
-        double minY = Math.min(pos0.y(), pos1.y());
-        double minZ = Math.min(pos0.z(), pos1.z());
-        Vector3d center = new Vector3d(maxX + minX, maxY + minY, maxZ + minZ).scalarMultiply(0.5);
-        double radiusX = (maxX - minX) / 2;
-        double radiusY = (maxY - minY) / 2;
-        double radiusZ = (maxZ - minZ) / 2;
-        Sphere sphere = new Sphere(1);
-        Selection selection = new Selection(sphere, 1, 1, 1, -1, -1, -1);
-        selection = selection.affineTransform(AffineTransformation3d.ofScale(radiusX, radiusY, radiusZ));
-        return selection.translate(center.x(), center.y(), center.z());
+        return createEllipse(new CuboidSelectionBound(pos0, pos1));
     }
 
     /**
