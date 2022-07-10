@@ -351,12 +351,10 @@ public class SelectionCreations {
         return createEllipse(new CuboidSelectionBound(pos0, pos1));
     }
 
-    /**
-     * Creates an oriented selection keeping cuboidBound its position.
-     */
-    private static Selection createOriented(CuboidBoundShapeCreator callback, CuboidSelectionBound cuboidBound, Axis axis) {
+    private static Selection createOriented(CuboidBoundShapeCreator callback, Vector3i pos0, Vector3i pos1, Axis axis) {
+        CuboidSelectionBound cuboidBound = new CuboidSelectionBound(pos0, pos1);
         Direction dir = cuboidBound.calculateDirection(axis);
-        if(dir == Direction.UP)return callback.create(cuboidBound.pos0(), cuboidBound.pos1());
+        if(dir == Direction.UP)return callback.create(pos0, pos1);
         double maxXd = cuboidBound.getMaxDoubleX();
         double maxYd = cuboidBound.getMaxDoubleY();
         double maxZd = cuboidBound.getMaxDoubleZ();
@@ -384,6 +382,13 @@ public class SelectionCreations {
         Vector3i posMax = new Vector3i(maxX0I, maxY0I, maxZ0I);
         Vector3i posMin = new Vector3i(minX0I, minY0I, minZ0I);
         return callback.create(posMax, posMin).affineTransform(trans.inverse());
+    }
+
+        /**
+         * Creates an oriented selection keeping cuboidBound its position.
+         */
+    private static Selection createOriented(CuboidBoundShapeCreator callback, CuboidSelectionBound cuboidBound, Axis axis) {
+        return createOriented(callback, cuboidBound.pos0(), cuboidBound.pos1(), axis);
     }
 
     /** A functional interface to create a selection in the cuboid bound. The direction of the selection is lower to
