@@ -356,9 +356,7 @@ public class SelectionCreations {
      */
     private static Selection createOriented(CuboidBoundShapeCreator callback, CuboidSelectionBound cuboidBound, Axis axis) {
         Direction dir = cuboidBound.calculateDirection(axis);
-        Vector3i pos0 = cuboidBound.pos0();
-        Vector3i pos1 = cuboidBound.pos1();
-        if(dir == Direction.UP)return callback.create(pos0, pos1);
+        if(dir == Direction.UP)return callback.create(cuboidBound);
         double maxXd = cuboidBound.getMaxDoubleX();
         double maxYd = cuboidBound.getMaxDoubleY();
         double maxZd = cuboidBound.getMaxDoubleZ();
