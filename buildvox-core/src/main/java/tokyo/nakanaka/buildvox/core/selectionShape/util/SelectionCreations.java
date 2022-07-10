@@ -577,19 +577,13 @@ public class SelectionCreations {
         return createPyramid(new CuboidSelectionBound(pos0, pos1), axis);
     }
 
-    /**
-     * Creates a positive y-oriented pyramid selection which is bounded by the cuboid by pos0 and pos1.
-     * @param pos0 pos0
-     * @param pos1 pos1
-     * @return a pyramid selection
-     */
-    private static Selection createPyramid(Vector3i pos0, Vector3i pos1) {
-        double maxXd = Math.max(pos0.x(), pos1.x()) + 1;
-        double maxYd = Math.max(pos0.y(), pos1.y()) + 1;
-        double maxZd = Math.max(pos0.z(), pos1.z()) + 1;
-        double minXd = Math.min(pos0.x(), pos1.x());
-        double minYd = Math.min(pos0.y(), pos1.y());
-        double minZd = Math.min(pos0.z(), pos1.z());
+    private static Selection createPyramid(CuboidSelectionBound cuboidBound) {
+        double maxXd = cuboidBound.getMaxDoubleX();
+        double maxYd = cuboidBound.getMaxDoubleY();
+        double maxZd = cuboidBound.getMaxDoubleZ();
+        double minXd = cuboidBound.getMinDoubleX();
+        double minYd = cuboidBound.getMinDoubleY();
+        double minZd = cuboidBound.getMinDoubleZ();
         var baseCenter = new Vector3d((maxXd + minXd) / 2, minYd, (maxZd + minZd) / 2);
         double sideX = maxXd - minXd;
         double sideZ = maxZd - minZd;
@@ -599,6 +593,16 @@ public class SelectionCreations {
                 .rotateX(-Math.PI / 2)
                 .scale(sideX, height, sideZ)
                 .translate(baseCenter);
+    }
+
+    /**
+     * Creates a positive y-oriented pyramid selection which is bounded by the cuboid by pos0 and pos1.
+     * @param pos0 pos0
+     * @param pos1 pos1
+     * @return a pyramid selection
+     */
+    private static Selection createPyramid(Vector3i pos0, Vector3i pos1) {
+        return createPyramid(new CuboidSelectionBound(pos0, pos1));
     }
 
     /**
