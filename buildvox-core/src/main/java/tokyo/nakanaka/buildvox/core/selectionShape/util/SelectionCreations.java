@@ -419,11 +419,6 @@ public class SelectionCreations {
         return new Selection(hollowReg, outerSel.getBound());
     }
 
-    /** Creates a cylinder in the cuboid bound. */
-    private static Selection createCylinder(CuboidSelectionBound cuboidBound, Axis axis) {
-        return createOriented(SelectionCreations::createCylinder, cuboidBound, axis);
-    }
-
     /**
      * Creates a cylinder-shaped selection in the cuboid.
      * @param pos0 the corner of the cuboid.
@@ -433,6 +428,11 @@ public class SelectionCreations {
      */
     public static Selection createCylinder(Vector3i pos0, Vector3i pos1, Axis axis) {
         return createCylinder(new CuboidSelectionBound(pos0, pos1), axis);
+    }
+
+    /** Creates a cylinder in the cuboid bound. */
+    private static Selection createCylinder(CuboidSelectionBound cuboidBound, Axis axis) {
+        return createOriented(SelectionCreations::createCylinder, cuboidBound, axis);
     }
 
     /**
@@ -488,11 +488,6 @@ public class SelectionCreations {
         return new Selection(hollowReg, outerSel.getBound());
     }
 
-    /** Creates a cylinder in the cuboid bound. */
-    private static Selection createCone(CuboidSelectionBound cuboidBound, Axis axis) {
-        return createOriented(SelectionCreations::createCone, cuboidBound, axis);
-    }
-
     /**
      * Creates a cone-shaped selection in the cuboid. The direction from base to apex is
      * from smaller to larger coordinate.
@@ -503,6 +498,11 @@ public class SelectionCreations {
      */
     public static Selection createCone(Vector3i pos0, Vector3i pos1, Axis axis) {
         return createCone(new CuboidSelectionBound(pos0, pos1), axis);
+    }
+
+    /** Creates a cylinder in the cuboid bound. */
+    private static Selection createCone(CuboidSelectionBound cuboidBound, Axis axis) {
+        return createOriented(SelectionCreations::createCone, cuboidBound, axis);
     }
 
     /**
@@ -556,10 +556,6 @@ public class SelectionCreations {
         return new Selection(hollowReg, outerSel.getBound());
     }
 
-    private static Selection createPyramid(CuboidSelectionBound cuboidBound, Axis axis) {
-        return createOriented(SelectionCreations::createPyramid, cuboidBound, axis);
-    }
-
     /**
      * Creates a pyramid-shaped selection in the cuboid. The direction from base to apex is
      * from smaller to larger coordinate.
@@ -570,6 +566,10 @@ public class SelectionCreations {
      */
     public static Selection createPyramid(Vector3i pos0, Vector3i pos1, Axis axis) {
         return createPyramid(new CuboidSelectionBound(pos0, pos1), axis);
+    }
+
+    private static Selection createPyramid(CuboidSelectionBound cuboidBound, Axis axis) {
+        return createOriented(SelectionCreations::createPyramid, cuboidBound, axis);
     }
 
     /**
@@ -621,6 +621,16 @@ public class SelectionCreations {
         return new Selection(hollowReg, outerSel.getBound());
     }
 
+    /**
+     * Creates a torus-shaped selection in the cuboid.
+     * @param pos0 the corner of the cuboid.
+     * @param pos1 the corner of the cuboid.
+     * @return a torus-shaped selection.
+     */
+    public static Selection createTorus(Vector3i pos0, Vector3i pos1) {
+        return createTorus(new CuboidSelectionBound(pos0, pos1));
+    }
+
     private static Selection createTorus(CuboidSelectionBound cuboidBound) {
         double maxX = cuboidBound.getMaxDoubleX();
         double maxY = cuboidBound.getMaxDoubleY();
@@ -642,16 +652,6 @@ public class SelectionCreations {
             LOGGER.error("Unexpected");
             return new Selection(new Empty(), 0, 0, 0, 0, 0, 0);
         }
-    }
-
-    /**
-     * Creates a torus-shaped selection in the cuboid.
-     * @param pos0 the corner of the cuboid.
-     * @param pos1 the corner of the cuboid.
-     * @return a torus-shaped selection.
-     */
-    public static Selection createTorus(Vector3i pos0, Vector3i pos1) {
-        return createTorus(new CuboidSelectionBound(pos0, pos1));
     }
 
     private static Selection createTorus(CuboidSelectionBound cuboidBound, Axis axis) {
