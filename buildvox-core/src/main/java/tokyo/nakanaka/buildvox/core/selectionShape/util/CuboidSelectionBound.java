@@ -75,10 +75,6 @@ class CuboidSelectionBound {
         };
     }
 
-    private int floor(double d) {
-        return (int)Math.floor(d);
-    }
-
     /** Calculates the max of the side length. */
     double calculateMaxSideLength(Axis axis) {
         Vector3d v = pos0.subtract(pos1);
@@ -111,10 +107,10 @@ class CuboidSelectionBound {
      */
     CuboidSelectionBound shrinkBottom(Axis axis, int length) {
         Vector3d s = pos0.subtract(pos1);
-        int t = switch (axis) {
-            case X -> floor(s.x());
-            case Y -> floor(s.y());
-            case Z -> floor(s.z());
+        double t = switch (axis) {
+            case X -> s.x();
+            case Y -> s.y();
+            case Z -> s.z();
         };
         if(Math.abs(t) < length) throw new IllegalStateException();
         Direction dir = calculateDirection(axis);
@@ -142,10 +138,10 @@ class CuboidSelectionBound {
      */
     private CuboidSelectionBound shrinkTopBottom(Axis axis, int thickness) {
         Vector3d s = pos0.subtract(pos1);
-        int t = switch (axis) {
-            case X -> floor(s.x());
-            case Y -> floor(s.y());
-            case Z -> floor(s.z());
+        double t = switch (axis) {
+            case X -> s.x();
+            case Y -> s.y();
+            case Z -> s.z();
         };
         if(Math.abs(t) < 2 * thickness) throw new IllegalStateException();
         Direction dir = calculateDirection(axis);
