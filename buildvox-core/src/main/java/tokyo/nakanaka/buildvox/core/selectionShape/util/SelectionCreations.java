@@ -569,17 +569,11 @@ public class SelectionCreations {
      * @return a pyramid selection
      */
     private static Selection createBasicPyramid(Vector3d pos0, Vector3d pos1) {
-        CuboidSelectionBound cuboidBound = new CuboidSelectionBound(pos0, pos1);
-        double maxXd = cuboidBound.getMaxX();
-        double maxYd = cuboidBound.getMaxY();
-        double maxZd = cuboidBound.getMaxZ();
-        double minXd = cuboidBound.getMinX();
-        double minYd = cuboidBound.getMinY();
-        double minZd = cuboidBound.getMinZ();
-        var baseCenter = new Vector3d((maxXd + minXd) / 2, minYd, (maxZd + minZd) / 2);
-        double sideX = maxXd - minXd;
-        double sideZ = maxZd - minZd;
-        double height = maxYd - minYd;
+        CuboidSelectionBound cb = new CuboidSelectionBound(pos0, pos1);
+        var baseCenter = new Vector3d(cb.getMidX(), cb.getMinY(), cb.getMidZ());
+        double sideX = cb.getLengthX();
+        double sideZ = cb.getLengthZ();
+        double height = cb.getLengthY();
         var pyramid = new Pyramid(1, 1);
         return new Selection(pyramid, 0.5, 0.5, 1, -0.5, -0.5, 0)
                 .rotateX(-Math.PI / 2)
