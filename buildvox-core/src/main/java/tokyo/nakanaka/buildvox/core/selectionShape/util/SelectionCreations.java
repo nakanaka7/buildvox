@@ -507,10 +507,15 @@ public class SelectionCreations {
     public static Selection createCone(Vector3i pos0, Vector3i pos1, Axis axis) {
         return createCone(new CuboidSelectionBound(pos0, pos1), axis);
     }
+
     /**
      * Creates a positive y-oriented cone selection which is bounded by the cuboid by pos0 and pos1.
+     * @param pos0 pos0
+     * @param pos1 pos1
+     * @return a cone selection
      */
-     private static Selection createCone(CuboidSelectionBound cuboidBound) {
+    private static Selection createCone(Vector3i pos0, Vector3i pos1) {
+        CuboidSelectionBound cuboidBound = new CuboidSelectionBound(pos0, pos1);
         double maxX = cuboidBound.getMaxDoubleX();
         double maxY = cuboidBound.getMaxDoubleY();
         double maxZ = cuboidBound.getMaxDoubleZ();
@@ -526,16 +531,6 @@ public class SelectionCreations {
                 .rotateX(-Math.PI / 2)
                 .scale(radiusX, height, radiusZ)
                 .translate(baseCenter);
-    }
-
-    /**
-     * Creates a positive y-oriented cone selection which is bounded by the cuboid by pos0 and pos1.
-     * @param pos0 pos0
-     * @param pos1 pos1
-     * @return a cone selection
-     */
-    private static Selection createCone(Vector3i pos0, Vector3i pos1) {
-        return createCone(new CuboidSelectionBound(pos0, pos1));
     }
 
     /**
