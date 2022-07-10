@@ -355,8 +355,8 @@ public class SelectionCreations {
      * Creates an oriented selection keeping cuboidBound its position.
      */
     private static Selection createOriented(CuboidBoundShapeCreator callback, CuboidSelectionBound cuboidBound, Axis axis) {
-        Vector3d pos0 = cuboidBound.pos0D();
-        Vector3d pos1 = cuboidBound.pos1D();
+        Vector3d pos0 = cuboidBound.pos0();
+        Vector3d pos1 = cuboidBound.pos1();
         CuboidSelectionBound cuboidBound1 = new CuboidSelectionBound(pos0, pos1);
         Direction dir = cuboidBound1.calculateDirection(axis);
         if(dir == Direction.UP)return callback.create(pos0, pos1);
