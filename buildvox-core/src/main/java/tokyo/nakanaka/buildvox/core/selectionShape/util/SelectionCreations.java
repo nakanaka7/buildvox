@@ -658,7 +658,8 @@ public class SelectionCreations {
         return createOriented(SelectionCreations::createBasicTorus, cuboidBound, axis);
     }
 
-    private static Selection createBasicTorus(CuboidSelectionBound cuboidBound) {
+    private static Selection createBasicTorus(Vector3d pos0, Vector3d pos1) {
+        CuboidSelectionBound cuboidBound = new CuboidSelectionBound(pos0, pos1);
         double maxX = cuboidBound.getMaxDoubleX();
         double maxY = cuboidBound.getMaxDoubleY();
         double maxZ = cuboidBound.getMaxDoubleZ();
@@ -678,10 +679,6 @@ public class SelectionCreations {
                 .rotateX(-Math.PI / 2)
                 .scale(scaleFacX, 1, scaleFacZ)
                 .translate(center);
-    }
-
-    private static Selection createBasicTorus(Vector3d pos0, Vector3d pos1) {
-        return createBasicTorus(new CuboidSelectionBound(pos0, pos1));
     }
 
 }
