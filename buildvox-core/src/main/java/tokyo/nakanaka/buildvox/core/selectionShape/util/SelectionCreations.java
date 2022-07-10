@@ -396,13 +396,6 @@ public class SelectionCreations {
         Selection create(Vector3d pos0, Vector3d pos1);
     }
 
-    private static Vector3i closestVec3i(Vector3d pos) {
-        int x = (int)Math.round(pos.x());
-        int y = (int)Math.round(pos.y());
-        int z = (int)Math.round(pos.z());
-        return new Vector3i(x, y, z);
-    }
-
     /**
      * Creates a hollow cylinder-shape selection in the cuboid.
      * @param pos0 the corner of the cuboid.
@@ -521,10 +514,6 @@ public class SelectionCreations {
      * @param pos1 pos1
      * @return a cone selection
      */
-    private static Selection createCone(Vector3i pos0, Vector3i pos1) {
-        return createCone(pos0.toVector3d(), pos1.toVector3d());
-    }
-
     private static Selection createCone(Vector3d pos0, Vector3d pos1) {
         CuboidSelectionBound cuboidBound = new CuboidSelectionBound(pos0, pos1);
         double maxX = cuboidBound.getMaxDoubleX();
