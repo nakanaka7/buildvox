@@ -393,10 +393,7 @@ public class SelectionCreations {
      * upper y-axis. */
     private interface CuboidBoundShapeCreator {
         /** Creates a selection which bound is the cuboid by pos0 and pos1 */
-        Selection create(Vector3i pos0, Vector3i pos1);
-        default Selection create(Vector3d pos0, Vector3d pos1) {
-            return create(closestVec3i(pos0), closestVec3i(pos1));
-        }
+        Selection create(Vector3d pos0, Vector3d pos1);
     }
 
     private static Vector3i closestVec3i(Vector3d pos) {
@@ -451,7 +448,7 @@ public class SelectionCreations {
      * @param pos1 pos1
      * @return a cylinder selection
      */
-    private static Selection createCylinder(Vector3i pos0, Vector3i pos1) {
+    private static Selection createCylinder(Vector3d pos0, Vector3d pos1) {
         return createCylinder(new CuboidSelectionBound(pos0, pos1));
     }
 
@@ -613,7 +610,7 @@ public class SelectionCreations {
      * @param pos1 pos1
      * @return a pyramid selection
      */
-    private static Selection createPyramid(Vector3i pos0, Vector3i pos1) {
+    private static Selection createPyramid(Vector3d pos0, Vector3d pos1) {
         return createPyramid(new CuboidSelectionBound(pos0, pos1));
     }
 
@@ -700,7 +697,7 @@ public class SelectionCreations {
                 .translate(center);
     }
 
-    private static Selection createTorusAlongYAxis(Vector3i pos0, Vector3i pos1) {
+    private static Selection createTorusAlongYAxis(Vector3d pos0, Vector3d pos1) {
         return createTorusAlongYAxis(new CuboidSelectionBound(pos0, pos1));
     }
 
