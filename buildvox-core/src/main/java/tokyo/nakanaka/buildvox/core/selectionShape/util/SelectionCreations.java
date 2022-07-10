@@ -506,17 +506,11 @@ public class SelectionCreations {
      * @return a cone selection
      */
     private static Selection createBasicCone(Vector3d pos0, Vector3d pos1) {
-        CuboidSelectionBound cuboidBound = new CuboidSelectionBound(pos0, pos1);
-        double maxX = cuboidBound.getMaxX();
-        double maxY = cuboidBound.getMaxY();
-        double maxZ = cuboidBound.getMaxZ();
-        double minX = cuboidBound.getMinX();
-        double minY = cuboidBound.getMinY();
-        double minZ = cuboidBound.getMinZ();
-        var baseCenter = new Vector3d((maxX + minX) / 2, minY, (maxZ + minZ) / 2);
-        double radiusX = (maxX - minX) / 2;
-        double radiusZ = (maxZ - minZ) / 2;
-        double height = maxY - minY;
+        CuboidSelectionBound cb = new CuboidSelectionBound(pos0, pos1);
+        var baseCenter = new Vector3d(cb.getMidX(), cb.getMinY(), cb.getMidZ());
+        double radiusX = cb.getHalfLengthX();
+        double radiusZ = cb.getHalfLengthZ();
+        double height = cb.getLengthY();
         var cone = new Cone(1, 1);
         return new Selection(cone, 1, 1, 1, -1, -1, 0)
                 .rotateX(-Math.PI / 2)
