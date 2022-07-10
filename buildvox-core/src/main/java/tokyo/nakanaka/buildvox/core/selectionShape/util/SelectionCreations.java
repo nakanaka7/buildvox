@@ -517,6 +517,10 @@ public class SelectionCreations {
      * @return a cone selection
      */
     private static Selection createCone(Vector3i pos0, Vector3i pos1) {
+        return createCone(pos0.toVector3d(), pos1.toVector3d());
+    }
+
+    private static Selection createCone(Vector3d pos0, Vector3d pos1) {
         CuboidSelectionBound cuboidBound = new CuboidSelectionBound(pos0, pos1);
         double maxX = cuboidBound.getMaxDoubleX();
         double maxY = cuboidBound.getMaxDoubleY();
