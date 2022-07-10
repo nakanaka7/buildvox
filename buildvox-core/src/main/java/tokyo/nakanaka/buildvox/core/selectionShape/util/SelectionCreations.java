@@ -544,9 +544,11 @@ public class SelectionCreations {
         CuboidSelectionBound innerBound;
         double a = outerBound.calculateLength(axis);
         double b = outerBound.calculateMaxSideLength(axis);
-        int c = - (int)Math.floor(- (2 * a) / b);
+        double arg = Math.atan(b / (2 * a));
+        double p = thickness / Math.cos(arg);
+        double q = thickness / Math.sin(arg);
         try {
-            innerBound = outerBound.shrinkSides(axis, thickness).shrinkTop(axis, c);
+            innerBound = outerBound.shrinkSides(axis, p).shrinkTop(axis, q);
         }catch (IllegalStateException ex) {
             return outerSel;
         }
