@@ -29,32 +29,32 @@ class CuboidSelectionBound {
     }
 
     /** Gets the maximum x-coordinate of this bound. */
-    double getMaxDoubleX() {
+    double getMaxX() {
         return Math.max(pos0.x(), pos1.x()) + 1;
     }
 
     /** Gets the maximum y-coordinate of this bound. */
-    double getMaxDoubleY() {
+    double getMaxY() {
         return Math.max(pos0.y(), pos1.y()) + 1;
     }
 
     /** Gets the maximum z-coordinate of this bound. */
-    double getMaxDoubleZ() {
+    double getMaxZ() {
         return Math.max(pos0.z(), pos1.z()) + 1;
     }
 
     /** Gets the minimum x-coordinate of this bound. */
-    double getMinDoubleX() {
+    double getMinX() {
         return Math.min(pos0.x(), pos1.x());
     }
 
     /** Gets the minimum y-coordinate of this bound. */
-    double getMinDoubleY() {
+    double getMinY() {
         return Math.min(pos0.y(), pos1.y());
     }
 
     /** Gets the minimum z-coordinate of this bound. */
-    double getMinDoubleZ() {
+    double getMinZ() {
         return Math.min(pos0.z(), pos1.z());
     }
 
