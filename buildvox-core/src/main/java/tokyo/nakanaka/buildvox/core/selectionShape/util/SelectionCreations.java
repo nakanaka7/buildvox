@@ -356,7 +356,7 @@ public class SelectionCreations {
      */
     private static Selection createOriented(CuboidBoundShapeCreator callback, CuboidSelectionBound cuboidBound, Axis axis) {
         Direction dir = cuboidBound.calculateDirection(axis);
-        if(dir == Direction.UP)return callback.create(cuboidBound);
+        if(dir == Direction.UP)return callback.create(cuboidBound.pos0(), cuboidBound.pos1());
         double maxXd = cuboidBound.getMaxDoubleX();
         double maxYd = cuboidBound.getMaxDoubleY();
         double maxZd = cuboidBound.getMaxDoubleZ();
@@ -381,8 +381,9 @@ public class SelectionCreations {
         int minX0I = (int)Math.round(Math.min(posTransMaxD.x(), posTransMinD.x()));
         int minY0I = (int)Math.round(Math.min(posTransMaxD.y(), posTransMinD.y()));
         int minZ0I = (int)Math.round(Math.min(posTransMaxD.z(), posTransMinD.z()));
-        CuboidSelectionBound cuboidBound0 = new CuboidSelectionBound(new Vector3i(maxX0I, maxY0I, maxZ0I), new Vector3i(minX0I, minY0I, minZ0I));
-        return callback.create(cuboidBound0).affineTransform(trans.inverse());
+        Vector3i posMax = new Vector3i(maxX0I, maxY0I, maxZ0I);
+        Vector3i posMin = new Vector3i(minX0I, minY0I, minZ0I);
+        return callback.create(posMax, posMin).affineTransform(trans.inverse());
     }
 
     /** A functional interface to create a selection in the cuboid bound. The direction of the selection is lower to
@@ -390,9 +391,6 @@ public class SelectionCreations {
     private interface CuboidBoundShapeCreator {
         /** Creates a selection which bound is the cuboid by pos0 and pos1 */
         Selection create(Vector3i pos0, Vector3i pos1);
-        default Selection create(CuboidSelectionBound cuboidBound) {
-            return create(cuboidBound.pos0(), cuboidBound.pos1());
-        }
     }
 
     /**
