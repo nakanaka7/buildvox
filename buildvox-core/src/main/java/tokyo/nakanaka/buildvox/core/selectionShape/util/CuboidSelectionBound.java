@@ -20,6 +20,14 @@ class CuboidSelectionBound {
         this.pos1 = pos1.toVector3d();
     }
 
+    public Vector3d pos0D() {
+        return pos0;
+    }
+
+    public Vector3d pos1D() {
+        return pos1;
+    }
+
     Vector3i getPos0Vector3i() {
         return toVector3i(pos0);
     }
