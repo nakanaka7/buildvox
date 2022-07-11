@@ -10,12 +10,10 @@ import tokyo.nakanaka.buildvox.core.clientWorld.BlockTransformingClientWorld;
 import tokyo.nakanaka.buildvox.core.clientWorld.ClientWorld;
 import tokyo.nakanaka.buildvox.core.math.region3d.Cuboid;
 import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
-import tokyo.nakanaka.buildvox.core.math.transformation.Matrix3x3i;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
 
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -74,7 +72,7 @@ public class WorldEdits {
      */
     public static void paste(Clipboard srcClip, ClientWorld dest, Vector3d pos, AffineTransformation3d clipboardTrans) {
         Set<Vector3i> srcPosSet = srcClip.blockPosSet();
-        BlockTransformation blockTrans = BlockTransformApproximator.approximateToBlockTrans(clipboardTrans);
+        BlockTransformation blockTrans = BlockTransformation.approximateOf(clipboardTrans);
         VoxelSpace<VoxelBlock> transDest = new BlockTransformingClientWorld(blockTrans, dest);
         AffineTransformation3d trans = AffineTransformation3d.ofTranslation(pos.x(), pos.y(), pos.z()).compose(clipboardTrans);
         VoxelSpaceEdits.copy(srcClip, srcPosSet, transDest, trans);
@@ -146,35 +144,6 @@ public class WorldEdits {
                 }
             }
         }
-    }
-
-    private static class BlockTransformApproximator {
-
-        static BlockTransformation approximateToBlockTrans(AffineTransformation3d trans) {
-            trans = trans.linear();
-            Vector3d transI = trans.apply(Vector3d.PLUS_I);
-            Vector3d transJ = trans.apply(Vector3d.PLUS_J);
-            Vector3d transK = trans.apply(Vector3d.PLUS_K);
-            Set<Vector3d> candidateSet0 = Set.of(Vector3d.PLUS_I, Vector3d.MINUS_I,
-                    Vector3d.PLUS_J, Vector3d.MINUS_J,
-                    Vector3d.PLUS_K, Vector3d.MINUS_K);
-            Set<Vector3d> candidateSet = new HashSet<>(candidateSet0);
-            Vector3d nk = transK.getNearestVector(candidateSet.toArray(new Vector3d[0]));
-            candidateSet.remove(nk);
-            candidateSet.remove(nk.scalarMultiply(-1));
-            Vector3d ni = transI.getNearestVector(candidateSet.toArray(new Vector3d[0]));
-            candidateSet.remove(ni);
-            candidateSet.remove(ni.scalarMultiply(-1));
-            Vector3d nj = transJ.getNearestVector(candidateSet.toArray(new Vector3d[0]));
-            candidateSet.remove(nj);
-            candidateSet.remove(nj.scalarMultiply(-1));
-            int[] e = new int[]{(int) Math.round(ni.x()), (int) Math.round(nj.x()), (int) Math.round(nk.x()),
-                    (int) Math.round(ni.y()), (int) Math.round(nj.y()), (int) Math.round(nk.y()),
-                    (int) Math.round(ni.z()), (int) Math.round(nj.z()), (int) Math.round(nk.z())};
-            Matrix3x3i matrix = new Matrix3x3i(e[0], e[1], e[2], e[3], e[4], e[5], e[6], e[7], e[8]);
-            return new BlockTransformation(matrix);
-        }
-
     }
 
 }
