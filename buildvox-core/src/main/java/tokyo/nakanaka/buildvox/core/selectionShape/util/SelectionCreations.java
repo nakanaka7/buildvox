@@ -349,17 +349,14 @@ public class SelectionCreations {
      * Creates an oriented selection keeping cuboidBound its position.
      */
     private static Selection createOriented(CuboidBoundShapeCreator callback, CuboidBound cuboidBound, Axis axis) {
-        Vector3d pos0 = cuboidBound.pos0();
-        Vector3d pos1 = cuboidBound.pos1();
-        CuboidBound cuboidBound1 = new CuboidBound(pos0, pos1);
-        Direction dir = cuboidBound1.calculateDirection(axis);
-        if(dir == Direction.UP)return callback.create(pos0, pos1);
-        double maxXd = cuboidBound1.getMaxX();
-        double maxYd = cuboidBound1.getMaxY();
-        double maxZd = cuboidBound1.getMaxZ();
-        double minXd = cuboidBound1.getMinX();
-        double minYd = cuboidBound1.getMinY();
-        double minZd = cuboidBound1.getMinZ();
+        Direction dir = cuboidBound.calculateDirection(axis);
+        if(dir == Direction.UP)return callback.create(cuboidBound.pos0(), cuboidBound.pos1());
+        double maxXd = cuboidBound.getMaxX();
+        double maxYd = cuboidBound.getMaxY();
+        double maxZd = cuboidBound.getMaxZ();
+        double minXd = cuboidBound.getMinX();
+        double minYd = cuboidBound.getMinY();
+        double minZd = cuboidBound.getMinZ();
         AffineTransformation3d trans = switch (dir) {
             case EAST -> AffineTransformation3d.ofRotationZ(Math.PI / 2);
             case WEST -> AffineTransformation3d.ofRotationZ(-Math.PI / 2);
