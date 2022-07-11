@@ -1,5 +1,6 @@
 package tokyo.nakanaka.buildvox.core.selection;
 
+import tokyo.nakanaka.buildvox.core.block.BlockTransformation;
 import tokyo.nakanaka.buildvox.core.clientWorld.ClientWorld;
 import tokyo.nakanaka.buildvox.core.edit.WorldEdits;
 import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
@@ -12,10 +13,12 @@ import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
  */
 public class FillSelection extends BlockSelection {
     private final VoxelBlock block;
+    private final AffineTransformation3d totalTrans;
 
-    private FillSelection(Region3d region3d, Parallelepiped bound, VoxelBlock block) {
+    private FillSelection(Region3d region3d, Parallelepiped bound, VoxelBlock block, AffineTransformation3d totalTrans) {
         super(region3d, bound);
         this.block = block;
+        this.totalTrans = totalTrans;
     }
 
     /**
@@ -24,6 +27,7 @@ public class FillSelection extends BlockSelection {
     public static class Builder {
         private final VoxelBlock block;
         private final Selection sel;
+        private final AffineTransformation3d totalTrans;
         private double integrity = 1;
         private boolean masked;
 
@@ -35,6 +39,13 @@ public class FillSelection extends BlockSelection {
         public Builder(VoxelBlock block, Selection sel) {
             this.block = block;
             this.sel = sel;
+            this.totalTrans = AffineTransformation3d.IDENTITY;
+        }
+
+        private Builder(VoxelBlock block, Selection sel, AffineTransformation3d totalTrans) {
+            this.block = block;
+            this.sel = sel;
+            this.totalTrans = totalTrans;
         }
 
         /**
@@ -58,7 +69,7 @@ public class FillSelection extends BlockSelection {
          * @return a new instance.
          */
         public FillSelection build() {
-            var i = new FillSelection(sel.getRegion3d(), sel.getBound(), block);
+            var i = new FillSelection(sel.getRegion3d(), sel.getBound(), block, totalTrans);
             i.integrity = this.integrity;
             i.masked = this.masked;
             return i;
@@ -67,7 +78,9 @@ public class FillSelection extends BlockSelection {
     }
 
     void setRawForwardBlocks(ClientWorld clientWorld) {
-        WorldEdits.fill(clientWorld, this, block);
+        BlockTransformation bt = BlockTransformation.approximateOf(totalTrans);
+        VoxelBlock transBlock = block.transform(bt);
+        WorldEdits.fill(clientWorld, this, transBlock);
     }
 
     @Override
@@ -76,7 +89,7 @@ public class FillSelection extends BlockSelection {
         Parallelepiped bound = super.getBound();
         Selection selection = new Selection(region3d, bound);
         Selection transSelection = selection.affineTransform(trans);
-        return new Builder(block, transSelection)
+        return new Builder(block, transSelection, totalTrans.compose(trans))
                 .integrity(this.integrity)
                 .masked(this.masked)
                 .build();
