@@ -4,18 +4,21 @@ import tokyo.nakanaka.buildvox.core.Axis;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 
-/** Represents a cuboid bound of a selection. Assumed pos-array length is 2. */
+/**
+ * Internal.
+ * Represents a cuboid bound of a selection. Assumed pos-array length is 2.
+ */
 
-class CuboidSelectionBound {
+class CuboidBound {
     private final Vector3d pos0;
     private final Vector3d pos1;
 
-    public CuboidSelectionBound(Vector3d pos0, Vector3d pos1) {
+    public CuboidBound(Vector3d pos0, Vector3d pos1) {
         this.pos0 = pos0;
         this.pos1 = pos1;
     }
 
-    public CuboidSelectionBound(Vector3i pos0, Vector3i pos1) {
+    public CuboidBound(Vector3i pos0, Vector3i pos1) {
         this.pos0 = pos0.toVector3d();
         this.pos1 = pos1.toVector3d();
     }
@@ -135,7 +138,7 @@ class CuboidSelectionBound {
     /** Shrink the top of the bound. (The direction of the axis is from "bottom" to "top")
      * @throws IllegalStateException if it cannot shrink anymore.
      */
-    CuboidSelectionBound shrinkTop(Axis axis, double length) {
+    CuboidBound shrinkTop(Axis axis, double length) {
         Vector3d s = pos0.subtract(pos1);
         double t = switch (axis) {
             case X -> s.x();
@@ -146,13 +149,13 @@ class CuboidSelectionBound {
         Direction dir = calculateDirection(axis);
         Vector3i dirV = dir.toVector3i();
         Vector3d q1 = pos1.subtract(dirV.toVector3d().scalarMultiply(length));
-        return new CuboidSelectionBound(pos0, q1);
+        return new CuboidBound(pos0, q1);
     }
 
     /** Shrink the bottom of the bound. (The direction of the axis is from "bottom" to "top")
      * @throws IllegalStateException if it cannot shrink anymore.
      */
-    CuboidSelectionBound shrinkBottom(Axis axis, double length) {
+    CuboidBound shrinkBottom(Axis axis, double length) {
         Vector3d s = pos0.subtract(pos1);
         double t = switch (axis) {
             case X -> s.x();
@@ -163,7 +166,7 @@ class CuboidSelectionBound {
         Direction dir = calculateDirection(axis);
         Vector3i dirV = dir.toVector3i();
         Vector3d q0 = pos0.add(dirV.toVector3d().scalarMultiply(length));
-        return new CuboidSelectionBound(q0, pos1);
+        return new CuboidBound(q0, pos1);
     }
 
     /**
@@ -171,7 +174,7 @@ class CuboidSelectionBound {
      * @param length the displacement of the wall.
      * @throws IllegalStateException if it cannot shrink anymore.
      */
-    CuboidSelectionBound shrinkSides(Axis axis, double length) {
+    CuboidBound shrinkSides(Axis axis, double length) {
         return switch (axis) {
             case X -> shrinkTopBottom(Axis.Y, length).shrinkTopBottom(Axis.Z, length);
             case Y -> shrinkTopBottom(Axis.Z, length).shrinkTopBottom(Axis.X, length);
@@ -183,7 +186,7 @@ class CuboidSelectionBound {
      * Shrinks both top and bottom.
      * @throws IllegalStateException if it cannot shrink anymore.
      */
-    private CuboidSelectionBound shrinkTopBottom(Axis axis, double thickness) {
+    private CuboidBound shrinkTopBottom(Axis axis, double thickness) {
         Vector3d s = pos0.subtract(pos1);
         double t = switch (axis) {
             case X -> s.x();
@@ -195,7 +198,7 @@ class CuboidSelectionBound {
         Vector3i dirV = dir.toVector3i();
         Vector3d q0 = pos0.add(dirV.toVector3d().scalarMultiply(thickness));
         Vector3d q1 = pos1.subtract(dirV.toVector3d().scalarMultiply(thickness));
-        return new CuboidSelectionBound(q0, q1);
+        return new CuboidBound(q0, q1);
     }
 
     /**
