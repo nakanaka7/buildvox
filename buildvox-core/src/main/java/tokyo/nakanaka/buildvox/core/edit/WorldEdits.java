@@ -158,13 +158,13 @@ public class WorldEdits {
                     Vector3d.PLUS_J, Vector3d.MINUS_J,
                     Vector3d.PLUS_K, Vector3d.MINUS_K);
             Set<Vector3d> candidateSet = new HashSet<>(candidateSet0);
-            Vector3d nk = getNearestVector(transK, candidateSet.toArray(new Vector3d[0]));
+            Vector3d nk = transK.getNearestVector(candidateSet.toArray(new Vector3d[0]));
             candidateSet.remove(nk);
             candidateSet.remove(nk.scalarMultiply(-1));
-            Vector3d ni = getNearestVector(transI, candidateSet.toArray(new Vector3d[0]));
+            Vector3d ni = transI.getNearestVector(candidateSet.toArray(new Vector3d[0]));
             candidateSet.remove(ni);
             candidateSet.remove(ni.scalarMultiply(-1));
-            Vector3d nj = getNearestVector(transJ, candidateSet.toArray(new Vector3d[0]));
+            Vector3d nj = transJ.getNearestVector(candidateSet.toArray(new Vector3d[0]));
             candidateSet.remove(nj);
             candidateSet.remove(nj.scalarMultiply(-1));
             return new int[]{(int)Math.round(ni.x()), (int)Math.round(nj.x()), (int)Math.round(nk.x()),
@@ -176,20 +176,6 @@ public class WorldEdits {
             int[] e = approximate(trans);
             Matrix3x3i matrix = new Matrix3x3i(e[0], e[1], e[2], e[3], e[4], e[5], e[6], e[7], e[8]);
             return new BlockTransformation(matrix);
-        }
-
-        private static Vector3d getNearestVector(Vector3d v, Vector3d... candidates){
-            if(candidates.length == 0)throw new IllegalArgumentException();
-            Vector3d nearest = candidates[0];
-            double dis = v.distance(candidates[0]);
-            for(Vector3d c : candidates){
-                double disVc = v.distance(c);
-                if(disVc < dis){
-                    nearest = c;
-                    dis = disVc;
-                }
-            }
-            return nearest;
         }
 
     }
