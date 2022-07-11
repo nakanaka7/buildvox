@@ -325,16 +325,10 @@ public class SelectionCreations {
     }
 
     private static Selection createEllipse(CuboidSelectionBound cuboidBound) {
-        double maxX = cuboidBound.getMaxX();
-        double maxY = cuboidBound.getMaxY();
-        double maxZ = cuboidBound.getMaxZ();
-        double minX = cuboidBound.getMinX();
-        double minY = cuboidBound.getMinY();
-        double minZ = cuboidBound.getMinZ();
-        Vector3d center = new Vector3d(maxX + minX, maxY + minY, maxZ + minZ).scalarMultiply(0.5);
-        double radiusX = (maxX - minX) / 2;
-        double radiusY = (maxY - minY) / 2;
-        double radiusZ = (maxZ - minZ) / 2;
+        Vector3d center = cuboidBound.getCenter();
+        double radiusX = cuboidBound.getHalfLengthX();
+        double radiusY = cuboidBound.getHalfLengthY();
+        double radiusZ = cuboidBound.getHalfLengthZ();
         Sphere sphere = new Sphere(1);
         Selection selection = new Selection(sphere, 1, 1, 1, -1, -1, -1);
         selection = selection.affineTransform(AffineTransformation3d.ofScale(radiusX, radiusY, radiusZ));
