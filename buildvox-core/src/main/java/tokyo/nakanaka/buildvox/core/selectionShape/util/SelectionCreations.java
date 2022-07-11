@@ -350,7 +350,7 @@ public class SelectionCreations {
      */
     private static Selection createOriented(CuboidBoundShapeCreator callback, CuboidBound cuboidBound, Axis axis) {
         Direction dir = cuboidBound.calculateDirection(axis);
-        if(dir == Direction.UP)return callback.create(cuboidBound.pos0(), cuboidBound.pos1());
+        if(dir == Direction.UP)return callback.create(cuboidBound.getPos0(), cuboidBound.getPos1());
         double maxXd = cuboidBound.getMaxX();
         double maxYd = cuboidBound.getMaxY();
         double maxZd = cuboidBound.getMaxZ();
@@ -457,8 +457,8 @@ public class SelectionCreations {
         CuboidBound outerBound = new CuboidBound(pos0, pos1);
         Selection outerSel = createCone(outerBound, axis);
         CuboidBound innerBound;
-        double a = outerBound.calculateLength(axis);
-        double b = outerBound.calculateMaxSideLength(axis);
+        double a = outerBound.getLength(axis);
+        double b = outerBound.getMaxSideLength(axis);
         double arg = Math.atan(b / (2 * a));
         double p = thickness / Math.cos(arg);
         double q = thickness / Math.sin(arg);
@@ -521,8 +521,8 @@ public class SelectionCreations {
         CuboidBound outerBound = new CuboidBound(pos0, pos1);
         Selection outerSel = createPyramid(outerBound, axis);
         CuboidBound innerBound;
-        double a = outerBound.calculateLength(axis);
-        double b = outerBound.calculateMaxSideLength(axis);
+        double a = outerBound.getLength(axis);
+        double b = outerBound.getMaxSideLength(axis);
         double arg = Math.atan(b / (2 * a));
         double p = thickness / Math.cos(arg);
         double q = thickness / Math.sin(arg);

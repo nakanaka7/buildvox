@@ -23,11 +23,11 @@ class CuboidBound {
         this.pos1 = pos1.toVector3d();
     }
 
-    public Vector3d pos0() {
+    public Vector3d getPos0() {
         return pos0;
     }
 
-    public Vector3d pos1() {
+    public Vector3d getPos1() {
         return pos1;
     }
 
@@ -115,8 +115,8 @@ class CuboidBound {
         return getLengthZ() * 0.5;
     }
 
-    /** Calculates the length along the axis. */
-    double calculateLength(Axis axis) {
+    /** Gets the length along the axis. */
+    double getLength(Axis axis) {
         Vector3d v = pos0.subtract(pos1);
         return switch (axis) {
             case X -> Math.abs(v.x()) + 1;
@@ -125,8 +125,8 @@ class CuboidBound {
         };
     }
 
-    /** Calculates the max of the side length. */
-    double calculateMaxSideLength(Axis axis) {
+    /** Gets the max of the side length. */
+    double getMaxSideLength(Axis axis) {
         Vector3d v = pos0.subtract(pos1);
         return switch (axis) {
             case X -> Math.max(Math.abs(v.y()), Math.abs(v.z())) + 1;
