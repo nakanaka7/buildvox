@@ -175,4 +175,22 @@ public class Vector3d {
         return this.subtract(v).length();
     }
 
+    /**
+     * Gets the nearest vector from candidates.
+     * @throws IllegalArgumentException if there is no candidates.
+     */
+    public Vector3d getNearestVector(Vector3d... candidates){
+        if(candidates.length == 0)throw new IllegalArgumentException();
+        Vector3d nearest = candidates[0];
+        double dis = distance(candidates[0]);
+        for(Vector3d c : candidates){
+            double disVc = distance(c);
+            if(disVc < dis){
+                nearest = c;
+                dis = disVc;
+            }
+        }
+        return nearest;
+    }
+
 }
