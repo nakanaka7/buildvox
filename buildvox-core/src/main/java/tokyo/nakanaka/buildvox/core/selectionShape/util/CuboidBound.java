@@ -4,77 +4,119 @@ import tokyo.nakanaka.buildvox.core.Axis;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 
-/** Represents a cuboid bound of a selection. Assumed pos-array length is 2. */
+/**
+ * Internal.
+ * Represents a cuboid bound of a selection. Assumed pos-array length is 2.
+ */
 
-class CuboidSelectionBound {
+class CuboidBound {
     private final Vector3d pos0;
     private final Vector3d pos1;
 
-    public CuboidSelectionBound(Vector3d pos0, Vector3d pos1) {
+    public CuboidBound(Vector3d pos0, Vector3d pos1) {
         this.pos0 = pos0;
         this.pos1 = pos1;
     }
 
-    public CuboidSelectionBound(Vector3i pos0, Vector3i pos1) {
+    public CuboidBound(Vector3i pos0, Vector3i pos1) {
         this.pos0 = pos0.toVector3d();
         this.pos1 = pos1.toVector3d();
     }
 
-    public Vector3d pos0D() {
+    public Vector3d getPos0() {
         return pos0;
     }
 
-    public Vector3d pos1D() {
+    public Vector3d getPos1() {
         return pos1;
     }
 
-    Vector3i pos0I() {
-        return toVector3i(pos0);
-    }
-
-    Vector3i pos1I() {
-        return toVector3i(pos1);
-    }
-
-    private Vector3i toVector3i(Vector3d v) {
-        int x = (int)Math.floor(v.x());
-        int y = (int)Math.floor(v.y());
-        int z = (int)Math.floor(v.z());
-        return new Vector3i(x, y, z);
-    }
-
     /** Gets the maximum x-coordinate of this bound. */
-    double getMaxDoubleX() {
+    double getMaxX() {
         return Math.max(pos0.x(), pos1.x()) + 1;
     }
 
     /** Gets the maximum y-coordinate of this bound. */
-    double getMaxDoubleY() {
+    double getMaxY() {
         return Math.max(pos0.y(), pos1.y()) + 1;
     }
 
     /** Gets the maximum z-coordinate of this bound. */
-    double getMaxDoubleZ() {
+    double getMaxZ() {
         return Math.max(pos0.z(), pos1.z()) + 1;
     }
 
     /** Gets the minimum x-coordinate of this bound. */
-    double getMinDoubleX() {
+    double getMinX() {
         return Math.min(pos0.x(), pos1.x());
     }
 
     /** Gets the minimum y-coordinate of this bound. */
-    double getMinDoubleY() {
+    double getMinY() {
         return Math.min(pos0.y(), pos1.y());
     }
 
     /** Gets the minimum z-coordinate of this bound. */
-    double getMinDoubleZ() {
+    double getMinZ() {
         return Math.min(pos0.z(), pos1.z());
     }
 
-    /** Calculates the length along the axis. */
-    double calculateLength(Axis axis) {
+    /** Gets the center point */
+    Vector3d getCenter() {
+        return pos0.add(pos1).add(1, 1, 1).scalarMultiply(0.5);
+    }
+
+    /** Gets the mid x-coordinate. */
+    double getMidX() {
+        return getCenter().x();
+    }
+
+    /** Gets the mid y-coordinate. */
+    double getMidY() {
+        return getCenter().y();
+    }
+
+    /** Gets the mid z-coordinate. */
+    double getMidZ() {
+        return getCenter().z();
+    }
+
+    private Vector3d vec10() {
+        return pos1.subtract(pos0);
+    }
+
+    /** Gets the length along x-axis. */
+    double getLengthX() {
+        return Math.abs(vec10().x()) + 1;
+    }
+
+    /** Gets the length along y-axis. */
+    double getLengthY() {
+        return Math.abs(vec10().y()) + 1;
+    }
+
+    /** Gets the length along z-axis. */
+    double getLengthZ() {
+        return Math.abs(vec10().z()) + 1;
+    }
+
+    /** Gets the half-length along x-axis. */
+    double getHalfLengthX() {
+        return getLengthX() * 0.5;
+    }
+
+    /** Gets the half-length along y-axis. */
+    double getHalfLengthY() {
+        return getLengthY() * 0.5;
+    }
+
+    /** Gets the half-length along z-axis. */
+    double getHalfLengthZ() {
+        return getLengthZ() * 0.5;
+    }
+
+    /** Gets the length along the axis. */
+    double getLength(Axis axis) {
         Vector3d v = pos0.subtract(pos1);
         return switch (axis) {
             case X -> Math.abs(v.x()) + 1;
@@ -83,8 +125,8 @@ class CuboidSelectionBound {
         };
     }
 
-    /** Calculates the max of the side length. */
-    double calculateMaxSideLength(Axis axis) {
+    /** Gets the max of the side length. */
+    double getMaxSideLength(Axis axis) {
         Vector3d v = pos0.subtract(pos1);
         return switch (axis) {
             case X -> Math.max(Math.abs(v.y()), Math.abs(v.z())) + 1;
@@ -96,7 +138,7 @@ class CuboidSelectionBound {
     /** Shrink the top of the bound. (The direction of the axis is from "bottom" to "top")
      * @throws IllegalStateException if it cannot shrink anymore.
      */
-    CuboidSelectionBound shrinkTop(Axis axis, double length) {
+    CuboidBound shrinkTop(Axis axis, double length) {
         Vector3d s = pos0.subtract(pos1);
         double t = switch (axis) {
             case X -> s.x();
@@ -107,13 +149,13 @@ class CuboidSelectionBound {
         Direction dir = calculateDirection(axis);
         Vector3i dirV = dir.toVector3i();
         Vector3d q1 = pos1.subtract(dirV.toVector3d().scalarMultiply(length));
-        return new CuboidSelectionBound(pos0, q1);
+        return new CuboidBound(pos0, q1);
     }
 
     /** Shrink the bottom of the bound. (The direction of the axis is from "bottom" to "top")
      * @throws IllegalStateException if it cannot shrink anymore.
      */
-    CuboidSelectionBound shrinkBottom(Axis axis, double length) {
+    CuboidBound shrinkBottom(Axis axis, double length) {
         Vector3d s = pos0.subtract(pos1);
         double t = switch (axis) {
             case X -> s.x();
@@ -124,7 +166,7 @@ class CuboidSelectionBound {
         Direction dir = calculateDirection(axis);
         Vector3i dirV = dir.toVector3i();
         Vector3d q0 = pos0.add(dirV.toVector3d().scalarMultiply(length));
-        return new CuboidSelectionBound(q0, pos1);
+        return new CuboidBound(q0, pos1);
     }
 
     /**
@@ -132,7 +174,7 @@ class CuboidSelectionBound {
      * @param length the displacement of the wall.
      * @throws IllegalStateException if it cannot shrink anymore.
      */
-    CuboidSelectionBound shrinkSides(Axis axis, double length) {
+    CuboidBound shrinkSides(Axis axis, double length) {
         return switch (axis) {
             case X -> shrinkTopBottom(Axis.Y, length).shrinkTopBottom(Axis.Z, length);
             case Y -> shrinkTopBottom(Axis.Z, length).shrinkTopBottom(Axis.X, length);
@@ -144,7 +186,7 @@ class CuboidSelectionBound {
      * Shrinks both top and bottom.
      * @throws IllegalStateException if it cannot shrink anymore.
      */
-    private CuboidSelectionBound shrinkTopBottom(Axis axis, double thickness) {
+    private CuboidBound shrinkTopBottom(Axis axis, double thickness) {
         Vector3d s = pos0.subtract(pos1);
         double t = switch (axis) {
             case X -> s.x();
@@ -156,7 +198,7 @@ class CuboidSelectionBound {
         Vector3i dirV = dir.toVector3i();
         Vector3d q0 = pos0.add(dirV.toVector3d().scalarMultiply(thickness));
         Vector3d q1 = pos1.subtract(dirV.toVector3d().scalarMultiply(thickness));
-        return new CuboidSelectionBound(q0, q1);
+        return new CuboidBound(q0, q1);
     }
 
     /**

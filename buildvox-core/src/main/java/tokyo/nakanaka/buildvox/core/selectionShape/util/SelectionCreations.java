@@ -45,17 +45,17 @@ public class SelectionCreations {
      * @return a cuboid selection. The cuboid corner will be pos 0 and pos 1.
      */
     public static Selection createCuboid(Vector3i pos0, Vector3i pos1) {
-        return createCuboid(new CuboidSelectionBound(pos0, pos1));
+        return createCuboid(new CuboidBound(pos0, pos1));
     }
 
-    private static Selection createCuboid(CuboidSelectionBound cuboidBound) {
+    private static Selection createCuboid(CuboidBound cuboidBound) {
         Cuboid cuboid = new Cuboid(
-                cuboidBound.getMaxDoubleX(),
-                cuboidBound.getMaxDoubleY(),
-                cuboidBound.getMaxDoubleZ(),
-                cuboidBound.getMinDoubleX(),
-                cuboidBound.getMinDoubleY(),
-                cuboidBound.getMinDoubleZ());
+                cuboidBound.getMaxX(),
+                cuboidBound.getMaxY(),
+                cuboidBound.getMaxZ(),
+                cuboidBound.getMinX(),
+                cuboidBound.getMinY(),
+                cuboidBound.getMinZ());
         return new Selection(cuboid, cuboid);
     }
 
@@ -67,9 +67,9 @@ public class SelectionCreations {
      * @return a hollow cuboid-shape selection.
      */
     public static Selection createHollowCuboid(Vector3i pos0, Vector3i pos1, int thickness) {
-        CuboidSelectionBound outerBound = new CuboidSelectionBound(pos0, pos1);
+        CuboidBound outerBound = new CuboidBound(pos0, pos1);
         Selection outerSel = createCuboid(outerBound);
-        CuboidSelectionBound innerBound;
+        CuboidBound innerBound;
         try {
             innerBound = outerBound
                     .shrinkTop(Axis.Y, thickness)
@@ -308,9 +308,9 @@ public class SelectionCreations {
      * @return a hollow ellipse-shape selection.
      */
     public static Selection createHollowEllipse(Vector3i pos0, Vector3i pos1, int thickness) {
-        CuboidSelectionBound outerBound = new CuboidSelectionBound(pos0, pos1);
+        CuboidBound outerBound = new CuboidBound(pos0, pos1);
         Selection outerSel = createEllipse(outerBound);
-        CuboidSelectionBound innerBound;
+        CuboidBound innerBound;
         try {
             innerBound = outerBound.shrinkTop(Axis.Y, thickness)//any axis is ok
                     .shrinkBottom(Axis.Y, thickness)
@@ -324,17 +324,11 @@ public class SelectionCreations {
         return new Selection(hollowReg, outerSel.getBound());
     }
 
-    private static Selection createEllipse(CuboidSelectionBound cuboidBound) {
-        double maxX = cuboidBound.getMaxDoubleX();
-        double maxY = cuboidBound.getMaxDoubleY();
-        double maxZ = cuboidBound.getMaxDoubleZ();
-        double minX = cuboidBound.getMinDoubleX();
-        double minY = cuboidBound.getMinDoubleY();
-        double minZ = cuboidBound.getMinDoubleZ();
-        Vector3d center = new Vector3d(maxX + minX, maxY + minY, maxZ + minZ).scalarMultiply(0.5);
-        double radiusX = (maxX - minX) / 2;
-        double radiusY = (maxY - minY) / 2;
-        double radiusZ = (maxZ - minZ) / 2;
+    private static Selection createEllipse(CuboidBound cuboidBound) {
+        Vector3d center = cuboidBound.getCenter();
+        double radiusX = cuboidBound.getHalfLengthX();
+        double radiusY = cuboidBound.getHalfLengthY();
+        double radiusZ = cuboidBound.getHalfLengthZ();
         Sphere sphere = new Sphere(1);
         Selection selection = new Selection(sphere, 1, 1, 1, -1, -1, -1);
         selection = selection.affineTransform(AffineTransformation3d.ofScale(radiusX, radiusY, radiusZ));
@@ -348,24 +342,21 @@ public class SelectionCreations {
      * @return an ellipse-shaped selection.
      */
     public static Selection createEllipse(Vector3i pos0, Vector3i pos1) {
-        return createEllipse(new CuboidSelectionBound(pos0, pos1));
+        return createEllipse(new CuboidBound(pos0, pos1));
     }
 
     /**
      * Creates an oriented selection keeping cuboidBound its position.
      */
-    private static Selection createOriented(CuboidBoundShapeCreator callback, CuboidSelectionBound cuboidBound, Axis axis) {
-        Vector3d pos0 = cuboidBound.pos0D();
-        Vector3d pos1 = cuboidBound.pos1D();
-        CuboidSelectionBound cuboidBound1 = new CuboidSelectionBound(pos0, pos1);
-        Direction dir = cuboidBound1.calculateDirection(axis);
-        if(dir == Direction.UP)return callback.create(pos0, pos1);
-        double maxXd = cuboidBound1.getMaxDoubleX();
-        double maxYd = cuboidBound1.getMaxDoubleY();
-        double maxZd = cuboidBound1.getMaxDoubleZ();
-        double minXd = cuboidBound1.getMinDoubleX();
-        double minYd = cuboidBound1.getMinDoubleY();
-        double minZd = cuboidBound1.getMinDoubleZ();
+    private static Selection createOriented(CuboidBoundShapeCreator callback, CuboidBound cuboidBound, Axis axis) {
+        Direction dir = cuboidBound.calculateDirection(axis);
+        if(dir == Direction.UP)return callback.create(cuboidBound.getPos0(), cuboidBound.getPos1());
+        double maxXd = cuboidBound.getMaxX();
+        double maxYd = cuboidBound.getMaxY();
+        double maxZd = cuboidBound.getMaxZ();
+        double minXd = cuboidBound.getMinX();
+        double minYd = cuboidBound.getMinY();
+        double minZd = cuboidBound.getMinZ();
         AffineTransformation3d trans = switch (dir) {
             case EAST -> AffineTransformation3d.ofRotationZ(Math.PI / 2);
             case WEST -> AffineTransformation3d.ofRotationZ(-Math.PI / 2);
@@ -405,9 +396,9 @@ public class SelectionCreations {
      * @return a hollow cylinder-shape selection.
      */
     public static Selection createHollowCylinder(Vector3i pos0, Vector3i pos1, Axis axis, int thickness) {
-        CuboidSelectionBound outerBound = new CuboidSelectionBound(pos0, pos1);
+        CuboidBound outerBound = new CuboidBound(pos0, pos1);
         Selection outerSel = createCylinder(outerBound, axis);
-        CuboidSelectionBound innerBound;
+        CuboidBound innerBound;
         try {
             innerBound = outerBound.shrinkSides(axis, thickness);
         }catch (IllegalStateException ex) {
@@ -427,11 +418,11 @@ public class SelectionCreations {
      * @return a cylinder-shaped selection.
      */
     public static Selection createCylinder(Vector3i pos0, Vector3i pos1, Axis axis) {
-        return createCylinder(new CuboidSelectionBound(pos0, pos1), axis);
+        return createCylinder(new CuboidBound(pos0, pos1), axis);
     }
 
     /** Creates a cylinder in the cuboid bound. */
-    private static Selection createCylinder(CuboidSelectionBound cuboidBound, Axis axis) {
+    private static Selection createCylinder(CuboidBound cuboidBound, Axis axis) {
         return createOriented(SelectionCreations::createBasicCylinder, cuboidBound, axis);
     }
 
@@ -442,17 +433,11 @@ public class SelectionCreations {
      * @return a cylinder selection
      */
     private static Selection createBasicCylinder(Vector3d pos0, Vector3d pos1) {
-        CuboidSelectionBound cuboidBound = new CuboidSelectionBound(pos0, pos1);
-        double maxX = cuboidBound.getMaxDoubleX();
-        double maxY = cuboidBound.getMaxDoubleY();
-        double maxZ = cuboidBound.getMaxDoubleZ();
-        double minX = cuboidBound.getMinDoubleX();
-        double minY = cuboidBound.getMinDoubleY();
-        double minZ = cuboidBound.getMinDoubleZ();
-        var baseCenter = new Vector3d((maxX + minX) / 2, minY, (maxZ + minZ) / 2);
-        double radiusX = (maxX - minX) / 2;
-        double radiusZ = (maxZ - minZ) / 2;
-        double height = maxY - minY;
+        CuboidBound cb = new CuboidBound(pos0, pos1);
+        var baseCenter = new Vector3d(cb.getMidX(), cb.getMinY(), cb.getMidZ());
+        double radiusX = cb.getHalfLengthX();
+        double radiusZ = cb.getHalfLengthZ();
+        double height = cb.getLengthY();
         Cylinder cylinder = new Cylinder(1, 1);
         return new Selection(cylinder, 1, 1, 1, -1, -1, 0)
                 .rotateX(-Math.PI / 2)
@@ -469,11 +454,11 @@ public class SelectionCreations {
      * @return a hollow cone-shape selection.
      */
     public static Selection createHollowCone(Vector3i pos0, Vector3i pos1, Axis axis, int thickness) {
-        CuboidSelectionBound outerBound = new CuboidSelectionBound(pos0, pos1);
+        CuboidBound outerBound = new CuboidBound(pos0, pos1);
         Selection outerSel = createCone(outerBound, axis);
-        CuboidSelectionBound innerBound;
-        double a = outerBound.calculateLength(axis);
-        double b = outerBound.calculateMaxSideLength(axis);
+        CuboidBound innerBound;
+        double a = outerBound.getLength(axis);
+        double b = outerBound.getMaxSideLength(axis);
         double arg = Math.atan(b / (2 * a));
         double p = thickness / Math.cos(arg);
         double q = thickness / Math.sin(arg);
@@ -497,11 +482,11 @@ public class SelectionCreations {
      * @return a cone-shaped selection.
      */
     public static Selection createCone(Vector3i pos0, Vector3i pos1, Axis axis) {
-        return createCone(new CuboidSelectionBound(pos0, pos1), axis);
+        return createCone(new CuboidBound(pos0, pos1), axis);
     }
 
     /** Creates a cylinder in the cuboid bound. */
-    private static Selection createCone(CuboidSelectionBound cuboidBound, Axis axis) {
+    private static Selection createCone(CuboidBound cuboidBound, Axis axis) {
         return createOriented(SelectionCreations::createBasicCone, cuboidBound, axis);
     }
 
@@ -512,17 +497,11 @@ public class SelectionCreations {
      * @return a cone selection
      */
     private static Selection createBasicCone(Vector3d pos0, Vector3d pos1) {
-        CuboidSelectionBound cuboidBound = new CuboidSelectionBound(pos0, pos1);
-        double maxX = cuboidBound.getMaxDoubleX();
-        double maxY = cuboidBound.getMaxDoubleY();
-        double maxZ = cuboidBound.getMaxDoubleZ();
-        double minX = cuboidBound.getMinDoubleX();
-        double minY = cuboidBound.getMinDoubleY();
-        double minZ = cuboidBound.getMinDoubleZ();
-        var baseCenter = new Vector3d((maxX + minX) / 2, minY, (maxZ + minZ) / 2);
-        double radiusX = (maxX - minX) / 2;
-        double radiusZ = (maxZ - minZ) / 2;
-        double height = maxY - minY;
+        CuboidBound cb = new CuboidBound(pos0, pos1);
+        var baseCenter = new Vector3d(cb.getMidX(), cb.getMinY(), cb.getMidZ());
+        double radiusX = cb.getHalfLengthX();
+        double radiusZ = cb.getHalfLengthZ();
+        double height = cb.getLengthY();
         var cone = new Cone(1, 1);
         return new Selection(cone, 1, 1, 1, -1, -1, 0)
                 .rotateX(-Math.PI / 2)
@@ -539,11 +518,11 @@ public class SelectionCreations {
      * @return a hollow pyramid-shape selection.
      */
     public static Selection createHollowPyramid(Vector3i pos0, Vector3i pos1, Axis axis, int thickness) {
-        CuboidSelectionBound outerBound = new CuboidSelectionBound(pos0, pos1);
+        CuboidBound outerBound = new CuboidBound(pos0, pos1);
         Selection outerSel = createPyramid(outerBound, axis);
-        CuboidSelectionBound innerBound;
-        double a = outerBound.calculateLength(axis);
-        double b = outerBound.calculateMaxSideLength(axis);
+        CuboidBound innerBound;
+        double a = outerBound.getLength(axis);
+        double b = outerBound.getMaxSideLength(axis);
         double arg = Math.atan(b / (2 * a));
         double p = thickness / Math.cos(arg);
         double q = thickness / Math.sin(arg);
@@ -567,10 +546,10 @@ public class SelectionCreations {
      * @return a pyramid-shaped selection.
      */
     public static Selection createPyramid(Vector3i pos0, Vector3i pos1, Axis axis) {
-        return createPyramid(new CuboidSelectionBound(pos0, pos1), axis);
+        return createPyramid(new CuboidBound(pos0, pos1), axis);
     }
 
-    private static Selection createPyramid(CuboidSelectionBound cuboidBound, Axis axis) {
+    private static Selection createPyramid(CuboidBound cuboidBound, Axis axis) {
         return createOriented(SelectionCreations::createBasicPyramid, cuboidBound, axis);
     }
 
@@ -581,17 +560,11 @@ public class SelectionCreations {
      * @return a pyramid selection
      */
     private static Selection createBasicPyramid(Vector3d pos0, Vector3d pos1) {
-        CuboidSelectionBound cuboidBound = new CuboidSelectionBound(pos0, pos1);
-        double maxXd = cuboidBound.getMaxDoubleX();
-        double maxYd = cuboidBound.getMaxDoubleY();
-        double maxZd = cuboidBound.getMaxDoubleZ();
-        double minXd = cuboidBound.getMinDoubleX();
-        double minYd = cuboidBound.getMinDoubleY();
-        double minZd = cuboidBound.getMinDoubleZ();
-        var baseCenter = new Vector3d((maxXd + minXd) / 2, minYd, (maxZd + minZd) / 2);
-        double sideX = maxXd - minXd;
-        double sideZ = maxZd - minZd;
-        double height = maxYd - minYd;
+        CuboidBound cb = new CuboidBound(pos0, pos1);
+        var baseCenter = new Vector3d(cb.getMidX(), cb.getMinY(), cb.getMidZ());
+        double sideX = cb.getLengthX();
+        double sideZ = cb.getLengthZ();
+        double height = cb.getLengthY();
         var pyramid = new Pyramid(1, 1);
         return new Selection(pyramid, 0.5, 0.5, 1, -0.5, -0.5, 0)
                 .rotateX(-Math.PI / 2)
@@ -607,9 +580,9 @@ public class SelectionCreations {
      * @return a hollow torus-shape selection.
      */
     public static Selection createHollowTorus(Vector3i pos0, Vector3i pos1, int thickness) {
-        CuboidSelectionBound outerBound = new CuboidSelectionBound(pos0, pos1);
+        CuboidBound outerBound = new CuboidBound(pos0, pos1);
         Selection outerSel = createTorus(outerBound);
-        CuboidSelectionBound innerBound;
+        CuboidBound innerBound;
         try {
             innerBound = outerBound.shrinkTop(Axis.Y, thickness)//any axis is ok
                     .shrinkBottom(Axis.Y, thickness)
@@ -630,19 +603,13 @@ public class SelectionCreations {
      * @return a torus-shaped selection.
      */
     public static Selection createTorus(Vector3i pos0, Vector3i pos1) {
-        return createTorus(new CuboidSelectionBound(pos0, pos1));
+        return createTorus(new CuboidBound(pos0, pos1));
     }
 
-    private static Selection createTorus(CuboidSelectionBound cuboidBound) {
-        double maxX = cuboidBound.getMaxDoubleX();
-        double maxY = cuboidBound.getMaxDoubleY();
-        double maxZ = cuboidBound.getMaxDoubleZ();
-        double minX = cuboidBound.getMinDoubleX();
-        double minY = cuboidBound.getMinDoubleY();
-        double minZ = cuboidBound.getMinDoubleZ();
-        double lx = maxX - minX;
-        double ly = maxY - minY;
-        double lz = maxZ - minZ;
+    private static Selection createTorus(CuboidBound cuboidBound) {
+        double lx = cuboidBound.getLengthX();
+        double ly = cuboidBound.getLengthY();
+        double lz = cuboidBound.getLengthZ();
         double minL = MaxMinCalculator.min(lx, ly, lz);
         if(minL == lx) {
             return createTorus(cuboidBound, Axis.X);
@@ -656,22 +623,16 @@ public class SelectionCreations {
         }
     }
 
-    private static Selection createTorus(CuboidSelectionBound cuboidBound, Axis axis) {
+    private static Selection createTorus(CuboidBound cuboidBound, Axis axis) {
         return createOriented(SelectionCreations::createBasicTorus, cuboidBound, axis);
     }
 
     private static Selection createBasicTorus(Vector3d pos0, Vector3d pos1) {
-        CuboidSelectionBound cuboidBound = new CuboidSelectionBound(pos0, pos1);
-        double maxX = cuboidBound.getMaxDoubleX();
-        double maxY = cuboidBound.getMaxDoubleY();
-        double maxZ = cuboidBound.getMaxDoubleZ();
-        double minX = cuboidBound.getMinDoubleX();
-        double minY = cuboidBound.getMinDoubleY();
-        double minZ = cuboidBound.getMinDoubleZ();
-        var center = new Vector3d((maxX + minX) / 2, (maxY + minY) / 2, (maxZ + minZ) / 2);
-        double minorRadius = (maxY - minY) / 2;
-        double halfDx = (maxX - minX) / 2;
-        double halfDz = (maxZ - minZ) / 2;
+        CuboidBound cb = new CuboidBound(pos0, pos1);
+        var center = cb.getCenter();
+        double minorRadius = cb.getHalfLengthY();
+        double halfDx = cb.getHalfLengthX();
+        double halfDz = cb.getHalfLengthZ();
         double majorRadius = Math.min(halfDx, halfDz) - minorRadius;
         double scaleFacX = Math.max(1.0, halfDx / halfDz);
         double scaleFacZ = Math.max(1.0, halfDz / halfDx);
