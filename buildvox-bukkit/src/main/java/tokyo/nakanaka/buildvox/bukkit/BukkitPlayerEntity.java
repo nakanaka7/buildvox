@@ -64,6 +64,18 @@ public class BukkitPlayerEntity implements PlayerEntity {
     }
 
     @Override
+    public void giveBrush() {
+        var itemStack = new org.bukkit.inventory.ItemStack(Material.STICK, 1);
+        itemStack.addUnsafeEnchantment(Enchantment.SILK_TOUCH, 0);
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        itemMeta.setDisplayName(ColorCode.LIGHT_PURPLE + "Brush");
+        itemMeta.setLocalizedName(BuildVoxPlugin.BRUSH_LOCALIZED_NAME);
+        itemStack.setItemMeta(itemMeta);
+        this.original.getInventory().addItem(itemStack);
+    }
+
+    @Override
     public void spawnParticle(Color color, World world, double x, double y, double z){
         if(!(world instanceof BukkitWorld bukkitWorld)) {
             return;
