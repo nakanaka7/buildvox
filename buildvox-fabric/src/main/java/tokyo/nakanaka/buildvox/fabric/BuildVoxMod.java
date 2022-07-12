@@ -56,7 +56,6 @@ import static tokyo.nakanaka.buildvox.fabric.NamespacedIds.createId;
 public class BuildVoxMod implements ModInitializer {
 	public static final Item POS_MARKER = new Item(new FabricItemSettings().group(ItemGroup.TOOLS));
 	public static final Item BRUSH = new Item(new FabricItemSettings().group(ItemGroup.TOOLS));
-	private Map<net.minecraft.world.World, NamespacedId> worldIdMap = new HashMap<>();
 
 	@Override
 	public void onInitialize() {
@@ -85,9 +84,6 @@ public class BuildVoxMod implements ModInitializer {
 		Set<RegistryKey<net.minecraft.world.World>> worldRegistryKeys = server.getWorldRegistryKeys();
 		for (var key : worldRegistryKeys) {
 			if (world == server.getWorld(key)) {//have to find the registry key of worldId
-				Identifier worldId0 = key.getValue();
-				NamespacedId worldId = createId(worldId0);
-				worldIdMap.put(world, worldId);
 				World world1 = new FabricWorld(world);
 				BuildVoxSystem.getWorldRegistry().register(world1);
 				break;
@@ -101,7 +97,6 @@ public class BuildVoxMod implements ModInitializer {
 			if(world == server.getWorld(key)) {//have to find the registry key of worldId
 				Identifier worldId0 = key.getValue();
 				NamespacedId worldId = createId(worldId0);
-				worldIdMap.remove(world);
 				BuildVoxSystem.getWorldRegistry().unregister(worldId);
 				break;
 			}
