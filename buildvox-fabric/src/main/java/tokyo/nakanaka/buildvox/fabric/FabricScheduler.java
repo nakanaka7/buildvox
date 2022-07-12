@@ -12,25 +12,23 @@ import java.util.*;
 public class FabricScheduler implements Scheduler {
     private Map<UUID, Runnable> runnableMap = new HashMap<>();
     private Map<UUID, Integer> leftTickMap = new HashMap<>();
-    private static FabricScheduler instance;
+    private static FabricScheduler instance = new FabricScheduler();
 
     private FabricScheduler() {
     }
 
     /**
      * Initialize the scheduler.
+     * @deprecated no effect
      */
     public static void initialize() {
-        instance = new FabricScheduler();
     }
 
     /**
      * Get the instance of this class.
      * @return the instance of this class.
-     * @throws IllegalStateException if initialize() has never been called.
      */
     public static FabricScheduler getInstance() {
-        if(instance == null)throw new IllegalStateException();
         return instance;
     }
 
