@@ -66,8 +66,7 @@ public class BuildVoxMod implements ModInitializer {
 		BlockRegistering.registerBlocks();
 		ServerWorldEvents.LOAD.register(this::onWorldLoad);
 		ServerWorldEvents.UNLOAD.register(this::onWorldUnLoad);
-		ServerEntityEvents.ENTITY_LOAD.register(this::onEntityLoad);
-		ServerEntityEvents.ENTITY_UNLOAD.register(this::onEntityUnload);
+		initPlayerManagement();
 		new CommandInitializer().init();
 		new ClickBlockEventInitializer().init();
 	}
@@ -102,6 +101,12 @@ public class BuildVoxMod implements ModInitializer {
 				break;
 			}
 		}
+	}
+
+	/** Handles player load and unload. */
+	private void initPlayerManagement() {
+		ServerEntityEvents.ENTITY_LOAD.register(this::onEntityLoad);
+		ServerEntityEvents.ENTITY_UNLOAD.register(this::onEntityUnload);
 	}
 
 	private void onEntityLoad(Entity entity, ServerWorld world) {
