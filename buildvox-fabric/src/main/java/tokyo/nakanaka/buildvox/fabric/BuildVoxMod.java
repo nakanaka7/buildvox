@@ -64,8 +64,7 @@ public class BuildVoxMod implements ModInitializer {
 		BuildVoxSystem.setScheduler(FabricScheduler.getInstance());
 		BuildVoxSystem.setBlockValidator(new FabricBlockValidator());
 		BlockRegistering.registerBlocks();
-		ServerWorldEvents.LOAD.register(this::onWorldLoad);
-		ServerWorldEvents.UNLOAD.register(this::onWorldUnLoad);
+		initWorldManagement();
 		initPlayerManagement();
 		new CommandInitializer().init();
 		new ClickBlockEventInitializer().init();
@@ -74,6 +73,12 @@ public class BuildVoxMod implements ModInitializer {
 	private void registerItems() {
 		Registry.register(Registry.ITEM, new Identifier("buildvox", "pos_marker"), POS_MARKER);
 		Registry.register(Registry.ITEM, new Identifier("buildvox", "brush"), BRUSH);
+	}
+
+	/** Handles world load and unload. */
+	private void initWorldManagement() {
+		ServerWorldEvents.LOAD.register(this::onWorldLoad);
+		ServerWorldEvents.UNLOAD.register(this::onWorldUnLoad);
 	}
 
 	private void onWorldLoad(MinecraftServer server, ServerWorld world){
