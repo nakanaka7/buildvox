@@ -142,7 +142,7 @@ public class BuildVoxMod implements ModInitializer {
 	}
 
 	/** Initializer of commands event. */
-	private class CommandInitializer {
+	private static class CommandInitializer {
 		private static final String SUBCOMMAND = "subcommand";
 
 		public void init() {
