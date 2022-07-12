@@ -128,14 +128,6 @@ public class BuildVoxMod implements ModInitializer {
 		player.setParticleGuiVisible(false);
 	}
 
-	/* convert ServerWorld to {@link World} */
-	public static World convertServerWorldToBvWorld(ServerWorld original) {
-		RegistryKey<net.minecraft.world.World> key = original.getRegistryKey();
-		Identifier worldId0 = key.getValue();
-		NamespacedId worldId = createId(worldId0);
-		return BuildVoxSystem.getWorldRegistry().get(worldId);
-	}
-
 	/** Initializer of commands event. */
 	private static class CommandInitializer {
 		private static final String SUBCOMMAND = "subcommand";

@@ -5,14 +5,19 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.registry.RegistryKey;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.player.PlayerEntity;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.particleGui.Color;
 import tokyo.nakanaka.buildvox.core.World;
+import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 
 import java.util.UUID;
+
+import static tokyo.nakanaka.buildvox.fabric.NamespacedIds.createId;
 
 /**
  * The implementation of PlayerEntity for Fabric platform
@@ -39,7 +44,10 @@ public class FabricPlayerEntity implements PlayerEntity {
     }
 
     private World getWorld() {
-        return BuildVoxMod.convertServerWorldToBvWorld(original.getWorld());
+        RegistryKey<net.minecraft.world.World> key = original.getWorld().getRegistryKey();
+        Identifier worldId0 = key.getValue();
+        NamespacedId worldId = createId(worldId0);
+        return BuildVoxSystem.getWorldRegistry().get(worldId);
     }
 
     @Override
