@@ -9,7 +9,6 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
@@ -57,36 +56,34 @@ import static tokyo.nakanaka.buildvox.fabric.NamespacedIds.createId;
 public class BuildVoxMod implements ModInitializer {
 	public static final Item POS_MARKER = new Item(new FabricItemSettings().group(ItemGroup.TOOLS));
 	public static final Item BRUSH = new Item(new FabricItemSettings().group(ItemGroup.TOOLS));
-	private Map<net.minecraft.world.World, NamespacedId> worldIdMap = new HashMap<>();
-	private static final String SUBCOMMAND = "subcommand";
 
 	@Override
 	public void onInitialize() {
-		Registry.register(Registry.ITEM, new Identifier("buildvox", "pos_marker"), POS_MARKER);
-		Registry.register(Registry.ITEM, new Identifier("buildvox", "brush"), BRUSH);
-		ServerLifecycleEvents.SERVER_STARTING.register(this::onServerStarting);
-		ServerWorldEvents.LOAD.register(this::onWorldLoad);
-		ServerWorldEvents.UNLOAD.register(this::onWorldUnLoad);
-		ServerEntityEvents.ENTITY_LOAD.register(this::onEntityLoad);
-		ServerEntityEvents.ENTITY_UNLOAD.register(this::onEntityUnload);
-		CommandRegistrationCallback.EVENT.register(this::onCommandRegistration);
-		new ClickBlockEventInitializer().init();
-	}
-
-	private void onServerStarting(MinecraftServer server) {
-		FabricScheduler.initialize();
+		registerItems();
 		BuildVoxSystem.setScheduler(FabricScheduler.getInstance());
 		BuildVoxSystem.setBlockValidator(new FabricBlockValidator());
 		BlockRegistering.registerBlocks();
+		initWorldManagement();
+		initPlayerManagement();
+		new CommandInitializer().init();
+		new ClickBlockEventInitializer().init();
+	}
+
+	private void registerItems() {
+		Registry.register(Registry.ITEM, new Identifier("buildvox", "pos_marker"), POS_MARKER);
+		Registry.register(Registry.ITEM, new Identifier("buildvox", "brush"), BRUSH);
+	}
+
+	/** Handles world load and unload. */
+	private void initWorldManagement() {
+		ServerWorldEvents.LOAD.register(this::onWorldLoad);
+		ServerWorldEvents.UNLOAD.register(this::onWorldUnLoad);
 	}
 
 	private void onWorldLoad(MinecraftServer server, ServerWorld world){
 		Set<RegistryKey<net.minecraft.world.World>> worldRegistryKeys = server.getWorldRegistryKeys();
 		for (var key : worldRegistryKeys) {
 			if (world == server.getWorld(key)) {//have to find the registry key of worldId
-				Identifier worldId0 = key.getValue();
-				NamespacedId worldId = createId(worldId0);
-				worldIdMap.put(world, worldId);
 				World world1 = new FabricWorld(world);
 				BuildVoxSystem.getWorldRegistry().register(world1);
 				break;
@@ -100,11 +97,16 @@ public class BuildVoxMod implements ModInitializer {
 			if(world == server.getWorld(key)) {//have to find the registry key of worldId
 				Identifier worldId0 = key.getValue();
 				NamespacedId worldId = createId(worldId0);
-				worldIdMap.remove(world);
 				BuildVoxSystem.getWorldRegistry().unregister(worldId);
 				break;
 			}
 		}
+	}
+
+	/** Handles player load and unload. */
+	private void initPlayerManagement() {
+		ServerEntityEvents.ENTITY_LOAD.register(this::onEntityLoad);
+		ServerEntityEvents.ENTITY_UNLOAD.register(this::onEntityUnload);
 	}
 
 	private void onEntityLoad(Entity entity, ServerWorld world) {
@@ -126,111 +128,114 @@ public class BuildVoxMod implements ModInitializer {
 		player.setParticleGuiVisible(false);
 	}
 
-	private void onCommandRegistration(CommandDispatcher<ServerCommandSource> dispatcher, boolean dedicated) {
-		dispatcher.register(
-				CommandManager
-						.literal("bv")
-						.then(argument(SUBCOMMAND, StringArgumentType.greedyString())
-								.suggests(this::onBvTabComplete)
-								.executes(this::onBvCommand))
-		);
-		dispatcher.register(
-				CommandManager
-						.literal("bvd")
-						.then(argument(SUBCOMMAND, StringArgumentType.greedyString())
-								.suggests(this::onBvdTabComplete)
-								.executes(this::onBvdCommand))
-		);
-	}
+	/** Initializer of commands event. */
+	private static class CommandInitializer {
+		private static final String SUBCOMMAND = "subcommand";
 
-	/* convert ServerWorld to {@link World} */
-	public static World convertServerWorldToBvWorld(ServerWorld original) {
-		RegistryKey<net.minecraft.world.World> key = original.getRegistryKey();
-		Identifier worldId0 = key.getValue();
-		NamespacedId worldId = createId(worldId0);
-		return BuildVoxSystem.getWorldRegistry().get(worldId);
-	}
-
-	private CommandSource getCommandSource(ServerCommandSource source) {
-		try {
-			ServerPlayerEntity player = source.getPlayer();
-			UUID playerId = player.getUuid();
-			return CommandSource.newInstance(playerId);
-		} catch (CommandSyntaxException ex) {
-			net.minecraft.world.World world = source.getWorld();
-			NamespacedId worldId = worldIdMap.get(world);
-			Vec3d p = source.getPosition();
-			Vector3i pos = new Vector3i((int)Math.floor(p.getX()), (int)Math.floor(p.getY()), (int)Math.floor(p.getZ()));
-			Messenger messenger = new Messenger() {
-				@Override
-				public void sendOutMessage(String msg) {
-					source.sendFeedback(Text.of(msg), false);
-				}
-				@Override
-				public void sendErrMessage(String msg) {
-					source.sendFeedback(Text.of(msg), false);
-				}
-			};
-			return new CommandSource(worldId, pos, messenger);
+		public void init() {
+			CommandRegistrationCallback.EVENT.register(this::onCommandRegistration);
 		}
-	}
 
-	private int onBvCommand(CommandContext<ServerCommandSource> context) {
-		String subcommand = StringArgumentType.getString(context, SUBCOMMAND);
-		String[] args = subcommand.split(" ", - 1);
-		CommandSource source = getCommandSource(context.getSource());
-		BuildVoxSystem.onBvCommand(source, args);
-		return 1;
-	}
-
-	private int onBvdCommand(CommandContext<ServerCommandSource> context) {
-		String subcommand = StringArgumentType.getString(context, SUBCOMMAND);
-		String[] args = subcommand.split(" ", - 1);
-		CommandSource source = getCommandSource(context.getSource());
-		BuildVoxSystem.onBvdCommand(source, args);
-		return 1;
-	}
-
-	private CompletableFuture<Suggestions> onBvTabComplete(CommandContext<ServerCommandSource> context,
-														   SuggestionsBuilder builder) {
-		TabCompleteListCreator listCreator = BuildVoxSystem::onBvTabComplete;
-		return onTabComplete(context, builder, listCreator);
-	}
-
-	private CompletableFuture<Suggestions> onBvdTabComplete(CommandContext<ServerCommandSource> context,
-														   SuggestionsBuilder builder) {
-		TabCompleteListCreator listCreator = BuildVoxSystem::onBvdTabComplete;
-		return onTabComplete(context, builder, listCreator);
-	}
-
-	private interface TabCompleteListCreator {
-		List<String> create(String[] args);
-	}
-
-	private CompletableFuture<Suggestions> onTabComplete(CommandContext<ServerCommandSource> context,
-														 SuggestionsBuilder builder, TabCompleteListCreator listCreator) {
-		String subcommand;
-		//when the subcommand is empty, it throws IllegalArgumentException
-		try {
-			subcommand = context.getArgument(SUBCOMMAND, String.class);
-		}catch (IllegalArgumentException e){
-			subcommand = "";
+		private void onCommandRegistration(CommandDispatcher<ServerCommandSource> dispatcher, boolean dedicated) {
+			dispatcher.register(
+					CommandManager
+							.literal("bv")
+							.then(argument(SUBCOMMAND, StringArgumentType.greedyString())
+									.suggests(this::onBvTabComplete)
+									.executes(this::onBvCommand))
+			);
+			dispatcher.register(
+					CommandManager
+							.literal("bvd")
+							.then(argument(SUBCOMMAND, StringArgumentType.greedyString())
+									.suggests(this::onBvdTabComplete)
+									.executes(this::onBvdCommand))
+			);
 		}
-		String[] args = subcommand.split(" ", - 1);
-		//subcommand is one string. So modify the builder start to the last arg head point.
-		int startOffset = 0;
-		for(int i = 0; i < args.length - 1; ++i) {
-			startOffset += args[i].length() + 1;
-		}
-		//new builder
-		builder = new SuggestionsBuilder(builder.getInput(), builder.getStart() + startOffset);
 
-		List<String> tabComplete = listCreator.create(args);
-
-		for(String text : tabComplete){
-			builder.suggest(text);
+		private int onBvCommand(CommandContext<ServerCommandSource> context) {
+			String subcommand = StringArgumentType.getString(context, SUBCOMMAND);
+			String[] args = subcommand.split(" ", - 1);
+			CommandSource source = getCommandSource(context.getSource());
+			BuildVoxSystem.onBvCommand(source, args);
+			return 1;
 		}
-		return builder.buildFuture();
+
+		private int onBvdCommand(CommandContext<ServerCommandSource> context) {
+			String subcommand = StringArgumentType.getString(context, SUBCOMMAND);
+			String[] args = subcommand.split(" ", - 1);
+			CommandSource source = getCommandSource(context.getSource());
+			BuildVoxSystem.onBvdCommand(source, args);
+			return 1;
+		}
+
+		private CommandSource getCommandSource(ServerCommandSource source) {
+			try {
+				ServerPlayerEntity player = source.getPlayer();
+				UUID playerId = player.getUuid();
+				return CommandSource.newInstance(playerId);
+			} catch (CommandSyntaxException ex) {
+				net.minecraft.world.World world = source.getWorld();
+				var regKey = world.getRegistryKey();
+				NamespacedId worldId = NamespacedIds.createId(regKey.getValue());
+				Vec3d p = source.getPosition();
+				Vector3i pos = new Vector3i((int)Math.floor(p.getX()), (int)Math.floor(p.getY()), (int)Math.floor(p.getZ()));
+				Messenger messenger = new Messenger() {
+					@Override
+					public void sendOutMessage(String msg) {
+						source.sendFeedback(Text.of(msg), false);
+					}
+					@Override
+					public void sendErrMessage(String msg) {
+						source.sendFeedback(Text.of(msg), false);
+					}
+				};
+				return new CommandSource(worldId, pos, messenger);
+			}
+		}
+
+		private interface TabCompleteListCreator {
+			List<String> create(String[] args);
+		}
+
+		private CompletableFuture<Suggestions> onBvTabComplete(CommandContext<ServerCommandSource> context,
+															   SuggestionsBuilder builder) {
+			TabCompleteListCreator listCreator = BuildVoxSystem::onBvTabComplete;
+			return onTabComplete(context, builder, listCreator);
+		}
+
+		private CompletableFuture<Suggestions> onBvdTabComplete(CommandContext<ServerCommandSource> context,
+																SuggestionsBuilder builder) {
+			TabCompleteListCreator listCreator = BuildVoxSystem::onBvdTabComplete;
+			return onTabComplete(context, builder, listCreator);
+		}
+
+		private CompletableFuture<Suggestions> onTabComplete(CommandContext<ServerCommandSource> context,
+															 SuggestionsBuilder builder, TabCompleteListCreator listCreator) {
+			String subcommand;
+			//when the subcommand is empty, it throws IllegalArgumentException
+			try {
+				subcommand = context.getArgument(SUBCOMMAND, String.class);
+			}catch (IllegalArgumentException e){
+				subcommand = "";
+			}
+			String[] args = subcommand.split(" ", - 1);
+			//subcommand is one string. So modify the builder start to the last arg head point.
+			int startOffset = 0;
+			for(int i = 0; i < args.length - 1; ++i) {
+				startOffset += args[i].length() + 1;
+			}
+			//new builder
+			builder = new SuggestionsBuilder(builder.getInput(), builder.getStart() + startOffset);
+
+			List<String> tabComplete = listCreator.create(args);
+
+			for(String text : tabComplete){
+				builder.suggest(text);
+			}
+			return builder.buildFuture();
+		}
+
 	}
 
 	/** Initializer of click block events. */
