@@ -233,48 +233,43 @@ public class BuildVoxMod implements ModInitializer {
 		return builder.buildFuture();
 	}
 
+	/** Initializer of click block events. */
 	private static class ClickBlockEventInitializer {
-		private final Map<Item, ClickBlockHandler> clickBlockMap = new HashMap<>();
+		private final Map<Item, LeftRightClickBlockHandler> clickBlockMap = new HashMap<>();
 
+		/** Initialize. */
 		public void init() {
-			registerClickBlockHandling();
-			registerEventsForClickBlock();
+			registerEvent(POS_MARKER, BuildVoxSystem::onLeftClickBlockByPosMarker, BuildVoxSystem::onRightClickBlockByPosMarker);
+			registerEvent(BRUSH, BuildVoxSystem::onLeftClickBlockByBrush, BuildVoxSystem::onRightClickBlockByBrush);
+			adaptEventsForMod();
 		}
 
-		/** Handles click block event */
+		private void registerEvent(Item item, ClickBlockHandler left, ClickBlockHandler right) {
+			clickBlockMap.put(item, new LeftRightClickBlockHandler() {
+				@Override
+				public void onLeftClickBlock(UUID playerId, Vector3i pos) {
+					left.onClickBlock(playerId, pos);
+				}
+				@Override
+				public void onRightClickBlock(UUID playerId, Vector3i pos) {
+					right.onClickBlock(playerId, pos);
+				}
+			});
+		}
+		
 		private interface ClickBlockHandler {
+			void onClickBlock(UUID playerId, Vector3i pos);
+		}
+
+		private interface LeftRightClickBlockHandler {
 			/** left click */
 			void onLeftClickBlock(UUID playerId, Vector3i pos);
 			/** right click*/
 			void onRightClickBlock(UUID playerId, Vector3i pos);
 		}
-
-		/** Registers click block handling. */
-		private void registerClickBlockHandling() {
-			clickBlockMap.put(POS_MARKER, new ClickBlockHandler() {
-				@Override
-				public void onLeftClickBlock(UUID playerId, Vector3i pos) {
-					BuildVoxSystem.onLeftClickBlockByPosMarker(playerId, pos);
-				}
-				@Override
-				public void onRightClickBlock(UUID playerId, Vector3i pos) {
-					BuildVoxSystem.onRightClickBlockByPosMarker(playerId, pos);
-				}
-			});
-			clickBlockMap.put(BRUSH, new ClickBlockHandler() {
-				@Override
-				public void onLeftClickBlock(UUID playerId, Vector3i pos) {
-					BuildVoxSystem.onLeftClickBlockByBrush(playerId, pos);
-				}
-				@Override
-				public void onRightClickBlock(UUID playerId, Vector3i pos) {
-					BuildVoxSystem.onRightClickBlockByBrush(playerId, pos);
-				}
-			});
-		}
-
+		
 		/** Registers events for clicking block */
-		private void registerEventsForClickBlock() {
+		private void adaptEventsForMod() {
 			AttackBlockCallback.EVENT.register(this::onAttackBlock);
 			UseBlockCallback.EVENT.register(this::onBlockUse);
 		}
@@ -332,7 +327,6 @@ public class BuildVoxMod implements ModInitializer {
 				}
 			}
 			return ActionResult.PASS;
-
 		}
 	}
 
