@@ -189,7 +189,8 @@ public class BuildVoxMod implements ModInitializer {
 				return CommandSource.newInstance(playerId);
 			} catch (CommandSyntaxException ex) {
 				net.minecraft.world.World world = source.getWorld();
-				NamespacedId worldId = worldIdMap.get(world);
+				var regKey = world.getRegistryKey();
+				NamespacedId worldId = NamespacedIds.createId(regKey.getValue());
 				Vec3d p = source.getPosition();
 				Vector3i pos = new Vector3i((int)Math.floor(p.getX()), (int)Math.floor(p.getY()), (int)Math.floor(p.getZ()));
 				Messenger messenger = new Messenger() {
