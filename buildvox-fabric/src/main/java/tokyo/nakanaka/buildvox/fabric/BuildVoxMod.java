@@ -60,8 +60,7 @@ public class BuildVoxMod implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		Registry.register(Registry.ITEM, new Identifier("buildvox", "pos_marker"), POS_MARKER);
-		Registry.register(Registry.ITEM, new Identifier("buildvox", "brush"), BRUSH);
+		registerItems();
 		BuildVoxSystem.setScheduler(FabricScheduler.getInstance());
 		BuildVoxSystem.setBlockValidator(new FabricBlockValidator());
 		BlockRegistering.registerBlocks();
@@ -71,6 +70,11 @@ public class BuildVoxMod implements ModInitializer {
 		ServerEntityEvents.ENTITY_UNLOAD.register(this::onEntityUnload);
 		new CommandInitializer().init();
 		new ClickBlockEventInitializer().init();
+	}
+
+	private void registerItems() {
+		Registry.register(Registry.ITEM, new Identifier("buildvox", "pos_marker"), POS_MARKER);
+		Registry.register(Registry.ITEM, new Identifier("buildvox", "brush"), BRUSH);
 	}
 
 	private void onWorldLoad(MinecraftServer server, ServerWorld world){
