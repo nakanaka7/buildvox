@@ -72,8 +72,7 @@ public class BuildVoxMod implements ModInitializer {
 		ServerEntityEvents.ENTITY_LOAD.register(this::onEntityLoad);
 		ServerEntityEvents.ENTITY_UNLOAD.register(this::onEntityUnload);
 		CommandRegistrationCallback.EVENT.register(this::onCommandRegistration);
-		AttackBlockCallback.EVENT.register(this::onAttackBlock);
-		UseBlockCallback.EVENT.register(this::onBlockUse);
+		registerEventsForClickBlock();
 	}
 
 	/** Registers click block handling. */
@@ -106,6 +105,12 @@ public class BuildVoxMod implements ModInitializer {
 		void onLeftClickBlock(UUID playerId, Vector3i pos);
 		/** right click*/
 		void onRightClickBlock(UUID playerId, Vector3i pos);
+	}
+
+	/** Registers events for clicking block */
+	private void registerEventsForClickBlock() {
+		AttackBlockCallback.EVENT.register(this::onAttackBlock);
+		UseBlockCallback.EVENT.register(this::onBlockUse);
 	}
 
 	private void onServerStarting(MinecraftServer server) {
