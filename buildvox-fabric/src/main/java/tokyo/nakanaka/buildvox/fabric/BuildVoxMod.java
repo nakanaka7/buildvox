@@ -63,7 +63,6 @@ public class BuildVoxMod implements ModInitializer {
 	public void onInitialize() {
 		Registry.register(Registry.ITEM, new Identifier("buildvox", "pos_marker"), POS_MARKER);
 		Registry.register(Registry.ITEM, new Identifier("buildvox", "brush"), BRUSH);
-		FabricScheduler.initialize();
 		BuildVoxSystem.setScheduler(FabricScheduler.getInstance());
 		BuildVoxSystem.setBlockValidator(new FabricBlockValidator());
 		BlockRegistering.registerBlocks();
