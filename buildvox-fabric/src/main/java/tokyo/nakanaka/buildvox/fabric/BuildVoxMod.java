@@ -70,8 +70,7 @@ public class BuildVoxMod implements ModInitializer {
 		ServerEntityEvents.ENTITY_LOAD.register(this::onEntityLoad);
 		ServerEntityEvents.ENTITY_UNLOAD.register(this::onEntityUnload);
 		CommandRegistrationCallback.EVENT.register(this::onCommandRegistration);
-		AttackBlockCallback.EVENT.register(this::onAttackBlock);
-		UseBlockCallback.EVENT.register(this::onBlockUse);
+		new ClickBlockEventInitializer().init();
 	}
 
 	private void onServerStarting(MinecraftServer server) {
@@ -234,55 +233,99 @@ public class BuildVoxMod implements ModInitializer {
 		return builder.buildFuture();
 	}
 
-	private ActionResult onAttackBlock(net.minecraft.entity.player.PlayerEntity player0,
-											  net.minecraft.world.World world0, Hand hand, BlockPos pos0, Direction direction) {
-		//One event triggers this function with different combinations of arguments.
-		//So filters the arguments by their super classes.
-		//The following filter may have redundant parts. For example, when the player is a server one, the world
-		//should be also a server one.
-		if(!(player0 instanceof ServerPlayerEntity player1)) {
-			return ActionResult.PASS;
-		}
-		if(!(world0 instanceof ServerWorld)) {
-			return ActionResult.PASS;
-		}
-		if(hand != Hand.MAIN_HAND) {
-			return ActionResult.PASS;
-		}
-		UUID playerId = player1.getUuid();
-		ItemStack is = player0.getMainHandStack();
-		Vector3i pos = new Vector3i(pos0.getX(), pos0.getY(), pos0.getZ());
-		if(is.getItem().equals(POS_MARKER)){
-			BuildVoxSystem.onLeftClickBlockByPosMarker(playerId, pos);
-			return ActionResult.SUCCESS;
-		}else {
-			return ActionResult.PASS;
-		}
-	}
+	/** Initializer of click block events. */
+	private static class ClickBlockEventInitializer {
+		private final Map<Item, LeftRightClickBlockHandler> clickBlockMap = new HashMap<>();
 
-	private ActionResult onBlockUse(net.minecraft.entity.player.PlayerEntity player0,
-										   net.minecraft.world.World world0, Hand hand, BlockHitResult hitResult){
-		//One event triggers this function with different combinations of arguments.
-		//So filters the arguments by their super classes.
-		//The following filter may have redundant parts. For example, when the player is a server one, the world
-		//should be also a server one.
-		if(!(player0 instanceof ServerPlayerEntity player1)) {
+		/** Initialize. */
+		public void init() {
+			registerEvent(POS_MARKER, BuildVoxSystem::onLeftClickBlockByPosMarker, BuildVoxSystem::onRightClickBlockByPosMarker);
+			registerEvent(BRUSH, BuildVoxSystem::onLeftClickBlockByBrush, BuildVoxSystem::onRightClickBlockByBrush);
+			adaptEventsForMod();
+		}
+
+		private void registerEvent(Item item, ClickBlockHandler left, ClickBlockHandler right) {
+			clickBlockMap.put(item, new LeftRightClickBlockHandler() {
+				@Override
+				public void onLeftClickBlock(UUID playerId, Vector3i pos) {
+					left.onClickBlock(playerId, pos);
+				}
+				@Override
+				public void onRightClickBlock(UUID playerId, Vector3i pos) {
+					right.onClickBlock(playerId, pos);
+				}
+			});
+		}
+		
+		private interface ClickBlockHandler {
+			void onClickBlock(UUID playerId, Vector3i pos);
+		}
+
+		private interface LeftRightClickBlockHandler {
+			/** left click */
+			void onLeftClickBlock(UUID playerId, Vector3i pos);
+			/** right click*/
+			void onRightClickBlock(UUID playerId, Vector3i pos);
+		}
+		
+		/** Registers events for clicking block */
+		private void adaptEventsForMod() {
+			AttackBlockCallback.EVENT.register(this::onAttackBlock);
+			UseBlockCallback.EVENT.register(this::onBlockUse);
+		}
+
+		private ActionResult onAttackBlock(net.minecraft.entity.player.PlayerEntity player0,
+										   net.minecraft.world.World world0, Hand hand, BlockPos pos0, Direction direction) {
+			//One event triggers this function with different combinations of arguments.
+			//So filters the arguments by their super classes.
+			//The following filter may have redundant parts. For example, when the player is a server one, the world
+			//should be also a server one.
+			if (!(player0 instanceof ServerPlayerEntity player1)) {
+				return ActionResult.PASS;
+			}
+			if (!(world0 instanceof ServerWorld)) {
+				return ActionResult.PASS;
+			}
+			if (hand != Hand.MAIN_HAND) {
+				return ActionResult.PASS;
+			}
+			UUID playerId = player1.getUuid();
+			ItemStack is = player0.getMainHandStack();
+			Vector3i pos = new Vector3i(pos0.getX(), pos0.getY(), pos0.getZ());
+			for (var e : clickBlockMap.entrySet()) {
+				if (e.getKey().equals(is.getItem())) {
+					e.getValue().onLeftClickBlock(playerId, pos);
+					return ActionResult.SUCCESS;
+				}
+			}
 			return ActionResult.PASS;
 		}
-		if(!(world0 instanceof ServerWorld)) {
-			return ActionResult.PASS;
-		}
-		if(hand != Hand.MAIN_HAND) {
-			return ActionResult.PASS;
-		}
-		UUID playerId = player1.getUuid();
-		ItemStack is = player0.getMainHandStack();
-		BlockPos pos0 = hitResult.getBlockPos();
-		Vector3i pos = new Vector3i(pos0.getX(), pos0.getY(), pos0.getZ());
-		if(is.getItem().equals(POS_MARKER)){
-			BuildVoxSystem.onRightClickBlockByPosMarker(playerId, pos);
-			return ActionResult.SUCCESS;
-		}else {
+
+		private ActionResult onBlockUse(net.minecraft.entity.player.PlayerEntity player0,
+										net.minecraft.world.World world0, Hand hand, BlockHitResult hitResult) {
+			//One event triggers this function with different combinations of arguments.
+			//So filters the arguments by their super classes.
+			//The following filter may have redundant parts. For example, when the player is a server one, the world
+			//should be also a server one.
+			if (!(player0 instanceof ServerPlayerEntity player1)) {
+				return ActionResult.PASS;
+			}
+			if (!(world0 instanceof ServerWorld)) {
+				return ActionResult.PASS;
+			}
+			if (hand != Hand.MAIN_HAND) {
+				return ActionResult.PASS;
+			}
+			UUID playerId = player1.getUuid();
+			ItemStack is = player0.getMainHandStack();
+			BlockPos pos0 = hitResult.getBlockPos();
+			Vector3i pos = new Vector3i(pos0.getX(), pos0.getY(), pos0.getZ());
+			for (var e : clickBlockMap.entrySet()) {
+				if (e.getKey().equals(is.getItem())) {
+					e.getValue().onRightClickBlock(playerId, pos);
+					return ActionResult.SUCCESS;
+				}
+			}
 			return ActionResult.PASS;
 		}
 	}

@@ -253,6 +253,14 @@ public class BuildVoxSystem {
         player.getMessenger().sendOutMessage(Messages.ofPosExit(index, pos.x(), pos.y(), pos.z()));
     }
 
+    public static void onLeftClickBlockByBrush(UUID playerId, Vector3i pos) {
+        //TODO
+    }
+
+    public static void onRightClickBlockByBrush(UUID playerId, Vector3i pos) {
+        //TODO
+    }
+
     private static class BuildVoxWriter extends Writer {
         private final LinePrinter linePrinter;
         private String str = "";
