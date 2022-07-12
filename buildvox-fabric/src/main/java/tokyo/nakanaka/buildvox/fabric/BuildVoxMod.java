@@ -9,7 +9,6 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
@@ -64,20 +63,16 @@ public class BuildVoxMod implements ModInitializer {
 	public void onInitialize() {
 		Registry.register(Registry.ITEM, new Identifier("buildvox", "pos_marker"), POS_MARKER);
 		Registry.register(Registry.ITEM, new Identifier("buildvox", "brush"), BRUSH);
-		ServerLifecycleEvents.SERVER_STARTING.register(this::onServerStarting);
+		FabricScheduler.initialize();
+		BuildVoxSystem.setScheduler(FabricScheduler.getInstance());
+		BuildVoxSystem.setBlockValidator(new FabricBlockValidator());
+		BlockRegistering.registerBlocks();
 		ServerWorldEvents.LOAD.register(this::onWorldLoad);
 		ServerWorldEvents.UNLOAD.register(this::onWorldUnLoad);
 		ServerEntityEvents.ENTITY_LOAD.register(this::onEntityLoad);
 		ServerEntityEvents.ENTITY_UNLOAD.register(this::onEntityUnload);
 		CommandRegistrationCallback.EVENT.register(this::onCommandRegistration);
 		new ClickBlockEventInitializer().init();
-	}
-
-	private void onServerStarting(MinecraftServer server) {
-		FabricScheduler.initialize();
-		BuildVoxSystem.setScheduler(FabricScheduler.getInstance());
-		BuildVoxSystem.setBlockValidator(new FabricBlockValidator());
-		BlockRegistering.registerBlocks();
 	}
 
 	private void onWorldLoad(MinecraftServer server, ServerWorld world){
