@@ -59,11 +59,13 @@ public class BuildVoxMod implements ModInitializer {
 	public static final Item BRUSH = new Item(new FabricItemSettings().group(ItemGroup.TOOLS));
 	private Map<net.minecraft.world.World, NamespacedId> worldIdMap = new HashMap<>();
 	private static final String SUBCOMMAND = "subcommand";
+	private final Map<Item, ClickBlockHandler> clickBlockMap = new HashMap<>();
 
 	@Override
 	public void onInitialize() {
 		Registry.register(Registry.ITEM, new Identifier("buildvox", "pos_marker"), POS_MARKER);
 		Registry.register(Registry.ITEM, new Identifier("buildvox", "brush"), BRUSH);
+		registerClickBlockHandling();
 		ServerLifecycleEvents.SERVER_STARTING.register(this::onServerStarting);
 		ServerWorldEvents.LOAD.register(this::onWorldLoad);
 		ServerWorldEvents.UNLOAD.register(this::onWorldUnLoad);
@@ -72,6 +74,28 @@ public class BuildVoxMod implements ModInitializer {
 		CommandRegistrationCallback.EVENT.register(this::onCommandRegistration);
 		AttackBlockCallback.EVENT.register(this::onAttackBlock);
 		UseBlockCallback.EVENT.register(this::onBlockUse);
+	}
+
+	/** Registers click block handling. */
+	private void registerClickBlockHandling() {
+		clickBlockMap.put(POS_MARKER, new ClickBlockHandler() {
+			@Override
+			public void onLeftClickBlock(UUID playerId, Vector3i pos) {
+				BuildVoxSystem.onLeftClickBlockByPosMarker(playerId, pos);
+			}
+			@Override
+			public void onRightClickBlock(UUID playerId, Vector3i pos) {
+				BuildVoxSystem.onRightClickBlockByPosMarker(playerId, pos);
+			}
+		});
+	}
+
+	/** Handles click block event */
+	private interface ClickBlockHandler {
+		/** left click */
+		void onLeftClickBlock(UUID playerId, Vector3i pos);
+		/** right click*/
+		void onRightClickBlock(UUID playerId, Vector3i pos);
 	}
 
 	private void onServerStarting(MinecraftServer server) {
@@ -252,12 +276,13 @@ public class BuildVoxMod implements ModInitializer {
 		UUID playerId = player1.getUuid();
 		ItemStack is = player0.getMainHandStack();
 		Vector3i pos = new Vector3i(pos0.getX(), pos0.getY(), pos0.getZ());
-		if(is.getItem().equals(POS_MARKER)){
-			BuildVoxSystem.onLeftClickBlockByPosMarker(playerId, pos);
-			return ActionResult.SUCCESS;
-		}else {
-			return ActionResult.PASS;
+		for (var e : clickBlockMap.entrySet()) {
+			if(e.getKey().equals(is.getItem())) {
+				e.getValue().onLeftClickBlock(playerId, pos);
+				return ActionResult.SUCCESS;
+			}
 		}
+		return ActionResult.PASS;
 	}
 
 	private ActionResult onBlockUse(net.minecraft.entity.player.PlayerEntity player0,
@@ -279,12 +304,14 @@ public class BuildVoxMod implements ModInitializer {
 		ItemStack is = player0.getMainHandStack();
 		BlockPos pos0 = hitResult.getBlockPos();
 		Vector3i pos = new Vector3i(pos0.getX(), pos0.getY(), pos0.getZ());
-		if(is.getItem().equals(POS_MARKER)){
-			BuildVoxSystem.onRightClickBlockByPosMarker(playerId, pos);
-			return ActionResult.SUCCESS;
-		}else {
-			return ActionResult.PASS;
+		for (var e : clickBlockMap.entrySet()) {
+			if(e.getKey().equals(is.getItem())) {
+				e.getValue().onRightClickBlock(playerId, pos);
+				return ActionResult.SUCCESS;
+			}
 		}
+		return ActionResult.PASS;
+
 	}
 
 }
