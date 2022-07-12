@@ -60,6 +60,13 @@ public class FabricPlayerEntity implements PlayerEntity {
         original.giveItemStack(itemStack);
     }
 
+    @Override
+    public void giveBrush() {
+        ItemConvertible item = BuildVoxMod.BRUSH;
+        ItemStack itemStack = new ItemStack(item, 1);
+        original.giveItemStack(itemStack);
+    }
+
     /**
      * @throws IllegalArgumentException if world is not the instance of {@link FabricWorld}
      */

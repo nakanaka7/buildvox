@@ -56,12 +56,14 @@ import static tokyo.nakanaka.buildvox.fabric.NamespacedIds.createId;
  */
 public class BuildVoxMod implements ModInitializer {
 	public static final Item POS_MARKER = new Item(new FabricItemSettings().group(ItemGroup.TOOLS));
+	public static final Item BRUSH = new Item(new FabricItemSettings().group(ItemGroup.TOOLS));
 	private Map<net.minecraft.world.World, NamespacedId> worldIdMap = new HashMap<>();
 	private static final String SUBCOMMAND = "subcommand";
 
 	@Override
 	public void onInitialize() {
 		Registry.register(Registry.ITEM, new Identifier("buildvox", "pos_marker"), POS_MARKER);
+		Registry.register(Registry.ITEM, new Identifier("buildvox", "brush"), BRUSH);
 		ServerLifecycleEvents.SERVER_STARTING.register(this::onServerStarting);
 		ServerWorldEvents.LOAD.register(this::onWorldLoad);
 		ServerWorldEvents.UNLOAD.register(this::onWorldUnLoad);

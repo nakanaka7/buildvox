@@ -41,6 +41,7 @@ public class BuildVoxPlugin extends JavaPlugin implements Listener {
     private Map<org.bukkit.World, NamespacedId> worldIdMap = new HashMap<>();
     private UUID consoleId;
     public static String POS_MARKER_LOCALIZED_NAME = "BuildVoxBukkit";
+    public static String BRUSH_LOCALIZED_NAME = "buildvox_brush";
 
     public static BuildVoxPlugin getInstance() {
         return instance;

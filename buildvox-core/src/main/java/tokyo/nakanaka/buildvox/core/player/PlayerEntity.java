@@ -38,6 +38,12 @@ public interface PlayerEntity extends ColoredParticleSpawner {
     void givePosMarker();
 
     /**
+     * Give her a brush.
+     */
+    default void giveBrush() {
+    }
+
+    /**
      * Spawn particles to the player. Spawn colored redstone dust as possible. This particle
      * may be seen only to the player.
      * @param color a color of particle.
