@@ -88,6 +88,16 @@ public class BuildVoxMod implements ModInitializer {
 				BuildVoxSystem.onRightClickBlockByPosMarker(playerId, pos);
 			}
 		});
+		clickBlockMap.put(BRUSH, new ClickBlockHandler() {
+			@Override
+			public void onLeftClickBlock(UUID playerId, Vector3i pos) {
+				BuildVoxSystem.onLeftClickBlockByBrush(playerId, pos);
+			}
+			@Override
+			public void onRightClickBlock(UUID playerId, Vector3i pos) {
+				BuildVoxSystem.onRightClickBlockByBrush(playerId, pos);
+			}
+		});
 	}
 
 	/** Handles click block event */
