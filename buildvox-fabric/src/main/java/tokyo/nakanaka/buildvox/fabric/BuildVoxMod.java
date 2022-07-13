@@ -131,26 +131,35 @@ public class BuildVoxMod implements ModInitializer {
 	/** Initializer of commands event. */
 	private static class CommandInitializer {
 		private static final String SUBCOMMAND = "subcommand";
+		private final Map<String, HandlerCompleter> cmdMap = new HashMap<>();
 
 		public void init() {
+			registerCommand("bv", BuildVoxSystem::onBvCommand, BuildVoxSystem::onBvTabComplete);
+			registerCommand("bvd", BuildVoxSystem::onBvdCommand, BuildVoxSystem::onBvdTabComplete);
+			adaptEvents();
+		}
+
+		private void registerCommand(String label, CommandHandler handler, TabCompleteListCreator completer) {
+			cmdMap.put(label, new HandlerCompleter(handler, completer));
+		}
+
+		private record HandlerCompleter (CommandHandler handler, TabCompleteListCreator completer) {
+		}
+
+		private void adaptEvents() {
 			CommandRegistrationCallback.EVENT.register(this::onCommandRegistration);
 		}
 
 		private void onCommandRegistration(CommandDispatcher<ServerCommandSource> dispatcher, boolean dedicated) {
-			dispatcher.register(
-					CommandManager
-							.literal("bv")
-							.then(argument(SUBCOMMAND, StringArgumentType.greedyString())
-									.suggests((context, builder) -> onTabComplete(context, builder, BuildVoxSystem::onBvTabComplete))
-									.executes((context) -> onCommand(BuildVoxSystem::onBvCommand, context)))
-			);
-			dispatcher.register(
-					CommandManager
-							.literal("bvd")
-							.then(argument(SUBCOMMAND, StringArgumentType.greedyString())
-									.suggests((context, builder) -> onTabComplete(context, builder, BuildVoxSystem::onBvdTabComplete))
-									.executes((context) -> onCommand(BuildVoxSystem::onBvdCommand, context)))
-			);
+			for(var e : cmdMap.entrySet()) {
+				dispatcher.register(
+						CommandManager
+								.literal(e.getKey())
+								.then(argument(SUBCOMMAND, StringArgumentType.greedyString())
+										.suggests((context, builder) -> onTabComplete(context, builder, e.getValue().completer()))
+										.executes((context) -> onCommand(e.getValue().handler(), context)))
+				);
+			}
 		}
 
 		private int onCommand(CommandHandler callback, CommandContext<ServerCommandSource> context) {
