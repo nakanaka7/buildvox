@@ -9,8 +9,13 @@ import java.util.Set;
 public class BukkitBlockEntity implements Block.Entity {
     private Object obj;
 
+    @Deprecated
     public BukkitBlockEntity(BlockEntityContent obj) {
         this.obj = obj;
+    }
+
+    public BukkitBlockEntity(Iterable<BlockUtils.BlockEntityData> blockEntityDatum, Inventory inventory) {
+        this.obj = new BukkitBlockEntity(blockEntityDatum, inventory);
     }
 
     public BlockEntityContent getObj() {
