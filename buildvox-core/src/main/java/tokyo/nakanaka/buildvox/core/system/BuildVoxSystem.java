@@ -10,8 +10,10 @@ import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.World;
 import tokyo.nakanaka.buildvox.core.block.Block;
 import tokyo.nakanaka.buildvox.core.block.BlockValidator;
+import tokyo.nakanaka.buildvox.core.clientWorld.PlayerClientWorld;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
 import tokyo.nakanaka.buildvox.core.command.bvdCommand.BvdCommand;
+import tokyo.nakanaka.buildvox.core.edit.WorldEdits;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.DummyPlayer;
 import tokyo.nakanaka.buildvox.core.player.RealPlayer;
@@ -254,7 +256,15 @@ public class BuildVoxSystem {
     }
 
     public static void onLeftClickBlockByBrush(UUID playerId, Vector3i pos) {
-        //TODO
+        var player = realPlayerRegistry.get(playerId);
+        var worldId = player.getPlayerEntity().getWorldId();
+        var world = worldRegistry.get(worldId);
+        player.setEditWorld(world);
+        var pcw = new PlayerClientWorld(player);
+        var src = player.getBrushSource();
+        WorldEdits.paste(src.getClipboard(), pcw, pos.toVector3d());
+        pcw.end();
+        player.getMessenger().sendOutMessage("this is experiment");
     }
 
     public static void onRightClickBlockByBrush(UUID playerId, Vector3i pos) {

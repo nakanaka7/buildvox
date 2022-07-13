@@ -1,6 +1,8 @@
 package tokyo.nakanaka.buildvox.core.player;
 
 import tokyo.nakanaka.buildvox.core.Clipboard;
+import tokyo.nakanaka.buildvox.core.brushSource.BrushSource;
+import tokyo.nakanaka.buildvox.core.brushSource.SphereBrushSource;
 import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.particleGui.Color;
@@ -25,6 +27,7 @@ public class Player {
     private World editWorld;
     private Vector3i[] posArray = new Vector3i[2];
     private Selection selection;
+    private BrushSource brushSource = SphereBrushSource.newInstance(VoxelBlock.valueOf("stone"), 3);
     private final PlayerEntity playerEntity;
     private final PlayerMessenger messenger;
     private boolean particleGuiVisible;
@@ -134,6 +137,14 @@ public class Player {
      */
     public void setClipboard(Clipboard clipboard) {
         this.clipboard = clipboard;
+    }
+
+    public BrushSource getBrushSource() {
+        return brushSource;
+    }
+
+    public void setBrushSource(BrushSource brushSource) {
+        this.brushSource = brushSource;
     }
 
     /**
