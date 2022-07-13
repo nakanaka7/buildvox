@@ -64,7 +64,7 @@ public class BuildVoxMod implements ModInitializer {
 		BuildVoxSystem.setScheduler(FabricScheduler.getInstance());
 		BuildVoxSystem.setBlockValidator(new FabricBlockValidator());
 		BlockRegistering.registerBlocks();
-		initWorldManagement();
+		WorldManager.init();
 		initPlayerManagement();
 		new CommandInitializer().init();
 		new ClickBlockEventInitializer().init();
@@ -75,21 +75,25 @@ public class BuildVoxMod implements ModInitializer {
 		Registry.register(Registry.ITEM, new Identifier("buildvox", "brush"), BRUSH);
 	}
 
-	/** Handles world load and unload. */
-	private void initWorldManagement() {
-		ServerWorldEvents.LOAD.register(this::onWorldLoad);
-		ServerWorldEvents.UNLOAD.register(this::onWorldUnLoad);
-	}
+	private static class WorldManager {
+		/**
+		 * Handles world load and unload.
+		 */
+		private static void init() {
+			ServerWorldEvents.LOAD.register(WorldManager::onWorldLoad);
+			ServerWorldEvents.UNLOAD.register(WorldManager::onWorldUnLoad);
+		}
 
-	private void onWorldLoad(MinecraftServer server, ServerWorld world){
-		World fabricWorld = new FabricWorld(world);
-		BuildVoxSystem.getWorldRegistry().register(fabricWorld);
-	}
+		private static void onWorldLoad(MinecraftServer server, ServerWorld world) {
+			World fabricWorld = new FabricWorld(world);
+			BuildVoxSystem.getWorldRegistry().register(fabricWorld);
+		}
 
-	private void onWorldUnLoad(MinecraftServer server, ServerWorld world) {
-		Identifier worldId0 = world.getRegistryKey().getValue();
-		NamespacedId worldId = createId(worldId0);
-		BuildVoxSystem.getWorldRegistry().unregister(worldId);
+		private static void onWorldUnLoad(MinecraftServer server, ServerWorld world) {
+			Identifier worldId0 = world.getRegistryKey().getValue();
+			NamespacedId worldId = createId(worldId0);
+			BuildVoxSystem.getWorldRegistry().unregister(worldId);
+		}
 	}
 
 	/** Handles player load and unload. */
