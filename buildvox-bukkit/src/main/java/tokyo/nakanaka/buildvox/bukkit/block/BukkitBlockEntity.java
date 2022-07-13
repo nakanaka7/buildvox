@@ -4,6 +4,7 @@ import org.bukkit.inventory.Inventory;
 import tokyo.nakanaka.buildvox.bukkit.block.blockEntityData.BlockEntityData;
 import tokyo.nakanaka.buildvox.core.block.Block;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -11,7 +12,11 @@ public class BukkitBlockEntity implements Block.Entity {
     private Object obj;
 
     public BukkitBlockEntity(Iterable<BlockEntityData> blockEntityDatum, Inventory inventory) {
-        this.obj = new BukkitBlockEntity(blockEntityDatum, inventory);
+        Set<BlockEntityData> set = new HashSet<>();
+        for(var e : blockEntityDatum) {
+            set.add(e);
+        }
+        this.obj = new BlockEntityContent(set, inventory);
     }
 
     private BlockEntityContent getObj() {
