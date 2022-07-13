@@ -65,7 +65,7 @@ public class BuildVoxMod implements ModInitializer {
 		BuildVoxSystem.setBlockValidator(new FabricBlockValidator());
 		BlockRegistering.registerBlocks();
 		WorldManager.init();
-		initPlayerManagement();
+		PlayerManager.init();
 		new CommandInitializer().init();
 		new ClickBlockEventInitializer().init();
 	}
@@ -96,29 +96,31 @@ public class BuildVoxMod implements ModInitializer {
 		}
 	}
 
-	/** Handles player load and unload. */
-	private void initPlayerManagement() {
-		ServerEntityEvents.ENTITY_LOAD.register(this::onEntityLoad);
-		ServerEntityEvents.ENTITY_UNLOAD.register(this::onEntityUnload);
-	}
-
-	private void onEntityLoad(Entity entity, ServerWorld world) {
-		if(!(entity instanceof ServerPlayerEntity player0)){
-			return;
+	private static class PlayerManager {
+		/** Handles player load and unload. */
+		private static void init() {
+			ServerEntityEvents.ENTITY_LOAD.register(PlayerManager::onEntityLoad);
+			ServerEntityEvents.ENTITY_UNLOAD.register(PlayerManager::onEntityUnload);
 		}
-		PlayerEntity playerEntity = new FabricPlayerEntity(player0);
-		var player = new RealPlayer(playerEntity);
-		player.setParticleGuiVisible(true);
-		BuildVoxSystem.getRealPlayerRegistry().register(player);
-	}
 
-	private void onEntityUnload(Entity entity, ServerWorld world) {
-		if(!(entity instanceof ServerPlayerEntity player0)){
-			return;
+		private static void onEntityLoad(Entity entity, ServerWorld world) {
+			if(!(entity instanceof ServerPlayerEntity player0)){
+				return;
+			}
+			PlayerEntity playerEntity = new FabricPlayerEntity(player0);
+			var player = new RealPlayer(playerEntity);
+			player.setParticleGuiVisible(true);
+			BuildVoxSystem.getRealPlayerRegistry().register(player);
 		}
-		UUID playerId = player0.getUuid();
-		Player player = BuildVoxSystem.getRealPlayerRegistry().unregister(playerId);
-		player.setParticleGuiVisible(false);
+
+		private static void onEntityUnload(Entity entity, ServerWorld world) {
+			if(!(entity instanceof ServerPlayerEntity player0)){
+				return;
+			}
+			UUID playerId = player0.getUuid();
+			Player player = BuildVoxSystem.getRealPlayerRegistry().unregister(playerId);
+			player.setParticleGuiVisible(false);
+		}
 	}
 
 	/** Initializer of commands event. */
