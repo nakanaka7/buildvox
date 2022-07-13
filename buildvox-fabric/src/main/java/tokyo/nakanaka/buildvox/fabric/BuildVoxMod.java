@@ -141,14 +141,14 @@ public class BuildVoxMod implements ModInitializer {
 					CommandManager
 							.literal("bv")
 							.then(argument(SUBCOMMAND, StringArgumentType.greedyString())
-									.suggests(this::onBvTabComplete)
+									.suggests((context, builder) -> onTabComplete(context, builder, BuildVoxSystem::onBvTabComplete))
 									.executes((context) -> onCommand(BuildVoxSystem::onBvCommand, context)))
 			);
 			dispatcher.register(
 					CommandManager
 							.literal("bvd")
 							.then(argument(SUBCOMMAND, StringArgumentType.greedyString())
-									.suggests(this::onBvdTabComplete)
+									.suggests((context, builder) -> onTabComplete(context, builder, BuildVoxSystem::onBvdTabComplete))
 									.executes((context) -> onCommand(BuildVoxSystem::onBvdCommand, context)))
 			);
 		}
@@ -192,18 +192,6 @@ public class BuildVoxMod implements ModInitializer {
 
 		private interface TabCompleteListCreator {
 			List<String> create(String[] args);
-		}
-
-		private CompletableFuture<Suggestions> onBvTabComplete(CommandContext<ServerCommandSource> context,
-															   SuggestionsBuilder builder) {
-			TabCompleteListCreator listCreator = BuildVoxSystem::onBvTabComplete;
-			return onTabComplete(context, builder, listCreator);
-		}
-
-		private CompletableFuture<Suggestions> onBvdTabComplete(CommandContext<ServerCommandSource> context,
-																SuggestionsBuilder builder) {
-			TabCompleteListCreator listCreator = BuildVoxSystem::onBvdTabComplete;
-			return onTabComplete(context, builder, listCreator);
 		}
 
 		private CompletableFuture<Suggestions> onTabComplete(CommandContext<ServerCommandSource> context,
