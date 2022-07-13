@@ -45,9 +45,6 @@ public class BlockUtils {
         }
     }
 
-    public static record BlockEntityContent(Set<BlockEntityData> blockEntityDataSet, Inventory inventory) {
-    }
-
     public static void registerBlocks() {
         for(var material : Material.values()){
             if(material.isBlock()) {
@@ -73,7 +70,7 @@ public class BlockUtils {
         if(blockState instanceof Container container) {
             inventory = container.getSnapshotInventory();
         }
-        var entityContent = new BlockEntityContent(blockEntityDataSet, inventory);
+        var entityContent = new BukkitBlockEntity.BlockEntityContent(blockEntityDataSet, inventory);
         var entity = new BukkitBlockEntity(entityContent);
         return new VoxelBlock(block.getBlockId(), block.getState(), entity);
     }
@@ -85,7 +82,7 @@ public class BlockUtils {
         org.bukkit.block.BlockState blockState = voxel.getState();
         BukkitBlockEntity entity = (BukkitBlockEntity) block.getEntity();
         if(entity != null) {
-            BlockUtils.BlockEntityContent entityContent = entity.getObj();
+            BukkitBlockEntity.BlockEntityContent entityContent = entity.getObj();
             for (var blockEntityData : entityContent.blockEntityDataSet()) {
                 blockEntityData.merge(blockState);
             }
