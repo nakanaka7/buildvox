@@ -85,7 +85,7 @@ public class BlockUtils {
         org.bukkit.block.BlockState blockState = voxel.getState();
         BukkitBlockEntity entity = (BukkitBlockEntity) block.getEntity();
         if(entity != null) {
-            BlockUtils.BlockEntityContent entityContent = (BlockUtils.BlockEntityContent) entity.getObj();
+            BlockUtils.BlockEntityContent entityContent = entity.getObj();
             for (var blockEntityData : entityContent.blockEntityDataSet()) {
                 blockEntityData.merge(blockState);
             }
