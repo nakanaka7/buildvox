@@ -7,7 +7,7 @@ import java.util.Objects;
 public class BukkitBlockEntity implements Block.Entity {
     private Object obj;
 
-    public BukkitBlockEntity(Object obj) {
+    public BukkitBlockEntity(BlockUtils.BlockEntityContent obj) {
         this.obj = obj;
     }
 
