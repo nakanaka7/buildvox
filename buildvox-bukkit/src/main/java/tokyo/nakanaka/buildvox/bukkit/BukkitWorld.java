@@ -6,8 +6,10 @@ import org.bukkit.block.Sign;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import tokyo.nakanaka.buildvox.bukkit.block.BlockUtils;
+import tokyo.nakanaka.buildvox.bukkit.block.blockEntityData.SignData;
+import tokyo.nakanaka.buildvox.bukkit.block.blockEntityData.BlockEntityData;
 import tokyo.nakanaka.buildvox.bukkit.block.BukkitBlockEntity;
+import tokyo.nakanaka.buildvox.bukkit.block.blockEntityData.CommandBlockData;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.World;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
@@ -47,13 +49,13 @@ public class BukkitWorld implements World {
         org.bukkit.block.Block block = original.getBlockAt(x, y, z);
         org.bukkit.block.BlockState blockState = block.getState();
         VoxelBlock block1 = VoxelBlock.valueOf(blockState.getBlockData().getAsString());
-        Set<BlockUtils.BlockEntityData> blockEntityDataSet = new HashSet<>();
+        Set<BlockEntityData> blockEntityDataSet = new HashSet<>();
         Inventory inventory = null;
         if(blockState instanceof CommandBlock commandBlock) {
-            blockEntityDataSet.add(new BlockUtils.CommandBlockData(commandBlock.getCommand(), commandBlock.getName()));
+            blockEntityDataSet.add(new CommandBlockData(commandBlock.getCommand(), commandBlock.getName()));
         }
         if(blockState instanceof Sign sign) {
-            blockEntityDataSet.add(new BlockUtils.SignData(sign.getLines(), sign.isGlowingText()));
+            blockEntityDataSet.add(new SignData(sign.getLines(), sign.isGlowingText()));
         }
         if(blockState instanceof Container container) {
             inventory = container.getSnapshotInventory();
