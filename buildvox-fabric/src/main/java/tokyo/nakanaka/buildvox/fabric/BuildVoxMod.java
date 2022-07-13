@@ -142,31 +142,27 @@ public class BuildVoxMod implements ModInitializer {
 							.literal("bv")
 							.then(argument(SUBCOMMAND, StringArgumentType.greedyString())
 									.suggests(this::onBvTabComplete)
-									.executes(this::onBvCommand))
+									.executes((context) -> onCommand(BuildVoxSystem::onBvCommand, context)))
 			);
 			dispatcher.register(
 					CommandManager
 							.literal("bvd")
 							.then(argument(SUBCOMMAND, StringArgumentType.greedyString())
 									.suggests(this::onBvdTabComplete)
-									.executes(this::onBvdCommand))
+									.executes((context) -> onCommand(BuildVoxSystem::onBvdCommand, context)))
 			);
 		}
 
-		private int onBvCommand(CommandContext<ServerCommandSource> context) {
+		private int onCommand(CommandHandler callback, CommandContext<ServerCommandSource> context) {
 			String subcommand = StringArgumentType.getString(context, SUBCOMMAND);
 			String[] args = subcommand.split(" ", - 1);
 			CommandSource source = getCommandSource(context.getSource());
-			BuildVoxSystem.onBvCommand(source, args);
+			callback.handle(source, args);
 			return 1;
 		}
 
-		private int onBvdCommand(CommandContext<ServerCommandSource> context) {
-			String subcommand = StringArgumentType.getString(context, SUBCOMMAND);
-			String[] args = subcommand.split(" ", - 1);
-			CommandSource source = getCommandSource(context.getSource());
-			BuildVoxSystem.onBvdCommand(source, args);
-			return 1;
+		private interface CommandHandler {
+			void handle(CommandSource source, String[] args);
 		}
 
 		private CommandSource getCommandSource(ServerCommandSource source) {
