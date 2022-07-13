@@ -49,7 +49,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import static net.minecraft.server.command.CommandManager.argument;
-import static tokyo.nakanaka.buildvox.fabric.NamespacedIds.createId;
+import static tokyo.nakanaka.buildvox.fabric.NamespacedIds.getId;
 
 /**
  * The entry point of BuildVox Fabric
@@ -90,8 +90,7 @@ public class BuildVoxMod implements ModInitializer {
 		}
 
 		private static void onWorldUnLoad(MinecraftServer server, ServerWorld world) {
-			Identifier worldId0 = world.getRegistryKey().getValue();
-			NamespacedId worldId = createId(worldId0);
+			NamespacedId worldId = getId(world);
 			BuildVoxSystem.getWorldRegistry().unregister(worldId);
 		}
 	}
@@ -181,8 +180,7 @@ public class BuildVoxMod implements ModInitializer {
 				return CommandSource.newInstance(playerId);
 			} catch (CommandSyntaxException ex) {
 				net.minecraft.world.World world = source.getWorld();
-				var regKey = world.getRegistryKey();
-				NamespacedId worldId = NamespacedIds.createId(regKey.getValue());
+				NamespacedId worldId = getId(world);
 				Vec3d p = source.getPosition();
 				Vector3i pos = new Vector3i((int)Math.floor(p.getX()), (int)Math.floor(p.getY()), (int)Math.floor(p.getZ()));
 				Messenger messenger = new Messenger() {
