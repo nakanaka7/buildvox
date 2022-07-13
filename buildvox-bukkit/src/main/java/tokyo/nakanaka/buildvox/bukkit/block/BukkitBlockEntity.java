@@ -18,8 +18,17 @@ public class BukkitBlockEntity implements Block.Entity {
         this.obj = new BukkitBlockEntity(blockEntityDatum, inventory);
     }
 
+    @Deprecated
     public BlockEntityContent getObj() {
         return (BlockEntityContent) obj;
+    }
+
+    public Iterable<BlockUtils.BlockEntityData> getBlockEntityDatum() {
+        return getObj().blockEntityDataSet;
+    }
+
+    public Inventory getInventory() {
+        return getObj().inventory;
     }
 
     @Override
