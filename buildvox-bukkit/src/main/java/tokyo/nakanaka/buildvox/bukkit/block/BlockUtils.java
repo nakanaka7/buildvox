@@ -4,18 +4,10 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Server;
 import org.bukkit.block.CommandBlock;
-import org.bukkit.block.Container;
 import org.bukkit.block.Sign;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 import tokyo.nakanaka.buildvox.bukkit.BuildVoxPlugin;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
-import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public class BlockUtils {
     private static final Server server = BuildVoxPlugin.getInstance().getServer();
@@ -24,7 +16,7 @@ public class BlockUtils {
         void merge(org.bukkit.block.BlockState blockState);
     }
 
-    private static record CommandBlockData(String command, String name) implements BlockEntityData {
+    public static record CommandBlockData(String command, String name) implements BlockUtils.BlockEntityData {
         public void merge(org.bukkit.block.BlockState blockState){
             if(blockState instanceof CommandBlock commandBlock) {
                 commandBlock.setCommand(command);
@@ -33,7 +25,7 @@ public class BlockUtils {
         }
     }
 
-    private static record SignData(String[] lines, boolean glowing) implements BlockEntityData {
+    public static record SignData(String[] lines, boolean glowing) implements BlockUtils.BlockEntityData {
         @Override
         public void merge(org.bukkit.block.BlockState blockState) {
             if(blockState instanceof Sign sign) {
@@ -53,45 +45,6 @@ public class BlockUtils {
                 tokyo.nakanaka.buildvox.core.block.Block block = new BukkitBlock(id, new BukkitBlockStateTransformer(server));
                 BuildVoxSystem.getBlockRegistry().register(block);
             }
-        }
-    }
-
-    public static VoxelBlock getVoxelBlock(org.bukkit.block.Block voxel) {
-        org.bukkit.block.BlockState blockState = voxel.getState();
-        VoxelBlock block = VoxelBlock.valueOf(blockState.getBlockData().getAsString());
-        Set<BlockEntityData> blockEntityDataSet = new HashSet<>();
-        Inventory inventory = null;
-        if(blockState instanceof CommandBlock commandBlock) {
-            blockEntityDataSet.add(new CommandBlockData(commandBlock.getCommand(), commandBlock.getName()));
-        }
-        if(blockState instanceof Sign sign) {
-            blockEntityDataSet.add(new SignData(sign.getLines(), sign.isGlowingText()));
-        }
-        if(blockState instanceof Container container) {
-            inventory = container.getSnapshotInventory();
-        }
-        var entity = new BukkitBlockEntity(blockEntityDataSet, inventory);
-        return new VoxelBlock(block.getBlockId(), block.getState(), entity);
-    }
-
-    public static void setVoxelBlock(org.bukkit.block.Block voxel, VoxelBlock block, boolean physics) {
-        String blockStr = block.withoutEntity().toString();
-        BlockData blockData = BuildVoxPlugin.getInstance().getServer().createBlockData(blockStr);
-        voxel.setBlockData(blockData, physics);
-        org.bukkit.block.BlockState blockState = voxel.getState();
-        BukkitBlockEntity entity = (BukkitBlockEntity) block.getEntity();
-        if(entity != null) {
-            for (var blockEntityData : entity.getBlockEntityDatum()) {
-                blockEntityData.merge(blockState);
-            }
-            blockState.update();
-            var inventory = entity.getInventory();
-            if (blockState instanceof Container container && inventory != null) {
-                ItemStack[] contents = inventory.getContents();
-                container.getInventory().setContents(contents);
-            }
-        }else {
-            blockState.update();
         }
     }
 
