@@ -1,7 +1,6 @@
 package tokyo.nakanaka.buildvox.bukkit.block;
 
 import tokyo.nakanaka.buildvox.core.block.Block;
-import tokyo.nakanaka.buildvox.core.block.EntityImpl;
 
 import java.util.Objects;
 
