@@ -30,7 +30,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.World;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
@@ -43,7 +42,10 @@ import tokyo.nakanaka.buildvox.core.system.Messenger;
 import tokyo.nakanaka.buildvox.fabric.block.BlockRegistering;
 import tokyo.nakanaka.buildvox.fabric.block.FabricBlockValidator;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import static net.minecraft.server.command.CommandManager.argument;
@@ -80,26 +82,14 @@ public class BuildVoxMod implements ModInitializer {
 	}
 
 	private void onWorldLoad(MinecraftServer server, ServerWorld world){
-		Set<RegistryKey<net.minecraft.world.World>> worldRegistryKeys = server.getWorldRegistryKeys();
-		for (var key : worldRegistryKeys) {
-			if (world == server.getWorld(key)) {//have to find the registry key of worldId
-				World world1 = new FabricWorld(world);
-				BuildVoxSystem.getWorldRegistry().register(world1);
-				break;
-			}
-		}
+		World fabricWorld = new FabricWorld(world);
+		BuildVoxSystem.getWorldRegistry().register(fabricWorld);
 	}
 
 	private void onWorldUnLoad(MinecraftServer server, ServerWorld world) {
-		Set<RegistryKey<net.minecraft.world.World>> worldRegistryKeys = server.getWorldRegistryKeys();
-		for(var key : worldRegistryKeys) {
-			if(world == server.getWorld(key)) {//have to find the registry key of worldId
-				Identifier worldId0 = key.getValue();
-				NamespacedId worldId = createId(worldId0);
-				BuildVoxSystem.getWorldRegistry().unregister(worldId);
-				break;
-			}
-		}
+		Identifier worldId0 = world.getRegistryKey().getValue();
+		NamespacedId worldId = createId(worldId0);
+		BuildVoxSystem.getWorldRegistry().unregister(worldId);
 	}
 
 	/** Handles player load and unload. */
