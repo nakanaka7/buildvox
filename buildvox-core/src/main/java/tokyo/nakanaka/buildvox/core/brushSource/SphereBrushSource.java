@@ -15,8 +15,10 @@ public class SphereBrushSource extends BrushSource {
 
     public static SphereBrushSource newInstance(VoxelBlock block, int size) {
         Region3d sphere = new Sphere(size * 0.5);
-        Selection sel = new Selection(sphere, size * 0.5, size * 0.5, size * 0.5, -size * 0.5, -size * 0.5, -size * 0.5)
-                .translate(0.5, 0.5, 0.5);
+        Selection sel = new Selection(sphere, size * 0.5, size * 0.5, size * 0.5, -size * 0.5, -size * 0.5, -size * 0.5);
+        if(size % 2 == 1) {
+            sel = sel.translate(0.5, 0.5, 0.5);
+        }
         Clipboard clipboard = new Clipboard();
         VoxelSpaceEdits.fill(clipboard, sel.calculateBlockPosSet(), block);
         return new SphereBrushSource(clipboard);
