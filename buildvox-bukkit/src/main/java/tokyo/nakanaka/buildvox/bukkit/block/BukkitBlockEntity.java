@@ -1,18 +1,34 @@
 package tokyo.nakanaka.buildvox.bukkit.block;
 
+import org.bukkit.inventory.Inventory;
+import tokyo.nakanaka.buildvox.bukkit.block.blockEntityData.BlockEntityData;
 import tokyo.nakanaka.buildvox.core.block.Block;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 public class BukkitBlockEntity implements Block.Entity {
     private Object obj;
 
-    public BukkitBlockEntity(Object obj) {
-        this.obj = obj;
+    public BukkitBlockEntity(Iterable<BlockEntityData> blockEntityDatum, Inventory inventory) {
+        Set<BlockEntityData> set = new HashSet<>();
+        for(var e : blockEntityDatum) {
+            set.add(e);
+        }
+        this.obj = new BlockEntityContent(set, inventory);
     }
 
-    public Object getObj() {
-        return obj;
+    private BlockEntityContent getObj() {
+        return (BlockEntityContent) obj;
+    }
+
+    public Iterable<BlockEntityData> getBlockEntityDatum() {
+        return getObj().blockEntityDataSet;
+    }
+
+    public Inventory getInventory() {
+        return getObj().inventory;
     }
 
     @Override
@@ -28,4 +44,6 @@ public class BukkitBlockEntity implements Block.Entity {
         return Objects.hash(obj);
     }
 
+    private static record BlockEntityContent(Set<BlockEntityData> blockEntityDataSet, Inventory inventory) {
+    }
 }
