@@ -2,16 +2,15 @@ package tokyo.nakanaka.buildvox.bukkit.block;
 
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.block.Block;
-import tokyo.nakanaka.buildvox.core.block.BlockStateTransformer;
 import tokyo.nakanaka.buildvox.core.block.BlockTransformation;
 
 import java.util.Map;
 
 public class BukkitBlock implements Block<BukkitBlockState, BukkitBlockEntity> {
     private NamespacedId id;
-    private BlockStateTransformer stateTransformer;
+    private BukkitBlockStateTransformer stateTransformer;
 
-    public BukkitBlock(NamespacedId id, BlockStateTransformer stateTransformer) {
+    public BukkitBlock(NamespacedId id, BukkitBlockStateTransformer stateTransformer) {
         this.id = id;
         this.stateTransformer = stateTransformer;
     }
