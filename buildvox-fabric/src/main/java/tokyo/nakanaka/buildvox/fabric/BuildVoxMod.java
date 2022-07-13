@@ -1,6 +1,5 @@
 package tokyo.nakanaka.buildvox.fabric;
 
-import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -133,45 +132,50 @@ public class BuildVoxMod implements ModInitializer {
 		private static final String SUBCOMMAND = "subcommand";
 		private final Map<String, HandlerCompleter> cmdMap = new HashMap<>();
 
+		/** Initialize */
 		public void init() {
 			registerCommand("bv", BuildVoxSystem::onBvCommand, BuildVoxSystem::onBvTabComplete);
 			registerCommand("bvd", BuildVoxSystem::onBvdCommand, BuildVoxSystem::onBvdTabComplete);
 			adaptEvents();
 		}
 
-		private void registerCommand(String label, CommandHandler handler, TabCompleteListCreator completer) {
+		/** Registers command to this initializer. Calling adaptEvents() is needed to register events actually to mod. */
+		private void registerCommand(String label, CommandHandler handler, TabCompleter completer) {
 			cmdMap.put(label, new HandlerCompleter(handler, completer));
 		}
 
-		private record HandlerCompleter (CommandHandler handler, TabCompleteListCreator completer) {
+		private interface CommandHandler {
+			void handle(CommandSource source, String[] args);
 		}
 
+		private interface TabCompleter {
+			List<String> create(String[] args);
+		}
+
+		private record HandlerCompleter (CommandHandler handler, TabCompleter completer) {
+		}
+
+		/** Registers events to mod. */
 		private void adaptEvents() {
-			CommandRegistrationCallback.EVENT.register(this::onCommandRegistration);
+			CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
+				for(var e : cmdMap.entrySet()) {
+					dispatcher.register(
+							CommandManager
+									.literal(e.getKey())
+									.then(argument(SUBCOMMAND, StringArgumentType.greedyString())
+											.suggests((context, builder) -> onTabComplete(context, builder, e.getValue().completer()))
+											.executes((context) -> onCommand(context, e.getValue().handler())))
+					);
+				}
+			});
 		}
 
-		private void onCommandRegistration(CommandDispatcher<ServerCommandSource> dispatcher, boolean dedicated) {
-			for(var e : cmdMap.entrySet()) {
-				dispatcher.register(
-						CommandManager
-								.literal(e.getKey())
-								.then(argument(SUBCOMMAND, StringArgumentType.greedyString())
-										.suggests((context, builder) -> onTabComplete(context, builder, e.getValue().completer()))
-										.executes((context) -> onCommand(e.getValue().handler(), context)))
-				);
-			}
-		}
-
-		private int onCommand(CommandHandler callback, CommandContext<ServerCommandSource> context) {
+		private int onCommand(CommandContext<ServerCommandSource> context, CommandHandler callback) {
 			String subcommand = StringArgumentType.getString(context, SUBCOMMAND);
 			String[] args = subcommand.split(" ", - 1);
 			CommandSource source = getCommandSource(context.getSource());
 			callback.handle(source, args);
 			return 1;
-		}
-
-		private interface CommandHandler {
-			void handle(CommandSource source, String[] args);
 		}
 
 		private CommandSource getCommandSource(ServerCommandSource source) {
@@ -199,12 +203,8 @@ public class BuildVoxMod implements ModInitializer {
 			}
 		}
 
-		private interface TabCompleteListCreator {
-			List<String> create(String[] args);
-		}
-
 		private CompletableFuture<Suggestions> onTabComplete(CommandContext<ServerCommandSource> context,
-															 SuggestionsBuilder builder, TabCompleteListCreator listCreator) {
+															 SuggestionsBuilder builder, TabCompleter listCreator) {
 			String subcommand;
 			//when the subcommand is empty, it throws IllegalArgumentException
 			try {
