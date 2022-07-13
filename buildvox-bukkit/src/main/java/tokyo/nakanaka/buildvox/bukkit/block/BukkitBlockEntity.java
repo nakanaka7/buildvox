@@ -9,17 +9,11 @@ import java.util.Set;
 public class BukkitBlockEntity implements Block.Entity {
     private Object obj;
 
-    @Deprecated
-    public BukkitBlockEntity(BlockEntityContent obj) {
-        this.obj = obj;
-    }
-
     public BukkitBlockEntity(Iterable<BlockUtils.BlockEntityData> blockEntityDatum, Inventory inventory) {
         this.obj = new BukkitBlockEntity(blockEntityDatum, inventory);
     }
 
-    @Deprecated
-    public BlockEntityContent getObj() {
+    private BlockEntityContent getObj() {
         return (BlockEntityContent) obj;
     }
 
@@ -44,6 +38,6 @@ public class BukkitBlockEntity implements Block.Entity {
         return Objects.hash(obj);
     }
 
-    public static record BlockEntityContent(Set<BlockUtils.BlockEntityData> blockEntityDataSet, Inventory inventory) {
+    private static record BlockEntityContent(Set<BlockUtils.BlockEntityData> blockEntityDataSet, Inventory inventory) {
     }
 }
