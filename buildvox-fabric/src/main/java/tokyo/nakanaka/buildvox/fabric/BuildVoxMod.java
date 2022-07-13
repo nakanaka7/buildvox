@@ -70,7 +70,7 @@ public class BuildVoxMod implements ModInitializer {
 		new ClickBlockEventInitializer().init();
 	}
 
-	private void registerItems() {
+	private static void registerItems() {
 		Registry.register(Registry.ITEM, new Identifier("buildvox", "pos_marker"), POS_MARKER);
 		Registry.register(Registry.ITEM, new Identifier("buildvox", "brush"), BRUSH);
 	}
