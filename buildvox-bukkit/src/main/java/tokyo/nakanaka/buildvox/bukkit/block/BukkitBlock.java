@@ -4,11 +4,10 @@ import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.block.Block;
 import tokyo.nakanaka.buildvox.core.block.BlockStateTransformer;
 import tokyo.nakanaka.buildvox.core.block.BlockTransformation;
-import tokyo.nakanaka.buildvox.core.block.EntityImpl;
 
 import java.util.Map;
 
-public class BukkitBlock implements Block<BukkitBlockState, EntityImpl> {
+public class BukkitBlock implements Block<BukkitBlockState, BukkitBlockEntity> {
     private NamespacedId id;
     private BlockStateTransformer stateTransformer;
 

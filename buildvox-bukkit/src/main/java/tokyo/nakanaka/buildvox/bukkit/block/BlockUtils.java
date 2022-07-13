@@ -11,7 +11,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import tokyo.nakanaka.buildvox.bukkit.BuildVoxPlugin;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
-import tokyo.nakanaka.buildvox.core.block.EntityImpl;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 
@@ -75,7 +74,7 @@ public class BlockUtils {
             inventory = container.getSnapshotInventory();
         }
         var entityContent = new BlockEntityContent(blockEntityDataSet, inventory);
-        var entity = new EntityImpl(entityContent);
+        var entity = new BukkitBlockEntity(entityContent);
         return new VoxelBlock(block.getBlockId(), block.getState(), entity);
     }
 
@@ -84,7 +83,7 @@ public class BlockUtils {
         BlockData blockData = server.createBlockData(blockStr);
         voxel.setBlockData(blockData, physics);
         org.bukkit.block.BlockState blockState = voxel.getState();
-        EntityImpl entity = (EntityImpl) block.getEntity();
+        BukkitBlockEntity entity = (BukkitBlockEntity) block.getEntity();
         if(entity != null) {
             BlockUtils.BlockEntityContent entityContent = (BlockUtils.BlockEntityContent) entity.getObj();
             for (var blockEntityData : entityContent.blockEntityDataSet()) {
