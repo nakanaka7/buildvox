@@ -11,8 +11,8 @@ public class BukkitBlockEntity implements Block.Entity {
         this.obj = obj;
     }
 
-    public Object getObj() {
-        return obj;
+    public BlockUtils.BlockEntityContent getObj() {
+        return (BlockUtils.BlockEntityContent) obj;
     }
 
     @Override
