@@ -11,10 +11,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import tokyo.nakanaka.buildvox.bukkit.BuildVoxPlugin;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
-import tokyo.nakanaka.buildvox.core.block.BlockImpl;
 import tokyo.nakanaka.buildvox.core.block.EntityImpl;
-import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
+import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -55,7 +54,7 @@ public class BlockUtils {
             if(material.isBlock()) {
                 NamespacedKey key = material.getKey();
                 NamespacedId id = new NamespacedId(key.getNamespace().toLowerCase(), key.getKey().toLowerCase());
-                tokyo.nakanaka.buildvox.core.block.Block block = new BlockImpl(id, new BukkitBlockStateTransformer(server));
+                tokyo.nakanaka.buildvox.core.block.Block block = new BukkitBlock(id, new BukkitBlockStateTransformer(server));
                 BuildVoxSystem.getBlockRegistry().register(block);
             }
         }
