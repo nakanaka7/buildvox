@@ -9,7 +9,6 @@ import org.bukkit.block.data.type.Stairs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
-import tokyo.nakanaka.buildvox.core.block.BlockStateTransformer;
 import tokyo.nakanaka.buildvox.core.block.BlockTransformation;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
@@ -23,14 +22,13 @@ import java.util.*;
 import static org.bukkit.block.BlockFace.*;
 
 /* internal */
-public class BukkitBlockStateTransformer implements BlockStateTransformer {
+public class BukkitBlockStateTransformer {
     private static final Logger LOGGER = LoggerFactory.getLogger(BukkitBlockStateTransformer.class);
     private Server server;
     public BukkitBlockStateTransformer(Server server) {
         this.server = server;
     }
 
-    @Override
     public Map<String, String> transform(NamespacedId blockId, Map<String, String> stateMap, BlockTransformation blockTrans){
         Matrix3x3i transMatrix = blockTrans.toMatrix3x3i();
         String blockStr = new VoxelBlock(blockId, new BukkitBlockState(stateMap)).toString();
