@@ -67,11 +67,11 @@ public class BuildVoxMod implements ModInitializer {
 		registerItems();
 		BuildVoxSystem.setScheduler(FabricScheduler.getInstance());
 		BuildVoxSystem.setBlockValidator(new FabricBlockValidator());
-		BlockRegistering.registerBlocks();
-		WorldManager.init();
-		PlayerManager.init();
-		new CommandInitializer().init();
-		new ClickBlockEventInitializer().init();
+		BlockInitializer.init();
+		WorldInitializer.init();
+		PlayerInitializer.init();
+		CommandInitializer.init();
+		ClickBlockEventInitializer.init();
 	}
 
 	private static void registerItems() {
@@ -79,12 +79,12 @@ public class BuildVoxMod implements ModInitializer {
 		Registry.register(Registry.ITEM, new Identifier("buildvox", "brush"), BRUSH);
 	}
 
-	public static class BlockRegistering {
-		private BlockRegistering() {
+	public static class BlockInitializer {
+		private BlockInitializer() {
 		}
 
 		/** Register all the blocks into the BuildVoxSystem block registry . */
-		public static void registerBlocks() {
+		public static void init() {
 			var registry0 = Registry.BLOCK;
 			var registry = BuildVoxSystem.getBlockRegistry();
 			for(Identifier id0 : registry0.getIds()) {
@@ -102,13 +102,13 @@ public class BuildVoxMod implements ModInitializer {
 
 	}
 
-	private static class WorldManager {
+	private static class WorldInitializer {
 		/**
 		 * Handles world load and unload.
 		 */
 		private static void init() {
-			ServerWorldEvents.LOAD.register(WorldManager::onWorldLoad);
-			ServerWorldEvents.UNLOAD.register(WorldManager::onWorldUnLoad);
+			ServerWorldEvents.LOAD.register(WorldInitializer::onWorldLoad);
+			ServerWorldEvents.UNLOAD.register(WorldInitializer::onWorldUnLoad);
 		}
 
 		private static void onWorldLoad(MinecraftServer server, ServerWorld world) {
@@ -122,11 +122,11 @@ public class BuildVoxMod implements ModInitializer {
 		}
 	}
 
-	private static class PlayerManager {
+	private static class PlayerInitializer {
 		/** Handles player load and unload. */
 		private static void init() {
-			ServerEntityEvents.ENTITY_LOAD.register(PlayerManager::onEntityLoad);
-			ServerEntityEvents.ENTITY_UNLOAD.register(PlayerManager::onEntityUnload);
+			ServerEntityEvents.ENTITY_LOAD.register(PlayerInitializer::onEntityLoad);
+			ServerEntityEvents.ENTITY_UNLOAD.register(PlayerInitializer::onEntityUnload);
 		}
 
 		private static void onEntityLoad(Entity entity, ServerWorld world) {
@@ -152,17 +152,20 @@ public class BuildVoxMod implements ModInitializer {
 	/** Initializer of commands event. */
 	private static class CommandInitializer {
 		private static final String SUBCOMMAND = "subcommand";
-		private final Map<String, HandlerCompleter> cmdMap = new HashMap<>();
+		private static final Map<String, HandlerCompleter> cmdMap = new HashMap<>();
+
+		private CommandInitializer() {
+		}
 
 		/** Initialize */
-		public void init() {
+		public static void init() {
 			registerCommand("bv", BuildVoxSystem::onBvCommand, BuildVoxSystem::onBvTabComplete);
 			registerCommand("bvd", BuildVoxSystem::onBvdCommand, BuildVoxSystem::onBvdTabComplete);
 			adaptEvents();
 		}
 
 		/** Registers command to this initializer. Calling adaptEvents() is needed to register events actually to mod. */
-		private void registerCommand(String label, CommandHandler handler, TabCompleter completer) {
+		private static void registerCommand(String label, CommandHandler handler, TabCompleter completer) {
 			cmdMap.put(label, new HandlerCompleter(handler, completer));
 		}
 
@@ -178,7 +181,7 @@ public class BuildVoxMod implements ModInitializer {
 		}
 
 		/** Registers events to mod. */
-		private void adaptEvents() {
+		private static void adaptEvents() {
 			CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
 				for(var e : cmdMap.entrySet()) {
 					dispatcher.register(
@@ -192,7 +195,7 @@ public class BuildVoxMod implements ModInitializer {
 			});
 		}
 
-		private int onCommand(CommandContext<ServerCommandSource> context, CommandHandler callback) {
+		private static int onCommand(CommandContext<ServerCommandSource> context, CommandHandler callback) {
 			String subcommand = StringArgumentType.getString(context, SUBCOMMAND);
 			String[] args = subcommand.split(" ", - 1);
 			CommandSource source = getCommandSource(context.getSource());
@@ -200,7 +203,7 @@ public class BuildVoxMod implements ModInitializer {
 			return 1;
 		}
 
-		private CommandSource getCommandSource(ServerCommandSource source) {
+		private static CommandSource getCommandSource(ServerCommandSource source) {
 			try {
 				ServerPlayerEntity player = source.getPlayer();
 				UUID playerId = player.getUuid();
@@ -224,7 +227,7 @@ public class BuildVoxMod implements ModInitializer {
 			}
 		}
 
-		private CompletableFuture<Suggestions> onTabComplete(CommandContext<ServerCommandSource> context,
+		private static CompletableFuture<Suggestions> onTabComplete(CommandContext<ServerCommandSource> context,
 															 SuggestionsBuilder builder, TabCompleter listCreator) {
 			String subcommand;
 			//when the subcommand is empty, it throws IllegalArgumentException
@@ -254,16 +257,19 @@ public class BuildVoxMod implements ModInitializer {
 
 	/** Initializer of click block events. */
 	private static class ClickBlockEventInitializer {
-		private final Map<Item, LeftRightClickBlockHandler> clickBlockMap = new HashMap<>();
+		private static final Map<Item, LeftRightClickBlockHandler> clickBlockMap = new HashMap<>();
+
+		private ClickBlockEventInitializer() {
+		}
 
 		/** Initialize. */
-		public void init() {
+		public static void init() {
 			registerEvent(POS_MARKER, BuildVoxSystem::onLeftClickBlockByPosMarker, BuildVoxSystem::onRightClickBlockByPosMarker);
 			registerEvent(BRUSH, BuildVoxSystem::onLeftClickBlockByBrush, BuildVoxSystem::onRightClickBlockByBrush);
 			adaptEventsForMod();
 		}
 
-		private void registerEvent(Item item, ClickBlockHandler left, ClickBlockHandler right) {
+		private static void registerEvent(Item item, ClickBlockHandler left, ClickBlockHandler right) {
 			clickBlockMap.put(item, new LeftRightClickBlockHandler() {
 				@Override
 				public void onLeftClickBlock(UUID playerId, Vector3i pos) {
@@ -288,12 +294,12 @@ public class BuildVoxMod implements ModInitializer {
 		}
 		
 		/** Registers events for clicking block */
-		private void adaptEventsForMod() {
-			AttackBlockCallback.EVENT.register(this::onAttackBlock);
-			UseBlockCallback.EVENT.register(this::onBlockUse);
+		private static void adaptEventsForMod() {
+			AttackBlockCallback.EVENT.register(ClickBlockEventInitializer::onAttackBlock);
+			UseBlockCallback.EVENT.register(ClickBlockEventInitializer::onBlockUse);
 		}
 
-		private ActionResult onAttackBlock(net.minecraft.entity.player.PlayerEntity player0,
+		private static ActionResult onAttackBlock(net.minecraft.entity.player.PlayerEntity player0,
 										   net.minecraft.world.World world0, Hand hand, BlockPos pos0, Direction direction) {
 			//One event triggers this function with different combinations of arguments.
 			//So filters the arguments by their super classes.
@@ -320,7 +326,7 @@ public class BuildVoxMod implements ModInitializer {
 			return ActionResult.PASS;
 		}
 
-		private ActionResult onBlockUse(net.minecraft.entity.player.PlayerEntity player0,
+		private static ActionResult onBlockUse(net.minecraft.entity.player.PlayerEntity player0,
 										net.minecraft.world.World world0, Hand hand, BlockHitResult hitResult) {
 			//One event triggers this function with different combinations of arguments.
 			//So filters the arguments by their super classes.
