@@ -12,6 +12,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
+import net.minecraft.block.StairsBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -32,6 +33,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.World;
+import tokyo.nakanaka.buildvox.core.block.Block;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.player.PlayerEntity;
@@ -39,8 +41,9 @@ import tokyo.nakanaka.buildvox.core.player.RealPlayer;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.system.CommandSource;
 import tokyo.nakanaka.buildvox.core.system.Messenger;
-import tokyo.nakanaka.buildvox.fabric.block.BlockRegistering;
+import tokyo.nakanaka.buildvox.fabric.block.FabricBlock;
 import tokyo.nakanaka.buildvox.fabric.block.FabricBlockValidator;
+import tokyo.nakanaka.buildvox.fabric.block.StairsFabricBlock;
 
 import java.util.HashMap;
 import java.util.List;
@@ -49,6 +52,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import static net.minecraft.server.command.CommandManager.argument;
+import static tokyo.nakanaka.buildvox.fabric.NamespacedIds.createId;
 import static tokyo.nakanaka.buildvox.fabric.NamespacedIds.getId;
 
 /**
@@ -73,6 +77,29 @@ public class BuildVoxMod implements ModInitializer {
 	private static void registerItems() {
 		Registry.register(Registry.ITEM, new Identifier("buildvox", "pos_marker"), POS_MARKER);
 		Registry.register(Registry.ITEM, new Identifier("buildvox", "brush"), BRUSH);
+	}
+
+	public static class BlockRegistering {
+		private BlockRegistering() {
+		}
+
+		/** Register all the blocks into the BuildVoxSystem block registry . */
+		public static void registerBlocks() {
+			var registry0 = Registry.BLOCK;
+			var registry = BuildVoxSystem.getBlockRegistry();
+			for(Identifier id0 : registry0.getIds()) {
+				NamespacedId id = createId(id0);
+				net.minecraft.block.Block block0 = registry0.get(id0);
+				Block<?, ?> block;
+				if(block0 instanceof StairsBlock) {
+					block = new StairsFabricBlock(id);
+				}else {
+					block = new FabricBlock(id);
+				}
+				registry.register(block);
+			}
+		}
+
 	}
 
 	private static class WorldManager {
