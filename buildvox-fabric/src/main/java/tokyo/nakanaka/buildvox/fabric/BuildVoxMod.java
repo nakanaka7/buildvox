@@ -1,6 +1,5 @@
 package tokyo.nakanaka.buildvox.fabric;
 
-import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -13,6 +12,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
+import net.minecraft.block.StairsBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -31,9 +31,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.World;
+import tokyo.nakanaka.buildvox.core.block.Block;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.player.PlayerEntity;
@@ -41,14 +41,19 @@ import tokyo.nakanaka.buildvox.core.player.RealPlayer;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 import tokyo.nakanaka.buildvox.core.system.CommandSource;
 import tokyo.nakanaka.buildvox.core.system.Messenger;
-import tokyo.nakanaka.buildvox.fabric.block.BlockRegistering;
+import tokyo.nakanaka.buildvox.fabric.block.FabricBlock;
 import tokyo.nakanaka.buildvox.fabric.block.FabricBlockValidator;
+import tokyo.nakanaka.buildvox.fabric.block.StairsFabricBlock;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import static net.minecraft.server.command.CommandManager.argument;
 import static tokyo.nakanaka.buildvox.fabric.NamespacedIds.createId;
+import static tokyo.nakanaka.buildvox.fabric.NamespacedIds.getId;
 
 /**
  * The entry point of BuildVox Fabric
@@ -62,122 +67,150 @@ public class BuildVoxMod implements ModInitializer {
 		registerItems();
 		BuildVoxSystem.setScheduler(FabricScheduler.getInstance());
 		BuildVoxSystem.setBlockValidator(new FabricBlockValidator());
-		BlockRegistering.registerBlocks();
-		initWorldManagement();
-		initPlayerManagement();
-		new CommandInitializer().init();
-		new ClickBlockEventInitializer().init();
+		BlockInitializer.init();
+		WorldInitializer.init();
+		PlayerInitializer.init();
+		CommandInitializer.init();
+		ClickBlockEventInitializer.init();
 	}
 
-	private void registerItems() {
+	private static void registerItems() {
 		Registry.register(Registry.ITEM, new Identifier("buildvox", "pos_marker"), POS_MARKER);
 		Registry.register(Registry.ITEM, new Identifier("buildvox", "brush"), BRUSH);
 	}
 
-	/** Handles world load and unload. */
-	private void initWorldManagement() {
-		ServerWorldEvents.LOAD.register(this::onWorldLoad);
-		ServerWorldEvents.UNLOAD.register(this::onWorldUnLoad);
-	}
+	public static class BlockInitializer {
+		private BlockInitializer() {
+		}
 
-	private void onWorldLoad(MinecraftServer server, ServerWorld world){
-		Set<RegistryKey<net.minecraft.world.World>> worldRegistryKeys = server.getWorldRegistryKeys();
-		for (var key : worldRegistryKeys) {
-			if (world == server.getWorld(key)) {//have to find the registry key of worldId
-				World world1 = new FabricWorld(world);
-				BuildVoxSystem.getWorldRegistry().register(world1);
-				break;
+		/** Register all the blocks into the BuildVoxSystem block registry . */
+		public static void init() {
+			var registry0 = Registry.BLOCK;
+			var registry = BuildVoxSystem.getBlockRegistry();
+			for(Identifier id0 : registry0.getIds()) {
+				NamespacedId id = createId(id0);
+				net.minecraft.block.Block block0 = registry0.get(id0);
+				Block<?, ?> block;
+				if(block0 instanceof StairsBlock) {
+					block = new StairsFabricBlock(id);
+				}else {
+					block = new FabricBlock(id);
+				}
+				registry.register(block);
 			}
 		}
+
 	}
 
-	private void onWorldUnLoad(MinecraftServer server, ServerWorld world) {
-		Set<RegistryKey<net.minecraft.world.World>> worldRegistryKeys = server.getWorldRegistryKeys();
-		for(var key : worldRegistryKeys) {
-			if(world == server.getWorld(key)) {//have to find the registry key of worldId
-				Identifier worldId0 = key.getValue();
-				NamespacedId worldId = createId(worldId0);
-				BuildVoxSystem.getWorldRegistry().unregister(worldId);
-				break;
+	private static class WorldInitializer {
+		/**
+		 * Handles world load and unload.
+		 */
+		private static void init() {
+			ServerWorldEvents.LOAD.register(WorldInitializer::onWorldLoad);
+			ServerWorldEvents.UNLOAD.register(WorldInitializer::onWorldUnLoad);
+		}
+
+		private static void onWorldLoad(MinecraftServer server, ServerWorld world) {
+			World fabricWorld = new FabricWorld(world);
+			BuildVoxSystem.getWorldRegistry().register(fabricWorld);
+		}
+
+		private static void onWorldUnLoad(MinecraftServer server, ServerWorld world) {
+			NamespacedId worldId = getId(world);
+			BuildVoxSystem.getWorldRegistry().unregister(worldId);
+		}
+	}
+
+	private static class PlayerInitializer {
+		/** Handles player load and unload. */
+		private static void init() {
+			ServerEntityEvents.ENTITY_LOAD.register(PlayerInitializer::onEntityLoad);
+			ServerEntityEvents.ENTITY_UNLOAD.register(PlayerInitializer::onEntityUnload);
+		}
+
+		private static void onEntityLoad(Entity entity, ServerWorld world) {
+			if(!(entity instanceof ServerPlayerEntity player0)){
+				return;
 			}
+			PlayerEntity playerEntity = new FabricPlayerEntity(player0);
+			var player = new RealPlayer(playerEntity);
+			player.setParticleGuiVisible(true);
+			BuildVoxSystem.getRealPlayerRegistry().register(player);
 		}
-	}
 
-	/** Handles player load and unload. */
-	private void initPlayerManagement() {
-		ServerEntityEvents.ENTITY_LOAD.register(this::onEntityLoad);
-		ServerEntityEvents.ENTITY_UNLOAD.register(this::onEntityUnload);
-	}
-
-	private void onEntityLoad(Entity entity, ServerWorld world) {
-		if(!(entity instanceof ServerPlayerEntity player0)){
-			return;
+		private static void onEntityUnload(Entity entity, ServerWorld world) {
+			if(!(entity instanceof ServerPlayerEntity player0)){
+				return;
+			}
+			UUID playerId = player0.getUuid();
+			Player player = BuildVoxSystem.getRealPlayerRegistry().unregister(playerId);
+			player.setParticleGuiVisible(false);
 		}
-		PlayerEntity playerEntity = new FabricPlayerEntity(player0);
-		var player = new RealPlayer(playerEntity);
-		player.setParticleGuiVisible(true);
-		BuildVoxSystem.getRealPlayerRegistry().register(player);
-	}
-
-	private void onEntityUnload(Entity entity, ServerWorld world) {
-		if(!(entity instanceof ServerPlayerEntity player0)){
-			return;
-		}
-		UUID playerId = player0.getUuid();
-		Player player = BuildVoxSystem.getRealPlayerRegistry().unregister(playerId);
-		player.setParticleGuiVisible(false);
 	}
 
 	/** Initializer of commands event. */
 	private static class CommandInitializer {
 		private static final String SUBCOMMAND = "subcommand";
+		private static final Map<String, HandlerCompleter> cmdMap = new HashMap<>();
 
-		public void init() {
-			CommandRegistrationCallback.EVENT.register(this::onCommandRegistration);
+		private CommandInitializer() {
 		}
 
-		private void onCommandRegistration(CommandDispatcher<ServerCommandSource> dispatcher, boolean dedicated) {
-			dispatcher.register(
-					CommandManager
-							.literal("bv")
-							.then(argument(SUBCOMMAND, StringArgumentType.greedyString())
-									.suggests(this::onBvTabComplete)
-									.executes(this::onBvCommand))
-			);
-			dispatcher.register(
-					CommandManager
-							.literal("bvd")
-							.then(argument(SUBCOMMAND, StringArgumentType.greedyString())
-									.suggests(this::onBvdTabComplete)
-									.executes(this::onBvdCommand))
-			);
+		/** Initialize */
+		public static void init() {
+			registerCommand("bv", BuildVoxSystem::onBvCommand, BuildVoxSystem::onBvTabComplete);
+			registerCommand("bvd", BuildVoxSystem::onBvdCommand, BuildVoxSystem::onBvdTabComplete);
+			adaptEvents();
 		}
 
-		private int onBvCommand(CommandContext<ServerCommandSource> context) {
+		/** Registers command to this initializer. Calling adaptEvents() is needed to register events actually to mod. */
+		private static void registerCommand(String label, CommandHandler handler, TabCompleter completer) {
+			cmdMap.put(label, new HandlerCompleter(handler, completer));
+		}
+
+		private interface CommandHandler {
+			void handle(CommandSource source, String[] args);
+		}
+
+		private interface TabCompleter {
+			List<String> create(String[] args);
+		}
+
+		private record HandlerCompleter (CommandHandler handler, TabCompleter completer) {
+		}
+
+		/** Registers events to mod. */
+		private static void adaptEvents() {
+			CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
+				for(var e : cmdMap.entrySet()) {
+					dispatcher.register(
+							CommandManager
+									.literal(e.getKey())
+									.then(argument(SUBCOMMAND, StringArgumentType.greedyString())
+											.suggests((context, builder) -> onTabComplete(context, builder, e.getValue().completer()))
+											.executes((context) -> onCommand(context, e.getValue().handler())))
+					);
+				}
+			});
+		}
+
+		private static int onCommand(CommandContext<ServerCommandSource> context, CommandHandler callback) {
 			String subcommand = StringArgumentType.getString(context, SUBCOMMAND);
 			String[] args = subcommand.split(" ", - 1);
 			CommandSource source = getCommandSource(context.getSource());
-			BuildVoxSystem.onBvCommand(source, args);
+			callback.handle(source, args);
 			return 1;
 		}
 
-		private int onBvdCommand(CommandContext<ServerCommandSource> context) {
-			String subcommand = StringArgumentType.getString(context, SUBCOMMAND);
-			String[] args = subcommand.split(" ", - 1);
-			CommandSource source = getCommandSource(context.getSource());
-			BuildVoxSystem.onBvdCommand(source, args);
-			return 1;
-		}
-
-		private CommandSource getCommandSource(ServerCommandSource source) {
+		private static CommandSource getCommandSource(ServerCommandSource source) {
 			try {
 				ServerPlayerEntity player = source.getPlayer();
 				UUID playerId = player.getUuid();
 				return CommandSource.newInstance(playerId);
 			} catch (CommandSyntaxException ex) {
 				net.minecraft.world.World world = source.getWorld();
-				var regKey = world.getRegistryKey();
-				NamespacedId worldId = NamespacedIds.createId(regKey.getValue());
+				NamespacedId worldId = getId(world);
 				Vec3d p = source.getPosition();
 				Vector3i pos = new Vector3i((int)Math.floor(p.getX()), (int)Math.floor(p.getY()), (int)Math.floor(p.getZ()));
 				Messenger messenger = new Messenger() {
@@ -194,24 +227,8 @@ public class BuildVoxMod implements ModInitializer {
 			}
 		}
 
-		private interface TabCompleteListCreator {
-			List<String> create(String[] args);
-		}
-
-		private CompletableFuture<Suggestions> onBvTabComplete(CommandContext<ServerCommandSource> context,
-															   SuggestionsBuilder builder) {
-			TabCompleteListCreator listCreator = BuildVoxSystem::onBvTabComplete;
-			return onTabComplete(context, builder, listCreator);
-		}
-
-		private CompletableFuture<Suggestions> onBvdTabComplete(CommandContext<ServerCommandSource> context,
-																SuggestionsBuilder builder) {
-			TabCompleteListCreator listCreator = BuildVoxSystem::onBvdTabComplete;
-			return onTabComplete(context, builder, listCreator);
-		}
-
-		private CompletableFuture<Suggestions> onTabComplete(CommandContext<ServerCommandSource> context,
-															 SuggestionsBuilder builder, TabCompleteListCreator listCreator) {
+		private static CompletableFuture<Suggestions> onTabComplete(CommandContext<ServerCommandSource> context,
+															 SuggestionsBuilder builder, TabCompleter listCreator) {
 			String subcommand;
 			//when the subcommand is empty, it throws IllegalArgumentException
 			try {
@@ -240,16 +257,19 @@ public class BuildVoxMod implements ModInitializer {
 
 	/** Initializer of click block events. */
 	private static class ClickBlockEventInitializer {
-		private final Map<Item, LeftRightClickBlockHandler> clickBlockMap = new HashMap<>();
+		private static final Map<Item, LeftRightClickBlockHandler> clickBlockMap = new HashMap<>();
+
+		private ClickBlockEventInitializer() {
+		}
 
 		/** Initialize. */
-		public void init() {
+		public static void init() {
 			registerEvent(POS_MARKER, BuildVoxSystem::onLeftClickBlockByPosMarker, BuildVoxSystem::onRightClickBlockByPosMarker);
 			registerEvent(BRUSH, BuildVoxSystem::onLeftClickBlockByBrush, BuildVoxSystem::onRightClickBlockByBrush);
 			adaptEventsForMod();
 		}
 
-		private void registerEvent(Item item, ClickBlockHandler left, ClickBlockHandler right) {
+		private static void registerEvent(Item item, ClickBlockHandler left, ClickBlockHandler right) {
 			clickBlockMap.put(item, new LeftRightClickBlockHandler() {
 				@Override
 				public void onLeftClickBlock(UUID playerId, Vector3i pos) {
@@ -274,12 +294,12 @@ public class BuildVoxMod implements ModInitializer {
 		}
 		
 		/** Registers events for clicking block */
-		private void adaptEventsForMod() {
-			AttackBlockCallback.EVENT.register(this::onAttackBlock);
-			UseBlockCallback.EVENT.register(this::onBlockUse);
+		private static void adaptEventsForMod() {
+			AttackBlockCallback.EVENT.register(ClickBlockEventInitializer::onAttackBlock);
+			UseBlockCallback.EVENT.register(ClickBlockEventInitializer::onBlockUse);
 		}
 
-		private ActionResult onAttackBlock(net.minecraft.entity.player.PlayerEntity player0,
+		private static ActionResult onAttackBlock(net.minecraft.entity.player.PlayerEntity player0,
 										   net.minecraft.world.World world0, Hand hand, BlockPos pos0, Direction direction) {
 			//One event triggers this function with different combinations of arguments.
 			//So filters the arguments by their super classes.
@@ -306,7 +326,7 @@ public class BuildVoxMod implements ModInitializer {
 			return ActionResult.PASS;
 		}
 
-		private ActionResult onBlockUse(net.minecraft.entity.player.PlayerEntity player0,
+		private static ActionResult onBlockUse(net.minecraft.entity.player.PlayerEntity player0,
 										net.minecraft.world.World world0, Hand hand, BlockHitResult hitResult) {
 			//One event triggers this function with different combinations of arguments.
 			//So filters the arguments by their super classes.
