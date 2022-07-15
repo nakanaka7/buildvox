@@ -507,7 +507,11 @@ public class PlayerEdits {
             double qy = pos.y() * dy;
             double qz = pos.z() * dz;
             Vector3d q = new Vector3d(qx, qy, qz);
-            PasteSelection pasteSel = new PasteSelection.Builder(clip, q, sel.translate(q)).build();
+            PasteSelection pasteSel = new PasteSelection
+                    .Builder(clip, q, sel.translate(q))
+                    .masked(options.masked)
+                    .integrity(options.integrity)
+                    .build();
             pasteSel.setForwardBlocks(pw);
             pw.setSelection(pasteSel);
         }
