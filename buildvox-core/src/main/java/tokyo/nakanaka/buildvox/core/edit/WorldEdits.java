@@ -8,7 +8,6 @@ import tokyo.nakanaka.buildvox.core.block.BlockTransformation;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.clientWorld.BlockTransformingClientWorld;
 import tokyo.nakanaka.buildvox.core.clientWorld.ClientWorld;
-import tokyo.nakanaka.buildvox.core.math.region3d.Cuboid;
 import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
@@ -110,40 +109,6 @@ public class WorldEdits {
                     return true;
                 },
                 toBlock);
-    }
-
-    /*
-     * Repeats the blocks in the cuboid specified by pos0 and pos1.
-     * @param world the world
-     * @param pos0 the position of a corner.
-     * @param pos1 the position of another corner.
-     * @param countX the count along x-axis.
-     * @param countY the count along y-axis.
-     * @param countZ the count along z-axis.
-     */
-    public static void repeatOld(ClientWorld world, Vector3i pos0, Vector3i pos1,
-                                 int countX, int countY, int countZ) {
-        int maxX = Math.max(pos0.x(), pos1.x());
-        int maxY = Math.max(pos0.y(), pos1.y());
-        int maxZ = Math.max(pos0.z(), pos1.z());
-        int minX = Math.min(pos0.x(), pos1.x());
-        int minY = Math.min(pos0.y(), pos1.y());
-        int minZ = Math.min(pos0.z(), pos1.z());
-        Cuboid cuboid = new Cuboid(maxX + 1, maxY + 1, maxZ + 1, minX, minY, minZ);
-        Selection selection = new Selection(cuboid, cuboid);
-        Clipboard clipboard = new Clipboard();
-        WorldEdits.copy(world, selection, new Vector3d(minX, minY, minZ), clipboard);
-        clipboard.lock();
-        for(int y = Math.min(0, countY); y <= Math.max(0, countY); ++y){
-            for(int x = Math.min(0, countX); x <= Math.max(0, countX); ++x){
-                for(int z = Math.min(0, countZ); z <= Math.max(0, countZ); ++z){
-                    int offsetX = minX + x * (maxX - minX + 1);
-                    int offsetY = minY + y * (maxY - minY + 1);
-                    int offsetZ = minZ + z * (maxZ - minZ + 1);
-                    paste(clipboard, world, new Vector3d(offsetX, offsetY, offsetZ));
-                }
-            }
-        }
     }
 
 }
