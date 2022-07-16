@@ -10,10 +10,6 @@ public class BrushSource {
     private VoxelBlock[] filters;
     private boolean masked;
 
-    public BrushSource(Clipboard clipboard) {
-        this.clipboard = clipboard;
-    }
-
     private BrushSource(Builder builder) {
         this.clipboard = builder.clipboard;
         this.integrity = builder.integrity;
