@@ -2,11 +2,20 @@ package tokyo.nakanaka.buildvox.core.clientWorld;
 
 import tokyo.nakanaka.buildvox.core.BlockSettingArguments;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
+import tokyo.nakanaka.buildvox.core.command.mixin.BlockSettingOptions;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 
 /* experimental */
 public class OptionalClientWorld extends ClientWorld {
     private final ClientWorld delegate;
+
+    public OptionalClientWorld(PlayerClientWorld playerClientWorld, BlockSettingOptions options) {
+        this(playerClientWorld, playerClientWorld.getPlayer().getBackgroundBlock(), options);
+    }
+
+    public OptionalClientWorld(ClientWorld clientWorld, VoxelBlock background, BlockSettingOptions options) {
+        this(clientWorld, background, options.getArguments());
+    }
 
     public OptionalClientWorld(ClientWorld clientWorld, VoxelBlock background, BlockSettingArguments args) {
         super(clientWorld.getWorld(), clientWorld.getPhysics());
