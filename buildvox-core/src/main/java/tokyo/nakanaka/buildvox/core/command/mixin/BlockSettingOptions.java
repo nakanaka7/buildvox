@@ -15,11 +15,14 @@ public class BlockSettingOptions {
     private Replace replace;
 
     public BlockSettingArguments getArguments() {
-        return new BlockSettingArguments.Builder()
+        var args = new BlockSettingArguments.Builder()
                 .integrity(integrity.integrity())
-                .filters(replace.filter())
-                .masked(masked.masked())
-                .build();
+                .masked(masked.masked());
+        VoxelBlock filter = replace.filter();
+        if(filter != null) {
+            args = args.filters(filter);
+        }
+        return args.build();
     }
 
     public double getIntegrity() {
