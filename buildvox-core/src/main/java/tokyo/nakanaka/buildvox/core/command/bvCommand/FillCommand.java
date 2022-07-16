@@ -22,13 +22,9 @@ public class FillCommand implements Runnable {
     @Parameters(description = "The block.", completionCandidates = Block.Candidates.class, converter = Block.Converter.class)
     private VoxelBlock block;
     @Mixin
-    private Integrity integrity;
-    @Mixin
-    private Masked masked;
-    @Mixin
     private Shape shape;
     @Mixin
-    private Replace replace;
+    private BlockSettingOptions blockSettingOptions;
 
     @Override
     public void run() {
@@ -36,15 +32,16 @@ public class FillCommand implements Runnable {
         PrintWriter err = commandSpec.commandLine().getErr();
         Player player = bvCmd.getPlayer();
         var options = new PlayerEdits.Options();
-        options.integrity = integrity.integrity();
-        options.masked = masked.masked();
+        var bsArgs = blockSettingOptions.getArguments();
+        options.setBlockSettingArguments(bsArgs);
         options.shape = shape.shape();
         try {
             EditExit exit;
-            if(replace.filter() == null) {
+            VoxelBlock[] filters = bsArgs.getFilters();
+            if(filters == null) {
                 exit = PlayerEdits.fill(player, block, options);
             }else {
-                exit = PlayerEdits.replace(player, replace.filter(), block, options);
+                exit = PlayerEdits.replace(player, filters[0], block, options);
             }
             out.println(Messages.ofSetExit(exit));
         }catch (PlayerEdits.MissingPosException ex) {
