@@ -3,6 +3,7 @@ package tokyo.nakanaka.buildvox.core.command.bvCommand;
 import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.affineTransformCommand.*;
+import tokyo.nakanaka.buildvox.core.command.bvCommand.brushBindCommand.BrushBindCommand;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.posArray.PosArrayCommand;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.Player;
@@ -24,6 +25,7 @@ import java.util.Iterator;
                 FillCommand.class, ReplaceCommand.class,
                 CopyCommand.class, CutCommand.class, PasteCommand.class,
                 RepeatCommand.class,
+                BrushBindCommand.class
         })
 public class BvCommand implements Runnable {
     @Spec
