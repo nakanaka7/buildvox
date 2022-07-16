@@ -1,8 +1,10 @@
 package tokyo.nakanaka.buildvox.core.player;
 
 import tokyo.nakanaka.buildvox.core.Clipboard;
+import tokyo.nakanaka.buildvox.core.World;
+import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.brushSource.BrushSource;
-import tokyo.nakanaka.buildvox.core.brushSource.SphereBrushSource;
+import tokyo.nakanaka.buildvox.core.brushSource.BrushSourceClipboards;
 import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.particleGui.Color;
@@ -11,8 +13,6 @@ import tokyo.nakanaka.buildvox.core.selection.FillSelection;
 import tokyo.nakanaka.buildvox.core.selection.PasteSelection;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
-import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
-import tokyo.nakanaka.buildvox.core.World;
 
 import javax.swing.undo.UndoManager;
 import java.util.Arrays;
@@ -27,7 +27,7 @@ public class Player {
     private World editWorld;
     private Vector3i[] posArray = new Vector3i[2];
     private Selection selection;
-    private BrushSource brushSource = SphereBrushSource.newInstance(VoxelBlock.valueOf("stone"), 3);
+    private BrushSource brushSource;
     private final PlayerEntity playerEntity;
     private final PlayerMessenger messenger;
     private boolean particleGuiVisible;
@@ -40,6 +40,8 @@ public class Player {
     public Player(PlayerEntity playerEntity) {
         this.playerEntity = playerEntity;
         this.messenger = new PlayerMessenger(playerEntity);
+        Clipboard brushClip = BrushSourceClipboards.createSphere(VoxelBlock.valueOf("stone"), 3);
+        this.brushSource = new BrushSource.Builder(brushClip).build();
     }
 
     /**

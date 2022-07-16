@@ -29,7 +29,7 @@ public class ClipboardCommand implements Runnable {
             err.println("No clipboard.");
             return;
         }
-        BrushSource bs = new BrushSource(clip);
+        BrushSource bs = new BrushSource.Builder(clip).build();
         player.setBrushSource(bs);
         out.println("Bound current clipboard to brush.");
     }
