@@ -1,5 +1,6 @@
 package tokyo.nakanaka.buildvox.core.selection;
 
+import tokyo.nakanaka.buildvox.core.BlockSettingArguments;
 import tokyo.nakanaka.buildvox.core.Clipboard;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.clientWorld.*;
@@ -21,6 +22,7 @@ public abstract class BlockSelection extends Selection {
     protected double integrity;
     protected VoxelBlock[] filters;
     protected boolean masked;
+    protected BlockSettingArguments args;
 
     public BlockSelection(Region3d region3d, Parallelepiped bound) {
         super(region3d, bound);
@@ -46,6 +48,13 @@ public abstract class BlockSelection extends Selection {
 
     public void setFilters(VoxelBlock... filters) {
         this.filters = filters;
+    }
+
+    public void setBlockSettingArguments(BlockSettingArguments blockSettingArguments) {
+        this.masked = blockSettingArguments.getMasked();
+        this.integrity = blockSettingArguments.getIntegrity();
+        this.filters = blockSettingArguments.getFilters();
+        this.args = blockSettingArguments;
     }
 
     /**
