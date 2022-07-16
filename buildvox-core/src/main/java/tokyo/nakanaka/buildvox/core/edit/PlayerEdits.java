@@ -81,15 +81,15 @@ public class PlayerEdits {
         public double integrity = 1.0;
         /** shape */
         public SelectionShape shape = null;
-        private BlockSettingProperties properties;
+        private BlockSettingArguments properties;
 
-        public void setBlockSettingProperties(BlockSettingProperties properties) {
+        public void setBlockSettingProperties(BlockSettingArguments properties) {
             this.properties = properties;
             masked = properties.getMasked();
             integrity = properties.getIntegrity();
         }
 
-        public BlockSettingProperties getBlockSettingProperties() {
+        public BlockSettingArguments getBlockSettingProperties() {
             return properties;
         }
 

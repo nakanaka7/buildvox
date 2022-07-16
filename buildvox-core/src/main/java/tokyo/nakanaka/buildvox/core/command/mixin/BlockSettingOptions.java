@@ -1,7 +1,7 @@
 package tokyo.nakanaka.buildvox.core.command.mixin;
 
 import picocli.CommandLine.*;
-import tokyo.nakanaka.buildvox.core.BlockSettingProperties;
+import tokyo.nakanaka.buildvox.core.BlockSettingArguments;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 
 public class BlockSettingOptions {
@@ -14,8 +14,8 @@ public class BlockSettingOptions {
     @Mixin
     private Replace replace;
 
-    public BlockSettingProperties getBlockSettingProperties() {
-        return new BlockSettingProperties.Builder()
+    public BlockSettingArguments getBlockSettingProperties() {
+        return new BlockSettingArguments.Builder()
                 .integrity(integrity.integrity())
                 .filters(replace.filter())
                 .masked(masked.masked())

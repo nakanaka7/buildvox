@@ -2,12 +2,12 @@ package tokyo.nakanaka.buildvox.core;
 
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 
-public class BlockSettingProperties {
+public class BlockSettingArguments {
     private final double integrity;
     private final boolean masked;
     private final VoxelBlock[] filters;
 
-    public BlockSettingProperties(Builder builder) {
+    public BlockSettingArguments(Builder builder) {
         this.integrity = builder.integrity;
         this.masked = builder.masked;
         this.filters = builder.filters;
@@ -33,8 +33,8 @@ public class BlockSettingProperties {
             return this;
         }
 
-        public BlockSettingProperties build() {
-            return new BlockSettingProperties(this);
+        public BlockSettingArguments build() {
+            return new BlockSettingArguments(this);
         }
 
     }
