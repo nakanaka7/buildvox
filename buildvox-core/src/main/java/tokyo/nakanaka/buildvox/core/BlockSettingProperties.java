@@ -28,7 +28,7 @@ public class BlockSettingProperties {
             return this;
         }
 
-        public Builder filters(VoxelBlock[] filters) {
+        public Builder filters(VoxelBlock... filters) {
             this.filters = filters;
             return this;
         }
