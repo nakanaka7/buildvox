@@ -14,7 +14,7 @@ public class BlockSettingOptions {
     @Mixin
     private Replace replace;
 
-    public BlockSettingArguments getBlockSettingProperties() {
+    public BlockSettingArguments getArguments() {
         return new BlockSettingArguments.Builder()
                 .integrity(integrity.integrity())
                 .filters(replace.filter())
