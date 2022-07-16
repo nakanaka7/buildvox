@@ -1,9 +1,6 @@
 package tokyo.nakanaka.buildvox.core.edit;
 
-import tokyo.nakanaka.buildvox.core.Axis;
-import tokyo.nakanaka.buildvox.core.Clipboard;
-import tokyo.nakanaka.buildvox.core.EditExit;
-import tokyo.nakanaka.buildvox.core.World;
+import tokyo.nakanaka.buildvox.core.*;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.clientWorld.ClientWorld;
 import tokyo.nakanaka.buildvox.core.clientWorld.IntegrityClientWorld;
@@ -84,6 +81,18 @@ public class PlayerEdits {
         public double integrity = 1.0;
         /** shape */
         public SelectionShape shape = null;
+        private BlockSettingProperties properties;
+
+        public void setBlockSettingProperties(BlockSettingProperties properties) {
+            this.properties = properties;
+            masked = properties.getMasked();
+            integrity = properties.getIntegrity();
+        }
+
+        public BlockSettingProperties getBlockSettingProperties() {
+            return properties;
+        }
+
     }
 
     /**
