@@ -270,7 +270,6 @@ public class BuildVoxSystem {
                 .build();
         WorldEdits.paste(src.getClipboard(), ocw, pos.toVector3d());
         pcw.end();
-        player.getMessenger().sendOutMessage("this is experiment");
     }
 
     public static void onRightClickBlockByBrush(UUID playerId, Vector3i pos) {
