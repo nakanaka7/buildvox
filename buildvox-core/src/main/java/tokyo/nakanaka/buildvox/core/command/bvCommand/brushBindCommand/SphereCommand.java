@@ -1,7 +1,9 @@
 package tokyo.nakanaka.buildvox.core.command.bvCommand.brushBindCommand;
 
 import picocli.CommandLine.*;
-import tokyo.nakanaka.buildvox.core.brushSource.SphereBrushSource;
+import tokyo.nakanaka.buildvox.core.Clipboard;
+import tokyo.nakanaka.buildvox.core.brushSource.BrushSource;
+import tokyo.nakanaka.buildvox.core.brushSource.BrushSourceClipboards;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
 import tokyo.nakanaka.buildvox.core.command.mixin.Block;
 import tokyo.nakanaka.buildvox.core.player.Player;
@@ -29,8 +31,9 @@ public class SphereCommand implements Runnable {
         PrintWriter out = spec.commandLine().getOut();
         BvCommand bvCmd = brushBindCmd.getBvCommand();
         Player player = bvCmd.getPlayer();
-        var sbs = SphereBrushSource.newInstance(block.block(), size.size());
-        player.setBrushSource(sbs);
+        Clipboard clipboard = BrushSourceClipboards.createSphere(block.block(), size.size());
+        BrushSource src = new BrushSource.Builder(clipboard).build();
+        player.setBrushSource(src);
         out.println("Bound sphere(" + "block:" + block.block().getBlockId().name() + ",size:" + size.size() + ") to brush.");
     }
 
