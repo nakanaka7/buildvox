@@ -10,6 +10,7 @@ import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.World;
 import tokyo.nakanaka.buildvox.core.block.Block;
 import tokyo.nakanaka.buildvox.core.block.BlockValidator;
+import tokyo.nakanaka.buildvox.core.clientWorld.OptionalClientWorld;
 import tokyo.nakanaka.buildvox.core.clientWorld.PlayerClientWorld;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
 import tokyo.nakanaka.buildvox.core.command.bvdCommand.BvdCommand;
@@ -260,9 +261,14 @@ public class BuildVoxSystem {
         var worldId = player.getPlayerEntity().getWorldId();
         var world = worldRegistry.get(worldId);
         player.setEditWorld(world);
-        var pcw = new PlayerClientWorld(player);
         var src = player.getBrushSource();
-        WorldEdits.paste(src.getClipboard(), pcw, pos.toVector3d());
+        var pcw = new PlayerClientWorld(player);
+        var ocw = new OptionalClientWorld.Builder(pcw, player.getBackgroundBlock())
+                .integrity(src.getIntegrity())
+                .masked(src.getMasked())
+                .filters(src.getFilters())
+                .build();
+        WorldEdits.paste(src.getClipboard(), ocw, pos.toVector3d());
         pcw.end();
         player.getMessenger().sendOutMessage("this is experiment");
     }
