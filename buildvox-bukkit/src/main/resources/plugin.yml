@@ -1,6 +1,6 @@
 main: tokyo.nakanaka.buildvox.bukkit.BuildVoxPlugin
 name: BuildVox
-version: 1.1.0
+version: 1.2.0-SNAPSHOT
 commands:
   'bv':
   'bvd':
