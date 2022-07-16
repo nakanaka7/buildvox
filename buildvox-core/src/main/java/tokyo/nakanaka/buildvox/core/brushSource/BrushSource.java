@@ -24,7 +24,7 @@ public class BrushSource {
     public static class Builder {
         private Clipboard clipboard;
         private double integrity = 1;
-        private VoxelBlock[] filters = new VoxelBlock[0];
+        private VoxelBlock[] filters;
         private boolean mask;
         public Builder(Clipboard clipboard) {
             this.clipboard = clipboard;
