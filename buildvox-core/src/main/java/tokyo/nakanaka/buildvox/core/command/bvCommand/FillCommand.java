@@ -4,10 +4,7 @@ import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.EditExit;
 import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
-import tokyo.nakanaka.buildvox.core.command.mixin.Block;
-import tokyo.nakanaka.buildvox.core.command.mixin.Integrity;
-import tokyo.nakanaka.buildvox.core.command.mixin.Masked;
-import tokyo.nakanaka.buildvox.core.command.mixin.Shape;
+import tokyo.nakanaka.buildvox.core.command.mixin.*;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.player.Player;
 import tokyo.nakanaka.buildvox.core.selectionShape.PosArrayLengthException;
@@ -30,8 +27,8 @@ public class FillCommand implements Runnable {
     private Masked masked;
     @Mixin
     private Shape shape;
-    @Option(names = {"-r", "--replace"}, description = "The block to replace", completionCandidates = Block.Candidates.class, converter = Block.Converter.class)
-    private VoxelBlock filter;
+    @Mixin
+    private Replace replace;
 
     @Override
     public void run() {
@@ -44,10 +41,10 @@ public class FillCommand implements Runnable {
         options.shape = shape.shape();
         try {
             EditExit exit;
-            if(filter == null) {
+            if(replace.filter() == null) {
                 exit = PlayerEdits.fill(player, block, options);
             }else {
-                exit = PlayerEdits.replace(player, filter, block, options);
+                exit = PlayerEdits.replace(player, replace.filter(), block, options);
             }
             out.println(Messages.ofSetExit(exit));
         }catch (PlayerEdits.MissingPosException ex) {
