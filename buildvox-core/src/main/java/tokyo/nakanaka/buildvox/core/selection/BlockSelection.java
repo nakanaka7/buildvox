@@ -2,10 +2,7 @@ package tokyo.nakanaka.buildvox.core.selection;
 
 import tokyo.nakanaka.buildvox.core.Clipboard;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
-import tokyo.nakanaka.buildvox.core.clientWorld.ClientWorld;
-import tokyo.nakanaka.buildvox.core.clientWorld.IntegrityClientWorld;
-import tokyo.nakanaka.buildvox.core.clientWorld.MaskedClientWorld;
-import tokyo.nakanaka.buildvox.core.clientWorld.PlayerClientWorld;
+import tokyo.nakanaka.buildvox.core.clientWorld.*;
 import tokyo.nakanaka.buildvox.core.edit.WorldEdits;
 import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
 import tokyo.nakanaka.buildvox.core.math.region3d.Region3d;
@@ -22,6 +19,7 @@ import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
 public abstract class BlockSelection extends Selection {
     protected Clipboard backwardClip;
     protected double integrity;
+    protected VoxelBlock[] filters;
     protected boolean masked;
 
     public BlockSelection(Region3d region3d, Parallelepiped bound) {
@@ -46,6 +44,10 @@ public abstract class BlockSelection extends Selection {
         this.masked = masked;
     }
 
+    public void setFilters(VoxelBlock... filters) {
+        this.filters = filters;
+    }
+
     /**
      * Set forward blocks.
      * @param playerClientWorld a world to set blocks.
@@ -54,11 +56,11 @@ public abstract class BlockSelection extends Selection {
         Clipboard newBackwardClip = new Clipboard();
         WorldEdits.copy(playerClientWorld, this, Vector3d.ZERO, newBackwardClip);
         VoxelBlock background = playerClientWorld.getPlayer().getBackgroundBlock();
-        ClientWorld clientWorld = playerClientWorld;
-        if(masked) {
-            clientWorld = new MaskedClientWorld(background, clientWorld);
-        }
-        clientWorld = new IntegrityClientWorld(integrity, background, clientWorld);
+        ClientWorld clientWorld = new OptionalClientWorld.Builder(playerClientWorld, background)
+                .integrity(integrity)
+                .masked(masked)
+                .filters(filters)
+                .build();
         setRawForwardBlocks(clientWorld);
         backwardClip = newBackwardClip;
     }
