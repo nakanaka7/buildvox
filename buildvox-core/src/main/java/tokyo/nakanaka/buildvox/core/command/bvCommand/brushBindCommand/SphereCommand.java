@@ -6,6 +6,8 @@ import tokyo.nakanaka.buildvox.core.brushSource.BrushSource;
 import tokyo.nakanaka.buildvox.core.brushSource.BrushSourceClipboards;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
 import tokyo.nakanaka.buildvox.core.command.mixin.Block;
+import tokyo.nakanaka.buildvox.core.command.mixin.Integrity;
+import tokyo.nakanaka.buildvox.core.command.mixin.Masked;
 import tokyo.nakanaka.buildvox.core.player.Player;
 
 import java.io.PrintWriter;
@@ -26,13 +28,22 @@ public class SphereCommand implements Runnable {
     @Mixin
     private Size size;
 
+    @Mixin
+    private Integrity integrity;
+
+    @Mixin
+    private Masked masked;
+
     @Override
     public void run() {
         PrintWriter out = spec.commandLine().getOut();
         BvCommand bvCmd = brushBindCmd.getBvCommand();
         Player player = bvCmd.getPlayer();
         Clipboard clipboard = BrushSourceClipboards.createSphere(block.block(), size.size());
-        BrushSource src = new BrushSource.Builder(clipboard).build();
+        BrushSource src = new BrushSource.Builder(clipboard)
+                .integrity(integrity.integrity())
+                .masked(masked.masked())
+                .build();
         player.setBrushSource(src);
         out.println("Bound sphere(" + "block:" + block.block().getBlockId().name() + ",size:" + size.size() + ") to brush.");
     }
