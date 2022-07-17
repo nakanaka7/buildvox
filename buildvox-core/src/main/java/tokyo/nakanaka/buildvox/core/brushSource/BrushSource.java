@@ -8,6 +8,15 @@ public class BrushSource {
     private final Clipboard clipboard;
     private final BlockSettingOptions options;
 
+    public BrushSource(Clipboard clipboard, BlockSettingOptions options) {
+        this.clipboard = clipboard;
+        this.options = options;
+    }
+
+    public BrushSource(Clipboard clipboard) {
+        this(clipboard, new BlockSettingOptions());
+    }
+
     private BrushSource(Builder builder) {
         this.clipboard = builder.clipboard;
         this.options = new BlockSettingOptions();
