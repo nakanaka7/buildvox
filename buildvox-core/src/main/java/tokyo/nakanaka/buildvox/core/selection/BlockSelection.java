@@ -52,7 +52,7 @@ public abstract class BlockSelection extends Selection {
         return options.getMasked();
     }
 
-    public void setBlockSettingOptions(BlockSettingOptions options) {
+    public void setOptions(BlockSettingOptions options) {
         this.options = options;
     }
 
