@@ -13,24 +13,19 @@ public class BrushSource {
     private BrushSource(Builder builder) {
         this.clipboard = builder.clipboard;
         this.integrity = builder.integrity;
-        this.filters = builder.filters;
+        this.filters = null;
         this.masked = builder.mask;
     }
 
     public static class Builder {
         private Clipboard clipboard;
         private double integrity = 1;
-        private VoxelBlock[] filters;
         private boolean mask;
         public Builder(Clipboard clipboard) {
             this.clipboard = clipboard;
         }
         public Builder integrity(double integrity) {
             this.integrity = integrity;
-            return this;
-        }
-        public Builder filters(VoxelBlock... filters) {
-            this.filters = filters;
             return this;
         }
         public Builder masked(boolean mask) {
