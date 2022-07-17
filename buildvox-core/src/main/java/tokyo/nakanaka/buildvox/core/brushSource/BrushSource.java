@@ -28,6 +28,7 @@ public class BrushSource {
         private Clipboard clipboard;
         private double integrity = 1;
         private boolean mask;
+        @Deprecated
         public Builder(Clipboard clipboard) {
             this.clipboard = clipboard;
         }
