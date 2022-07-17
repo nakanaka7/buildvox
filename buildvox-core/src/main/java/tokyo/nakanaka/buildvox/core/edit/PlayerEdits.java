@@ -354,13 +354,21 @@ public class PlayerEdits {
         return pw.end();
     }
 
-    public static EditExit paste(Player player, Vector3d pos, BlockSettingOptions options) {
+    /**
+     * Pastes the blocks of the clipboard. A paste-selection will be set in the end.
+     * @param player the player.
+     * @param pos the position which corresponds to the origin of the clipboard.
+     * @param blockSettingOptions the block-setting options.
+     * @throws IllegalStateException if clipboard is null
+     * @throws IllegalArgumentException if integrity is less than 0 or more than 1.
+     */
+    public static EditExit paste(Player player, Vector3d pos, BlockSettingOptions blockSettingOptions) {
         Clipboard clipboard = player.getClipboard();
         if(clipboard == null){
             throw new IllegalStateException();
         }
         PasteSelection pasteSel = new PasteSelection(clipboard, pos);
-        pasteSel.setOptions(options);
+        pasteSel.setOptions(blockSettingOptions);
         PlayerClientWorld pw = new PlayerClientWorld(player);
         pasteSel.setForwardBlocks(pw);
         pw.setSelection(pasteSel);
