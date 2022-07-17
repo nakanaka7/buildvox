@@ -16,6 +16,12 @@ public class FillSelection extends BlockSelection {
     private final VoxelBlock block;
     private final AffineTransformation3d totalTrans;
 
+    public FillSelection(Selection sel, VoxelBlock block) {
+        super(sel.getRegion3d(), sel.getBound());
+        this.block = block;
+        this.totalTrans = AffineTransformation3d.IDENTITY;
+    }
+
     public FillSelection(Selection sel, VoxelBlock block, BlockSettingOptions options) {
         super(sel.getRegion3d(), sel.getBound());
         this.block = block;
