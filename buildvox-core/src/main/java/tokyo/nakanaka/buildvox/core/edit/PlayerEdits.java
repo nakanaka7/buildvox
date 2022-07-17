@@ -420,7 +420,8 @@ public class PlayerEdits {
         if(sel == null) {
             sel = createPosArraySelection(player.getPosArrayClone(), shape);
         }
-        FillSelection fillSelection = new FillSelection(sel, block, blockSettingOptions);
+        FillSelection fillSelection = new FillSelection(sel, block);
+        fillSelection.setOptions(blockSettingOptions);
         PlayerClientWorld pcw = new PlayerClientWorld(player);
         fillSelection.setForwardBlocks(pcw);
         pcw.setSelection(fillSelection);
