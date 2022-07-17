@@ -18,6 +18,10 @@ public class BlockSettingOptions {
         this.integrity.setIntegrity(integrity);
     }
 
+    public void setMasked(boolean masked) {
+        this.masked.setMasked(masked);
+    }
+
     public BlockSettingArguments getArguments() {
         var args = new BlockSettingArguments.Builder()
                 .integrity(integrity.integrity())
