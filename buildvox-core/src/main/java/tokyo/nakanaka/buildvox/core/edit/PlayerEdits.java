@@ -285,7 +285,7 @@ public class PlayerEdits {
     private static PasteSelection createPasteSelection(World world, Selection sel) {
         Clipboard clipboard = new Clipboard(sel);
         WorldEdits.copy(world, sel, Vector3d.ZERO, clipboard);
-        return new PasteSelection.Builder(clipboard, Vector3d.ZERO, sel).build();
+        return new PasteSelection(clipboard, Vector3d.ZERO);
     }
 
     /**
