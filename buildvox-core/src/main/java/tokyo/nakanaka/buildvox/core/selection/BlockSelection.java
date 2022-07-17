@@ -51,6 +51,14 @@ public abstract class BlockSelection extends Selection {
         this.filters = filters;
     }
 
+    protected double getIntegrity() {
+        return integrity;
+    }
+
+    protected boolean getMasked() {
+        return masked;
+    }
+
     public void setBlockSettingOptions(BlockSettingOptions options) {
         BlockSettingArguments blockSettingArguments = options.getArguments();
         this.masked = blockSettingArguments.getMasked();
