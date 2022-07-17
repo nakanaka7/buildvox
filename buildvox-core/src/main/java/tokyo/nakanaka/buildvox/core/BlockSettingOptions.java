@@ -16,9 +16,10 @@ public class BlockSettingOptions {
 
     @Option(names = {"-r", "--replace"},
             description = "The block to replace",
+            arity = "1..*",
             completionCandidates = Block.Candidates.class,
             converter = Block.Converter.class)
-    private VoxelBlock filter;
+    private VoxelBlock[] filters;
 
     public void setIntegrity(double integrity) {
         this.integrity.setIntegrity(integrity);
@@ -37,11 +38,7 @@ public class BlockSettingOptions {
     }
 
     public VoxelBlock[] getFilters() {
-        if(filter == null) {
-            return null;
-        }else{
-            return new VoxelBlock[]{filter};
-        }
+        return filters;
     }
 
 }
