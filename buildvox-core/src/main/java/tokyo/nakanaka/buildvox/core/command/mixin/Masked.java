@@ -10,4 +10,8 @@ public class Masked {
         return masked;
     }
 
+    public void setMasked(boolean masked) {
+        this.masked = masked;
+    }
+
 }
