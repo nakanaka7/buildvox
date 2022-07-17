@@ -41,8 +41,13 @@ public class BlockSettingOptions {
         return masked.masked();
     }
 
-    public VoxelBlock getFilter() {
-        return replace.filter();
+    public VoxelBlock[] getFilters() {
+        var filter = replace.filter();
+        if(filter == null) {
+            return null;
+        }else{
+            return new VoxelBlock[]{filter};
+        }
     }
 
 }
