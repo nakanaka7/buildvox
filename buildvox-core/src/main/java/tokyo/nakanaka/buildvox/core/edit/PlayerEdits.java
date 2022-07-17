@@ -380,6 +380,18 @@ public class PlayerEdits {
         return pcw.end();
     }
 
+    /**
+     * Fills the blocks into the selection. If player does not have a selection, a selection will be created from pos-array.
+     * A fill-selection will be set in the end.
+     * @param player the player.
+     * @param block the block
+     * @param shape the selection shape which is used when creating a new selection from pos-array.
+     * @param blockSettingOptions the block-setting options.
+     * @return the edit-exit.
+     * @throws MissingPosException if player does not have a selection and some pos are missing.
+     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
+     * the shape.
+     */
     public static EditExit fill(Player player, VoxelBlock block, SelectionShape shape, BlockSettingOptions blockSettingOptions) {
         Selection sel = player.getSelection();
         if(sel == null) {
