@@ -56,6 +56,10 @@ public abstract class BlockSelection extends Selection {
         this.options = options;
     }
 
+    public BlockSettingOptions getOptions() {
+        return options;
+    }
+
     /**
      * Set forward blocks.
      * @param playerClientWorld a world to set blocks.
