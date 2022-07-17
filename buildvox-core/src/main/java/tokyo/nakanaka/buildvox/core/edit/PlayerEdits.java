@@ -5,6 +5,7 @@ import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.clientWorld.ClientWorld;
 import tokyo.nakanaka.buildvox.core.clientWorld.IntegrityClientWorld;
 import tokyo.nakanaka.buildvox.core.clientWorld.PlayerClientWorld;
+import tokyo.nakanaka.buildvox.core.command.mixin.BlockSettingOptions;
 import tokyo.nakanaka.buildvox.core.math.Drawings;
 import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
 import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
@@ -385,6 +386,19 @@ public class PlayerEdits {
                 .integrity(options.integrity)
                 .masked(options.masked)
                 .build();
+        PlayerClientWorld pcw = new PlayerClientWorld(player);
+        fillSelection.setForwardBlocks(pcw);
+        pcw.setSelection(fillSelection);
+        return pcw.end();
+    }
+
+    public static EditExit fill(Player player, VoxelBlock block, SelectionShape shape, BlockSettingOptions settingOptions) {
+        Selection sel = player.getSelection();
+        if(sel == null) {
+            sel = createPosArraySelection(player.getPosArrayClone(), shape);
+        }
+        FillSelection fillSelection = new FillSelection.Builder(block, sel).build();
+        fillSelection.setBlockSettingOptions(settingOptions);
         PlayerClientWorld pcw = new PlayerClientWorld(player);
         fillSelection.setForwardBlocks(pcw);
         pcw.setSelection(fillSelection);
