@@ -1,5 +1,6 @@
 package tokyo.nakanaka.buildvox.core.selection;
 
+import tokyo.nakanaka.buildvox.core.BlockSettingOptions;
 import tokyo.nakanaka.buildvox.core.block.BlockTransformation;
 import tokyo.nakanaka.buildvox.core.clientWorld.ClientWorld;
 import tokyo.nakanaka.buildvox.core.edit.WorldEdits;
@@ -14,6 +15,13 @@ import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 public class FillSelection extends BlockSelection {
     private final VoxelBlock block;
     private final AffineTransformation3d totalTrans;
+
+    public FillSelection(Selection sel, VoxelBlock block, BlockSettingOptions options) {
+        super(sel.getRegion3d(), sel.getBound());
+        this.block = block;
+        this.totalTrans = AffineTransformation3d.IDENTITY;
+        setOptions(options);
+    }
 
     private FillSelection(Region3d region3d, Parallelepiped bound, VoxelBlock block, AffineTransformation3d totalTrans) {
         super(region3d, bound);
