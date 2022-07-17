@@ -37,7 +37,7 @@ public class BlockSettingOptions {
         return masked.masked();
     }
 
-    public VoxelBlock[] getFilters() {
+    public VoxelBlock[] getReplaces() {
         return replace;
     }
 

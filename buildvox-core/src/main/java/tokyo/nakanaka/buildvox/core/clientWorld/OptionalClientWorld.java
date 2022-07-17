@@ -30,8 +30,8 @@ public class OptionalClientWorld extends ClientWorld {
             dw = new MaskedClientWorld(background, dw);
         }
         dw = new IntegrityClientWorld(options.getIntegrity(), background, dw);
-        if(options.getFilters()!= null) {
-            dw = new ReplaceClientWorld(dw, options.getFilters());
+        if(options.getReplaces()!= null) {
+            dw = new ReplaceClientWorld(dw, options.getReplaces());
         }
         this.delegate = dw;
     }
