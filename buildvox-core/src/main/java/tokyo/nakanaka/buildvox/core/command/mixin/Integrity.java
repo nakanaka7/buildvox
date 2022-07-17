@@ -9,7 +9,7 @@ public class Integrity {
     @CommandLine.Option(names = {"-i", "--integrity"}, description = "The integrity of block setting.",
             converter = Converter.class, completionCandidates = Candidates.class,
             defaultValue = "1")
-    private double integrity;
+    private double integrity = 1;
 
     public double integrity() {
         return integrity;
