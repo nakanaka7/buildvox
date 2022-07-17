@@ -23,7 +23,7 @@ public abstract class BlockSelection extends Selection {
     protected double integrity;
     protected VoxelBlock[] filters;
     protected boolean masked;
-    protected BlockSettingArguments args;
+    protected BlockSettingOptions options;
 
     public BlockSelection(Region3d region3d, Parallelepiped bound) {
         super(region3d, bound);
@@ -64,7 +64,7 @@ public abstract class BlockSelection extends Selection {
         this.masked = blockSettingArguments.getMasked();
         this.integrity = blockSettingArguments.getIntegrity();
         this.filters = blockSettingArguments.getFilters();
-        this.args = blockSettingArguments;
+        this.options = options;
     }
 
     /**
