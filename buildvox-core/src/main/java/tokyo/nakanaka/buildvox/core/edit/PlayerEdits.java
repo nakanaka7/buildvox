@@ -282,6 +282,43 @@ public class PlayerEdits {
         return pcw.end();
     }
 
+    /**
+     * Affine transform the selection. If player does not have a selection, a selection will be created from pos-array,
+     * and then converted to a paste-selection. If the selection is block-selection, backward and forward blocks
+     * will be set.
+     * @param player the player.
+     * @param pos the block position of the center of affine transformation
+     * @param shape the selection shape which is used when creating a new selection from pos-array.
+     * @param blockSettingOptions the block-setting options.
+     * @param relativeTrans the affine transformation.
+     * @return the edit exit.
+     * @throws MissingPosException if player does not have a selection and some pos are missing.
+     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
+     * the shape.
+     */
+    private static EditExit affineTransform(Player player, Vector3d pos, AffineTransformation3d relativeTrans,
+                                            SelectionShape shape, BlockSettingOptions blockSettingOptions) {
+        AffineTransformation3d trans = AffineTransformation3d.withOffset(relativeTrans, pos.x() + 0.5, pos.y() + 0.5, pos.z() + 0.5);
+        Selection selFrom = player.getSelection();
+        if(selFrom == null) {
+            Selection posArraySel = createPosArraySelection(player.getPosArrayClone(), shape);
+            PasteSelection pasteSel = createPasteSelection(player.getEditWorld(), posArraySel);
+            pasteSel.setOptions(blockSettingOptions);
+            selFrom = pasteSel;
+        }
+        PlayerClientWorld pcw = new PlayerClientWorld(player);
+        if(selFrom instanceof BlockSelection blockSel) {
+            blockSel.setBackwardBlocks(pcw);
+        }
+        Selection selTo;
+        selTo = selFrom.affineTransform(trans);
+        if(selTo instanceof BlockSelection blockSel) {
+            blockSel.setForwardBlocks(pcw);
+        }
+        pcw.setSelection(selTo);
+        return pcw.end();
+    }
+
     private static PasteSelection createPasteSelection(World world, Selection sel) {
         Clipboard clipboard = new Clipboard(sel);
         WorldEdits.copy(world, sel, Vector3d.ZERO, clipboard);
