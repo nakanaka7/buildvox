@@ -380,13 +380,13 @@ public class PlayerEdits {
         return pcw.end();
     }
 
-    public static EditExit fill(Player player, VoxelBlock block, SelectionShape shape, BlockSettingOptions settingOptions) {
+    public static EditExit fill(Player player, VoxelBlock block, SelectionShape shape, BlockSettingOptions blockSettingOptions) {
         Selection sel = player.getSelection();
         if(sel == null) {
             sel = createPosArraySelection(player.getPosArrayClone(), shape);
         }
         FillSelection fillSelection = new FillSelection.Builder(block, sel).build();
-        fillSelection.setOptions(settingOptions);
+        fillSelection.setOptions(blockSettingOptions);
         PlayerClientWorld pcw = new PlayerClientWorld(player);
         fillSelection.setForwardBlocks(pcw);
         pcw.setSelection(fillSelection);
