@@ -46,10 +46,6 @@ public abstract class BlockSelection extends Selection {
         this.masked = masked;
     }
 
-    public void setFilters(VoxelBlock... filters) {
-        this.filters = filters;
-    }
-
     protected double getIntegrity() {
         return options.getIntegrity();
     }
