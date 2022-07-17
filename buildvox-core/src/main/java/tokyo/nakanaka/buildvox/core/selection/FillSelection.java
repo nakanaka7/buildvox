@@ -70,8 +70,8 @@ public class FillSelection extends BlockSelection {
          */
         public FillSelection build() {
             var i = new FillSelection(sel.getRegion3d(), sel.getBound(), block, totalTrans);
-            i.integrity = this.integrity;
-            i.masked = this.masked;
+            i.setIntegrity(this.integrity);
+            i.setMasked(this.masked);
             return i;
         }
 

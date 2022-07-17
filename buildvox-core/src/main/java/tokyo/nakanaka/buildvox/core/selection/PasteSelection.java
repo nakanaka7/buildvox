@@ -86,8 +86,8 @@ public class PasteSelection extends BlockSelection {
          */
         public PasteSelection build() {
             var i = new PasteSelection(selection, clipboard, pos, clipTrans);
-            i.integrity = this.integrity;
-            i.masked = this.masked;
+            i.setIntegrity(this.integrity);
+            i.setMasked(this.masked);
             return i;
         }
 
