@@ -21,7 +21,6 @@ import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
 public abstract class BlockSelection extends Selection {
     protected Clipboard backwardClip;
     private VoxelBlock[] filters;
-    private boolean masked;
     protected BlockSettingOptions options = new BlockSettingOptions();
 
     public BlockSelection(Region3d region3d, Parallelepiped bound) {
@@ -43,7 +42,7 @@ public abstract class BlockSelection extends Selection {
 
     /** Sets the masked. Should be called before setForwardBlocks().  */
     public void setMasked(boolean masked) {
-        this.masked = masked;
+        options.setMasked(masked);
     }
 
     protected double getIntegrity() {
@@ -51,12 +50,11 @@ public abstract class BlockSelection extends Selection {
     }
 
     protected boolean getMasked() {
-        return masked;
+        return options.getMasked();
     }
 
     public void setBlockSettingOptions(BlockSettingOptions options) {
         BlockSettingArguments blockSettingArguments = options.getArguments();
-        this.masked = blockSettingArguments.getMasked();
         this.filters = blockSettingArguments.getFilters();
         this.options = options;
     }
@@ -71,7 +69,7 @@ public abstract class BlockSelection extends Selection {
         VoxelBlock background = playerClientWorld.getPlayer().getBackgroundBlock();
         ClientWorld clientWorld = new OptionalClientWorld.Builder(playerClientWorld, background)
                 .integrity(options.getIntegrity())
-                .masked(masked)
+                .masked(options.getMasked())
                 .filters(filters)
                 .build();
         setRawForwardBlocks(clientWorld);
