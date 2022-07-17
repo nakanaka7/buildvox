@@ -1,9 +1,10 @@
 package tokyo.nakanaka.buildvox.core.selection;
 
-import tokyo.nakanaka.buildvox.core.BlockSettingArguments;
 import tokyo.nakanaka.buildvox.core.Clipboard;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
-import tokyo.nakanaka.buildvox.core.clientWorld.*;
+import tokyo.nakanaka.buildvox.core.clientWorld.ClientWorld;
+import tokyo.nakanaka.buildvox.core.clientWorld.OptionalClientWorld;
+import tokyo.nakanaka.buildvox.core.clientWorld.PlayerClientWorld;
 import tokyo.nakanaka.buildvox.core.command.mixin.BlockSettingOptions;
 import tokyo.nakanaka.buildvox.core.edit.WorldEdits;
 import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
@@ -20,7 +21,6 @@ import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
  */
 public abstract class BlockSelection extends Selection {
     protected Clipboard backwardClip;
-    private VoxelBlock[] filters;
     protected BlockSettingOptions options = new BlockSettingOptions();
 
     public BlockSelection(Region3d region3d, Parallelepiped bound) {
@@ -54,8 +54,6 @@ public abstract class BlockSelection extends Selection {
     }
 
     public void setBlockSettingOptions(BlockSettingOptions options) {
-        BlockSettingArguments blockSettingArguments = options.getArguments();
-        this.filters = blockSettingArguments.getFilters();
         this.options = options;
     }
 
@@ -70,7 +68,7 @@ public abstract class BlockSelection extends Selection {
         ClientWorld clientWorld = new OptionalClientWorld.Builder(playerClientWorld, background)
                 .integrity(options.getIntegrity())
                 .masked(options.getMasked())
-                .filters(filters)
+                .filters(options.getFilters())
                 .build();
         setRawForwardBlocks(clientWorld);
         backwardClip = newBackwardClip;
