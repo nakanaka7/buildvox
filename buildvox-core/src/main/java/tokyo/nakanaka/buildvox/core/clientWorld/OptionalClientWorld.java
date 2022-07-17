@@ -1,6 +1,5 @@
 package tokyo.nakanaka.buildvox.core.clientWorld;
 
-import tokyo.nakanaka.buildvox.core.BlockSettingArguments;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.command.mixin.BlockSettingOptions;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
@@ -15,14 +14,13 @@ public class OptionalClientWorld extends ClientWorld {
 
     public OptionalClientWorld(ClientWorld clientWorld, VoxelBlock background, BlockSettingOptions options) {
         super(clientWorld.getWorld(), clientWorld.getPhysics());
-        BlockSettingArguments args = options.getArguments();
         ClientWorld dw = clientWorld;
-        if(args.getMasked()) {
+        if(options.getMasked()) {
             dw = new MaskedClientWorld(background, dw);
         }
-        dw = new IntegrityClientWorld(args.getIntegrity(), background, dw);
-        if(args.getFilters()!= null) {
-            dw = new ReplaceClientWorld(dw, args.getFilters());
+        dw = new IntegrityClientWorld(options.getIntegrity(), background, dw);
+        if(options.getFilters()!= null) {
+            dw = new ReplaceClientWorld(dw, options.getFilters());
         }
         this.delegate = dw;
     }
