@@ -20,9 +20,9 @@ import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
  */
 public abstract class BlockSelection extends Selection {
     protected Clipboard backwardClip;
-    protected double integrity;
-    protected VoxelBlock[] filters;
-    protected boolean masked;
+    private double integrity;
+    private VoxelBlock[] filters;
+    private boolean masked;
     protected BlockSettingOptions options;
 
     public BlockSelection(Region3d region3d, Parallelepiped bound) {
