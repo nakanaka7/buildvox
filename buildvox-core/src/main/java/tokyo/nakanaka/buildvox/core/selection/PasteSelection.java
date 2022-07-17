@@ -102,11 +102,11 @@ public class PasteSelection extends BlockSelection {
         AffineTransformation3d newClipTrans = trans.linear().compose(this.clipTrans);
         Vector3d transPos = trans.apply(pos);
         Selection newSel = toNonBlock().affineTransform(trans);
-        return new Builder(clipboard, transPos, newSel)
+        PasteSelection newPasteSel = new Builder(clipboard, transPos, newSel)
                 .clipTrans(newClipTrans)
-                .integrity(getIntegrity())
-                .masked(getMasked())
                 .build();
+        newPasteSel.setOptions(getOptions());
+        return newPasteSel;
     }
 
 }
