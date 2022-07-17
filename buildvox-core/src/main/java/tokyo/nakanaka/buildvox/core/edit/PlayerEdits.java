@@ -492,4 +492,42 @@ public class PlayerEdits {
         return pw.end();
     }
 
+    /**
+     * Repeats the blocks in the player selection. countX, countY, and countZ defines the repeating direction vector.
+     * The end selection will be the paste selection of the last repeating blocks.
+     * @param player the player.
+     * @param countX the count along x-axis.
+     * @param countY the count along y-axis.
+     * @param countZ the count along z-axis.
+     * @param shape the selection shape which is used when creating a new selection from pos-array.
+     * @param blockSettingOptions the block-setting options.
+     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
+     * @throws IllegalArgumentException if integrity is less than 0 or larger than 1.
+     */
+    public static EditExit repeat(Player player, int countX, int countY, int countZ, SelectionShape shape, BlockSettingOptions blockSettingOptions) {
+        Selection sel = player.getSelection();
+        if(sel == null) {
+            sel = createPosArraySelection(player.getPosArrayClone(), shape);
+        }
+        Parallelepiped bound = sel.getBound();
+        double dx = bound.maxX() - bound.minX();
+        double dy = bound.maxY() - bound.minY();
+        double dz = bound.maxZ() - bound.minZ();
+        Clipboard clip = new Clipboard(sel);
+        WorldEdits.copy(player.getEditWorld(), sel, Vector3d.ZERO, clip);
+        List<Vector3i> positions = Drawings.line(Vector3i.ZERO, new Vector3i(countX, countY, countZ));
+        PlayerClientWorld pw = new PlayerClientWorld(player);
+        for(Vector3i pos : positions) {
+            double qx = pos.x() * dx;
+            double qy = pos.y() * dy;
+            double qz = pos.z() * dz;
+            Vector3d q = new Vector3d(qx, qy, qz);
+            PasteSelection pasteSel = new PasteSelection(clip, q);
+            pasteSel.setOptions(blockSettingOptions);
+            pasteSel.setForwardBlocks(pw);
+            pw.setSelection(pasteSel);
+        }
+        return pw.end();
+    }
+
 }
