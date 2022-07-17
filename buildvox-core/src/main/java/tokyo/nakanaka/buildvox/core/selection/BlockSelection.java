@@ -4,7 +4,7 @@ import tokyo.nakanaka.buildvox.core.Clipboard;
 import tokyo.nakanaka.buildvox.core.clientWorld.ClientWorld;
 import tokyo.nakanaka.buildvox.core.clientWorld.OptionalClientWorld;
 import tokyo.nakanaka.buildvox.core.clientWorld.PlayerClientWorld;
-import tokyo.nakanaka.buildvox.core.command.mixin.BlockSettingOptions;
+import tokyo.nakanaka.buildvox.core.BlockSettingOptions;
 import tokyo.nakanaka.buildvox.core.edit.WorldEdits;
 import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
 import tokyo.nakanaka.buildvox.core.math.region3d.Region3d;

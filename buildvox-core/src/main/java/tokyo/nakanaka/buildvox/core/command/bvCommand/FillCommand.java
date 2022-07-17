@@ -1,6 +1,7 @@
 package tokyo.nakanaka.buildvox.core.command.bvCommand;
 
 import picocli.CommandLine.*;
+import tokyo.nakanaka.buildvox.core.BlockSettingOptions;
 import tokyo.nakanaka.buildvox.core.EditExit;
 import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;

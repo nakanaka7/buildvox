@@ -1,7 +1,7 @@
 package tokyo.nakanaka.buildvox.core.clientWorld;
 
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
-import tokyo.nakanaka.buildvox.core.command.mixin.BlockSettingOptions;
+import tokyo.nakanaka.buildvox.core.BlockSettingOptions;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 
 /* experimental */

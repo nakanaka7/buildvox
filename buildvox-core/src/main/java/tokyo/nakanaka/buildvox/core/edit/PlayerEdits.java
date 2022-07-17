@@ -5,7 +5,7 @@ import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.clientWorld.ClientWorld;
 import tokyo.nakanaka.buildvox.core.clientWorld.IntegrityClientWorld;
 import tokyo.nakanaka.buildvox.core.clientWorld.PlayerClientWorld;
-import tokyo.nakanaka.buildvox.core.command.mixin.BlockSettingOptions;
+import tokyo.nakanaka.buildvox.core.BlockSettingOptions;
 import tokyo.nakanaka.buildvox.core.math.Drawings;
 import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
 import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;

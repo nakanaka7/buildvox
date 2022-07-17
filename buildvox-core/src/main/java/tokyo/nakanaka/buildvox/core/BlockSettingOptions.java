@@ -1,7 +1,10 @@
-package tokyo.nakanaka.buildvox.core.command.mixin;
+package tokyo.nakanaka.buildvox.core;
 
 import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
+import tokyo.nakanaka.buildvox.core.command.mixin.Integrity;
+import tokyo.nakanaka.buildvox.core.command.mixin.Masked;
+import tokyo.nakanaka.buildvox.core.command.mixin.Replace;
 
 public class BlockSettingOptions {
     @Mixin
