@@ -263,11 +263,7 @@ public class BuildVoxSystem {
         player.setEditWorld(world);
         var src = player.getBrushSource();
         var pcw = new PlayerClientWorld(player);
-        var ocw = new OptionalClientWorld.Builder(pcw, player.getBackgroundBlock())
-                .integrity(src.getIntegrity())
-                .masked(src.getMasked())
-                .filters(src.getFilters())
-                .build();
+        var ocw = new OptionalClientWorld(pcw, src.getOptions());
         WorldEdits.paste(src.getClipboard(), ocw, pos.toVector3d());
         pcw.end();
     }

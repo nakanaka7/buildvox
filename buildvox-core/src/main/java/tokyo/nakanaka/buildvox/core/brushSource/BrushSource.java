@@ -1,61 +1,28 @@
 package tokyo.nakanaka.buildvox.core.brushSource;
 
+import tokyo.nakanaka.buildvox.core.BlockSettingOptions;
 import tokyo.nakanaka.buildvox.core.Clipboard;
-import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 
 /* experimental */
 public class BrushSource {
     private final Clipboard clipboard;
-    private double integrity;
-    private VoxelBlock[] filters;
-    private boolean masked;
+    private final BlockSettingOptions options;
 
-    private BrushSource(Builder builder) {
-        this.clipboard = builder.clipboard;
-        this.integrity = builder.integrity;
-        this.filters = builder.filters;
-        this.masked = builder.mask;
+    public BrushSource(Clipboard clipboard, BlockSettingOptions options) {
+        this.clipboard = clipboard;
+        this.options = options;
     }
 
-    public static class Builder {
-        private Clipboard clipboard;
-        private double integrity = 1;
-        private VoxelBlock[] filters;
-        private boolean mask;
-        public Builder(Clipboard clipboard) {
-            this.clipboard = clipboard;
-        }
-        public Builder integrity(double integrity) {
-            this.integrity = integrity;
-            return this;
-        }
-        public Builder filters(VoxelBlock... filters) {
-            this.filters = filters;
-            return this;
-        }
-        public Builder masked(boolean mask) {
-            this.mask = mask;
-            return this;
-        }
-        public BrushSource build() {
-            return new BrushSource(this);
-        }
+    public BrushSource(Clipboard clipboard) {
+        this(clipboard, new BlockSettingOptions());
     }
 
     public Clipboard getClipboard() {
         return clipboard;
     }
 
-    public double getIntegrity() {
-        return integrity;
-    }
-
-    public VoxelBlock[] getFilters() {
-        return filters;
-    }
-
-    public boolean getMasked() {
-        return masked;
+    public BlockSettingOptions getOptions() {
+        return options;
     }
 
 }

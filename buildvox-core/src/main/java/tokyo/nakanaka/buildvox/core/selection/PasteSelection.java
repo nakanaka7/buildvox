@@ -15,6 +15,19 @@ public class PasteSelection extends BlockSelection {
     private final Vector3d pos;
     private final AffineTransformation3d clipTrans;
 
+    /**
+     * Creates a new instance.
+     * @param clipboard the clipboard.
+     * @param pos the position which corresponds to the clipboard origin.
+     */
+    public PasteSelection(Clipboard clipboard, Vector3d pos) {
+        super(clipboard.getSelection().translate(pos).getRegion3d(),
+                clipboard.getSelection().translate(pos).getBound());
+        this.clipboard = clipboard;
+        this.pos = pos;
+        this.clipTrans = AffineTransformation3d.IDENTITY;
+    }
+
     private PasteSelection(Selection selection, Clipboard clipboard, Vector3d pos,
                            AffineTransformation3d clipTrans) {
         super(selection.getRegion3d(), selection.getBound());
@@ -35,6 +48,7 @@ public class PasteSelection extends BlockSelection {
 
     /**
      * The builder class of PasteSelection.
+     * @deprecated Use the normal constructor.
      */
     public static class Builder {
         private final Selection selection;

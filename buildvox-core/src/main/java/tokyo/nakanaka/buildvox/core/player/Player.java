@@ -41,7 +41,7 @@ public class Player {
         this.playerEntity = playerEntity;
         this.messenger = new PlayerMessenger(playerEntity);
         Clipboard brushClip = BrushSourceClipboards.createSphere(VoxelBlock.valueOf("stone"), 3);
-        this.brushSource = new BrushSource.Builder(brushClip).build();
+        this.brushSource = new BrushSource(brushClip);
     }
 
     /**

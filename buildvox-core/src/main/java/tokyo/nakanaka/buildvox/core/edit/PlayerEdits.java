@@ -339,6 +339,7 @@ public class PlayerEdits {
      * @param pos the position which corresponds to the origin of the clipboard.
      * @throws IllegalStateException if clipboard is null
      * @throws IllegalArgumentException if integrity is less than 0 or more than 1.
+     * @deprecated Use paste() with blockSettingOptions parameters.
      */
     public static EditExit paste(Player player, Vector3d pos, double integrity, boolean masked) {
         Clipboard clipboard = player.getClipboard();
@@ -351,6 +352,27 @@ public class PlayerEdits {
         PlayerClientWorld pw = new PlayerClientWorld(player);
         pasteSelection.setForwardBlocks(pw);
         pw.setSelection(pasteSelection);
+        return pw.end();
+    }
+
+    /**
+     * Pastes the blocks of the clipboard. A paste-selection will be set in the end.
+     * @param player the player.
+     * @param pos the position which corresponds to the origin of the clipboard.
+     * @param blockSettingOptions the block-setting options.
+     * @throws IllegalStateException if clipboard is null
+     * @throws IllegalArgumentException if integrity is less than 0 or more than 1.
+     */
+    public static EditExit paste(Player player, Vector3d pos, BlockSettingOptions blockSettingOptions) {
+        Clipboard clipboard = player.getClipboard();
+        if(clipboard == null){
+            throw new IllegalStateException();
+        }
+        PasteSelection pasteSel = new PasteSelection(clipboard, pos);
+        pasteSel.setOptions(blockSettingOptions);
+        PlayerClientWorld pw = new PlayerClientWorld(player);
+        pasteSel.setForwardBlocks(pw);
+        pw.setSelection(pasteSel);
         return pw.end();
     }
 
@@ -398,7 +420,7 @@ public class PlayerEdits {
         if(sel == null) {
             sel = createPosArraySelection(player.getPosArrayClone(), shape);
         }
-        FillSelection fillSelection = new FillSelection.Builder(block, sel).build();
+        FillSelection fillSelection = new FillSelection(sel, block);
         fillSelection.setOptions(blockSettingOptions);
         PlayerClientWorld pcw = new PlayerClientWorld(player);
         fillSelection.setForwardBlocks(pcw);
