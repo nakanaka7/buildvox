@@ -6,13 +6,13 @@ import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 
 public class BlockSettingOptions {
     @Mixin
-    private Integrity integrity;
+    private Integrity integrity = new Integrity();
 
     @Mixin
-    private Masked masked;
+    private Masked masked = new Masked();
 
     @Mixin
-    private Replace replace;
+    private Replace replace = new Replace();
 
     public void setIntegrity(double integrity) {
         this.integrity.setIntegrity(integrity);
