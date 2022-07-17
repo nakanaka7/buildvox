@@ -354,6 +354,19 @@ public class PlayerEdits {
         return pw.end();
     }
 
+    public static EditExit paste(Player player, Vector3d pos, BlockSettingOptions options) {
+        Clipboard clipboard = player.getClipboard();
+        if(clipboard == null){
+            throw new IllegalStateException();
+        }
+        PasteSelection pasteSel = new PasteSelection(clipboard, pos);
+        pasteSel.setOptions(options);
+        PlayerClientWorld pw = new PlayerClientWorld(player);
+        pasteSel.setForwardBlocks(pw);
+        pw.setSelection(pasteSel);
+        return pw.end();
+    }
+
     /**
      * Fills the blocks into the selection. If player does not have a selection, a selection will be created from pos-array.
      * A fill-selection will be set in the end.
