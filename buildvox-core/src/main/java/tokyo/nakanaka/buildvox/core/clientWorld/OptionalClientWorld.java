@@ -14,11 +14,8 @@ public class OptionalClientWorld extends ClientWorld {
     }
 
     public OptionalClientWorld(ClientWorld clientWorld, VoxelBlock background, BlockSettingOptions options) {
-        this(clientWorld, background, options.getArguments());
-    }
-
-    public OptionalClientWorld(ClientWorld clientWorld, VoxelBlock background, BlockSettingArguments args) {
         super(clientWorld.getWorld(), clientWorld.getPhysics());
+        BlockSettingArguments args = options.getArguments();
         ClientWorld dw = clientWorld;
         if(args.getMasked()) {
             dw = new MaskedClientWorld(background, dw);
