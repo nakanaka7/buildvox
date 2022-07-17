@@ -29,6 +29,10 @@ public class BlockSettingOptions {
         this.masked.setMasked(masked);
     }
 
+    public void setReplaces(VoxelBlock... replaces) {
+        this.replace = replaces;
+    }
+
     public double getIntegrity() {
         return integrity.integrity();
     }
