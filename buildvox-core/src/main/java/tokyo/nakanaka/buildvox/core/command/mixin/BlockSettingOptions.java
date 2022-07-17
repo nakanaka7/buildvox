@@ -14,6 +14,10 @@ public class BlockSettingOptions {
     @Mixin
     private Replace replace;
 
+    public void setIntegrity(double integrity) {
+        this.integrity.setIntegrity(integrity);
+    }
+
     public BlockSettingArguments getArguments() {
         var args = new BlockSettingArguments.Builder()
                 .integrity(integrity.integrity())
