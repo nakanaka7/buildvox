@@ -2,7 +2,6 @@ package tokyo.nakanaka.buildvox.core.brushSource;
 
 import tokyo.nakanaka.buildvox.core.BlockSettingOptions;
 import tokyo.nakanaka.buildvox.core.Clipboard;
-import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 
 /* experimental */
 public class BrushSource {
@@ -42,18 +41,6 @@ public class BrushSource {
 
     public BlockSettingOptions getOptions() {
         return options;
-    }
-
-    public double getIntegrity() {
-        return options.getIntegrity();
-    }
-
-    public VoxelBlock[] getFilters() {
-        return null;
-    }
-
-    public boolean getMasked() {
-        return options.getMasked();
     }
 
 }
