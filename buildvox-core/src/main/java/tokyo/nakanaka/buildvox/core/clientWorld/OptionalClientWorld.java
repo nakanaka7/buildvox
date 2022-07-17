@@ -60,6 +60,7 @@ public class OptionalClientWorld extends ClientWorld {
         private VoxelBlock[] filters;
 
         /* Creates a new instance. */
+        @Deprecated
         public Builder(ClientWorld clientWorld, VoxelBlock background) {
             this.clientWorld = clientWorld;
             this.background = background;
