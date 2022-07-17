@@ -364,6 +364,7 @@ public class PlayerEdits {
      * @throws MissingPosException if player does not have a selection and some pos are missing.
      * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
      * the shape.
+     * @deprecated Use fill() with shape and blockSettingOptions parameters.
      */
     public static EditExit fill(Player player, VoxelBlock block, Options options) {
         Selection sel = player.getSelection();
