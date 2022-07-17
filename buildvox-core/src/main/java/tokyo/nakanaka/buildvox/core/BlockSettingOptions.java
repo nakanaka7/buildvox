@@ -2,9 +2,9 @@ package tokyo.nakanaka.buildvox.core;
 
 import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
+import tokyo.nakanaka.buildvox.core.command.mixin.Block;
 import tokyo.nakanaka.buildvox.core.command.mixin.Integrity;
 import tokyo.nakanaka.buildvox.core.command.mixin.Masked;
-import tokyo.nakanaka.buildvox.core.command.mixin.Replace;
 
 /** Represents block setting options. */
 public class BlockSettingOptions {
@@ -14,8 +14,12 @@ public class BlockSettingOptions {
     @Mixin
     private Masked masked = new Masked();
 
-    @Mixin
-    private Replace replace = new Replace();
+    @Option(names = {"-r", "--replace"},
+            description = "The block to replace",
+            arity = "1..*",
+            completionCandidates = Block.Candidates.class,
+            converter = Block.Converter.class)
+    private VoxelBlock[] filters;
 
     public void setIntegrity(double integrity) {
         this.integrity.setIntegrity(integrity);
@@ -34,12 +38,7 @@ public class BlockSettingOptions {
     }
 
     public VoxelBlock[] getFilters() {
-        var filter = replace.filter();
-        if(filter == null) {
-            return null;
-        }else{
-            return new VoxelBlock[]{filter};
-        }
+        return filters;
     }
 
 }
