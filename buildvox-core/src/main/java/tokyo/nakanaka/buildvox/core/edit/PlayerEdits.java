@@ -462,6 +462,7 @@ public class PlayerEdits {
      * @param countZ the count along z-axis.
      * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
      * @throws IllegalArgumentException if integrity is less than 0 or larger than 1.
+     * @deprecated Use repeat() with shape and blockSettingOptions parameters.
      */
     public static EditExit repeat(Player player, int countX, int countY, int countZ, Options options) {
         Selection sel = player.getSelection();
