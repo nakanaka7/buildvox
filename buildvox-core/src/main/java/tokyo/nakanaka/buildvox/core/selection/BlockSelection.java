@@ -51,15 +51,12 @@ public abstract class BlockSelection extends Selection {
         this.filters = filters;
     }
 
-    public void setBlockSettingArguments(BlockSettingArguments blockSettingArguments) {
+    public void setBlockSettingOptions(BlockSettingOptions options) {
+        BlockSettingArguments blockSettingArguments = options.getArguments();
         this.masked = blockSettingArguments.getMasked();
         this.integrity = blockSettingArguments.getIntegrity();
         this.filters = blockSettingArguments.getFilters();
         this.args = blockSettingArguments;
-    }
-
-    public void setBlockSettingOptions(BlockSettingOptions options) {
-        setBlockSettingArguments(options.getArguments());
     }
 
     /**
