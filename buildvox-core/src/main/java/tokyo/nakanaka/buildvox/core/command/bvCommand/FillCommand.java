@@ -31,18 +31,8 @@ public class FillCommand implements Runnable {
         PrintWriter out = commandSpec.commandLine().getOut();
         PrintWriter err = commandSpec.commandLine().getErr();
         Player player = bvCmd.getPlayer();
-        var options = new PlayerEdits.Options();
-        var bsArgs = blockSettingOptions.getArguments();
-        options.setBlockSettingArguments(bsArgs);
-        options.shape = shape.shape();
         try {
-            EditExit exit;
-            VoxelBlock[] filters = bsArgs.getFilters();
-            if(filters == null) {
-                exit = PlayerEdits.fill(player, block, options);
-            }else {
-                exit = PlayerEdits.replace(player, filters[0], block, options);
-            }
+            EditExit exit = PlayerEdits.fill(player, block, shape.shape(), blockSettingOptions);
             out.println(Messages.ofSetExit(exit));
         }catch (PlayerEdits.MissingPosException ex) {
             err.println(Messages.MISSING_POS_ERROR);
