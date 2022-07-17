@@ -86,8 +86,8 @@ public class PasteSelection extends BlockSelection {
          */
         public PasteSelection build() {
             var i = new PasteSelection(selection, clipboard, pos, clipTrans);
-            i.integrity = this.integrity;
-            i.masked = this.masked;
+            i.setIntegrity(this.integrity);
+            i.setMasked(this.masked);
             return i;
         }
 
@@ -102,11 +102,11 @@ public class PasteSelection extends BlockSelection {
         AffineTransformation3d newClipTrans = trans.linear().compose(this.clipTrans);
         Vector3d transPos = trans.apply(pos);
         Selection newSel = toNonBlock().affineTransform(trans);
-        return new Builder(clipboard, transPos, newSel)
+        PasteSelection newPasteSel = new Builder(clipboard, transPos, newSel)
                 .clipTrans(newClipTrans)
-                .integrity(this.integrity)
-                .masked(this.masked)
                 .build();
+        newPasteSel.setOptions(getOptions());
+        return newPasteSel;
     }
 
 }

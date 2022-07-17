@@ -15,6 +15,11 @@ public class Integrity {
         return integrity;
     }
 
+    public void setIntegrity(double integrity) {
+        if(integrity < 0 || 1 < integrity) throw new IllegalArgumentException("integrity must be 0..1");
+        this.integrity = integrity;
+    }
+
     private static class Converter implements CommandLine.ITypeConverter<Double> {
         @Override
         public Double convert(String value) {

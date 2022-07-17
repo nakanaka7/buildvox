@@ -1,11 +1,10 @@
 package tokyo.nakanaka.buildvox.core.selection;
 
 import tokyo.nakanaka.buildvox.core.Clipboard;
-import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.clientWorld.ClientWorld;
-import tokyo.nakanaka.buildvox.core.clientWorld.IntegrityClientWorld;
-import tokyo.nakanaka.buildvox.core.clientWorld.MaskedClientWorld;
+import tokyo.nakanaka.buildvox.core.clientWorld.OptionalClientWorld;
 import tokyo.nakanaka.buildvox.core.clientWorld.PlayerClientWorld;
+import tokyo.nakanaka.buildvox.core.BlockSettingOptions;
 import tokyo.nakanaka.buildvox.core.edit.WorldEdits;
 import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
 import tokyo.nakanaka.buildvox.core.math.region3d.Region3d;
@@ -21,8 +20,7 @@ import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
  */
 public abstract class BlockSelection extends Selection {
     protected Clipboard backwardClip;
-    protected double integrity;
-    protected boolean masked;
+    protected BlockSettingOptions options = new BlockSettingOptions();
 
     public BlockSelection(Region3d region3d, Parallelepiped bound) {
         super(region3d, bound);
@@ -38,12 +36,20 @@ public abstract class BlockSelection extends Selection {
 
     /** Sets the integrity. Should be called before setForwardBlocks(). */
     public void setIntegrity(double integrity) {
-        this.integrity = integrity;
+        options.setIntegrity(integrity);
     }
 
     /** Sets the masked. Should be called before setForwardBlocks().  */
     public void setMasked(boolean masked) {
-        this.masked = masked;
+        options.setMasked(masked);
+    }
+
+    public void setOptions(BlockSettingOptions options) {
+        this.options = options;
+    }
+
+    public BlockSettingOptions getOptions() {
+        return options;
     }
 
     /**
@@ -53,12 +59,7 @@ public abstract class BlockSelection extends Selection {
     public void setForwardBlocks(PlayerClientWorld playerClientWorld) {
         Clipboard newBackwardClip = new Clipboard();
         WorldEdits.copy(playerClientWorld, this, Vector3d.ZERO, newBackwardClip);
-        VoxelBlock background = playerClientWorld.getPlayer().getBackgroundBlock();
-        ClientWorld clientWorld = playerClientWorld;
-        if(masked) {
-            clientWorld = new MaskedClientWorld(background, clientWorld);
-        }
-        clientWorld = new IntegrityClientWorld(integrity, background, clientWorld);
+        ClientWorld clientWorld = new OptionalClientWorld(playerClientWorld, options);
         setRawForwardBlocks(clientWorld);
         backwardClip = newBackwardClip;
     }
