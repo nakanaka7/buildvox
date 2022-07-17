@@ -339,6 +339,7 @@ public class PlayerEdits {
      * @param pos the position which corresponds to the origin of the clipboard.
      * @throws IllegalStateException if clipboard is null
      * @throws IllegalArgumentException if integrity is less than 0 or more than 1.
+     * @deprecated Use paste() with blockSettingOptions parameters.
      */
     public static EditExit paste(Player player, Vector3d pos, double integrity, boolean masked) {
         Clipboard clipboard = player.getClipboard();
