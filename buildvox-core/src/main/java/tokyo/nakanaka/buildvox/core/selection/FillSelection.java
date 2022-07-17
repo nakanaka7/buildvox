@@ -15,6 +15,11 @@ public class FillSelection extends BlockSelection {
     private final VoxelBlock block;
     private final AffineTransformation3d totalTrans;
 
+    /**
+     * Creates a new instance.
+     * @param sel the original selection.
+     * @param block the block to set.
+     */
     public FillSelection(Selection sel, VoxelBlock block) {
         super(sel.getRegion3d(), sel.getBound());
         this.block = block;
@@ -29,6 +34,7 @@ public class FillSelection extends BlockSelection {
 
     /**
      * The builder class of FillSelection.
+     * @deprecated Use normal constructor.
      */
     public static class Builder {
         private final VoxelBlock block;
