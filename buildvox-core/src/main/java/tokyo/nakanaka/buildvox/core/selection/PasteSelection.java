@@ -104,8 +104,8 @@ public class PasteSelection extends BlockSelection {
         Selection newSel = toNonBlock().affineTransform(trans);
         return new Builder(clipboard, transPos, newSel)
                 .clipTrans(newClipTrans)
-                .integrity(this.integrity)
-                .masked(this.masked)
+                .integrity(getIntegrity())
+                .masked(getMasked())
                 .build();
     }
 

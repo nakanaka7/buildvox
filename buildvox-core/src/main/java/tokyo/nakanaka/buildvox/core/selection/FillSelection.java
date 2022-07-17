@@ -90,8 +90,8 @@ public class FillSelection extends BlockSelection {
         Selection selection = new Selection(region3d, bound);
         Selection transSelection = selection.affineTransform(trans);
         return new Builder(block, transSelection, totalTrans.compose(trans))
-                .integrity(this.integrity)
-                .masked(this.masked)
+                .integrity(getIntegrity())
+                .masked(getMasked())
                 .build();
     }
 
