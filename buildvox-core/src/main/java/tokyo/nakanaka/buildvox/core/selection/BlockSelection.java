@@ -20,10 +20,9 @@ import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
  */
 public abstract class BlockSelection extends Selection {
     protected Clipboard backwardClip;
-    private double integrity;
     private VoxelBlock[] filters;
     private boolean masked;
-    protected BlockSettingOptions options;
+    protected BlockSettingOptions options = new BlockSettingOptions();
 
     public BlockSelection(Region3d region3d, Parallelepiped bound) {
         super(region3d, bound);
@@ -39,7 +38,7 @@ public abstract class BlockSelection extends Selection {
 
     /** Sets the integrity. Should be called before setForwardBlocks(). */
     public void setIntegrity(double integrity) {
-        this.integrity = integrity;
+        options.setIntegrity(integrity);
     }
 
     /** Sets the masked. Should be called before setForwardBlocks().  */
@@ -52,7 +51,7 @@ public abstract class BlockSelection extends Selection {
     }
 
     protected double getIntegrity() {
-        return integrity;
+        return options.getIntegrity();
     }
 
     protected boolean getMasked() {
@@ -62,7 +61,6 @@ public abstract class BlockSelection extends Selection {
     public void setBlockSettingOptions(BlockSettingOptions options) {
         BlockSettingArguments blockSettingArguments = options.getArguments();
         this.masked = blockSettingArguments.getMasked();
-        this.integrity = blockSettingArguments.getIntegrity();
         this.filters = blockSettingArguments.getFilters();
         this.options = options;
     }
@@ -76,7 +74,7 @@ public abstract class BlockSelection extends Selection {
         WorldEdits.copy(playerClientWorld, this, Vector3d.ZERO, newBackwardClip);
         VoxelBlock background = playerClientWorld.getPlayer().getBackgroundBlock();
         ClientWorld clientWorld = new OptionalClientWorld.Builder(playerClientWorld, background)
-                .integrity(integrity)
+                .integrity(options.getIntegrity())
                 .masked(masked)
                 .filters(filters)
                 .build();
