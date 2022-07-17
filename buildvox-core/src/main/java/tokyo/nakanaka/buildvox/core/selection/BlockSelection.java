@@ -1,7 +1,6 @@
 package tokyo.nakanaka.buildvox.core.selection;
 
 import tokyo.nakanaka.buildvox.core.Clipboard;
-import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.clientWorld.ClientWorld;
 import tokyo.nakanaka.buildvox.core.clientWorld.OptionalClientWorld;
 import tokyo.nakanaka.buildvox.core.clientWorld.PlayerClientWorld;
@@ -64,12 +63,7 @@ public abstract class BlockSelection extends Selection {
     public void setForwardBlocks(PlayerClientWorld playerClientWorld) {
         Clipboard newBackwardClip = new Clipboard();
         WorldEdits.copy(playerClientWorld, this, Vector3d.ZERO, newBackwardClip);
-        VoxelBlock background = playerClientWorld.getPlayer().getBackgroundBlock();
-        ClientWorld clientWorld = new OptionalClientWorld.Builder(playerClientWorld, background)
-                .integrity(options.getIntegrity())
-                .masked(options.getMasked())
-                .filters(options.getFilters())
-                .build();
+        ClientWorld clientWorld = new OptionalClientWorld(playerClientWorld, options);
         setRawForwardBlocks(clientWorld);
         backwardClip = newBackwardClip;
     }
