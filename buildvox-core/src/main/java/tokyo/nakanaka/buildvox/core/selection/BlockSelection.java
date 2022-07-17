@@ -44,14 +44,6 @@ public abstract class BlockSelection extends Selection {
         options.setMasked(masked);
     }
 
-    protected double getIntegrity() {
-        return options.getIntegrity();
-    }
-
-    protected boolean getMasked() {
-        return options.getMasked();
-    }
-
     public void setOptions(BlockSettingOptions options) {
         this.options = options;
     }
