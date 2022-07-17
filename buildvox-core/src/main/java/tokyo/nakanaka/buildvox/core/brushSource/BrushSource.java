@@ -1,20 +1,19 @@
 package tokyo.nakanaka.buildvox.core.brushSource;
 
+import tokyo.nakanaka.buildvox.core.BlockSettingOptions;
 import tokyo.nakanaka.buildvox.core.Clipboard;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 
 /* experimental */
 public class BrushSource {
     private final Clipboard clipboard;
-    private double integrity;
-    private VoxelBlock[] filters;
-    private boolean masked;
+    private final BlockSettingOptions options;
 
     private BrushSource(Builder builder) {
         this.clipboard = builder.clipboard;
-        this.integrity = builder.integrity;
-        this.filters = null;
-        this.masked = builder.mask;
+        this.options = new BlockSettingOptions();
+        this.options.setIntegrity(builder.integrity);
+        this.options.setMasked(builder.mask);
     }
 
     public static class Builder {
@@ -42,15 +41,15 @@ public class BrushSource {
     }
 
     public double getIntegrity() {
-        return integrity;
+        return options.getIntegrity();
     }
 
     public VoxelBlock[] getFilters() {
-        return filters;
+        return null;
     }
 
     public boolean getMasked() {
-        return masked;
+        return options.getMasked();
     }
 
 }
