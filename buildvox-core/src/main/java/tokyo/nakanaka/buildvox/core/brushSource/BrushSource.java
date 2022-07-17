@@ -40,6 +40,10 @@ public class BrushSource {
         return clipboard;
     }
 
+    public BlockSettingOptions getOptions() {
+        return options;
+    }
+
     public double getIntegrity() {
         return options.getIntegrity();
     }
