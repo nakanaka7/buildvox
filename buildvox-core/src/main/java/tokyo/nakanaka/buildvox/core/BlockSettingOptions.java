@@ -6,6 +6,7 @@ import tokyo.nakanaka.buildvox.core.command.mixin.Integrity;
 import tokyo.nakanaka.buildvox.core.command.mixin.Masked;
 import tokyo.nakanaka.buildvox.core.command.mixin.Replace;
 
+/** Represents block setting options. */
 public class BlockSettingOptions {
     @Mixin
     private Integrity integrity = new Integrity();

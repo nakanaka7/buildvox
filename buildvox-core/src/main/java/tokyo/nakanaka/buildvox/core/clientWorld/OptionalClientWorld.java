@@ -4,14 +4,25 @@ import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.BlockSettingOptions;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 
-/* experimental */
+/** A client world which block-setting options applies to. */
 public class OptionalClientWorld extends ClientWorld {
     private final ClientWorld delegate;
 
+    /**
+     * Creates a new instance from a player client world.
+     * @param playerClientWorld a player client world.
+     * @param options the block-setting options.
+     */
     public OptionalClientWorld(PlayerClientWorld playerClientWorld, BlockSettingOptions options) {
         this(playerClientWorld, playerClientWorld.getPlayer().getBackgroundBlock(), options);
     }
 
+    /**
+     * Creates a new instance from a client world.
+     * @param clientWorld the client world.
+     * @param background the background block.
+     * @param options the block-setting options.
+     */
     public OptionalClientWorld(ClientWorld clientWorld, VoxelBlock background, BlockSettingOptions options) {
         super(clientWorld.getWorld(), clientWorld.getPhysics());
         ClientWorld dw = clientWorld;
@@ -40,7 +51,7 @@ public class OptionalClientWorld extends ClientWorld {
         this.delegate = dw;
     }
 
-    /** Builder */
+    /* Builder */
     public static class Builder {
         private final ClientWorld clientWorld;
         private final VoxelBlock background;
@@ -48,31 +59,31 @@ public class OptionalClientWorld extends ClientWorld {
         private boolean masked;
         private VoxelBlock[] filters;
 
-        /** Creates a new instance. */
+        /* Creates a new instance. */
         public Builder(ClientWorld clientWorld, VoxelBlock background) {
             this.clientWorld = clientWorld;
             this.background = background;
         }
 
-        /** Set the integrity. */
+        /* Set the integrity. */
         public Builder integrity(double integrity) {
             this.integrity = integrity;
             return this;
         }
 
-        /** Set masked. */
+        /* Set masked. */
         public Builder masked(boolean b) {
             this.masked = b;
             return this;
         }
 
-        /** Set filters. */
+        /* Set filters. */
         public Builder filters(VoxelBlock... filters) {
             this.filters = filters;
             return this;
         }
 
-        /**
+        /*
          * Returns a PlayerClientWorld instance.
          * @throws IllegalArgumentException if failed to build a new instance.
          */
