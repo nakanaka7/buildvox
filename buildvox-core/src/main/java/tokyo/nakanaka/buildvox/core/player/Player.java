@@ -168,6 +168,10 @@ public class Player {
         return particleGui;
     }
 
+    public boolean isParticleGuiVisible() {
+        return particleGuiVisible;
+    }
+
     /**
      * Sets whether the particle gui is visible
      * @param b true if the gui is visible, otherwise false.
