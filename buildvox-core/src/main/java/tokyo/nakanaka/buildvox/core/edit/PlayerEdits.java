@@ -198,6 +198,29 @@ public class PlayerEdits {
      * @param axis the axis which parallels to the rotating-axis.
      * @param angle the rotation angle.
      * @param pos the block position which the rotating-axis goes throw.
+     * @param shape the selection shape which is used when creating a new selection from pos-array.
+     * @param blockSettingOptions the block-setting options.
+     * @return the edit exit.
+     * @throws MissingPosException if player does not have a selection and some pos are missing.
+     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
+     * the shape.
+     */
+    public static EditExit rotate(Player player, Axis axis, double angle, Vector3d pos, SelectionShape shape, BlockSettingOptions blockSettingOptions) {
+        double angleRad = angle * Math.PI / 180;
+        AffineTransformation3d relativeTrans = switch (axis){
+            case X -> AffineTransformation3d.ofRotationX(angleRad);
+            case Y -> AffineTransformation3d.ofRotationY(angleRad);
+            case Z -> AffineTransformation3d.ofRotationZ(angleRad);
+        };
+        return affineTransform(player, pos, relativeTrans, shape, blockSettingOptions);
+    }
+
+    /**
+     * Rotates the blocks in the player's selection.
+     * @param player the player
+     * @param axis the axis which parallels to the rotating-axis.
+     * @param angle the rotation angle.
+     * @param pos the block position which the rotating-axis goes throw.
      * @return the edit exit.
      * @throws MissingPosException if player does not have a selection and some pos are missing.
      * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
