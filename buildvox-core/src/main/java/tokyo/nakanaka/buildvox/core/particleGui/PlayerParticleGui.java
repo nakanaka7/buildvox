@@ -36,22 +36,20 @@ public class PlayerParticleGui {
     }
 
     public void update() {
-        final ParticleGui particleGui = player.getParticleGui();
-        final World editWorld = player.getEditWorld();
-        final Vector3i[] posArray = player.getPosArrayClone();
-        final Selection selection = player.getSelection();
-
-        if(!player.isParticleGuiVisible()) return;
-        if(particleGui == null)return;
+        if(!particleGuiVisible) return;
+        if(particleGui == null) return;
         particleGui.clearAllLines();
-        if(editWorld == null)return;
-        if(selection != null){
-            addSelectionLines(particleGui, editWorld, selection);
+        World editWorld = player.getEditWorld();
+        Vector3i[] posArray = player.getPosArrayClone();
+        Selection selection = player.getSelection();
+        if(editWorld == null) return;
+        if(selection != null) {
+            addSelectionLines(editWorld, selection);
         }
-        addPosArrayLines(particleGui, editWorld, posArray);
+        addPosArrayLines(editWorld, posArray);
     }
 
-    private static void addSelectionLines(ParticleGui particleGui, World editWorld, Selection selection) {
+    private void addSelectionLines(World editWorld, Selection selection) {
         Color color;
         if(selection instanceof PasteSelection){
             color = Color.YELLOW;
@@ -63,7 +61,7 @@ public class PlayerParticleGui {
         particleGui.addParallelepipedLines(color, editWorld, selection.getBound());
     }
 
-    private static void addPosArrayLines(ParticleGui particleGui, World editWorld, Vector3i[] posArray) {
+    private void addPosArrayLines(World editWorld, Vector3i[] posArray) {
         for(int i = 0; i < posArray.length; ++ i){
             Vector3i pos = posArray[i];
             if(pos != null){
