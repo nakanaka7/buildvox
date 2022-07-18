@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * The object which draws particle lines. Setting a colored particle drawer is needed to spawn particles.
+ * The object which draws particle lines.
  */
 public class ParticleGui implements AutoCloseable {
     private ColoredParticleSpawner out;
