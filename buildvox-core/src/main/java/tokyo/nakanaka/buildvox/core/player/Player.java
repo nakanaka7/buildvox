@@ -28,7 +28,7 @@ public class Player {
     private BrushSource brushSource;
     private final PlayerEntity playerEntity;
     private final PlayerMessenger messenger;
-    private final PlayerParticleGui playerParticleGui = new PlayerParticleGui();
+    private final PlayerParticleGui playerParticleGui = new PlayerParticleGui(this);
 
     /**
      * Creates a new instance by the player entity.
