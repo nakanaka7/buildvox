@@ -248,6 +248,24 @@ public class PlayerEdits {
     }
 
     /**
+     * Translates the blocks in the player's selection.
+     * @param player the player.
+     * @param dx the displacement along x-axis.
+     * @param dy the displacement along y-axis.
+     * @param dz the displacement along z-axis.
+     * @param shape the selection shape which is used when creating a new selection from pos-array.
+     * @param blockSettingOptions the block-setting options.
+     * @return the edit exit.
+     * @throws MissingPosException if player does not have a selection and some pos are missing.
+     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
+     * the shape.
+     */
+    public static EditExit translate(Player player, double dx, double dy, double dz, SelectionShape shape, BlockSettingOptions blockSettingOptions) {
+        AffineTransformation3d relativeTrans = AffineTransformation3d.ofTranslation(dx, dy, dz);
+        return affineTransform(player, Vector3d.ZERO, relativeTrans, shape, blockSettingOptions);
+    }
+
+    /**
      * Affine transform the selection. If player does not have a selection, a selection will be created from pos-array,
      * and then converted to a paste-selection. If the selection is block-selection, backward and forward blocks
      * will be set.
