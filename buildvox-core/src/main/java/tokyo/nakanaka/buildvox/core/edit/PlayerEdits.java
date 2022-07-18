@@ -160,6 +160,7 @@ public class PlayerEdits {
      * @return the edit exit.
      * @throws MissingPosException if player does not have a selection and some pos are missing.
      * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
+     * @deprecated Use reflect() with shape and blockSettingOptions parameters.
      * the shape.
      */
     public static EditExit reflect(Player player, Axis axis, Vector3d pos, Options options) {
@@ -172,6 +173,50 @@ public class PlayerEdits {
     }
 
     /**
+     * Reflects the blocks in the player's selection.
+     * @param player the player.
+     * @param axis the direction of reflection.
+     * @param pos the block position which the reflection plane goes throw.
+     * @return the edit exit.
+     * @param shape the selection shape which is used when creating a new selection from pos-array.
+     * @param blockSettingOptions the block-setting options.
+     * @throws MissingPosException if player does not have a selection and some pos are missing.
+     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
+     * the shape.
+     */
+    public static EditExit reflect(Player player, Axis axis, Vector3d pos, SelectionShape shape, BlockSettingOptions blockSettingOptions) {
+        AffineTransformation3d relativeTrans = switch (axis){
+            case X -> AffineTransformation3d.ofScale(- 1, 1, 1);
+            case Y -> AffineTransformation3d.ofScale(1, - 1, 1);
+            case Z -> AffineTransformation3d.ofScale(1, 1, - 1);
+        };
+        return affineTransform(player, pos, relativeTrans, shape, blockSettingOptions);
+    }
+
+    /**
+     * Rotates the blocks in the player's selection.
+     * @param player the player
+     * @param axis the axis which parallels to the rotating-axis.
+     * @param angle the rotation angle.
+     * @param pos the block position which the rotating-axis goes throw.
+     * @param shape the selection shape which is used when creating a new selection from pos-array.
+     * @param blockSettingOptions the block-setting options.
+     * @return the edit exit.
+     * @throws MissingPosException if player does not have a selection and some pos are missing.
+     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
+     * the shape.
+     */
+    public static EditExit rotate(Player player, Axis axis, double angle, Vector3d pos, SelectionShape shape, BlockSettingOptions blockSettingOptions) {
+        double angleRad = angle * Math.PI / 180;
+        AffineTransformation3d relativeTrans = switch (axis){
+            case X -> AffineTransformation3d.ofRotationX(angleRad);
+            case Y -> AffineTransformation3d.ofRotationY(angleRad);
+            case Z -> AffineTransformation3d.ofRotationZ(angleRad);
+        };
+        return affineTransform(player, pos, relativeTrans, shape, blockSettingOptions);
+    }
+
+    /**
      * Rotates the blocks in the player's selection.
      * @param player the player
      * @param axis the axis which parallels to the rotating-axis.
@@ -181,6 +226,7 @@ public class PlayerEdits {
      * @throws MissingPosException if player does not have a selection and some pos are missing.
      * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
      * the shape.
+     * @deprecated Use rotate() with shape and blockSettingOptions parameters.
      */
     public static EditExit rotate(Player player, Axis axis, double angle, Vector3d pos, Options options) {
         double angleRad = angle * Math.PI / 180;
@@ -203,6 +249,7 @@ public class PlayerEdits {
      * @throws MissingPosException if player does not have a selection and some pos are missing.
      * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
      * the shape.
+     * @deprecated Use scale() with shape and blockSettingOptions parameters.
      */
     public static EditExit scale(Player player, double factorX, double factorY, double factorZ, Vector3d pos, Options options) {
         if(factorX * factorY * factorZ == 0) throw new IllegalArgumentException();
@@ -210,6 +257,26 @@ public class PlayerEdits {
         return affineTransform(player, pos, relativeTrans, options);
     }
 
+    /**
+     * Scales the blocks in the player's selection.
+     * @param player the player
+     * @param factorX the scale factor about x-axis.
+     * @param factorY the scale factor about y-axis.
+     * @param factorZ the scale factor about z-axis.
+     * @param pos the center position of scaling.
+     * @param shape the selection shape which is used when creating a new selection from pos-array.
+     * @param blockSettingOptions the block-setting options.
+     * @return the edit exit.
+     * @throws MissingPosException if player does not have a selection and some pos are missing.
+     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
+     * the shape.
+     */
+    public static EditExit scale(Player player, double factorX, double factorY, double factorZ, Vector3d pos,
+                                 SelectionShape shape, BlockSettingOptions blockSettingOptions) {
+        if(factorX * factorY * factorZ == 0) throw new IllegalArgumentException();
+        AffineTransformation3d relativeTrans = AffineTransformation3d.ofScale(factorX, factorY, factorZ);
+        return affineTransform(player, pos, relativeTrans, shape, blockSettingOptions);
+    }
     /**
      * Shears the blocks in the player's selection.
      * @param player the player.
@@ -221,6 +288,7 @@ public class PlayerEdits {
      * @throws MissingPosException if player does not have a selection and some pos are missing.
      * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
      * the shape.
+     * @deprecated Use shear() with shape and blockSettingOptions parameters.
      */
     public static EditExit shear(Player player, Axis axis, double factorI, double factorJ, Vector3d pos, Options options) {
         AffineTransformation3d relativeTrans = switch (axis) {
@@ -229,6 +297,30 @@ public class PlayerEdits {
             case Z -> AffineTransformation3d.ofShearZ(factorI, factorJ);
         };
         return affineTransform(player, pos, relativeTrans, options);
+    }
+
+    /**
+     * Shears the blocks in the player's selection.
+     * @param player the player.
+     * @param axis the axis.
+     * @param factorI the 1st factor.
+     * @param factorJ the 2nd factor.
+     * @param pos the center position of shearing.
+     * @param shape the selection shape which is used when creating a new selection from pos-array.
+     * @param blockSettingOptions the block-setting options.
+     * @return the edit-exit
+     * @throws MissingPosException if player does not have a selection and some pos are missing.
+     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
+     * the shape.
+     */
+    public static EditExit shear(Player player, Axis axis, double factorI, double factorJ, Vector3d pos,
+                                 SelectionShape shape, BlockSettingOptions blockSettingOptions) {
+        AffineTransformation3d relativeTrans = switch (axis) {
+            case X -> AffineTransformation3d.ofShearX(factorI, factorJ);
+            case Y -> AffineTransformation3d.ofShearY(factorI, factorJ);
+            case Z -> AffineTransformation3d.ofShearZ(factorI, factorJ);
+        };
+        return affineTransform(player, pos, relativeTrans, shape, blockSettingOptions);
     }
 
     /**
@@ -241,10 +333,29 @@ public class PlayerEdits {
      * @throws MissingPosException if player does not have a selection and some pos are missing.
      * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
      * the shape.
+     * @deprecated Use translate() with shape and blockSettingOptions parameters.
      */
     public static EditExit translate(Player player, double dx, double dy, double dz, Options options) {
         AffineTransformation3d relativeTrans = AffineTransformation3d.ofTranslation(dx, dy, dz);
         return affineTransform(player, Vector3d.ZERO, relativeTrans, options);
+    }
+
+    /**
+     * Translates the blocks in the player's selection.
+     * @param player the player.
+     * @param dx the displacement along x-axis.
+     * @param dy the displacement along y-axis.
+     * @param dz the displacement along z-axis.
+     * @param shape the selection shape which is used when creating a new selection from pos-array.
+     * @param blockSettingOptions the block-setting options.
+     * @return the edit exit.
+     * @throws MissingPosException if player does not have a selection and some pos are missing.
+     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
+     * the shape.
+     */
+    public static EditExit translate(Player player, double dx, double dy, double dz, SelectionShape shape, BlockSettingOptions blockSettingOptions) {
+        AffineTransformation3d relativeTrans = AffineTransformation3d.ofTranslation(dx, dy, dz);
+        return affineTransform(player, Vector3d.ZERO, relativeTrans, shape, blockSettingOptions);
     }
 
     /**
@@ -259,6 +370,7 @@ public class PlayerEdits {
      * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
      * the shape.
      */
+    @Deprecated
     private static EditExit affineTransform(Player player, Vector3d pos, AffineTransformation3d relativeTrans, Options options) {
         AffineTransformation3d trans = AffineTransformation3d.withOffset(relativeTrans, pos.x() + 0.5, pos.y() + 0.5, pos.z() + 0.5);
         Selection selFrom = player.getSelection();
@@ -282,10 +394,47 @@ public class PlayerEdits {
         return pcw.end();
     }
 
+    /**
+     * Affine transform the selection. If player does not have a selection, a selection will be created from pos-array,
+     * and then converted to a paste-selection. If the selection is block-selection, backward and forward blocks
+     * will be set.
+     * @param player the player.
+     * @param pos the block position of the center of affine transformation
+     * @param shape the selection shape which is used when creating a new selection from pos-array.
+     * @param blockSettingOptions the block-setting options.
+     * @param relativeTrans the affine transformation.
+     * @return the edit exit.
+     * @throws MissingPosException if player does not have a selection and some pos are missing.
+     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
+     * the shape.
+     */
+    private static EditExit affineTransform(Player player, Vector3d pos, AffineTransformation3d relativeTrans,
+                                            SelectionShape shape, BlockSettingOptions blockSettingOptions) {
+        AffineTransformation3d trans = AffineTransformation3d.withOffset(relativeTrans, pos.x() + 0.5, pos.y() + 0.5, pos.z() + 0.5);
+        Selection selFrom = player.getSelection();
+        if(selFrom == null) {
+            Selection posArraySel = createPosArraySelection(player.getPosArrayClone(), shape);
+            PasteSelection pasteSel = createPasteSelection(player.getEditWorld(), posArraySel);
+            pasteSel.setOptions(blockSettingOptions);
+            selFrom = pasteSel;
+        }
+        PlayerClientWorld pcw = new PlayerClientWorld(player);
+        if(selFrom instanceof BlockSelection blockSel) {
+            blockSel.setBackwardBlocks(pcw);
+        }
+        Selection selTo;
+        selTo = selFrom.affineTransform(trans);
+        if(selTo instanceof BlockSelection blockSel) {
+            blockSel.setForwardBlocks(pcw);
+        }
+        pcw.setSelection(selTo);
+        return pcw.end();
+    }
+
     private static PasteSelection createPasteSelection(World world, Selection sel) {
         Clipboard clipboard = new Clipboard(sel);
         WorldEdits.copy(world, sel, Vector3d.ZERO, clipboard);
-        return new PasteSelection.Builder(clipboard, Vector3d.ZERO, sel).build();
+        return new PasteSelection(clipboard, Vector3d.ZERO);
     }
 
     /**
@@ -462,6 +611,7 @@ public class PlayerEdits {
      * @param countZ the count along z-axis.
      * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
      * @throws IllegalArgumentException if integrity is less than 0 or larger than 1.
+     * @deprecated Use repeat() with shape and blockSettingOptions parameters.
      */
     public static EditExit repeat(Player player, int countX, int countY, int countZ, Options options) {
         Selection sel = player.getSelection();
@@ -486,6 +636,44 @@ public class PlayerEdits {
                     .masked(options.masked)
                     .integrity(options.integrity)
                     .build();
+            pasteSel.setForwardBlocks(pw);
+            pw.setSelection(pasteSel);
+        }
+        return pw.end();
+    }
+
+    /**
+     * Repeats the blocks in the player selection. countX, countY, and countZ defines the repeating direction vector.
+     * The end selection will be the paste selection of the last repeating blocks.
+     * @param player the player.
+     * @param countX the count along x-axis.
+     * @param countY the count along y-axis.
+     * @param countZ the count along z-axis.
+     * @param shape the selection shape which is used when creating a new selection from pos-array.
+     * @param blockSettingOptions the block-setting options.
+     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
+     * @throws IllegalArgumentException if integrity is less than 0 or larger than 1.
+     */
+    public static EditExit repeat(Player player, int countX, int countY, int countZ, SelectionShape shape, BlockSettingOptions blockSettingOptions) {
+        Selection sel = player.getSelection();
+        if(sel == null) {
+            sel = createPosArraySelection(player.getPosArrayClone(), shape);
+        }
+        Parallelepiped bound = sel.getBound();
+        double dx = bound.maxX() - bound.minX();
+        double dy = bound.maxY() - bound.minY();
+        double dz = bound.maxZ() - bound.minZ();
+        Clipboard clip = new Clipboard(sel);
+        WorldEdits.copy(player.getEditWorld(), sel, Vector3d.ZERO, clip);
+        List<Vector3i> positions = Drawings.line(Vector3i.ZERO, new Vector3i(countX, countY, countZ));
+        PlayerClientWorld pw = new PlayerClientWorld(player);
+        for(Vector3i pos : positions) {
+            double qx = pos.x() * dx;
+            double qy = pos.y() * dy;
+            double qz = pos.z() * dz;
+            Vector3d q = new Vector3d(qx, qy, qz);
+            PasteSelection pasteSel = new PasteSelection(clip, q);
+            pasteSel.setOptions(blockSettingOptions);
             pasteSel.setForwardBlocks(pw);
             pw.setSelection(pasteSel);
         }

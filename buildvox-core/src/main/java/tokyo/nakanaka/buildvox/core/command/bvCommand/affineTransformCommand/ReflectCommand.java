@@ -2,11 +2,10 @@ package tokyo.nakanaka.buildvox.core.command.bvCommand.affineTransformCommand;
 
 import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.Axis;
+import tokyo.nakanaka.buildvox.core.BlockSettingOptions;
 import tokyo.nakanaka.buildvox.core.EditExit;
 import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
-import tokyo.nakanaka.buildvox.core.command.mixin.Integrity;
-import tokyo.nakanaka.buildvox.core.command.mixin.Masked;
 import tokyo.nakanaka.buildvox.core.command.mixin.Pos;
 import tokyo.nakanaka.buildvox.core.command.mixin.Shape;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
@@ -29,11 +28,9 @@ public class ReflectCommand implements Runnable {
     @Mixin
     private Pos pos;
     @Mixin
-    private Integrity integrity;
-    @Mixin
-    private Masked masked;
-    @Mixin
     private Shape shape;
+    @Mixin
+    private BlockSettingOptions blockSettingOptions;
 
     @Override
     public void run() {
@@ -41,12 +38,8 @@ public class ReflectCommand implements Runnable {
         PrintWriter err = commandSpec.commandLine().getErr();
         Player player = bvCmd.getPlayer();
         Vector3d pos = this.pos.toVector3d(bvCmd.getExecutionPos());
-        var options = new PlayerEdits.Options();
-        options.integrity = integrity.integrity();
-        options.masked = masked.masked();
-        options.shape = shape.shape();
         try {
-            EditExit editExit = PlayerEdits.reflect(player, axis, pos, options);
+            EditExit editExit = PlayerEdits.reflect(player, axis, pos, shape.shape(), blockSettingOptions);
             out.println(Messages.ofSetExit(editExit));
         }catch (PlayerEdits.MissingPosException ex) {
             err.println(Messages.MISSING_POS_ERROR);
