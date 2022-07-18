@@ -11,26 +11,35 @@ import tokyo.nakanaka.buildvox.core.selection.Selection;
 public class ParticleGuis {
     public static void updateParticleGui(Player player) {
         final ParticleGui particleGui = player.getParticleGui();
+        final World editWorld = player.getEditWorld();
+        final Vector3i[] posArray = player.getPosArrayClone();
+        final Selection selection = player.getSelection();
+
         if(!player.isParticleGuiVisible()) return;
         if(particleGui == null)return;
         particleGui.clearAllLines();
-        final World posOrSelectionWorld = player.getEditWorld();
-        if(posOrSelectionWorld == null)return;
-        final Selection selection = player.getSelection();
+        if(editWorld == null)return;
         if(selection != null){
-            Color color;
-            if(selection instanceof PasteSelection){
-                color = Color.YELLOW;
-            }else if(selection instanceof FillSelection){
-                color = Color.LIME;
-            }else{
-                color = Color.MAGENTA;
-            }
-            particleGui.addParallelepipedLines(color, posOrSelectionWorld, selection.getBound());
+            addSelectionLines(particleGui, editWorld, selection);
         }
-        final Vector3i[] posData = player.getPosArrayClone();
-        for(int i = 0; i < posData.length; ++ i){
-            Vector3i pos = posData[i];
+        addPosArrayLines(particleGui, editWorld, posArray);
+    }
+
+    private static void addSelectionLines(ParticleGui particleGui, World editWorld, Selection selection) {
+        Color color;
+        if(selection instanceof PasteSelection){
+            color = Color.YELLOW;
+        }else if(selection instanceof FillSelection){
+            color = Color.LIME;
+        }else{
+            color = Color.MAGENTA;
+        }
+        particleGui.addParallelepipedLines(color, editWorld, selection.getBound());
+    }
+
+    private static void addPosArrayLines(ParticleGui particleGui, World editWorld, Vector3i[] posArray) {
+        for(int i = 0; i < posArray.length; ++ i){
+            Vector3i pos = posArray[i];
             if(pos != null){
                 Color color;
                 if(i == 0){
@@ -44,20 +53,20 @@ public class ParticleGuis {
                 }else{
                     throw new InternalError();
                 }
-                particleGui.addBlockLines(color, posOrSelectionWorld, (int)Math.floor(pos.x()), (int)Math.floor(pos.y()), (int)Math.floor(pos.z()));
-                for(int j = i + 1; j < posData.length; ++ j){
-                    Vector3i posJ = posData[j];
+                particleGui.addBlockLines(color, editWorld, (int)Math.floor(pos.x()), (int)Math.floor(pos.y()), (int)Math.floor(pos.z()));
+                for(int j = i + 1; j < posArray.length; ++ j){
+                    Vector3i posJ = posArray[j];
                     if(posJ != null){
-                        particleGui.addLine(Color.CYAN, posOrSelectionWorld,
+                        particleGui.addLine(Color.CYAN, editWorld,
                                 pos.x() + 0.5, pos.y() + 0.5, pos.z() + 0.5,
                                 posJ.x() + 0.5, posJ.y() + 0.5, posJ.z() + 0.5);
                     }
                 }
             }
         }
-        if(posData.length == 2){
-            Vector3i pos0 = posData[0];
-            Vector3i pos1 = posData[1];
+        if(posArray.length == 2){
+            Vector3i pos0 = posArray[0];
+            Vector3i pos1 = posArray[1];
             if(pos0 != null && pos1 != null){
                 double px = Math.max(pos0.x(), pos1.x()) + 1;
                 double py = Math.max(pos0.y(), pos1.y()) + 1;
@@ -66,8 +75,9 @@ public class ParticleGuis {
                 double ny = Math.min(pos0.y(), pos1.y());
                 double nz = Math.min(pos0.z(), pos1.z());
                 Parallelepiped parallelepiped = new Parallelepiped(px, py, pz, nx, ny, nz);
-                particleGui.addParallelepipedLines(Color.CYAN, posOrSelectionWorld, parallelepiped);
+                particleGui.addParallelepipedLines(Color.CYAN, editWorld, parallelepiped);
             }
         }
     }
+
 }
