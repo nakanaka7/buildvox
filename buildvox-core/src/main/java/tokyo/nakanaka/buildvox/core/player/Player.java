@@ -6,7 +6,6 @@ import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.brushSource.BrushSource;
 import tokyo.nakanaka.buildvox.core.brushSource.BrushSourceClipboards;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
-import tokyo.nakanaka.buildvox.core.particleGui.ParticleGui;
 import tokyo.nakanaka.buildvox.core.particleGui.PlayerParticleGui;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
@@ -165,13 +164,7 @@ public class Player {
      * @param b true if the gui is visible, otherwise false.
      */
     public void setParticleGuiVisible(boolean b) {
-        playerParticleGui.setParticleGuiVisible(b);
-        if (b) {
-            playerParticleGui.setParticleGui(new ParticleGui(playerEntity));
-            updateParticleGui();
-        } else {
-            playerParticleGui.getParticleGui().close();
-        }
+        playerParticleGui.setVisible(b);
     }
 
     private void updateParticleGui() {
