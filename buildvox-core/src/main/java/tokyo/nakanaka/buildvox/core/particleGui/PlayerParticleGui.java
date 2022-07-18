@@ -17,10 +17,6 @@ public class PlayerParticleGui {
         this.player = player;
     }
 
-    public boolean isParticleGuiVisible() {
-        return particleGuiVisible;
-    }
-
     public PlayerParticleGui setParticleGuiVisible(boolean particleGuiVisible) {
         this.particleGuiVisible = particleGuiVisible;
         return this;
