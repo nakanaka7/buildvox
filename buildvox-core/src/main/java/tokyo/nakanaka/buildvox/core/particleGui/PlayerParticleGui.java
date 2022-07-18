@@ -29,4 +29,8 @@ public class PlayerParticleGui {
         return this;
     }
 
+    public void update() {
+        ParticleGuis.updateParticleGui(player);
+    }
+
 }
