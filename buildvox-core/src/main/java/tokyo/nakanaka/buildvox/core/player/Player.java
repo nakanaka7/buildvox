@@ -73,7 +73,7 @@ public class Player {
             this.editWorld = editWorld;
             Arrays.fill(posArray, null);
             this.selection = null;
-            updateParticleGui();
+            playerParticleGui.update();
         }
     }
 
@@ -100,7 +100,7 @@ public class Player {
     public void setSelection(Selection selection) {
         Arrays.fill(posArray, null);
         this.selection = selection;
-        updateParticleGui();
+        playerParticleGui.update();
     }
 
     /**
@@ -110,7 +110,7 @@ public class Player {
     public void setPosArray(Vector3i[] posArray) {
         this.posArray = posArray.clone();
         this.selection = null;
-        updateParticleGui();
+        playerParticleGui.update();
     }
 
     /**
@@ -165,10 +165,6 @@ public class Player {
      */
     public void setParticleGuiVisible(boolean b) {
         playerParticleGui.setVisible(b);
-    }
-
-    private void updateParticleGui() {
-        playerParticleGui.update();
     }
 
 }
