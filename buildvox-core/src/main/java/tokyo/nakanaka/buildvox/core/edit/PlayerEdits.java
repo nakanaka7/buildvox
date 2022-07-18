@@ -172,6 +172,27 @@ public class PlayerEdits {
     }
 
     /**
+     * Reflects the blocks in the player's selection.
+     * @param player the player.
+     * @param axis the direction of reflection.
+     * @param pos the block position which the reflection plane goes throw.
+     * @return the edit exit.
+     * @param shape the selection shape which is used when creating a new selection from pos-array.
+     * @param blockSettingOptions the block-setting options.
+     * @throws MissingPosException if player does not have a selection and some pos are missing.
+     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
+     * the shape.
+     */
+    public static EditExit reflect(Player player, Axis axis, Vector3d pos, SelectionShape shape, BlockSettingOptions blockSettingOptions) {
+        AffineTransformation3d relativeTrans = switch (axis){
+            case X -> AffineTransformation3d.ofScale(- 1, 1, 1);
+            case Y -> AffineTransformation3d.ofScale(1, - 1, 1);
+            case Z -> AffineTransformation3d.ofScale(1, 1, - 1);
+        };
+        return affineTransform(player, pos, relativeTrans, shape, blockSettingOptions);
+    }
+
+    /**
      * Rotates the blocks in the player's selection.
      * @param player the player
      * @param axis the axis which parallels to the rotating-axis.
