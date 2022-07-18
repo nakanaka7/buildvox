@@ -35,6 +35,7 @@ public class ParticleGui implements AutoCloseable {
     /**
      * Set the output particle spawner of this drawer.
      * @param out the output particle spawner.
+     * @deprecated unused.
      */
     public void setOut(ColoredParticleSpawner out){
         this.out = out;
