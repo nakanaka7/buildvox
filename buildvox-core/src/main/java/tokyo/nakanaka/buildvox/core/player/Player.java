@@ -164,6 +164,10 @@ public class Player {
         return messenger;
     }
 
+    public ParticleGui getParticleGui() {
+        return particleGui;
+    }
+
     /**
      * Sets whether the particle gui is visible
      * @param b true if the gui is visible, otherwise false.
