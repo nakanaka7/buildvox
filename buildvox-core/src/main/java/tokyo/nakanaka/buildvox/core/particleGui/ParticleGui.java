@@ -14,8 +14,8 @@ import java.util.Set;
  * The object which draws particle lines. Setting a colored particle drawer is needed to spawn particles.
  */
 public class ParticleGui implements AutoCloseable {
-    private ColoredParticleSpawner out = (color, world, x, y, z) -> {};
-    private Scheduler scheduler = BuildVoxSystem.getScheduler();
+    private ColoredParticleSpawner out;
+    private final Scheduler scheduler = BuildVoxSystem.getScheduler();
     private Set<ParticleSpawnData> spawnDataSet = new HashSet<>();
     private boolean drawing;
 
