@@ -296,6 +296,30 @@ public class PlayerEdits {
     }
 
     /**
+     * Shears the blocks in the player's selection.
+     * @param player the player.
+     * @param axis the axis.
+     * @param factorI the 1st factor.
+     * @param factorJ the 2nd factor.
+     * @param pos the center position of shearing.
+     * @param shape the selection shape which is used when creating a new selection from pos-array.
+     * @param blockSettingOptions the block-setting options.
+     * @return the edit-exit
+     * @throws MissingPosException if player does not have a selection and some pos are missing.
+     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
+     * the shape.
+     */
+    public static EditExit shear(Player player, Axis axis, double factorI, double factorJ, Vector3d pos,
+                                 SelectionShape shape, BlockSettingOptions blockSettingOptions) {
+        AffineTransformation3d relativeTrans = switch (axis) {
+            case X -> AffineTransformation3d.ofShearX(factorI, factorJ);
+            case Y -> AffineTransformation3d.ofShearY(factorI, factorJ);
+            case Z -> AffineTransformation3d.ofShearZ(factorI, factorJ);
+        };
+        return affineTransform(player, pos, relativeTrans, shape, blockSettingOptions);
+    }
+
+    /**
      * Translates the blocks in the player's selection.
      * @param player the player.
      * @param dx the displacement along x-axis.
