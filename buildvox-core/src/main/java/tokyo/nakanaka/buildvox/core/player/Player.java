@@ -109,11 +109,11 @@ public class Player {
     }
 
     /**
-     * Sets a pos array. The selection will be set null.
+     * Sets a pos array. The array will be cloned internally. The selection will be set null.
      * @param posArray the pos array.
      */
     public void setPosArray(Vector3i[] posArray) {
-        this.posArray = posArray;
+        this.posArray = posArray.clone();
         this.selection = null;
         updateParticleGui();
     }
