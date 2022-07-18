@@ -8,6 +8,7 @@ import tokyo.nakanaka.buildvox.core.brushSource.BrushSourceClipboards;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.particleGui.ParticleGui;
 import tokyo.nakanaka.buildvox.core.particleGui.ParticleGuis;
+import tokyo.nakanaka.buildvox.core.particleGui.PlayerParticleGui;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
 
@@ -27,8 +28,7 @@ public class Player {
     private BrushSource brushSource;
     private final PlayerEntity playerEntity;
     private final PlayerMessenger messenger;
-    private boolean particleGuiVisible;
-    private ParticleGui particleGui;
+    private final PlayerParticleGui playerParticleGui = new PlayerParticleGui();
 
     /**
      * Creates a new instance by the player entity.
@@ -162,11 +162,11 @@ public class Player {
     }
 
     public ParticleGui getParticleGui() {
-        return particleGui;
+        return playerParticleGui.getParticleGui();
     }
 
     public boolean isParticleGuiVisible() {
-        return particleGuiVisible;
+        return playerParticleGui.isParticleGuiVisible();
     }
 
     /**
@@ -174,13 +174,13 @@ public class Player {
      * @param b true if the gui is visible, otherwise false.
      */
     public void setParticleGuiVisible(boolean b) {
-        this.particleGuiVisible = b;
+        playerParticleGui.setParticleGuiVisible(b);
         if (b) {
             if(playerEntity == null) return;
-            particleGui = new ParticleGui(playerEntity);
+            playerParticleGui.setParticleGui(new ParticleGui(playerEntity));
             updateParticleGui();
         } else {
-            particleGui.close();
+            playerParticleGui.getParticleGui().close();
         }
     }
 
