@@ -7,7 +7,6 @@ import tokyo.nakanaka.buildvox.core.brushSource.BrushSource;
 import tokyo.nakanaka.buildvox.core.brushSource.BrushSourceClipboards;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.particleGui.ParticleGui;
-import tokyo.nakanaka.buildvox.core.particleGui.ParticleGuis;
 import tokyo.nakanaka.buildvox.core.particleGui.PlayerParticleGui;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
 import tokyo.nakanaka.buildvox.core.system.BuildVoxSystem;
@@ -185,7 +184,7 @@ public class Player {
     }
 
     private void updateParticleGui() {
-        ParticleGuis.updateParticleGui(this);
+        playerParticleGui.update();
     }
 
 }
