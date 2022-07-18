@@ -17,9 +17,8 @@ public class PlayerParticleGui {
         this.player = player;
     }
 
-    public PlayerParticleGui setParticleGuiVisible(boolean particleGuiVisible) {
+    public void setParticleGuiVisible(boolean particleGuiVisible) {
         this.particleGuiVisible = particleGuiVisible;
-        return this;
     }
 
     public ParticleGui getParticleGui() {
