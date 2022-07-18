@@ -167,7 +167,6 @@ public class Player {
     public void setParticleGuiVisible(boolean b) {
         playerParticleGui.setParticleGuiVisible(b);
         if (b) {
-            if(playerEntity == null) return;
             playerParticleGui.setParticleGui(new ParticleGui(playerEntity));
             updateParticleGui();
         } else {
