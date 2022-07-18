@@ -8,6 +8,7 @@ import tokyo.nakanaka.buildvox.core.math.vector.Vector3d;
 import java.util.HashSet;
 import java.util.Set;
 
+/* All methods are not used now. */
 @Deprecated
 @SuppressWarnings("unused")
 class Func {
