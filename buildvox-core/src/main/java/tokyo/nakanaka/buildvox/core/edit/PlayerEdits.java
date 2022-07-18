@@ -160,6 +160,7 @@ public class PlayerEdits {
      * @return the edit exit.
      * @throws MissingPosException if player does not have a selection and some pos are missing.
      * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
+     * @deprecated Use reflect() with shape and blockSettingOptions parameters.
      * the shape.
      */
     public static EditExit reflect(Player player, Axis axis, Vector3d pos, Options options) {
@@ -225,6 +226,7 @@ public class PlayerEdits {
      * @throws MissingPosException if player does not have a selection and some pos are missing.
      * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
      * the shape.
+     * @deprecated Use rotate() with shape and blockSettingOptions parameters.
      */
     public static EditExit rotate(Player player, Axis axis, double angle, Vector3d pos, Options options) {
         double angleRad = angle * Math.PI / 180;
@@ -247,6 +249,7 @@ public class PlayerEdits {
      * @throws MissingPosException if player does not have a selection and some pos are missing.
      * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
      * the shape.
+     * @deprecated Use scale() with shape and blockSettingOptions parameters.
      */
     public static EditExit scale(Player player, double factorX, double factorY, double factorZ, Vector3d pos, Options options) {
         if(factorX * factorY * factorZ == 0) throw new IllegalArgumentException();
@@ -285,6 +288,7 @@ public class PlayerEdits {
      * @throws MissingPosException if player does not have a selection and some pos are missing.
      * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
      * the shape.
+     * @deprecated Use shear() with shape and blockSettingOptions parameters.
      */
     public static EditExit shear(Player player, Axis axis, double factorI, double factorJ, Vector3d pos, Options options) {
         AffineTransformation3d relativeTrans = switch (axis) {
@@ -329,6 +333,7 @@ public class PlayerEdits {
      * @throws MissingPosException if player does not have a selection and some pos are missing.
      * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
      * the shape.
+     * @deprecated Use translate() with shape and blockSettingOptions parameters.
      */
     public static EditExit translate(Player player, double dx, double dy, double dz, Options options) {
         AffineTransformation3d relativeTrans = AffineTransformation3d.ofTranslation(dx, dy, dz);
@@ -365,6 +370,7 @@ public class PlayerEdits {
      * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
      * the shape.
      */
+    @Deprecated
     private static EditExit affineTransform(Player player, Vector3d pos, AffineTransformation3d relativeTrans, Options options) {
         AffineTransformation3d trans = AffineTransformation3d.withOffset(relativeTrans, pos.x() + 0.5, pos.y() + 0.5, pos.z() + 0.5);
         Selection selFrom = player.getSelection();
