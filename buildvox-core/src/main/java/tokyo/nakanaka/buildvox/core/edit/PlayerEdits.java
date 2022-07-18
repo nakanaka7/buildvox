@@ -255,6 +255,26 @@ public class PlayerEdits {
     }
 
     /**
+     * Scales the blocks in the player's selection.
+     * @param player the player
+     * @param factorX the scale factor about x-axis.
+     * @param factorY the scale factor about y-axis.
+     * @param factorZ the scale factor about z-axis.
+     * @param pos the center position of scaling.
+     * @param shape the selection shape which is used when creating a new selection from pos-array.
+     * @param blockSettingOptions the block-setting options.
+     * @return the edit exit.
+     * @throws MissingPosException if player does not have a selection and some pos are missing.
+     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
+     * the shape.
+     */
+    public static EditExit scale(Player player, double factorX, double factorY, double factorZ, Vector3d pos,
+                                 SelectionShape shape, BlockSettingOptions blockSettingOptions) {
+        if(factorX * factorY * factorZ == 0) throw new IllegalArgumentException();
+        AffineTransformation3d relativeTrans = AffineTransformation3d.ofScale(factorX, factorY, factorZ);
+        return affineTransform(player, pos, relativeTrans, shape, blockSettingOptions);
+    }
+    /**
      * Shears the blocks in the player's selection.
      * @param player the player.
      * @param axis the axis.
