@@ -132,9 +132,9 @@ public class Selection {
      * @return block positions of this selection
      */
     public Set<Vector3i> calculateBlockPosSet() {
-        BoundRegion3d translated = boundRegion3d.translate(-0.5, -0.5, -0.5);
+        Selection translated = translate(-0.5, -0.5, -0.5);
         Set<Vector3i> posSet = new HashSet<>();
-        Iterator<Vector3i> iteV3 = getIteratorOfRegion3d(translated, translated.bound());
+        Iterator<Vector3i> iteV3 = getIteratorOfRegion3d(translated.getRegion3d(), translated.getBound());
         while(iteV3.hasNext()) {
             posSet.add(iteV3.next());
         }
