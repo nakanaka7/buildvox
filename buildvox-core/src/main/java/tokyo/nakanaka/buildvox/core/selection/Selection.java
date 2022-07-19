@@ -48,7 +48,11 @@ public class Selection {
      * @return a new instance
      */
     public Selection affineTransform(AffineTransformation3d trans){
-        return new Selection(boundRegion3d.affineTransform(trans));
+        var region = boundRegion3d.region();
+        var piped = boundRegion3d.bound();
+        var transRegion = region.affineTransform(trans);
+        var transPiped = piped.affineTransform(trans);
+        return new Selection(transRegion, transPiped);
     }
 
     /**
@@ -170,22 +174,12 @@ public class Selection {
             return this.region.contains(x, y, z);
         }
 
-        public Region3d region(){
+        public EditableRegion3d region(){
             return this.region;
         }
 
         public Parallelepiped bound(){
             return this.piped;
-        }
-
-        public BoundRegion3d affineTransform(AffineTransformation3d trans){
-            var transRegion = this.region.affineTransform(trans);
-            var transPiped = this.piped.affineTransform(trans);
-            return new BoundRegion3d(transRegion, transPiped);
-        }
-
-        public BoundRegion3d translate(double dx, double dy, double dz){
-            return this.affineTransform(AffineTransformation3d.ofTranslation(dx, dy, dz));
         }
 
     }
