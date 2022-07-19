@@ -138,13 +138,18 @@ public class Selection {
      * @return block positions of this selection
      */
     public Set<Vector3i> calculateBlockPosSet() {
-        Selection translated = translate(-0.5, -0.5, -0.5);
         Set<Vector3i> posSet = new HashSet<>();
-        Iterator<Vector3i> iteV3 = getIteratorOfRegion3d(translated.getRegion3d(), translated.getBound());
-        while(iteV3.hasNext()) {
-            posSet.add(iteV3.next());
+        for(Vector3i pos : calculateBlockPosIterable()) {
+            posSet.add(pos);
         }
         return posSet;
+    }
+
+    private Iterable<Vector3i> calculateBlockPosIterable() {
+        return () -> {
+            Selection translated = translate(-0.5, -0.5, -0.5);
+            return getIteratorOfRegion3d(translated.getRegion3d(), translated.getBound());
+        };
     }
 
     /**
@@ -239,7 +244,13 @@ public class Selection {
      * Legacy method, inefficient but so simple code
      */
     @SuppressWarnings("unused")
-    @Deprecated
+    private Iterable<Vector3i> calculateBlockPosIterableLegacy() {
+        return () -> {
+            Selection translated = translate(-0.5, -0.5, -0.5);
+            return getIteratorOfRegion3dLegacy(translated.getRegion3d(), translated.getBound());
+        };
+    }
+
     private static Iterator<Vector3i> getIteratorOfRegion3dLegacy(Region3d region, Parallelepiped bound){
         Set<Vector3i> posSet = new HashSet<>();
         int minX = (int)Math.floor(bound.minX());
