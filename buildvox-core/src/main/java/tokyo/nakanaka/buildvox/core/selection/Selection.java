@@ -20,10 +20,6 @@ import java.util.Set;
 public class Selection {
     private final BoundRegion3d boundRegion3d;
 
-    private Selection(BoundRegion3d boundRegion3d) {
-        this.boundRegion3d = boundRegion3d;
-    }
-
     /**
      * Constructs a selection
      * @param region3d a region of the selection
@@ -34,12 +30,12 @@ public class Selection {
     }
 
     public Selection(Region3d region3d, Cuboid bound) {
-        this.boundRegion3d = new BoundRegion3d(region3d, bound);
+        this(region3d, new Parallelepiped(bound.x1(), bound.y1(), bound.z1(), bound.x2(), bound.y2(), bound.z2()));
     }
 
-    public Selection(Region3d region, double ubx, double uby, double ubz,
+    public Selection(Region3d region3d, double ubx, double uby, double ubz,
                      double lbx, double lby, double lbz) {
-        this.boundRegion3d = new BoundRegion3d(region, ubx, uby, ubz, lbx, lby, lbz);
+        this(region3d, new Parallelepiped(ubx, uby, ubz, lbx, lby, lbz));
     }
 
     /**
@@ -150,24 +146,9 @@ public class Selection {
         private final EditableRegion3d region;
         private final Parallelepiped piped;
 
-        public BoundRegion3d(Region3d region, double ubx, double uby, double ubz,
-                             double lbx, double lby, double lbz) {
-            if(region instanceof EditableRegion3d editRegion){
-                this.region = editRegion;
-            }else{
-                this.region = new EditableRegion3d(region);
-            }
-            this.piped = new Parallelepiped(ubx, uby, ubz, lbx, lby, lbz);
-        }
-
         public BoundRegion3d(Region3d region, Parallelepiped piped) {
             this.region = new EditableRegion3d(region);
             this.piped = piped;
-        }
-
-        public BoundRegion3d(Region3d region, Cuboid bound) {
-            this.region = new EditableRegion3d(region);
-            this.piped = new Parallelepiped(bound.x1(), bound.y1(), bound.z1(), bound.x2(), bound.y2(), bound.z2());
         }
 
         public boolean contains(double x, double y, double z) {
