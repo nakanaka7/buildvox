@@ -59,7 +59,7 @@ public class Selection {
      * @return new instance
      */
     public Selection translate(double dx, double dy, double dz){
-        return new Selection(boundRegion3d.translate(dx, dy, dz));
+        return affineTransform(AffineTransformation3d.ofTranslation(dx, dy, dz));
     }
 
     /**
