@@ -589,14 +589,31 @@ public class PlayerEdits {
      * @throws IllegalArgumentException if integrity is less than 0 or larger than 1.
      */
     public static EditExit replace(Player player, VoxelBlock blockFrom, VoxelBlock blockTo, Options options) {
+        return replace(player, blockFrom, blockTo, options.shape, options.integrity);
+    }
+
+    /**
+     * Replaces blocks. If player does not have a selection, a selection will be created from pos-array. A paste-selection
+     * will be set in the end.
+     * @param player the player.
+     * @param blockFrom the block to be replaced from
+     * @param blockTo the block to be replaced to
+     * @param shape the selection shape which is used when creating a new selection from pos-array.
+     * @param integrity block setting integrity. Must be 0 to 1 (inclusive).
+     * @return the edit-exit.
+     * @throws MissingPosException if player does not have a selection and some pos are missing.
+     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
+     * @throws IllegalArgumentException if integrity is less than 0 or larger than 1.
+     */
+    public static EditExit replace(Player player, VoxelBlock blockFrom, VoxelBlock blockTo, SelectionShape shape, double integrity) {
         Selection sel = player.getSelection();
         if(sel == null) {
-            sel = createPosArraySelection(player.getPosArrayClone(), options.shape);
+            sel = createPosArraySelection(player.getPosArrayClone(), shape);
         }
         PlayerClientWorld pcw = new PlayerClientWorld(player);
         BlockSettingOptions blockSettingOptions = new BlockSettingOptions();
         blockSettingOptions.setReplaces(blockFrom);
-        blockSettingOptions.setIntegrity(options.integrity);
+        blockSettingOptions.setIntegrity(integrity);
         blockSettingOptions.setMasked(true);
         OptionalClientWorld ocw = new OptionalClientWorld(pcw, blockSettingOptions);
         WorldEdits.fill(ocw, sel, blockTo);
