@@ -9,8 +9,8 @@ import tokyo.nakanaka.buildvox.core.selection.PasteSelection;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
 
 public class PlayerParticleGui {
-    private Player player;
-    private boolean particleGuiVisible;
+    private final Player player;
+    private boolean visible;
     private ParticleGui particleGui;
 
     public PlayerParticleGui(Player player) {
@@ -18,7 +18,7 @@ public class PlayerParticleGui {
     }
 
     public void setVisible(boolean b) {
-        this.particleGuiVisible = b;
+        this.visible = b;
         if (b) {
             this.particleGui = new ParticleGui(player.getPlayerEntity());
             update();
@@ -28,7 +28,7 @@ public class PlayerParticleGui {
     }
 
     public void update() {
-        if(!particleGuiVisible) return;
+        if(!visible) return;
         if(particleGui == null) return;
         particleGui.clearAllLines();
         World editWorld = player.getEditWorld();
