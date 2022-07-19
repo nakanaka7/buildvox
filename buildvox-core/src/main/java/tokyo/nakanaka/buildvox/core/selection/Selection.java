@@ -188,33 +188,6 @@ public class Selection {
             return this.affineTransform(AffineTransformation3d.ofTranslation(dx, dy, dz));
         }
 
-        /**
-         * Returns the rotated bound region about x-axis.
-         * @param angle the angle(radian)
-         * @return the rotated bound region about x-axis.
-         */
-        public BoundRegion3d rotateX(double angle){
-            return this.affineTransform(AffineTransformation3d.ofRotationX(angle));
-        }
-
-        /**
-         * Returns the rotated bound region about y-axis.
-         * @param angle the angle(radian)
-         * @return the rotated bound region about y-axis.
-         */
-        public BoundRegion3d rotateY(double angle){
-            return this.affineTransform(AffineTransformation3d.ofRotationY(angle));
-        }
-
-        /**
-         * Returns the rotated bound region about z-axis.
-         * @param angle the angle(radian)
-         * @return the rotated bound region about z-axis.
-         */
-        public BoundRegion3d rotateZ(double angle){
-            return this.affineTransform(AffineTransformation3d.ofRotationZ(angle));
-        }
-
     }
 
     /**
