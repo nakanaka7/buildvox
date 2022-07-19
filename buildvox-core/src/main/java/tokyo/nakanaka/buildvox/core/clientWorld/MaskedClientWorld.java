@@ -5,6 +5,7 @@ import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 
 /**
  * The client world which skips background block settings.
+ * @deprecated Use OptionalClientWorld. This class will be package private from ver 2.0.0.
  */
 public class MaskedClientWorld extends ClientWorld {
     private final VoxelBlock background;

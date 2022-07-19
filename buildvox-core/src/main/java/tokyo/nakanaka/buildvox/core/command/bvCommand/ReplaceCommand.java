@@ -30,20 +30,17 @@ public class ReplaceCommand implements Runnable {
             converter = Block.Converter.class)
     private VoxelBlock blockTo;
     @Mixin
-    private Integrity integrity;
-    @Mixin
     private Shape shape;
+    @Mixin
+    private Integrity integrity;
 
     @Override
     public void run() {
         PrintWriter out = commandSpec.commandLine().getOut();
         PrintWriter err = commandSpec.commandLine().getErr();
         Player player = bvCmd.getPlayer();
-        var options = new PlayerEdits.Options();
-        options.integrity = integrity.integrity();
-        options.shape = shape.shape();
         try {
-            EditExit exit = PlayerEdits.replace(player, blockFrom, blockTo, options);
+            EditExit exit = PlayerEdits.replace(player, blockFrom, blockTo, shape.shape(), integrity.integrity());
             out.println(Messages.ofSetExit(exit));
         }catch (PlayerEdits.MissingPosException ex) {
             err.println(Messages.MISSING_POS_ERROR);
