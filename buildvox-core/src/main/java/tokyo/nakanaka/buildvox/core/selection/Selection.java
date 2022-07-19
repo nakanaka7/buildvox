@@ -18,7 +18,7 @@ import java.util.Set;
  * region and bound contain will be regarded selection points.
  */
 public class Selection {
-    private final EditableRegion3d editRegion3d;
+    private final Region3d region3d;
     private final Parallelepiped bound;
 
     /**
@@ -27,7 +27,7 @@ public class Selection {
      * @param bound a bound of the selection
      */
     public Selection(Region3d region3d, Parallelepiped bound) {
-        this.editRegion3d = new EditableRegion3d(region3d);
+        this.region3d = region3d;
         this.bound = bound;
     }
 
@@ -46,7 +46,7 @@ public class Selection {
      * @return a new instance
      */
     public Selection affineTransform(AffineTransformation3d trans){
-        var transRegion3d = editRegion3d.affineTransform(trans);
+        var transRegion3d = new EditableRegion3d(region3d).affineTransform(trans);
         var transBound = bound.affineTransform(trans);
         return new Selection(transRegion3d, transBound);
     }
@@ -116,7 +116,7 @@ public class Selection {
      * @return the region of this selection
      */
     public Region3d getRegion3d() {
-        return editRegion3d;
+        return region3d;
     }
 
     /**
