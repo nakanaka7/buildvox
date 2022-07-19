@@ -45,8 +45,14 @@ public class Selection {
      * @param trans the affine transformation which this selection will be applied to.
      * @return a new instance
      */
-    public Selection affineTransform(AffineTransformation3d trans){
-        var transRegion3d = new EditableRegion3d(region3d).affineTransform(trans);
+    public Selection affineTransform(AffineTransformation3d trans) {
+        EditableRegion3d original;
+        if(region3d instanceof EditableRegion3d editRegion3d) {
+            original = editRegion3d;
+        }else {
+            original = new EditableRegion3d(region3d);
+        }
+        EditableRegion3d transRegion3d = original.affineTransform(trans);
         var transBound = bound.affineTransform(trans);
         return new Selection(transRegion3d, transBound);
     }
