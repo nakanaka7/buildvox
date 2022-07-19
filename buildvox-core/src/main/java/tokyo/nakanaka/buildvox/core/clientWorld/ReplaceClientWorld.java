@@ -3,8 +3,7 @@ package tokyo.nakanaka.buildvox.core.clientWorld;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 
-/* experimental */
-public class ReplaceClientWorld extends ClientWorld {
+class ReplaceClientWorld extends ClientWorld {
     private final ClientWorld delegateWorld;
     private final VoxelBlock[] filters;
 
