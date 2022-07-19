@@ -11,11 +11,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * The object which draws particle lines. Setting a colored particle drawer is needed to spawn particles.
+ * The object which draws particle lines.
  */
 public class ParticleGui implements AutoCloseable {
-    private ColoredParticleSpawner out = (color, world, x, y, z) -> {};
-    private Scheduler scheduler = BuildVoxSystem.getScheduler();
+    private ColoredParticleSpawner out;
+    private final Scheduler scheduler = BuildVoxSystem.getScheduler();
     private Set<ParticleSpawnData> spawnDataSet = new HashSet<>();
     private boolean drawing;
 
@@ -35,6 +35,7 @@ public class ParticleGui implements AutoCloseable {
     /**
      * Set the output particle spawner of this drawer.
      * @param out the output particle spawner.
+     * @deprecated unused.
      */
     public void setOut(ColoredParticleSpawner out){
         this.out = out;
