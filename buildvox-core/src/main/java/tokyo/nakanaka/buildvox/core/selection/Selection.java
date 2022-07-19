@@ -18,7 +18,8 @@ import java.util.Set;
  * region and bound contain will be regarded selection points.
  */
 public class Selection {
-    private final BoundRegion3d boundRegion3d;
+    private final EditableRegion3d editRegion3d;
+    private final Parallelepiped bound;
 
     /**
      * Constructs a selection
@@ -26,7 +27,8 @@ public class Selection {
      * @param bound a bound of the selection
      */
     public Selection(Region3d region3d, Parallelepiped bound) {
-        this.boundRegion3d = new BoundRegion3d(region3d, bound);
+        this.editRegion3d = new EditableRegion3d(region3d);
+        this.bound = bound;
     }
 
     public Selection(Region3d region3d, Cuboid bound) {
@@ -44,11 +46,9 @@ public class Selection {
      * @return a new instance
      */
     public Selection affineTransform(AffineTransformation3d trans){
-        var region = boundRegion3d.editRegion3d();
-        var piped = boundRegion3d.bound();
-        var transRegion = region.affineTransform(trans);
-        var transPiped = piped.affineTransform(trans);
-        return new Selection(transRegion, transPiped);
+        var transRegion3d = editRegion3d.affineTransform(trans);
+        var transBound = bound.affineTransform(trans);
+        return new Selection(transRegion3d, transBound);
     }
 
     /**
@@ -116,7 +116,7 @@ public class Selection {
      * @return the region of this selection
      */
     public Region3d getRegion3d() {
-        return boundRegion3d.editRegion3d();
+        return editRegion3d;
     }
 
     /**
@@ -124,7 +124,7 @@ public class Selection {
      * @return the bound of this selection
      */
     public Parallelepiped getBound() {
-        return boundRegion3d.bound();
+        return bound;
     }
 
     /**
@@ -139,26 +139,6 @@ public class Selection {
             posSet.add(iteV3.next());
         }
         return posSet;
-    }
-
-    @Deprecated
-    private static class BoundRegion3d {
-        private final EditableRegion3d editRegion3d;
-        private final Parallelepiped bound;
-
-        public BoundRegion3d(Region3d region, Parallelepiped bound) {
-            this.editRegion3d = new EditableRegion3d(region);
-            this.bound = bound;
-        }
-
-        public EditableRegion3d editRegion3d(){
-            return this.editRegion3d;
-        }
-
-        public Parallelepiped bound(){
-            return this.bound;
-        }
-
     }
 
     /**
