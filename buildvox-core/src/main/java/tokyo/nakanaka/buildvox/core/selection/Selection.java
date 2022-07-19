@@ -18,7 +18,7 @@ import java.util.Set;
  * region and bound contain will be regarded selection points.
  */
 public class Selection {
-    private BoundRegion3d boundRegion3d;
+    private final BoundRegion3d boundRegion3d;
 
     private Selection(BoundRegion3d boundRegion3d) {
         this.boundRegion3d = boundRegion3d;
@@ -143,8 +143,8 @@ public class Selection {
 
     @Deprecated
     private static class BoundRegion3d implements Region3d {
-        private EditableRegion3d region;
-        private Parallelepiped piped;
+        private final EditableRegion3d region;
+        private final Parallelepiped piped;
 
         public BoundRegion3d(Region3d region, double ubx, double uby, double ubz,
                              double lbx, double lby, double lbz) {
@@ -198,12 +198,12 @@ public class Selection {
      */
     private static Iterator<Vector3i> getIteratorOfRegion3d(Region3d region, Parallelepiped bound){
         return new Iterator<>() {
-            private int minX = (int)Math.floor(bound.minX());
-            private int minY = (int)Math.floor(bound.minY());
-            private int minZ = (int)Math.floor(bound.minZ());
-            private int maxX = (int)Math.floor(bound.maxX());
-            private int maxY = (int)Math.floor(bound.maxY());
-            private int maxZ = (int)Math.floor(bound.maxZ());
+            private final int minX = (int)Math.floor(bound.minX());
+            private final int minY = (int)Math.floor(bound.minY());
+            private final int minZ = (int)Math.floor(bound.minZ());
+            private final int maxX = (int)Math.floor(bound.maxX());
+            private final int maxY = (int)Math.floor(bound.maxY());
+            private final int maxZ = (int)Math.floor(bound.maxZ());
 
             //target pos (x, y, z)
             private int x = minX;
