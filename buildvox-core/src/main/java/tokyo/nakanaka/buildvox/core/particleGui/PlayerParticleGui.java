@@ -8,6 +8,7 @@ import tokyo.nakanaka.buildvox.core.selection.FillSelection;
 import tokyo.nakanaka.buildvox.core.selection.PasteSelection;
 import tokyo.nakanaka.buildvox.core.selection.Selection;
 
+/* internal */
 public class PlayerParticleGui {
     private final Player player;
     private boolean visible;
@@ -17,6 +18,7 @@ public class PlayerParticleGui {
         this.player = player;
     }
 
+    /** Sets visible. */
     public void setVisible(boolean b) {
         this.visible = b;
         if (b) {
@@ -27,6 +29,7 @@ public class PlayerParticleGui {
         }
     }
 
+    /** Updates this GUI. */
     public void update() {
         if(!visible) return;
         if(particleGui == null) return;
