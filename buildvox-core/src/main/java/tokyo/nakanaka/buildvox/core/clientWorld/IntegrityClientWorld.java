@@ -6,6 +6,7 @@ import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 /**
  * The client world which changes the integrity of block settings.
  * {@link <a href="https://www.computerhope.com/jargon/i/integrit.htm">integrity</a>}
+ * @deprecated Use OptionalClientWorld. This class will be package private from ver 2.0.0.
  */
 public class IntegrityClientWorld extends ClientWorld {
     private final double integrity;
