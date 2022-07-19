@@ -3,9 +3,8 @@ package tokyo.nakanaka.buildvox.core.edit;
 import tokyo.nakanaka.buildvox.core.*;
 import tokyo.nakanaka.buildvox.core.block.VoxelBlock;
 import tokyo.nakanaka.buildvox.core.clientWorld.ClientWorld;
-import tokyo.nakanaka.buildvox.core.clientWorld.IntegrityClientWorld;
+import tokyo.nakanaka.buildvox.core.clientWorld.OptionalClientWorld;
 import tokyo.nakanaka.buildvox.core.clientWorld.PlayerClientWorld;
-import tokyo.nakanaka.buildvox.core.BlockSettingOptions;
 import tokyo.nakanaka.buildvox.core.math.Drawings;
 import tokyo.nakanaka.buildvox.core.math.region3d.Parallelepiped;
 import tokyo.nakanaka.buildvox.core.math.transformation.AffineTransformation3d;
@@ -595,8 +594,12 @@ public class PlayerEdits {
             sel = createPosArraySelection(player.getPosArrayClone(), options.shape);
         }
         PlayerClientWorld pcw = new PlayerClientWorld(player);
-        IntegrityClientWorld icw = new IntegrityClientWorld(options.integrity, pcw);
-        WorldEdits.replace(icw, sel, blockFrom, blockTo);
+        BlockSettingOptions blockSettingOptions = new BlockSettingOptions();
+        blockSettingOptions.setReplaces(blockFrom);
+        blockSettingOptions.setIntegrity(options.integrity);
+        blockSettingOptions.setMasked(true);
+        OptionalClientWorld ocw = new OptionalClientWorld(pcw, blockSettingOptions);
+        WorldEdits.fill(ocw, sel, blockTo);
         Selection pasteSel = createPasteSelection(player.getEditWorld(), sel);
         pcw.setSelection(pasteSel);
         return pcw.end();
