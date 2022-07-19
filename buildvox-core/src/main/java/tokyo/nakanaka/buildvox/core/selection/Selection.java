@@ -44,7 +44,7 @@ public class Selection {
      * @return a new instance
      */
     public Selection affineTransform(AffineTransformation3d trans){
-        var region = boundRegion3d.region();
+        var region = boundRegion3d.editRegion3d();
         var piped = boundRegion3d.bound();
         var transRegion = region.affineTransform(trans);
         var transPiped = piped.affineTransform(trans);
@@ -116,7 +116,7 @@ public class Selection {
      * @return the region of this selection
      */
     public Region3d getRegion3d() {
-        return boundRegion3d;
+        return boundRegion3d.editRegion3d();
     }
 
     /**
@@ -142,25 +142,21 @@ public class Selection {
     }
 
     @Deprecated
-    private static class BoundRegion3d implements Region3d {
-        private final EditableRegion3d region;
-        private final Parallelepiped piped;
+    private static class BoundRegion3d {
+        private final EditableRegion3d editRegion3d;
+        private final Parallelepiped bound;
 
-        public BoundRegion3d(Region3d region, Parallelepiped piped) {
-            this.region = new EditableRegion3d(region);
-            this.piped = piped;
+        public BoundRegion3d(Region3d region, Parallelepiped bound) {
+            this.editRegion3d = new EditableRegion3d(region);
+            this.bound = bound;
         }
 
-        public boolean contains(double x, double y, double z) {
-            return this.region.contains(x, y, z);
-        }
-
-        public EditableRegion3d region(){
-            return this.region;
+        public EditableRegion3d editRegion3d(){
+            return this.editRegion3d;
         }
 
         public Parallelepiped bound(){
-            return this.piped;
+            return this.bound;
         }
 
     }
