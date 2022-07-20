@@ -72,8 +72,10 @@ public class PlayerEdits {
     }
 
     /**
+     * Unused now.
      * General options.
      */
+    @Deprecated
     public static class Options {
         /** masked */
         public boolean masked = false;
