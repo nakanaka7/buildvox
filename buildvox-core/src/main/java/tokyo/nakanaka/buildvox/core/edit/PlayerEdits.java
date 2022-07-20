@@ -83,6 +83,12 @@ public class PlayerEdits {
         public double integrity = 1.0;
         /** shape */
         public SelectionShape shape = null;
+        private BlockSettingOptions extractBlockSettingOptions() {
+            var blockSettingOptions = new BlockSettingOptions();
+            blockSettingOptions.setMasked(masked);
+            blockSettingOptions.setIntegrity(integrity);
+            return blockSettingOptions;
+        }
     }
 
     /**
@@ -117,10 +123,7 @@ public class PlayerEdits {
      * @deprecated Use select with shape and blockSettingOptions parameter.
      */
     public static void select(Player player, Options options) {
-        var blockSettingOptions = new BlockSettingOptions();
-        blockSettingOptions.setIntegrity(options.integrity);
-        blockSettingOptions.setMasked(options.masked);
-        select(player, options.shape, blockSettingOptions);
+        select(player, options.shape, options.extractBlockSettingOptions());
     }
 
     /**
@@ -157,12 +160,7 @@ public class PlayerEdits {
      * the shape.
      */
     public static EditExit reflect(Player player, Axis axis, Vector3d pos, Options options) {
-        AffineTransformation3d relativeTrans = switch (axis){
-            case X -> AffineTransformation3d.ofScale(- 1, 1, 1);
-            case Y -> AffineTransformation3d.ofScale(1, - 1, 1);
-            case Z -> AffineTransformation3d.ofScale(1, 1, - 1);
-        };
-        return affineTransform(player, pos, relativeTrans, options);
+        return reflect(player, axis, pos, options.shape, options.extractBlockSettingOptions());
     }
 
     /**
@@ -222,13 +220,7 @@ public class PlayerEdits {
      * @deprecated Use rotate() with shape and blockSettingOptions parameters.
      */
     public static EditExit rotate(Player player, Axis axis, double angle, Vector3d pos, Options options) {
-        double angleRad = angle * Math.PI / 180;
-        AffineTransformation3d relativeTrans = switch (axis){
-            case X -> AffineTransformation3d.ofRotationX(angleRad);
-            case Y -> AffineTransformation3d.ofRotationY(angleRad);
-            case Z -> AffineTransformation3d.ofRotationZ(angleRad);
-        };
-        return affineTransform(player, pos, relativeTrans, options);
+        return rotate(player, axis, angle, pos, options.shape, options.extractBlockSettingOptions());
     }
 
     /**
@@ -245,9 +237,7 @@ public class PlayerEdits {
      * @deprecated Use scale() with shape and blockSettingOptions parameters.
      */
     public static EditExit scale(Player player, double factorX, double factorY, double factorZ, Vector3d pos, Options options) {
-        if(factorX * factorY * factorZ == 0) throw new IllegalArgumentException();
-        AffineTransformation3d relativeTrans = AffineTransformation3d.ofScale(factorX, factorY, factorZ);
-        return affineTransform(player, pos, relativeTrans, options);
+        return scale(player, factorX, factorY, factorZ, pos, options.shape, options.extractBlockSettingOptions());
     }
 
     /**
@@ -284,12 +274,7 @@ public class PlayerEdits {
      * @deprecated Use shear() with shape and blockSettingOptions parameters.
      */
     public static EditExit shear(Player player, Axis axis, double factorI, double factorJ, Vector3d pos, Options options) {
-        AffineTransformation3d relativeTrans = switch (axis) {
-            case X -> AffineTransformation3d.ofShearX(factorI, factorJ);
-            case Y -> AffineTransformation3d.ofShearY(factorI, factorJ);
-            case Z -> AffineTransformation3d.ofShearZ(factorI, factorJ);
-        };
-        return affineTransform(player, pos, relativeTrans, options);
+        return shear(player, axis, factorI, factorJ, pos, options.shape, options.extractBlockSettingOptions());
     }
 
     /**
@@ -329,8 +314,7 @@ public class PlayerEdits {
      * @deprecated Use translate() with shape and blockSettingOptions parameters.
      */
     public static EditExit translate(Player player, double dx, double dy, double dz, Options options) {
-        AffineTransformation3d relativeTrans = AffineTransformation3d.ofTranslation(dx, dy, dz);
-        return affineTransform(player, Vector3d.ZERO, relativeTrans, options);
+        return translate(player, dx, dy, dz, options.shape, options.extractBlockSettingOptions());
     }
 
     /**
@@ -510,17 +494,10 @@ public class PlayerEdits {
      * @deprecated Use paste() with blockSettingOptions parameters.
      */
     public static EditExit paste(Player player, Vector3d pos, double integrity, boolean masked) {
-        Clipboard clipboard = player.getClipboard();
-        if(clipboard == null){
-            throw new IllegalStateException();
-        }
-        PasteSelection pasteSelection = new PasteSelection.Builder(clipboard, pos, clipboard.getSelection().translate(pos))
-                .integrity(integrity)
-                .masked(masked).build();
-        PlayerClientWorld pw = new PlayerClientWorld(player);
-        pasteSelection.setForwardBlocks(pw);
-        pw.setSelection(pasteSelection);
-        return pw.end();
+        var blockSettingOptions = new BlockSettingOptions();
+        blockSettingOptions.setIntegrity(integrity);
+        blockSettingOptions.setMasked(masked);
+        return paste(player, pos, blockSettingOptions);
     }
 
     /**
@@ -557,18 +534,7 @@ public class PlayerEdits {
      * @deprecated Use fill() with shape and blockSettingOptions parameters.
      */
     public static EditExit fill(Player player, VoxelBlock block, Options options) {
-        Selection sel = player.getSelection();
-        if(sel == null) {
-            sel = createPosArraySelection(player.getPosArrayClone(), options.shape);
-        }
-        FillSelection fillSelection = new FillSelection.Builder(block, sel)
-                .integrity(options.integrity)
-                .masked(options.masked)
-                .build();
-        PlayerClientWorld pcw = new PlayerClientWorld(player);
-        fillSelection.setForwardBlocks(pcw);
-        pcw.setSelection(fillSelection);
-        return pcw.end();
+        return fill(player, block, options.shape, options.extractBlockSettingOptions());
     }
 
     /**
@@ -655,32 +621,7 @@ public class PlayerEdits {
      * @deprecated Use repeat() with shape and blockSettingOptions parameters.
      */
     public static EditExit repeat(Player player, int countX, int countY, int countZ, Options options) {
-        Selection sel = player.getSelection();
-        if(sel == null) {
-            sel = createPosArraySelection(player.getPosArrayClone(), options.shape);
-        }
-        Parallelepiped bound = sel.getBound();
-        double dx = bound.maxX() - bound.minX();
-        double dy = bound.maxY() - bound.minY();
-        double dz = bound.maxZ() - bound.minZ();
-        Clipboard clip = new Clipboard();
-        WorldEdits.copy(player.getEditWorld(), sel, Vector3d.ZERO, clip);
-        List<Vector3i> positions = Drawings.line(Vector3i.ZERO, new Vector3i(countX, countY, countZ));
-        PlayerClientWorld pw = new PlayerClientWorld(player);
-        for(Vector3i pos : positions) {
-            double qx = pos.x() * dx;
-            double qy = pos.y() * dy;
-            double qz = pos.z() * dz;
-            Vector3d q = new Vector3d(qx, qy, qz);
-            PasteSelection pasteSel = new PasteSelection
-                    .Builder(clip, q, sel.translate(q))
-                    .masked(options.masked)
-                    .integrity(options.integrity)
-                    .build();
-            pasteSel.setForwardBlocks(pw);
-            pw.setSelection(pasteSel);
-        }
-        return pw.end();
+        return repeat(player, countX, countY, countZ, options.shape,options.extractBlockSettingOptions());
     }
 
     /**
