@@ -112,17 +112,31 @@ public class PlayerEdits {
      * will be rebound.
      * @param player the player.
      * @param options the options.
+     * @deprecated Use select with shape and blockSettingOptions parameter.
      */
     public static void select(Player player, Options options) {
+        var blockSettingOptions = new BlockSettingOptions();
+        blockSettingOptions.setIntegrity(options.integrity);
+        blockSettingOptions.setMasked(options.masked);
+        select(player, options.shape, blockSettingOptions);
+    }
+
+    /**
+     * Creates a new selection from existing selection or pos-array. If the new selection is block-selection, options
+     * will be rebound.
+     * @param player the player.
+     * @param shape the selection shape which is used when creating a new selection from pos-array.
+     * @param blockSettingOptions the block-setting options.
+     */
+    public static void select(Player player, SelectionShape shape, BlockSettingOptions blockSettingOptions) {
         Selection sel = player.getSelection();
         if(sel == null) {
-            sel = createPosArraySelection(player.getPosArrayClone(), options.shape);
+            sel = createPosArraySelection(player.getPosArrayClone(), shape);
         }
         PlayerClientWorld pcw = new PlayerClientWorld(player);
         if(sel instanceof BlockSelection blockSel) {
             blockSel.setBackwardBlocks(pcw);
-            blockSel.setIntegrity(options.integrity);
-            blockSel.setMasked(options.masked);
+            blockSel.setOptions(blockSettingOptions);
             blockSel.setForwardBlocks(pcw);
         }
         pcw.setSelection(sel);
