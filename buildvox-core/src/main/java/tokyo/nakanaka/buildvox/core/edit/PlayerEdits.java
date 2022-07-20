@@ -482,11 +482,23 @@ public class PlayerEdits {
      * @throws MissingPosException if player does not have a selection and some pos are missing.
      * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
      * the shape.
+     * @deprecated Use copy with shape parameter.
      */
     public static EditExit copy(Player player, Vector3d pos, Options options) {
+        return copy(player, pos, options.shape);
+    }
+
+    /**
+     * Copies the blocks in the selection. If player does not have a selection, a selection will be created from pos-array.
+     * @param pos the position which corresponds to the origin of the clipboard.
+     * @throws MissingPosException if player does not have a selection and some pos are missing.
+     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
+     * the shape.
+     */
+    public static EditExit copy(Player player, Vector3d pos, SelectionShape shape) {
         Selection sel = player.getSelection();
         if(sel == null) {
-            sel = createPosArraySelection(player.getPosArrayClone(), options.shape);
+            sel = createPosArraySelection(player.getPosArrayClone(), shape);
         }
         Clipboard clipboard = new Clipboard(sel.translate(pos.negate()));
         WorldEdits.copy(new ClientWorld(player.getEditWorld()), sel, pos, clipboard);
