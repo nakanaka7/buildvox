@@ -605,6 +605,7 @@ public class PlayerEdits {
      * @throws MissingPosException if player does not have a selection and some pos are missing.
      * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
      * @throws IllegalArgumentException if integrity is less than 0 or larger than 1.
+     * @deprecated Use replace() with shape and integrity parameter.
      */
     public static EditExit replace(Player player, VoxelBlock blockFrom, VoxelBlock blockTo, Options options) {
         return replace(player, blockFrom, blockTo, options.shape, options.integrity);
