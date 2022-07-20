@@ -143,28 +143,6 @@ public class PlayerEdits {
         pcw.end();
     }
 
-    /*
-     * Experimental
-     * Applies physics in the selection.
-     * @throws MissingPosException if player does not have a selection and some pos are missing.
-     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
-     */
-    public static void applyPhysics(Player player, Options options) {
-        Selection sel = player.getSelection();
-        if(sel == null) {
-            sel = createPosArraySelection(player.getPosArrayClone(), options.shape);
-        }
-        Clipboard clipboard = new Clipboard();
-        ClientWorld clientWorld = new ClientWorld(player.getEditWorld(), true);
-        WorldEdits.copy(clientWorld, sel, Vector3d.ZERO, clipboard);
-        WorldEdits.fill(clientWorld, sel, VoxelBlock.valueOf("air"));
-        WorldEdits.paste(clipboard, clientWorld, Vector3d.ZERO);
-        Clipboard clipboard1 = new Clipboard();
-        WorldEdits.copy(player.getEditWorld(), sel, Vector3d.ZERO, clipboard1);
-        Selection pasteSel = new PasteSelection.Builder(clipboard1, Vector3d.ZERO, sel).build();
-        player.setSelection(pasteSel);
-    }
-
     /**
      * Reflects the blocks in the player's selection.
      * @param player the player.
