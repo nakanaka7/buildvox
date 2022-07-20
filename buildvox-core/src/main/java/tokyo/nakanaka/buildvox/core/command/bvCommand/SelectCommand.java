@@ -1,11 +1,9 @@
 package tokyo.nakanaka.buildvox.core.command.bvCommand;
 
 import picocli.CommandLine;
-import picocli.CommandLine.Command;
-import picocli.CommandLine.Mixin;
+import picocli.CommandLine.*;
+import tokyo.nakanaka.buildvox.core.BlockSettingOptions;
 import tokyo.nakanaka.buildvox.core.Messages;
-import tokyo.nakanaka.buildvox.core.command.mixin.Integrity;
-import tokyo.nakanaka.buildvox.core.command.mixin.Masked;
 import tokyo.nakanaka.buildvox.core.command.mixin.Shape;
 import tokyo.nakanaka.buildvox.core.edit.PlayerEdits;
 import tokyo.nakanaka.buildvox.core.player.Player;
@@ -21,22 +19,16 @@ public class SelectCommand implements Runnable {
     @CommandLine.ParentCommand
     private BvCommand bvCmd;
     @Mixin
-    private Integrity integrity;
-    @Mixin
-    private Masked masked;
-    @Mixin
     private Shape shape;
+    @Mixin
+    private BlockSettingOptions blockSettingOptions;
 
     public void run() {
         PrintWriter out = commandSpec.commandLine().getOut();
         PrintWriter err = commandSpec.commandLine().getErr();
         Player player = bvCmd.getPlayer();
-        var options = new PlayerEdits.Options();
-        options.integrity = integrity.integrity();
-        options.masked = masked.masked();
-        options.shape = shape.shape();
         try {
-            PlayerEdits.select(player, options);
+            PlayerEdits.select(player, shape.shape(), blockSettingOptions);
             out.println("Creates a new selection.");
         }catch (PlayerEdits.MissingPosException ex) {
             err.println(Messages.MISSING_POS_ERROR);
