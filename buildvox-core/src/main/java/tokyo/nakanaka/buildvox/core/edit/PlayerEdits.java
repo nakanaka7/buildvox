@@ -72,8 +72,10 @@ public class PlayerEdits {
     }
 
     /**
+     * Unused now.
      * General options.
      */
+    @Deprecated
     public static class Options {
         /** masked */
         public boolean masked = false;
@@ -81,6 +83,12 @@ public class PlayerEdits {
         public double integrity = 1.0;
         /** shape */
         public SelectionShape shape = null;
+        private BlockSettingOptions extractBlockSettingOptions() {
+            var blockSettingOptions = new BlockSettingOptions();
+            blockSettingOptions.setMasked(masked);
+            blockSettingOptions.setIntegrity(integrity);
+            return blockSettingOptions;
+        }
     }
 
     /**
@@ -115,10 +123,7 @@ public class PlayerEdits {
      * @deprecated Use select with shape and blockSettingOptions parameter.
      */
     public static void select(Player player, Options options) {
-        var blockSettingOptions = new BlockSettingOptions();
-        blockSettingOptions.setIntegrity(options.integrity);
-        blockSettingOptions.setMasked(options.masked);
-        select(player, options.shape, blockSettingOptions);
+        select(player, options.shape, options.extractBlockSettingOptions());
     }
 
     /**
@@ -143,28 +148,6 @@ public class PlayerEdits {
         pcw.end();
     }
 
-    /*
-     * Experimental
-     * Applies physics in the selection.
-     * @throws MissingPosException if player does not have a selection and some pos are missing.
-     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
-     */
-    public static void applyPhysics(Player player, Options options) {
-        Selection sel = player.getSelection();
-        if(sel == null) {
-            sel = createPosArraySelection(player.getPosArrayClone(), options.shape);
-        }
-        Clipboard clipboard = new Clipboard();
-        ClientWorld clientWorld = new ClientWorld(player.getEditWorld(), true);
-        WorldEdits.copy(clientWorld, sel, Vector3d.ZERO, clipboard);
-        WorldEdits.fill(clientWorld, sel, VoxelBlock.valueOf("air"));
-        WorldEdits.paste(clipboard, clientWorld, Vector3d.ZERO);
-        Clipboard clipboard1 = new Clipboard();
-        WorldEdits.copy(player.getEditWorld(), sel, Vector3d.ZERO, clipboard1);
-        Selection pasteSel = new PasteSelection.Builder(clipboard1, Vector3d.ZERO, sel).build();
-        player.setSelection(pasteSel);
-    }
-
     /**
      * Reflects the blocks in the player's selection.
      * @param player the player.
@@ -177,12 +160,7 @@ public class PlayerEdits {
      * the shape.
      */
     public static EditExit reflect(Player player, Axis axis, Vector3d pos, Options options) {
-        AffineTransformation3d relativeTrans = switch (axis){
-            case X -> AffineTransformation3d.ofScale(- 1, 1, 1);
-            case Y -> AffineTransformation3d.ofScale(1, - 1, 1);
-            case Z -> AffineTransformation3d.ofScale(1, 1, - 1);
-        };
-        return affineTransform(player, pos, relativeTrans, options);
+        return reflect(player, axis, pos, options.shape, options.extractBlockSettingOptions());
     }
 
     /**
@@ -242,13 +220,7 @@ public class PlayerEdits {
      * @deprecated Use rotate() with shape and blockSettingOptions parameters.
      */
     public static EditExit rotate(Player player, Axis axis, double angle, Vector3d pos, Options options) {
-        double angleRad = angle * Math.PI / 180;
-        AffineTransformation3d relativeTrans = switch (axis){
-            case X -> AffineTransformation3d.ofRotationX(angleRad);
-            case Y -> AffineTransformation3d.ofRotationY(angleRad);
-            case Z -> AffineTransformation3d.ofRotationZ(angleRad);
-        };
-        return affineTransform(player, pos, relativeTrans, options);
+        return rotate(player, axis, angle, pos, options.shape, options.extractBlockSettingOptions());
     }
 
     /**
@@ -265,9 +237,7 @@ public class PlayerEdits {
      * @deprecated Use scale() with shape and blockSettingOptions parameters.
      */
     public static EditExit scale(Player player, double factorX, double factorY, double factorZ, Vector3d pos, Options options) {
-        if(factorX * factorY * factorZ == 0) throw new IllegalArgumentException();
-        AffineTransformation3d relativeTrans = AffineTransformation3d.ofScale(factorX, factorY, factorZ);
-        return affineTransform(player, pos, relativeTrans, options);
+        return scale(player, factorX, factorY, factorZ, pos, options.shape, options.extractBlockSettingOptions());
     }
 
     /**
@@ -304,12 +274,7 @@ public class PlayerEdits {
      * @deprecated Use shear() with shape and blockSettingOptions parameters.
      */
     public static EditExit shear(Player player, Axis axis, double factorI, double factorJ, Vector3d pos, Options options) {
-        AffineTransformation3d relativeTrans = switch (axis) {
-            case X -> AffineTransformation3d.ofShearX(factorI, factorJ);
-            case Y -> AffineTransformation3d.ofShearY(factorI, factorJ);
-            case Z -> AffineTransformation3d.ofShearZ(factorI, factorJ);
-        };
-        return affineTransform(player, pos, relativeTrans, options);
+        return shear(player, axis, factorI, factorJ, pos, options.shape, options.extractBlockSettingOptions());
     }
 
     /**
@@ -349,8 +314,7 @@ public class PlayerEdits {
      * @deprecated Use translate() with shape and blockSettingOptions parameters.
      */
     public static EditExit translate(Player player, double dx, double dy, double dz, Options options) {
-        AffineTransformation3d relativeTrans = AffineTransformation3d.ofTranslation(dx, dy, dz);
-        return affineTransform(player, Vector3d.ZERO, relativeTrans, options);
+        return translate(player, dx, dy, dz, options.shape, options.extractBlockSettingOptions());
     }
 
     /**
@@ -369,42 +333,6 @@ public class PlayerEdits {
     public static EditExit translate(Player player, double dx, double dy, double dz, SelectionShape shape, BlockSettingOptions blockSettingOptions) {
         AffineTransformation3d relativeTrans = AffineTransformation3d.ofTranslation(dx, dy, dz);
         return affineTransform(player, Vector3d.ZERO, relativeTrans, shape, blockSettingOptions);
-    }
-
-    /**
-     * Affine transform the selection. If player does not have a selection, a selection will be created from pos-array,
-     * and then converted to a paste-selection. If the selection is block-selection, backward and forward blocks
-     * will be set.
-     * @param player the player.
-     * @param pos the block position of the center of affine transformation
-     * @param relativeTrans the affine transformation.
-     * @return the edit exit.
-     * @throws MissingPosException if player does not have a selection and some pos are missing.
-     * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
-     * the shape.
-     */
-    @Deprecated
-    private static EditExit affineTransform(Player player, Vector3d pos, AffineTransformation3d relativeTrans, Options options) {
-        AffineTransformation3d trans = AffineTransformation3d.withOffset(relativeTrans, pos.x() + 0.5, pos.y() + 0.5, pos.z() + 0.5);
-        Selection selFrom = player.getSelection();
-        if(selFrom == null) {
-            Selection posArraySel = createPosArraySelection(player.getPosArrayClone(), options.shape);
-            PasteSelection pasteSel = createPasteSelection(player.getEditWorld(), posArraySel);
-            pasteSel.setIntegrity(options.integrity);
-            pasteSel.setMasked(options.masked);
-            selFrom = pasteSel;
-        }
-        PlayerClientWorld pcw = new PlayerClientWorld(player);
-        if(selFrom instanceof BlockSelection blockSel) {
-            blockSel.setBackwardBlocks(pcw);
-        }
-        Selection selTo;
-        selTo = selFrom.affineTransform(trans);
-        if(selTo instanceof BlockSelection blockSel) {
-            blockSel.setForwardBlocks(pcw);
-        }
-        pcw.setSelection(selTo);
-        return pcw.end();
     }
 
     /**
@@ -530,17 +458,10 @@ public class PlayerEdits {
      * @deprecated Use paste() with blockSettingOptions parameters.
      */
     public static EditExit paste(Player player, Vector3d pos, double integrity, boolean masked) {
-        Clipboard clipboard = player.getClipboard();
-        if(clipboard == null){
-            throw new IllegalStateException();
-        }
-        PasteSelection pasteSelection = new PasteSelection.Builder(clipboard, pos, clipboard.getSelection().translate(pos))
-                .integrity(integrity)
-                .masked(masked).build();
-        PlayerClientWorld pw = new PlayerClientWorld(player);
-        pasteSelection.setForwardBlocks(pw);
-        pw.setSelection(pasteSelection);
-        return pw.end();
+        var blockSettingOptions = new BlockSettingOptions();
+        blockSettingOptions.setIntegrity(integrity);
+        blockSettingOptions.setMasked(masked);
+        return paste(player, pos, blockSettingOptions);
     }
 
     /**
@@ -577,18 +498,7 @@ public class PlayerEdits {
      * @deprecated Use fill() with shape and blockSettingOptions parameters.
      */
     public static EditExit fill(Player player, VoxelBlock block, Options options) {
-        Selection sel = player.getSelection();
-        if(sel == null) {
-            sel = createPosArraySelection(player.getPosArrayClone(), options.shape);
-        }
-        FillSelection fillSelection = new FillSelection.Builder(block, sel)
-                .integrity(options.integrity)
-                .masked(options.masked)
-                .build();
-        PlayerClientWorld pcw = new PlayerClientWorld(player);
-        fillSelection.setForwardBlocks(pcw);
-        pcw.setSelection(fillSelection);
-        return pcw.end();
+        return fill(player, block, options.shape, options.extractBlockSettingOptions());
     }
 
     /**
@@ -627,6 +537,7 @@ public class PlayerEdits {
      * @throws MissingPosException if player does not have a selection and some pos are missing.
      * @throws PosArrayLengthException if player does not have a selection and pos array length is not valid for
      * @throws IllegalArgumentException if integrity is less than 0 or larger than 1.
+     * @deprecated Use replace() with shape and integrity parameter.
      */
     public static EditExit replace(Player player, VoxelBlock blockFrom, VoxelBlock blockTo, Options options) {
         return replace(player, blockFrom, blockTo, options.shape, options.integrity);
@@ -674,32 +585,7 @@ public class PlayerEdits {
      * @deprecated Use repeat() with shape and blockSettingOptions parameters.
      */
     public static EditExit repeat(Player player, int countX, int countY, int countZ, Options options) {
-        Selection sel = player.getSelection();
-        if(sel == null) {
-            sel = createPosArraySelection(player.getPosArrayClone(), options.shape);
-        }
-        Parallelepiped bound = sel.getBound();
-        double dx = bound.maxX() - bound.minX();
-        double dy = bound.maxY() - bound.minY();
-        double dz = bound.maxZ() - bound.minZ();
-        Clipboard clip = new Clipboard();
-        WorldEdits.copy(player.getEditWorld(), sel, Vector3d.ZERO, clip);
-        List<Vector3i> positions = Drawings.line(Vector3i.ZERO, new Vector3i(countX, countY, countZ));
-        PlayerClientWorld pw = new PlayerClientWorld(player);
-        for(Vector3i pos : positions) {
-            double qx = pos.x() * dx;
-            double qy = pos.y() * dy;
-            double qz = pos.z() * dz;
-            Vector3d q = new Vector3d(qx, qy, qz);
-            PasteSelection pasteSel = new PasteSelection
-                    .Builder(clip, q, sel.translate(q))
-                    .masked(options.masked)
-                    .integrity(options.integrity)
-                    .build();
-            pasteSel.setForwardBlocks(pw);
-            pw.setSelection(pasteSel);
-        }
-        return pw.end();
+        return repeat(player, countX, countY, countZ, options.shape,options.extractBlockSettingOptions());
     }
 
     /**
