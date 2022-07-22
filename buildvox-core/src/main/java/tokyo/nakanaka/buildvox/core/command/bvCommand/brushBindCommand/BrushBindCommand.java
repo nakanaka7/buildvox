@@ -6,7 +6,7 @@ import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
 @Command(name = "brush-bind",
         mixinStandardHelpOptions = true,
         description = "Binds brush type",
-        subcommands = {SphereCommand.class, ClipboardCommand.class})
+        subcommands = {SphereCommand.class, CylinderCommand.class, ClipboardCommand.class})
 public class BrushBindCommand {
     @ParentCommand
     private BvCommand bvCmd;
