@@ -8,7 +8,8 @@ import java.util.List;
 public class Integrity {
     @CommandLine.Option(names = {"-i", "--integrity"}, description = "The integrity of block setting.",
             converter = Converter.class, completionCandidates = Candidates.class,
-            defaultValue = "1")
+            defaultValue = "1",
+            scope = CommandLine.ScopeType.INHERIT)
     private double integrity = 1;
 
     public double integrity() {
