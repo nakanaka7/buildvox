@@ -11,7 +11,9 @@ import tokyo.nakanaka.buildvox.core.player.Player;
 
 import java.io.PrintWriter;
 
-@Command(name = "sphere")
+@Command(name = "sphere",
+        mixinStandardHelpOptions = true,
+        description = "Binds a sphere to the brush")
 public class SphereCommand implements Runnable {
     @Spec
     private Model.CommandSpec spec;
