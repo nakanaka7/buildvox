@@ -234,9 +234,11 @@ public class BuildVoxSystem {
      * Handles a left-clicking block event by brush.
      * @param playerId the id of the player who invoked this event.
      * @param pos the position of the clicked block.
+     * @throws IllegalArgumentException if the player of the id is not registered.
      */
     public static void onLeftClickBlockByBrush(UUID playerId, Vector3i pos) {
         var player = realPlayerRegistry.get(playerId);
+        if(player == null) throw new IllegalArgumentException();
         BrushEvent.onLeft(player, pos);
     }
 
@@ -244,9 +246,11 @@ public class BuildVoxSystem {
      * Handles a right-clicking block event by brush. Sets background block.
      * @param playerId the id of the player who invoked this event.
      * @param pos the position of the clicked block.
+     * @throws IllegalArgumentException if the player of the id is not registered.
      */
     public static void onRightClickBlockByBrush(UUID playerId, Vector3i pos) {
         var player = realPlayerRegistry.get(playerId);
+        if(player == null) throw new IllegalArgumentException();
         BrushEvent.onRight(player, pos);
     }
 
