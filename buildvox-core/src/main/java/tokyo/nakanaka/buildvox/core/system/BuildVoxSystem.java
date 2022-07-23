@@ -29,7 +29,8 @@ import java.util.UUID;
  */
 public class BuildVoxSystem {
     public static final Logger CORE_LOGGER = LoggerFactory.getLogger("BuildVoxCore");
-    private static Environment environment = Environment.DEFAULT;
+    private static BlockValidator blockValidator = block -> false;
+    private static Scheduler scheduler = (runnable, tick) -> {};
     private static Config config = Config.DEFAULT;
     private static final Registry<World, NamespacedId> worldRegistry = new Registry<>();
     private static final Registry<Block<?,?>, NamespacedId> blockRegistry = new Registry<>();
@@ -40,36 +41,26 @@ public class BuildVoxSystem {
     }
 
     @Deprecated
-    private static record Environment(BlockValidator blockValidator,
-                                     Scheduler scheduler) {
-        public static final Environment DEFAULT = new Environment(
-                (block) -> false,
-                (runnable, tick) -> {});
-    }
-
-    @Deprecated
     private static record Config(String outColor, String errColor, String backgroundBlock, int posArrayLength) {
         public static final Config DEFAULT = new Config(ColorCode.GREEN, ColorCode.RED, "minecraft:air", 2);
     }
 
     /** Sets the scheduler */
     public static void setScheduler(Scheduler scheduler) {
-        var e = new Environment(environment.blockValidator, scheduler);
-        environment = e;
+        BuildVoxSystem.scheduler = scheduler;
     }
 
     /** Gets the scheduler */
     public static Scheduler getScheduler() {
-        return environment.scheduler();
+        return scheduler;
     }
 
     public static void setBlockValidator(BlockValidator blockValidator) {
-        var e = new Environment(blockValidator, environment.scheduler());
-        environment = e;
+        BuildVoxSystem.blockValidator = blockValidator;
     }
 
     public static BlockValidator getBlockValidator() {
-        return environment.blockValidator();
+        return blockValidator;
     }
 
     /** Gets the out color code. */
