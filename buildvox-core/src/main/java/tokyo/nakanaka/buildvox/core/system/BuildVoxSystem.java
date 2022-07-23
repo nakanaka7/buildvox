@@ -14,6 +14,7 @@ import tokyo.nakanaka.buildvox.core.clientWorld.OptionalClientWorld;
 import tokyo.nakanaka.buildvox.core.clientWorld.PlayerClientWorld;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
 import tokyo.nakanaka.buildvox.core.command.bvdCommand.BvdCommand;
+import tokyo.nakanaka.buildvox.core.edit.VoxelSpaceEdits;
 import tokyo.nakanaka.buildvox.core.edit.WorldEdits;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.DummyPlayer;
@@ -22,9 +23,7 @@ import tokyo.nakanaka.buildvox.core.player.RealPlayer;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * The entrypoint for the platforms which use BuildVox Core project.
@@ -256,6 +255,11 @@ public class BuildVoxSystem {
         player.getMessenger().sendOutMessage(Messages.ofPosExit(index, pos.x(), pos.y(), pos.z()));
     }
 
+    /**
+     * Handles a left-clicking block event by brush.
+     * @param playerId the id of the player who invoked this event.
+     * @param pos the position of the clicked block.
+     */
     public static void onLeftClickBlockByBrush(UUID playerId, Vector3i pos) {
         var player = realPlayerRegistry.get(playerId);
         var worldId = player.getPlayerEntity().getWorldId();
@@ -268,8 +272,25 @@ public class BuildVoxSystem {
         pcw.end();
     }
 
+    /**
+     * Handles a right-clicking block event by brush. Sets background block.
+     * @param playerId the id of the player who invoked this event.
+     * @param pos the position of the clicked block.
+     */
     public static void onRightClickBlockByBrush(UUID playerId, Vector3i pos) {
-        //TODO
+        var player = realPlayerRegistry.get(playerId);
+        var worldId = player.getPlayerEntity().getWorldId();
+        World world = worldRegistry.get(worldId);
+        player.setEditWorld(world);
+        var src = player.getBrushSource();
+        Set<Vector3i> clipPosSet = src.getClipboard().blockPosSet();
+        Set<Vector3i> posSet = new HashSet<>();
+        for(var p : clipPosSet) {
+            posSet.add(p.add(pos));
+        }
+        var pcw = new PlayerClientWorld(player);
+        VoxelSpaceEdits.fill(pcw, posSet, player.getBackgroundBlock());
+        pcw.end();
     }
 
     private static class BuildVoxWriter extends Writer {
