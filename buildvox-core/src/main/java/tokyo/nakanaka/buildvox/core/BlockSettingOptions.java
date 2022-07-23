@@ -18,7 +18,8 @@ public class BlockSettingOptions {
             description = "The blocks to replace",
             arity = "1..*",
             completionCandidates = Block.Candidates.class,
-            converter = Block.Converter.class)
+            converter = Block.Converter.class,
+            scope = ScopeType.INHERIT)
     private VoxelBlock[] replace; //not "replaces", because picocli shows "-r = <replace>..."
 
     /** Sets the integrity. */

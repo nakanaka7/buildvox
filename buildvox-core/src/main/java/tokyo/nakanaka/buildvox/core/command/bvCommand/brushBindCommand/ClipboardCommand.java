@@ -1,7 +1,6 @@
 package tokyo.nakanaka.buildvox.core.command.bvCommand.brushBindCommand;
 
 import picocli.CommandLine;
-import tokyo.nakanaka.buildvox.core.BlockSettingOptions;
 import tokyo.nakanaka.buildvox.core.Clipboard;
 import tokyo.nakanaka.buildvox.core.brushSource.BrushSource;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
@@ -19,9 +18,6 @@ public class ClipboardCommand implements Runnable {
     @CommandLine.ParentCommand
     private BrushBindCommand brushBindCmd;
 
-    @CommandLine.Mixin
-    private BlockSettingOptions options;
-
     @Override
     public void run() {
         PrintWriter out = spec.commandLine().getOut();
@@ -33,7 +29,7 @@ public class ClipboardCommand implements Runnable {
             err.println("No clipboard.");
             return;
         }
-        BrushSource bs = new BrushSource(clip, options);
+        BrushSource bs = new BrushSource(clip, brushBindCmd.getBlockSettingOptions());
         player.setBrushSource(bs);
         out.println("Bound current clipboard to brush.");
     }
