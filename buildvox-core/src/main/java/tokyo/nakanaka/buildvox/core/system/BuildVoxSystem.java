@@ -5,17 +5,14 @@ import org.slf4j.LoggerFactory;
 import picocli.AutoComplete;
 import picocli.CommandLine;
 import tokyo.nakanaka.buildvox.core.ColorCode;
-import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.World;
 import tokyo.nakanaka.buildvox.core.block.Block;
 import tokyo.nakanaka.buildvox.core.block.BlockValidator;
-import tokyo.nakanaka.buildvox.core.clientWorld.OptionalClientWorld;
-import tokyo.nakanaka.buildvox.core.clientWorld.PlayerClientWorld;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
 import tokyo.nakanaka.buildvox.core.command.bvdCommand.BvdCommand;
-import tokyo.nakanaka.buildvox.core.edit.VoxelSpaceEdits;
-import tokyo.nakanaka.buildvox.core.edit.WorldEdits;
+import tokyo.nakanaka.buildvox.core.event.BrushEvent;
+import tokyo.nakanaka.buildvox.core.event.PosMarkerEvent;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.DummyPlayer;
 import tokyo.nakanaka.buildvox.core.player.RealPlayer;
@@ -23,15 +20,19 @@ import tokyo.nakanaka.buildvox.core.player.RealPlayer;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * The entrypoint for the platforms which use BuildVox Core project.
  */
 public class BuildVoxSystem {
     public static final Logger CORE_LOGGER = LoggerFactory.getLogger("BuildVoxCore");
-    private static Environment environment = Environment.DEFAULT;
-    private static Config config = Config.DEFAULT;
+    private static BlockValidator blockValidator = block -> false;
+    private static Scheduler scheduler = (runnable, tick) -> {};
+    private static final String outColor = ColorCode.GREEN;
+    private static final String errColor = ColorCode.RED;
     private static final Registry<World, NamespacedId> worldRegistry = new Registry<>();
     private static final Registry<Block<?,?>, NamespacedId> blockRegistry = new Registry<>();
     private static final Registry<RealPlayer, UUID> realPlayerRegistry = new Registry<>();
@@ -40,47 +41,32 @@ public class BuildVoxSystem {
     private BuildVoxSystem() {
     }
 
-    @Deprecated
-    private static record Environment(BlockValidator blockValidator,
-                                     Scheduler scheduler) {
-        public static final Environment DEFAULT = new Environment(
-                (block) -> false,
-                (runnable, tick) -> {});
-    }
-
-    @Deprecated
-    private static record Config(String outColor, String errColor, String backgroundBlock, int posArrayLength) {
-        public static final Config DEFAULT = new Config(ColorCode.GREEN, ColorCode.RED, "minecraft:air", 2);
-    }
-
     /** Sets the scheduler */
     public static void setScheduler(Scheduler scheduler) {
-        var e = new Environment(environment.blockValidator, scheduler);
-        environment = e;
+        BuildVoxSystem.scheduler = scheduler;
     }
 
     /** Gets the scheduler */
     public static Scheduler getScheduler() {
-        return environment.scheduler();
+        return scheduler;
     }
 
     public static void setBlockValidator(BlockValidator blockValidator) {
-        var e = new Environment(blockValidator, environment.scheduler());
-        environment = e;
+        BuildVoxSystem.blockValidator = blockValidator;
     }
 
     public static BlockValidator getBlockValidator() {
-        return environment.blockValidator();
+        return blockValidator;
     }
 
     /** Gets the out color code. */
     public static String getOutColor() {
-        return config.outColor;
+        return outColor;
     }
 
     /** Gets the error color code. */
     public static String getErrColor() {
-        return config.errColor;
+        return errColor;
     }
 
     /** Gets the default background block id */
@@ -216,13 +202,7 @@ public class BuildVoxSystem {
     public static void onLeftClickBlockByPosMarker(UUID playerId, Vector3i pos) {
         var player = realPlayerRegistry.get(playerId);
         if(player == null) throw new IllegalArgumentException();
-        var worldId = player.getPlayerEntity().getWorldId();
-        var world = worldRegistry.get(worldId);
-        player.setEditWorld(world);
-        Vector3i[] posArray = new Vector3i[player.getPosArrayClone().length];
-        posArray[0] = pos;
-        player.setPosArray(posArray);
-        player.getMessenger().sendOutMessage(Messages.ofPosExit(0, pos.x(), pos.y(), pos.z()));
+        PosMarkerEvent.onLeft(player, pos);
     }
 
     /**
@@ -234,63 +214,31 @@ public class BuildVoxSystem {
     public static void onRightClickBlockByPosMarker(UUID playerId, Vector3i pos) {
         var player = realPlayerRegistry.get(playerId);
         if(player == null) throw new IllegalArgumentException();
-        var worldId = player.getPlayerEntity().getWorldId();
-        var world = worldRegistry.get(worldId);
-        World editWorld = player.getEditWorld();
-        Vector3i[] posArray = player.getPosArrayClone();
-        if (world != editWorld) {
-            posArray = new Vector3i[player.getPosArrayClone().length];
-        }
-        int l = posArray.length;
-        int index = l - 1;
-        for (int i = 0; i < l; ++i) {
-            if (posArray[i] == null) {
-                index = i;
-                break;
-            }
-        }
-        posArray[index] = pos;
-        player.setEditWorld(world);
-        player.setPosArray(posArray);
-        player.getMessenger().sendOutMessage(Messages.ofPosExit(index, pos.x(), pos.y(), pos.z()));
+        PosMarkerEvent.onRight(player, pos);
     }
 
     /**
      * Handles a left-clicking block event by brush.
      * @param playerId the id of the player who invoked this event.
      * @param pos the position of the clicked block.
+     * @throws IllegalArgumentException if the player of the id is not registered.
      */
     public static void onLeftClickBlockByBrush(UUID playerId, Vector3i pos) {
         var player = realPlayerRegistry.get(playerId);
-        var worldId = player.getPlayerEntity().getWorldId();
-        var world = worldRegistry.get(worldId);
-        player.setEditWorld(world);
-        var src = player.getBrushSource();
-        var pcw = new PlayerClientWorld(player);
-        var ocw = new OptionalClientWorld(pcw, src.getOptions());
-        WorldEdits.paste(src.getClipboard(), ocw, pos.toVector3d());
-        pcw.end();
+        if(player == null) throw new IllegalArgumentException();
+        BrushEvent.onLeft(player, pos);
     }
 
     /**
      * Handles a right-clicking block event by brush. Sets background block.
      * @param playerId the id of the player who invoked this event.
      * @param pos the position of the clicked block.
+     * @throws IllegalArgumentException if the player of the id is not registered.
      */
     public static void onRightClickBlockByBrush(UUID playerId, Vector3i pos) {
         var player = realPlayerRegistry.get(playerId);
-        var worldId = player.getPlayerEntity().getWorldId();
-        World world = worldRegistry.get(worldId);
-        player.setEditWorld(world);
-        var src = player.getBrushSource();
-        Set<Vector3i> clipPosSet = src.getClipboard().blockPosSet();
-        Set<Vector3i> posSet = new HashSet<>();
-        for(var p : clipPosSet) {
-            posSet.add(p.add(pos));
-        }
-        var pcw = new PlayerClientWorld(player);
-        VoxelSpaceEdits.fill(pcw, posSet, player.getBackgroundBlock());
-        pcw.end();
+        if(player == null) throw new IllegalArgumentException();
+        BrushEvent.onRight(player, pos);
     }
 
     private static class BuildVoxWriter extends Writer {
