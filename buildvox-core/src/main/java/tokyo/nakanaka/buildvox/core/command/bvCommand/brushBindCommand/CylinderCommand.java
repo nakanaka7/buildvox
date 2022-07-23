@@ -7,11 +7,10 @@ import tokyo.nakanaka.buildvox.core.brushSource.BrushSource;
 import tokyo.nakanaka.buildvox.core.brushSource.BrushSourceClipboards;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
 import tokyo.nakanaka.buildvox.core.command.mixin.Block;
+import tokyo.nakanaka.buildvox.core.command.mixin.PositiveInteger;
 import tokyo.nakanaka.buildvox.core.player.Player;
 
 import java.io.PrintWriter;
-import java.util.Iterator;
-import java.util.List;
 
 @Command(name = "cylinder",
         mixinStandardHelpOptions = true,
@@ -28,14 +27,14 @@ public class CylinderCommand implements Runnable {
 
     @Parameters(description = "diameter(default = 3)",
             defaultValue = "3",
-            completionCandidates = PositiveIntegerCandidates.class,
-            converter = PositiveIntegerConverter.class)
+            completionCandidates = PositiveInteger.PositiveIntegerCandidates.class,
+            converter = PositiveInteger.PositiveIntegerConverter.class)
     private int diameter;
 
     @Parameters(description = "thickness(default = 1)",
             defaultValue = "1",
-            completionCandidates = PositiveIntegerCandidates.class,
-            converter = PositiveIntegerConverter.class
+            completionCandidates = PositiveInteger.PositiveIntegerCandidates.class,
+            converter = PositiveInteger.PositiveIntegerConverter.class
     )
     private int thickness;
 
@@ -59,22 +58,6 @@ public class CylinderCommand implements Runnable {
         String thicknessStr = "thickness=" + thickness;
         String axisStr = "axis=" + axis;
         return "cylinder[" + String.join(",", blockStr, diameterStr, thicknessStr, axisStr) + "]";
-    }
-
-    private static class PositiveIntegerCandidates implements Iterable<String> {
-        @Override
-        public Iterator<String> iterator() {
-            return List.of("1", "2", "3", "4", "5", "6", "7", "8", "9").iterator();
-        }
-    }
-
-    private static class PositiveIntegerConverter implements ITypeConverter<Integer> {
-        @Override
-        public Integer convert(String value) {
-            int i = Integer.parseInt(value);
-            if(i < 1) throw new IllegalArgumentException();
-            return i;
-        }
     }
 
 }
