@@ -2,7 +2,6 @@ package tokyo.nakanaka.buildvox.core.command.bvCommand.brushBindCommand;
 
 import picocli.CommandLine.*;
 import tokyo.nakanaka.buildvox.core.Axis;
-import tokyo.nakanaka.buildvox.core.BlockSettingOptions;
 import tokyo.nakanaka.buildvox.core.Clipboard;
 import tokyo.nakanaka.buildvox.core.brushSource.BrushSource;
 import tokyo.nakanaka.buildvox.core.brushSource.BrushSourceClipboards;
@@ -43,16 +42,13 @@ public class CylinderCommand implements Runnable {
     @Option(names = {"--axis", "-a"})
     private Axis axis = Axis.Y;
 
-    @Mixin
-    private BlockSettingOptions options;
-
     @Override
     public void run() {
         PrintWriter out = spec.commandLine().getOut();
         BvCommand bvCmd = brushBindCmd.getBvCommand();
         Player player = bvCmd.getPlayer();
         Clipboard clipboard = BrushSourceClipboards.createCylinder(block.block(), axis, diameter, thickness);
-        BrushSource src = new BrushSource(clipboard, options);
+        BrushSource src = new BrushSource(clipboard, brushBindCmd.getBlockSettingOptions());
         player.setBrushSource(src);
         out.println("Bound " + createBrushDescription() + " to brush.");
     }
