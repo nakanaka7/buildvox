@@ -5,17 +5,14 @@ import org.slf4j.LoggerFactory;
 import picocli.AutoComplete;
 import picocli.CommandLine;
 import tokyo.nakanaka.buildvox.core.ColorCode;
-import tokyo.nakanaka.buildvox.core.Messages;
 import tokyo.nakanaka.buildvox.core.NamespacedId;
 import tokyo.nakanaka.buildvox.core.World;
 import tokyo.nakanaka.buildvox.core.block.Block;
 import tokyo.nakanaka.buildvox.core.block.BlockValidator;
-import tokyo.nakanaka.buildvox.core.clientWorld.OptionalClientWorld;
-import tokyo.nakanaka.buildvox.core.clientWorld.PlayerClientWorld;
 import tokyo.nakanaka.buildvox.core.command.bvCommand.BvCommand;
 import tokyo.nakanaka.buildvox.core.command.bvdCommand.BvdCommand;
-import tokyo.nakanaka.buildvox.core.edit.VoxelSpaceEdits;
-import tokyo.nakanaka.buildvox.core.edit.WorldEdits;
+import tokyo.nakanaka.buildvox.core.event.BrushEvent;
+import tokyo.nakanaka.buildvox.core.event.PosMarkerEvent;
 import tokyo.nakanaka.buildvox.core.math.vector.Vector3i;
 import tokyo.nakanaka.buildvox.core.player.DummyPlayer;
 import tokyo.nakanaka.buildvox.core.player.RealPlayer;
@@ -23,7 +20,9 @@ import tokyo.nakanaka.buildvox.core.player.RealPlayer;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * The entrypoint for the platforms which use BuildVox Core project.
@@ -216,13 +215,7 @@ public class BuildVoxSystem {
     public static void onLeftClickBlockByPosMarker(UUID playerId, Vector3i pos) {
         var player = realPlayerRegistry.get(playerId);
         if(player == null) throw new IllegalArgumentException();
-        var worldId = player.getPlayerEntity().getWorldId();
-        var world = worldRegistry.get(worldId);
-        player.setEditWorld(world);
-        Vector3i[] posArray = new Vector3i[player.getPosArrayClone().length];
-        posArray[0] = pos;
-        player.setPosArray(posArray);
-        player.getMessenger().sendOutMessage(Messages.ofPosExit(0, pos.x(), pos.y(), pos.z()));
+        PosMarkerEvent.onLeft(player, pos);
     }
 
     /**
@@ -234,25 +227,7 @@ public class BuildVoxSystem {
     public static void onRightClickBlockByPosMarker(UUID playerId, Vector3i pos) {
         var player = realPlayerRegistry.get(playerId);
         if(player == null) throw new IllegalArgumentException();
-        var worldId = player.getPlayerEntity().getWorldId();
-        var world = worldRegistry.get(worldId);
-        World editWorld = player.getEditWorld();
-        Vector3i[] posArray = player.getPosArrayClone();
-        if (world != editWorld) {
-            posArray = new Vector3i[player.getPosArrayClone().length];
-        }
-        int l = posArray.length;
-        int index = l - 1;
-        for (int i = 0; i < l; ++i) {
-            if (posArray[i] == null) {
-                index = i;
-                break;
-            }
-        }
-        posArray[index] = pos;
-        player.setEditWorld(world);
-        player.setPosArray(posArray);
-        player.getMessenger().sendOutMessage(Messages.ofPosExit(index, pos.x(), pos.y(), pos.z()));
+        PosMarkerEvent.onRight(player, pos);
     }
 
     /**
@@ -262,14 +237,7 @@ public class BuildVoxSystem {
      */
     public static void onLeftClickBlockByBrush(UUID playerId, Vector3i pos) {
         var player = realPlayerRegistry.get(playerId);
-        var worldId = player.getPlayerEntity().getWorldId();
-        var world = worldRegistry.get(worldId);
-        player.setEditWorld(world);
-        var src = player.getBrushSource();
-        var pcw = new PlayerClientWorld(player);
-        var ocw = new OptionalClientWorld(pcw, src.getOptions());
-        WorldEdits.paste(src.getClipboard(), ocw, pos.toVector3d());
-        pcw.end();
+        BrushEvent.onLeft(player, pos);
     }
 
     /**
@@ -279,18 +247,7 @@ public class BuildVoxSystem {
      */
     public static void onRightClickBlockByBrush(UUID playerId, Vector3i pos) {
         var player = realPlayerRegistry.get(playerId);
-        var worldId = player.getPlayerEntity().getWorldId();
-        World world = worldRegistry.get(worldId);
-        player.setEditWorld(world);
-        var src = player.getBrushSource();
-        Set<Vector3i> clipPosSet = src.getClipboard().blockPosSet();
-        Set<Vector3i> posSet = new HashSet<>();
-        for(var p : clipPosSet) {
-            posSet.add(p.add(pos));
-        }
-        var pcw = new PlayerClientWorld(player);
-        VoxelSpaceEdits.fill(pcw, posSet, player.getBackgroundBlock());
-        pcw.end();
+        BrushEvent.onRight(player, pos);
     }
 
     private static class BuildVoxWriter extends Writer {
