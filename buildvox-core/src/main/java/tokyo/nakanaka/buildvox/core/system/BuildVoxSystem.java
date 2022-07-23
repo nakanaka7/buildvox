@@ -255,6 +255,11 @@ public class BuildVoxSystem {
         player.getMessenger().sendOutMessage(Messages.ofPosExit(index, pos.x(), pos.y(), pos.z()));
     }
 
+    /**
+     * Handles a left-clicking block event by brush.
+     * @param playerId the id of the player who invoked this event.
+     * @param pos the position of the clicked block.
+     */
     public static void onLeftClickBlockByBrush(UUID playerId, Vector3i pos) {
         var player = realPlayerRegistry.get(playerId);
         var worldId = player.getPlayerEntity().getWorldId();
@@ -267,6 +272,11 @@ public class BuildVoxSystem {
         pcw.end();
     }
 
+    /**
+     * Handles a right-clicking block event by brush. Sets background block.
+     * @param playerId the id of the player who invoked this event.
+     * @param pos the position of the clicked block.
+     */
     public static void onRightClickBlockByBrush(UUID playerId, Vector3i pos) {
         var player = realPlayerRegistry.get(playerId);
         var worldId = player.getPlayerEntity().getWorldId();
