@@ -31,18 +31,14 @@ public class BuildVoxSystem {
     public static final Logger CORE_LOGGER = LoggerFactory.getLogger("BuildVoxCore");
     private static BlockValidator blockValidator = block -> false;
     private static Scheduler scheduler = (runnable, tick) -> {};
-    private static Config config = Config.DEFAULT;
+    private static final String outColor = ColorCode.GREEN;
+    private static final String errColor = ColorCode.RED;
     private static final Registry<World, NamespacedId> worldRegistry = new Registry<>();
     private static final Registry<Block<?,?>, NamespacedId> blockRegistry = new Registry<>();
     private static final Registry<RealPlayer, UUID> realPlayerRegistry = new Registry<>();
     private static final Registry<DummyPlayer, String> dummyPlayerRegistry = new Registry<>();
 
     private BuildVoxSystem() {
-    }
-
-    @Deprecated
-    private static record Config(String outColor, String errColor, String backgroundBlock, int posArrayLength) {
-        public static final Config DEFAULT = new Config(ColorCode.GREEN, ColorCode.RED, "minecraft:air", 2);
     }
 
     /** Sets the scheduler */
@@ -65,12 +61,12 @@ public class BuildVoxSystem {
 
     /** Gets the out color code. */
     public static String getOutColor() {
-        return config.outColor;
+        return outColor;
     }
 
     /** Gets the error color code. */
     public static String getErrColor() {
-        return config.errColor;
+        return errColor;
     }
 
     /** Gets the default background block id */
