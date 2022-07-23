@@ -36,7 +36,13 @@ public class SphereCommand implements Runnable {
         Clipboard clipboard = BrushSourceClipboards.createSphere(block.block(), diameter);
         BrushSource src = new BrushSource(clipboard, brushBindCmd.getBlockSettingOptions());
         player.setBrushSource(src);
-        out.println("Bound sphere(" + "block:" + block.block().getBlockId().name() + ",size:" + diameter + ") to brush.");
+        out.println("Bound " + createBrushDescription() + " to brush.");
+    }
+
+    private String createBrushDescription() {
+        String blockStr = "block=" + block.block();
+        String diameterStr = "diameter=" + diameter;
+        return "sphere[" + String.join(",", blockStr, diameterStr) + "]";
     }
 
 }
